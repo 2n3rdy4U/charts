@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    #vis.vega-embed {
+      width: 100%;
+      display: flex;
+    }
+
+    #vis.vega-embed details,
+    #vis.vega-embed details summary {
+      position: relative;
+    }
+  </style>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-lite@5.20.1"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+</head>
+<body>
+  <div id="vis"></div>
+  <script>
+    (function(vegaEmbed) {
+      var spec = {"config": {"view": {"continuousWidth": 300, "continuousHeight": 300, "strokeWidth": 0}, "axis": {"labelFont": "Georgia, serif", "titleFont": "Georgia, serif"}, "title": {"font": "Georgia, serif"}}, "vconcat": [{"layer": [{"data": {"name": "data-90dc4dcfe0389c737ded8e90526c1e42"}, "mark": {"type": "line", "color": "#2E86AB", "strokeWidth": 3}, "encoding": {"tooltip": [{"field": "date", "format": "%B %Y", "type": "temporal"}, {"field": "value", "format": ".2f", "type": "quantitative"}], "x": {"axis": {"format": "%Y", "labelColor": "#555", "labelFontSize": 11}, "field": "date", "scale": {"domain": {"param": "param_8"}}, "title": "", "type": "temporal"}, "y": {"axis": {"format": ".1f", "grid": true, "gridColor": "#E8E8E8", "labelColor": "#555"}, "field": "value", "title": "Percent (%)", "type": "quantitative"}}}, {"data": {"name": "data-67dd51329816a186197179336ae77f57"}, "mark": {"type": "rule", "color": "#C73E1D", "opacity": 0.7, "strokeDash": [8, 4], "strokeWidth": 2}, "encoding": {"y": {"field": "y", "type": "quantitative"}}}], "height": 350, "width": 650}, {"data": {"name": "data-90dc4dcfe0389c737ded8e90526c1e42"}, "mark": {"type": "line", "color": "#2E86AB", "strokeWidth": 1}, "encoding": {"x": {"axis": {"format": "%Y", "labelColor": "#666", "labelFontSize": 10}, "field": "date", "title": "Drag to select date range", "type": "temporal"}, "y": {"axis": null, "field": "value", "type": "quantitative"}}, "height": 50, "name": "view_8", "width": 650}], "params": [{"name": "param_8", "select": {"type": "interval", "encodings": ["x"]}, "views": ["view_8"]}], "resolve": {"scale": {"x": "independent"}}, "title": {"text": ["Nonfarm Business Sector: Labor Productivity (Output per Hour) for All Workers", "Interactive chart with user-defined ranges"], "anchor": "start", "color": "#2c3e50", "fontSize": 18, "fontWeight": "normal"}, "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json", "datasets": {"data-90dc4dcfe0389c737ded8e90526c1e42": [{"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2016-01-01T00:00:00", "value": 0.58175, "type": "YoY %"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2016-04-01T00:00:00", "value": 0.15288, "type": "YoY %"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2016-07-01T00:00:00", "value": 0.21445, "type": "YoY %"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2016-10-01T00:00:00", "value": 1.51758, "type": "YoY %"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2017-01-01T00:00:00", "value": 1.24943, "type": "YoY %"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2017-04-01T00:00:00", "value": 1.23948, "type": "YoY %"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2017-07-01T00:00:00", "value": 1.71496, "type": "YoY %"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2017-10-01T00:00:00", "value": 1.77292, "type": "YoY %"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2018-01-01T00:00:00", "value": 1.93801, "type": "YoY %"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2018-04-01T00:00:00", "value": 1.89677, "type": "YoY %"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2018-07-01T00:00:00", "value": 1.36997, "type": "YoY %"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2018-10-01T00:00:00", "value": 0.45036, "type": "YoY %"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2019-01-01T00:00:00", "value": 0.96883, "type": "YoY %"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2019-04-01T00:00:00", "value": 1.57637, "type": "YoY %"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2019-07-01T00:00:00", "value": 2.41964, "type": "YoY %"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2019-10-01T00:00:00", "value": 3.56305, "type": "YoY %"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2020-01-01T00:00:00", "value": 2.28452, "type": "YoY %"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2020-04-01T00:00:00", "value": 6.60678, "type": "YoY %"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2020-07-01T00:00:00", "value": 7.07207, "type": "YoY %"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2020-10-01T00:00:00", "value": 5.22921, "type": "YoY %"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2021-01-01T00:00:00", "value": 6.43778, "type": "YoY %"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2021-04-01T00:00:00", "value": 1.65979, "type": "YoY %"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2021-07-01T00:00:00", "value": -0.44398, "type": "YoY %"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2021-10-01T00:00:00", "value": 0.94938, "type": "YoY %"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2022-01-01T00:00:00", "value": -1.09139, "type": "YoY %"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2022-04-01T00:00:00", "value": -2.00188, "type": "YoY %"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2022-07-01T00:00:00", "value": -1.40004, "type": "YoY %"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2022-10-01T00:00:00", "value": -1.46532, "type": "YoY %"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2023-01-01T00:00:00", "value": 0.09709, "type": "YoY %"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2023-04-01T00:00:00", "value": 1.84618, "type": "YoY %"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2023-07-01T00:00:00", "value": 3.06918, "type": "YoY %"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2023-10-01T00:00:00", "value": 3.49507, "type": "YoY %"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2024-01-01T00:00:00", "value": 3.35149, "type": "YoY %"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2024-04-01T00:00:00", "value": 3.11995, "type": "YoY %"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2024-07-01T00:00:00", "value": 2.60456, "type": "YoY %"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2024-10-01T00:00:00", "value": 1.87604, "type": "YoY %"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2025-01-01T00:00:00", "value": 1.20871, "type": "YoY %"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2025-04-01T00:00:00", "value": 1.47926, "type": "YoY %"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2025-07-01T00:00:00", "value": 1.92328, "type": "YoY %"}], "data-67dd51329816a186197179336ae77f57": [{"y": 2}]}};
+      var embedOpt = {"mode": "vega-lite"};
+
+      function showError(el, error){
+          el.innerHTML = ('<div style="color:red;">'
+                          + '<p>JavaScript Error: ' + error.message + '</p>'
+                          + "<p>This usually means there's a typo in your chart specification. "
+                          + "See the javascript console for the full traceback.</p>"
+                          + '</div>');
+          throw error;
+      }
+      const el = document.getElementById('vis');
+      vegaEmbed("#vis", spec, embedOpt)
+        .catch(error => showError(el, error));
+    })(vegaEmbed);
+
+  </script>
+</body>
+</html>
