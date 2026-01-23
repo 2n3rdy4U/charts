@@ -2,41 +2,3137 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    #vis.vega-embed {
-      width: 100%;
-      display: flex;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
-
-    #vis.vega-embed details,
-    #vis.vega-embed details summary {
-      position: relative;
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+    #vis {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    #vis .vega-embed {
+      width: 100% !important;
+      flex: 1;
+    }
+    #vis .vega-embed details {
+      position: absolute;
+      right: 5px;
+      top: 5px;
+    }
+    /* Style the radio buttons */
+    .vega-bindings {
+      padding: 5px 0 10px 0;
+      font-family: Georgia, serif;
+      font-size: 13px;
+    }
+    .vega-bind {
+      padding: 2px 0;
+    }
+    .vega-bind-name {
+      font-weight: normal;
+      color: #555;
+    }
+    .vega-bind input[type="radio"] {
+      margin: 0 3px 0 8px;
     }
   </style>
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega@5"></script>
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-lite@5.20.1"></script>
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 </head>
 <body>
   <div id="vis"></div>
   <script>
-    (function(vegaEmbed) {
-      var spec = {"config": {"view": {"continuousWidth": 300, "continuousHeight": 300, "strokeWidth": 0}, "axis": {"labelFont": "Georgia, serif", "titleFont": "Georgia, serif"}, "title": {"font": "Georgia, serif"}}, "vconcat": [{"layer": [{"data": {"name": "data-d35fd132196b494e2b103e66c6baa462"}, "mark": {"type": "line", "color": "#2E86AB", "strokeWidth": 3}, "encoding": {"tooltip": [{"field": "date", "format": "%B %Y", "title": "Date", "type": "temporal"}, {"field": "value", "format": ",.2f", "title": "Value", "type": "quantitative"}, {"field": "units", "title": "Units", "type": "nominal"}], "x": {"axis": {"format": "%Y", "labelColor": "#555", "labelFontSize": 11}, "field": "date", "scale": {"domain": {"param": "param_6"}}, "title": "", "type": "temporal"}, "y": {"axis": {"grid": true, "gridColor": "#E8E8E8", "labelColor": "#555"}, "field": "value", "title": "Level in Thousands", "type": "quantitative"}}, "name": "view_5", "transform": [{"filter": {"param": "param_5"}}]}, {"data": {"name": "data-67dd51329816a186197179336ae77f57"}, "mark": {"type": "rule", "color": "#C73E1D", "opacity": 0.7, "strokeDash": [8, 4], "strokeWidth": 2}, "encoding": {"y": {"field": "y", "type": "quantitative"}}}], "height": 350, "width": 650}, {"data": {"name": "data-d35fd132196b494e2b103e66c6baa462"}, "mark": {"type": "line", "color": "#2E86AB", "strokeWidth": 1}, "encoding": {"x": {"axis": {"format": "%Y", "labelColor": "#666", "labelFontSize": 10}, "field": "date", "title": "Drag to select date range", "type": "temporal"}, "y": {"axis": null, "field": "value", "type": "quantitative"}}, "height": 50, "name": "view_6", "transform": [{"filter": {"param": "param_5"}}], "width": "container"}], "params": [{"name": "param_5", "select": {"type": "point", "fields": ["type"]}, "bind": {"input": "radio", "options": ["Level", "YoY %", "MoM %"], "name": "View: "}, "value": "Level", "views": ["view_5"]}, {"name": "param_6", "select": {"type": "interval", "encodings": ["x"]}, "views": ["view_6"]}], "resolve": {"scale": {"x": "independent"}}, "title": {"text": "Job Openings\u2014Total Nonfarm", "anchor": "start", "color": "#2c3e50", "fontSize": 18, "fontWeight": "normal", "subtitle": "Units: Level in Thousands (changes with selection)", "subtitleColor": "#666", "subtitleFontSize": 12}, "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json", "datasets": {"data-d35fd132196b494e2b103e66c6baa462": [{"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2016-01-01T00:00:00", "value": 6012.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2016-02-01T00:00:00", "value": 5770.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2016-03-01T00:00:00", "value": 6129.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2016-04-01T00:00:00", "value": 5803.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2016-05-01T00:00:00", "value": 5777.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2016-06-01T00:00:00", "value": 5742.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2016-07-01T00:00:00", "value": 5962.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2016-08-01T00:00:00", "value": 5677.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2016-09-01T00:00:00", "value": 5868.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2016-10-01T00:00:00", "value": 5591.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2016-11-01T00:00:00", "value": 5971.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2016-12-01T00:00:00", "value": 5964.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2017-01-01T00:00:00", "value": 5617.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2017-02-01T00:00:00", "value": 5923.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2017-03-01T00:00:00", "value": 5811.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2017-04-01T00:00:00", "value": 6091.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2017-05-01T00:00:00", "value": 5826.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2017-06-01T00:00:00", "value": 6305.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2017-07-01T00:00:00", "value": 6238.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2017-08-01T00:00:00", "value": 6276.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2017-09-01T00:00:00", "value": 6320.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2017-10-01T00:00:00", "value": 6408.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2017-11-01T00:00:00", "value": 6271.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2017-12-01T00:00:00", "value": 6336.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2018-01-01T00:00:00", "value": 6621.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2018-02-01T00:00:00", "value": 6552.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2018-03-01T00:00:00", "value": 6818.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2018-04-01T00:00:00", "value": 6877.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2018-05-01T00:00:00", "value": 7016.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2018-06-01T00:00:00", "value": 7230.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2018-07-01T00:00:00", "value": 7190.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2018-08-01T00:00:00", "value": 7208.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2018-09-01T00:00:00", "value": 7411.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2018-10-01T00:00:00", "value": 7304.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2018-11-01T00:00:00", "value": 7594.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2018-12-01T00:00:00", "value": 7489.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2019-01-01T00:00:00", "value": 7502.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2019-02-01T00:00:00", "value": 7066.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2019-03-01T00:00:00", "value": 7317.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2019-04-01T00:00:00", "value": 7272.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2019-05-01T00:00:00", "value": 7275.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2019-06-01T00:00:00", "value": 7194.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2019-07-01T00:00:00", "value": 7042.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2019-08-01T00:00:00", "value": 7178.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2019-09-01T00:00:00", "value": 7124.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2019-10-01T00:00:00", "value": 7289.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2019-11-01T00:00:00", "value": 6888.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2019-12-01T00:00:00", "value": 6699.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2020-01-01T00:00:00", "value": 7124.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2020-02-01T00:00:00", "value": 6966.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2020-03-01T00:00:00", "value": 5894.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2020-04-01T00:00:00", "value": 4606.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2020-05-01T00:00:00", "value": 5612.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2020-06-01T00:00:00", "value": 6129.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2020-07-01T00:00:00", "value": 6530.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2020-08-01T00:00:00", "value": 6429.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2020-09-01T00:00:00", "value": 6511.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2020-10-01T00:00:00", "value": 6798.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2020-11-01T00:00:00", "value": 6820.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2020-12-01T00:00:00", "value": 6773.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2021-01-01T00:00:00", "value": 7204.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2021-02-01T00:00:00", "value": 7752.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2021-03-01T00:00:00", "value": 8470.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2021-04-01T00:00:00", "value": 9356.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2021-05-01T00:00:00", "value": 9905.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2021-06-01T00:00:00", "value": 10298.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2021-07-01T00:00:00", "value": 11049.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2021-08-01T00:00:00", "value": 10956.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2021-09-01T00:00:00", "value": 10879.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2021-10-01T00:00:00", "value": 11341.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2021-11-01T00:00:00", "value": 11119.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2021-12-01T00:00:00", "value": 11417.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2022-01-01T00:00:00", "value": 11238.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2022-02-01T00:00:00", "value": 11661.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2022-03-01T00:00:00", "value": 12134.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2022-04-01T00:00:00", "value": 11881.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2022-05-01T00:00:00", "value": 11483.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2022-06-01T00:00:00", "value": 11256.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2022-07-01T00:00:00", "value": 11610.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2022-08-01T00:00:00", "value": 10148.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2022-09-01T00:00:00", "value": 10812.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2022-10-01T00:00:00", "value": 10488.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2022-11-01T00:00:00", "value": 10619.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2022-12-01T00:00:00", "value": 10876.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2023-01-01T00:00:00", "value": 10393.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2023-02-01T00:00:00", "value": 9846.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2023-03-01T00:00:00", "value": 9572.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2023-04-01T00:00:00", "value": 9992.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2023-05-01T00:00:00", "value": 9310.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2023-06-01T00:00:00", "value": 9191.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2023-07-01T00:00:00", "value": 8606.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2023-08-01T00:00:00", "value": 9287.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2023-09-01T00:00:00", "value": 9279.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2023-10-01T00:00:00", "value": 8550.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2023-11-01T00:00:00", "value": 8663.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2023-12-01T00:00:00", "value": 8585.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2024-01-01T00:00:00", "value": 8468.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2024-02-01T00:00:00", "value": 8445.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2024-03-01T00:00:00", "value": 8093.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2024-04-01T00:00:00", "value": 7619.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2024-05-01T00:00:00", "value": 7901.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2024-06-01T00:00:00", "value": 7412.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2024-07-01T00:00:00", "value": 7504.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2024-08-01T00:00:00", "value": 7649.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2024-09-01T00:00:00", "value": 7103.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2024-10-01T00:00:00", "value": 7615.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2024-11-01T00:00:00", "value": 8031.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2024-12-01T00:00:00", "value": 7508.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2025-01-01T00:00:00", "value": 7762.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2025-02-01T00:00:00", "value": 7480.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2025-03-01T00:00:00", "value": 7200.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2025-04-01T00:00:00", "value": 7395.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2025-05-01T00:00:00", "value": 7712.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2025-06-01T00:00:00", "value": 7357.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2025-07-01T00:00:00", "value": 7208.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2025-08-01T00:00:00", "value": 7227.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2025-09-01T00:00:00", "value": 7658.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2025-10-01T00:00:00", "value": 7449.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2025-11-01T00:00:00", "value": 7146.0, "type": "Level", "units": "Level in Thousands"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2016-01-01T00:00:00", "value": 12.5, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2016-02-01T00:00:00", "value": 5.56165, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2016-03-01T00:00:00", "value": 17.63916, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2016-04-01T00:00:00", "value": 3.66202, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2016-05-01T00:00:00", "value": 3.84685, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2016-06-01T00:00:00", "value": 9.41311, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2016-07-01T00:00:00", "value": -1.55218, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2016-08-01T00:00:00", "value": 3.84123, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2016-09-01T00:00:00", "value": 6.9242, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2016-10-01T00:00:00", "value": -3.15261, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2016-11-01T00:00:00", "value": 4.60757, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2016-12-01T00:00:00", "value": 2.03593, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2017-01-01T00:00:00", "value": -6.57019, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2017-02-01T00:00:00", "value": 2.65165, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2017-03-01T00:00:00", "value": -5.18845, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2017-04-01T00:00:00", "value": 4.96295, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2017-05-01T00:00:00", "value": 0.84819, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2017-06-01T00:00:00", "value": 9.80495, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2017-07-01T00:00:00", "value": 4.62932, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2017-08-01T00:00:00", "value": 10.55135, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2017-09-01T00:00:00", "value": 7.70279, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2017-10-01T00:00:00", "value": 14.61277, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2017-11-01T00:00:00", "value": 5.02428, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2017-12-01T00:00:00", "value": 6.23742, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2018-01-01T00:00:00", "value": 17.87431, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2018-02-01T00:00:00", "value": 10.61962, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2018-03-01T00:00:00", "value": 17.3292, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2018-04-01T00:00:00", "value": 12.90429, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2018-05-01T00:00:00", "value": 20.42568, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2018-06-01T00:00:00", "value": 14.6709, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2018-07-01T00:00:00", "value": 15.2613, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2018-08-01T00:00:00", "value": 14.85022, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2018-09-01T00:00:00", "value": 17.26266, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2018-10-01T00:00:00", "value": 13.98252, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2018-11-01T00:00:00", "value": 21.09711, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2018-12-01T00:00:00", "value": 18.1976, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2019-01-01T00:00:00", "value": 13.30615, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2019-02-01T00:00:00", "value": 7.84493, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2019-03-01T00:00:00", "value": 7.31886, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2019-04-01T00:00:00", "value": 5.74378, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2019-05-01T00:00:00", "value": 3.69156, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2019-06-01T00:00:00", "value": -0.49793, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2019-07-01T00:00:00", "value": -2.05841, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2019-08-01T00:00:00", "value": -0.4162, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2019-09-01T00:00:00", "value": -3.87262, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2019-10-01T00:00:00", "value": -0.20537, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2019-11-01T00:00:00", "value": -9.29681, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2019-12-01T00:00:00", "value": -10.5488, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2020-01-01T00:00:00", "value": -5.03866, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2020-02-01T00:00:00", "value": -1.41523, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2020-03-01T00:00:00", "value": -19.44786, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2020-04-01T00:00:00", "value": -36.66117, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2020-05-01T00:00:00", "value": -22.85911, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2020-06-01T00:00:00", "value": -14.804, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2020-07-01T00:00:00", "value": -7.27066, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2020-08-01T00:00:00", "value": -10.43466, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2020-09-01T00:00:00", "value": -8.60472, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2020-10-01T00:00:00", "value": -6.73618, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2020-11-01T00:00:00", "value": -0.98722, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2020-12-01T00:00:00", "value": 1.10464, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2021-01-01T00:00:00", "value": 1.12296, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2021-02-01T00:00:00", "value": 11.28338, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2021-03-01T00:00:00", "value": 43.70546, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2021-04-01T00:00:00", "value": 103.12636, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2021-05-01T00:00:00", "value": 76.49679, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2021-06-01T00:00:00", "value": 68.02088, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2021-07-01T00:00:00", "value": 69.20368, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2021-08-01T00:00:00", "value": 70.41531, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2021-09-01T00:00:00", "value": 67.08647, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2021-10-01T00:00:00", "value": 66.82848, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2021-11-01T00:00:00", "value": 63.03519, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2021-12-01T00:00:00", "value": 68.56637, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2022-01-01T00:00:00", "value": 55.99667, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2022-02-01T00:00:00", "value": 50.4257, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2022-03-01T00:00:00", "value": 43.25856, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2022-04-01T00:00:00", "value": 26.98803, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2022-05-01T00:00:00", "value": 15.93135, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2022-06-01T00:00:00", "value": 9.30278, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2022-07-01T00:00:00", "value": 5.07738, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2022-08-01T00:00:00", "value": -7.37495, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2022-09-01T00:00:00", "value": -0.61587, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2022-10-01T00:00:00", "value": -7.52138, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2022-11-01T00:00:00", "value": -4.49681, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2022-12-01T00:00:00", "value": -4.73855, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2023-01-01T00:00:00", "value": -7.51913, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2023-02-01T00:00:00", "value": -15.5647, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2023-03-01T00:00:00", "value": -21.11422, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2023-04-01T00:00:00", "value": -15.89934, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2023-05-01T00:00:00", "value": -18.92363, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2023-06-01T00:00:00", "value": -18.34577, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2023-07-01T00:00:00", "value": -25.87425, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2023-08-01T00:00:00", "value": -8.48443, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2023-09-01T00:00:00", "value": -14.17869, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2023-10-01T00:00:00", "value": -18.47826, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2023-11-01T00:00:00", "value": -18.41981, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2023-12-01T00:00:00", "value": -21.06473, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2024-01-01T00:00:00", "value": -18.52208, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2024-02-01T00:00:00", "value": -14.22913, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2024-03-01T00:00:00", "value": -15.45132, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2024-04-01T00:00:00", "value": -23.749, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2024-05-01T00:00:00", "value": -15.13426, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2024-06-01T00:00:00", "value": -19.35589, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2024-07-01T00:00:00", "value": -12.80502, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2024-08-01T00:00:00", "value": -17.63756, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2024-09-01T00:00:00", "value": -23.4508, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2024-10-01T00:00:00", "value": -10.93567, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2024-11-01T00:00:00", "value": -7.29539, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2024-12-01T00:00:00", "value": -12.54514, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2025-01-01T00:00:00", "value": -8.33727, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2025-02-01T00:00:00", "value": -11.42688, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2025-03-01T00:00:00", "value": -11.03423, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2025-04-01T00:00:00", "value": -2.94002, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2025-05-01T00:00:00", "value": -2.3921, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2025-06-01T00:00:00", "value": -0.74204, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2025-07-01T00:00:00", "value": -3.94456, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2025-08-01T00:00:00", "value": -5.51706, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2025-09-01T00:00:00", "value": 7.8136, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2025-10-01T00:00:00", "value": -2.17991, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2025-11-01T00:00:00", "value": -11.0198, "type": "YoY %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2016-01-01T00:00:00", "value": 2.85714, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2016-02-01T00:00:00", "value": -4.02528, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2016-03-01T00:00:00", "value": 6.22184, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2016-04-01T00:00:00", "value": -5.31898, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2016-05-01T00:00:00", "value": -0.44804, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2016-06-01T00:00:00", "value": -0.60585, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2016-07-01T00:00:00", "value": 3.83142, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2016-08-01T00:00:00", "value": -4.78028, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2016-09-01T00:00:00", "value": 3.36445, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2016-10-01T00:00:00", "value": -4.72052, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2016-11-01T00:00:00", "value": 6.79664, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2016-12-01T00:00:00", "value": -0.11723, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2017-01-01T00:00:00", "value": -5.81824, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2017-02-01T00:00:00", "value": 5.44775, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2017-03-01T00:00:00", "value": -1.89093, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2017-04-01T00:00:00", "value": 4.81845, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2017-05-01T00:00:00", "value": -4.35068, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2017-06-01T00:00:00", "value": 8.22176, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2017-07-01T00:00:00", "value": -1.06265, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2017-08-01T00:00:00", "value": 0.60917, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2017-09-01T00:00:00", "value": 0.70108, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2017-10-01T00:00:00", "value": 1.39241, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2017-11-01T00:00:00", "value": -2.13795, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2017-12-01T00:00:00", "value": 1.03652, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2018-01-01T00:00:00", "value": 4.49811, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2018-02-01T00:00:00", "value": -1.04214, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2018-03-01T00:00:00", "value": 4.05983, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2018-04-01T00:00:00", "value": 0.86536, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2018-05-01T00:00:00", "value": 2.02123, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2018-06-01T00:00:00", "value": 3.05017, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2018-07-01T00:00:00", "value": -0.55325, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2018-08-01T00:00:00", "value": 0.25035, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2018-09-01T00:00:00", "value": 2.81632, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2018-10-01T00:00:00", "value": -1.4438, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2018-11-01T00:00:00", "value": 3.97043, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2018-12-01T00:00:00", "value": -1.38267, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2019-01-01T00:00:00", "value": 0.17359, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2019-02-01T00:00:00", "value": -5.81178, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2019-03-01T00:00:00", "value": 3.55222, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2019-04-01T00:00:00", "value": -0.61501, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2019-05-01T00:00:00", "value": 0.04125, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2019-06-01T00:00:00", "value": -1.1134, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2019-07-01T00:00:00", "value": -2.11287, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2019-08-01T00:00:00", "value": 1.93127, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2019-09-01T00:00:00", "value": -0.7523, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2019-10-01T00:00:00", "value": 2.31611, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2019-11-01T00:00:00", "value": -5.50144, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2019-12-01T00:00:00", "value": -2.7439, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2020-01-01T00:00:00", "value": 6.34423, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2020-02-01T00:00:00", "value": -2.21786, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2020-03-01T00:00:00", "value": -15.38903, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2020-04-01T00:00:00", "value": -21.85273, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2020-05-01T00:00:00", "value": 21.84108, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2020-06-01T00:00:00", "value": 9.2124, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2020-07-01T00:00:00", "value": 6.54267, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2020-08-01T00:00:00", "value": -1.54671, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2020-09-01T00:00:00", "value": 1.27547, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2020-10-01T00:00:00", "value": 4.40793, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2020-11-01T00:00:00", "value": 0.32362, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2020-12-01T00:00:00", "value": -0.68915, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2021-01-01T00:00:00", "value": 6.3635, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2021-02-01T00:00:00", "value": 7.60689, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2021-03-01T00:00:00", "value": 9.26213, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2021-04-01T00:00:00", "value": 10.46045, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2021-05-01T00:00:00", "value": 5.86789, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2021-06-01T00:00:00", "value": 3.96769, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2021-07-01T00:00:00", "value": 7.29268, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2021-08-01T00:00:00", "value": -0.84171, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2021-09-01T00:00:00", "value": -0.70281, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2021-10-01T00:00:00", "value": 4.24671, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2021-11-01T00:00:00", "value": -1.9575, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2021-12-01T00:00:00", "value": 2.6801, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2022-01-01T00:00:00", "value": -1.56784, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2022-02-01T00:00:00", "value": 3.76401, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2022-03-01T00:00:00", "value": 4.05626, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2022-04-01T00:00:00", "value": -2.08505, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2022-05-01T00:00:00", "value": -3.34989, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2022-06-01T00:00:00", "value": -1.97684, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2022-07-01T00:00:00", "value": 3.14499, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2022-08-01T00:00:00", "value": -12.59259, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2022-09-01T00:00:00", "value": 6.54316, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2022-10-01T00:00:00", "value": -2.99667, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2022-11-01T00:00:00", "value": 1.24905, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2022-12-01T00:00:00", "value": 2.42019, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2023-01-01T00:00:00", "value": -4.44097, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2023-02-01T00:00:00", "value": -5.26316, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2023-03-01T00:00:00", "value": -2.78286, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2023-04-01T00:00:00", "value": 4.3878, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2023-05-01T00:00:00", "value": -6.82546, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2023-06-01T00:00:00", "value": -1.2782, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2023-07-01T00:00:00", "value": -6.36492, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2023-08-01T00:00:00", "value": 7.91308, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2023-09-01T00:00:00", "value": -0.08614, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2023-10-01T00:00:00", "value": -7.85645, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2023-11-01T00:00:00", "value": 1.32164, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2023-12-01T00:00:00", "value": -0.90038, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2024-01-01T00:00:00", "value": -1.36284, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2024-02-01T00:00:00", "value": -0.27161, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2024-03-01T00:00:00", "value": -4.16815, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2024-04-01T00:00:00", "value": -5.85691, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2024-05-01T00:00:00", "value": 3.70127, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2024-06-01T00:00:00", "value": -6.18909, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2024-07-01T00:00:00", "value": 1.24123, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2024-08-01T00:00:00", "value": 1.9323, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2024-09-01T00:00:00", "value": -7.13819, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2024-10-01T00:00:00", "value": 7.20822, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2024-11-01T00:00:00", "value": 5.4629, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2024-12-01T00:00:00", "value": -6.51226, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2025-01-01T00:00:00", "value": 3.38306, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2025-02-01T00:00:00", "value": -3.63308, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2025-03-01T00:00:00", "value": -3.74332, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2025-04-01T00:00:00", "value": 2.70833, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2025-05-01T00:00:00", "value": 4.28668, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2025-06-01T00:00:00", "value": -4.60322, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2025-07-01T00:00:00", "value": -2.02528, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2025-08-01T00:00:00", "value": 0.2636, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2025-09-01T00:00:00", "value": 5.96375, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2025-10-01T00:00:00", "value": -2.72917, "type": "MoM %", "units": "Percent (%)"}, {"realtime_start": "2026-01-23", "realtime_end": "2026-01-23", "date": "2025-11-01T00:00:00", "value": -4.06766, "type": "MoM %", "units": "Percent (%)"}], "data-67dd51329816a186197179336ae77f57": [{"y": 2}]}};
-      var embedOpt = {"mode": "vega-lite"};
-
-      function showError(el, error){
-          el.innerHTML = ('<div style="color:red;">'
-                          + '<p>JavaScript Error: ' + error.message + '</p>'
-                          + "<p>This usually means there's a typo in your chart specification. "
-                          + "See the javascript console for the full traceback.</p>"
-                          + '</div>');
-          throw error;
+    const spec = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json",
+  "config": {
+    "axis": {
+      "labelFont": "Georgia, serif",
+      "titleFont": "Georgia, serif"
+    },
+    "title": {
+      "font": "Georgia, serif"
+    },
+    "view": {
+      "continuousHeight": 300,
+      "continuousWidth": 300,
+      "strokeWidth": 0
+    }
+  },
+  "datasets": {
+    "data-67dd51329816a186197179336ae77f57": [
+      {
+        "y": 2
       }
-      const el = document.getElementById('vis');
-      vegaEmbed("#vis", spec, embedOpt)
-        .catch(error => showError(el, error));
-    })(vegaEmbed);
-
+    ],
+    "data-d35fd132196b494e2b103e66c6baa462": [
+      {
+        "date": "2016-01-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 6012.0
+      },
+      {
+        "date": "2016-02-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 5770.0
+      },
+      {
+        "date": "2016-03-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 6129.0
+      },
+      {
+        "date": "2016-04-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 5803.0
+      },
+      {
+        "date": "2016-05-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 5777.0
+      },
+      {
+        "date": "2016-06-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 5742.0
+      },
+      {
+        "date": "2016-07-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 5962.0
+      },
+      {
+        "date": "2016-08-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 5677.0
+      },
+      {
+        "date": "2016-09-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 5868.0
+      },
+      {
+        "date": "2016-10-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 5591.0
+      },
+      {
+        "date": "2016-11-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 5971.0
+      },
+      {
+        "date": "2016-12-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 5964.0
+      },
+      {
+        "date": "2017-01-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 5617.0
+      },
+      {
+        "date": "2017-02-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 5923.0
+      },
+      {
+        "date": "2017-03-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 5811.0
+      },
+      {
+        "date": "2017-04-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 6091.0
+      },
+      {
+        "date": "2017-05-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 5826.0
+      },
+      {
+        "date": "2017-06-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 6305.0
+      },
+      {
+        "date": "2017-07-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 6238.0
+      },
+      {
+        "date": "2017-08-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 6276.0
+      },
+      {
+        "date": "2017-09-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 6320.0
+      },
+      {
+        "date": "2017-10-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 6408.0
+      },
+      {
+        "date": "2017-11-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 6271.0
+      },
+      {
+        "date": "2017-12-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 6336.0
+      },
+      {
+        "date": "2018-01-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 6621.0
+      },
+      {
+        "date": "2018-02-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 6552.0
+      },
+      {
+        "date": "2018-03-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 6818.0
+      },
+      {
+        "date": "2018-04-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 6877.0
+      },
+      {
+        "date": "2018-05-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 7016.0
+      },
+      {
+        "date": "2018-06-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 7230.0
+      },
+      {
+        "date": "2018-07-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 7190.0
+      },
+      {
+        "date": "2018-08-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 7208.0
+      },
+      {
+        "date": "2018-09-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 7411.0
+      },
+      {
+        "date": "2018-10-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 7304.0
+      },
+      {
+        "date": "2018-11-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 7594.0
+      },
+      {
+        "date": "2018-12-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 7489.0
+      },
+      {
+        "date": "2019-01-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 7502.0
+      },
+      {
+        "date": "2019-02-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 7066.0
+      },
+      {
+        "date": "2019-03-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 7317.0
+      },
+      {
+        "date": "2019-04-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 7272.0
+      },
+      {
+        "date": "2019-05-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 7275.0
+      },
+      {
+        "date": "2019-06-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 7194.0
+      },
+      {
+        "date": "2019-07-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 7042.0
+      },
+      {
+        "date": "2019-08-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 7178.0
+      },
+      {
+        "date": "2019-09-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 7124.0
+      },
+      {
+        "date": "2019-10-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 7289.0
+      },
+      {
+        "date": "2019-11-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 6888.0
+      },
+      {
+        "date": "2019-12-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 6699.0
+      },
+      {
+        "date": "2020-01-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 7124.0
+      },
+      {
+        "date": "2020-02-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 6966.0
+      },
+      {
+        "date": "2020-03-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 5894.0
+      },
+      {
+        "date": "2020-04-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 4606.0
+      },
+      {
+        "date": "2020-05-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 5612.0
+      },
+      {
+        "date": "2020-06-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 6129.0
+      },
+      {
+        "date": "2020-07-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 6530.0
+      },
+      {
+        "date": "2020-08-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 6429.0
+      },
+      {
+        "date": "2020-09-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 6511.0
+      },
+      {
+        "date": "2020-10-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 6798.0
+      },
+      {
+        "date": "2020-11-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 6820.0
+      },
+      {
+        "date": "2020-12-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 6773.0
+      },
+      {
+        "date": "2021-01-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 7204.0
+      },
+      {
+        "date": "2021-02-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 7752.0
+      },
+      {
+        "date": "2021-03-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 8470.0
+      },
+      {
+        "date": "2021-04-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 9356.0
+      },
+      {
+        "date": "2021-05-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 9905.0
+      },
+      {
+        "date": "2021-06-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 10298.0
+      },
+      {
+        "date": "2021-07-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 11049.0
+      },
+      {
+        "date": "2021-08-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 10956.0
+      },
+      {
+        "date": "2021-09-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 10879.0
+      },
+      {
+        "date": "2021-10-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 11341.0
+      },
+      {
+        "date": "2021-11-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 11119.0
+      },
+      {
+        "date": "2021-12-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 11417.0
+      },
+      {
+        "date": "2022-01-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 11238.0
+      },
+      {
+        "date": "2022-02-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 11661.0
+      },
+      {
+        "date": "2022-03-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 12134.0
+      },
+      {
+        "date": "2022-04-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 11881.0
+      },
+      {
+        "date": "2022-05-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 11483.0
+      },
+      {
+        "date": "2022-06-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 11256.0
+      },
+      {
+        "date": "2022-07-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 11610.0
+      },
+      {
+        "date": "2022-08-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 10148.0
+      },
+      {
+        "date": "2022-09-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 10812.0
+      },
+      {
+        "date": "2022-10-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 10488.0
+      },
+      {
+        "date": "2022-11-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 10619.0
+      },
+      {
+        "date": "2022-12-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 10876.0
+      },
+      {
+        "date": "2023-01-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 10393.0
+      },
+      {
+        "date": "2023-02-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 9846.0
+      },
+      {
+        "date": "2023-03-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 9572.0
+      },
+      {
+        "date": "2023-04-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 9992.0
+      },
+      {
+        "date": "2023-05-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 9310.0
+      },
+      {
+        "date": "2023-06-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 9191.0
+      },
+      {
+        "date": "2023-07-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 8606.0
+      },
+      {
+        "date": "2023-08-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 9287.0
+      },
+      {
+        "date": "2023-09-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 9279.0
+      },
+      {
+        "date": "2023-10-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 8550.0
+      },
+      {
+        "date": "2023-11-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 8663.0
+      },
+      {
+        "date": "2023-12-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 8585.0
+      },
+      {
+        "date": "2024-01-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 8468.0
+      },
+      {
+        "date": "2024-02-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 8445.0
+      },
+      {
+        "date": "2024-03-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 8093.0
+      },
+      {
+        "date": "2024-04-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 7619.0
+      },
+      {
+        "date": "2024-05-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 7901.0
+      },
+      {
+        "date": "2024-06-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 7412.0
+      },
+      {
+        "date": "2024-07-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 7504.0
+      },
+      {
+        "date": "2024-08-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 7649.0
+      },
+      {
+        "date": "2024-09-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 7103.0
+      },
+      {
+        "date": "2024-10-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 7615.0
+      },
+      {
+        "date": "2024-11-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 8031.0
+      },
+      {
+        "date": "2024-12-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 7508.0
+      },
+      {
+        "date": "2025-01-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 7762.0
+      },
+      {
+        "date": "2025-02-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 7480.0
+      },
+      {
+        "date": "2025-03-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 7200.0
+      },
+      {
+        "date": "2025-04-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 7395.0
+      },
+      {
+        "date": "2025-05-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 7712.0
+      },
+      {
+        "date": "2025-06-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 7357.0
+      },
+      {
+        "date": "2025-07-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 7208.0
+      },
+      {
+        "date": "2025-08-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 7227.0
+      },
+      {
+        "date": "2025-09-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 7658.0
+      },
+      {
+        "date": "2025-10-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 7449.0
+      },
+      {
+        "date": "2025-11-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "Level",
+        "units": "Level in Thousands",
+        "value": 7146.0
+      },
+      {
+        "date": "2016-01-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 12.5
+      },
+      {
+        "date": "2016-02-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 5.56165
+      },
+      {
+        "date": "2016-03-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 17.63916
+      },
+      {
+        "date": "2016-04-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 3.66202
+      },
+      {
+        "date": "2016-05-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 3.84685
+      },
+      {
+        "date": "2016-06-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 9.41311
+      },
+      {
+        "date": "2016-07-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -1.55218
+      },
+      {
+        "date": "2016-08-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 3.84123
+      },
+      {
+        "date": "2016-09-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 6.9242
+      },
+      {
+        "date": "2016-10-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -3.15261
+      },
+      {
+        "date": "2016-11-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 4.60757
+      },
+      {
+        "date": "2016-12-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 2.03593
+      },
+      {
+        "date": "2017-01-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -6.57019
+      },
+      {
+        "date": "2017-02-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 2.65165
+      },
+      {
+        "date": "2017-03-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -5.18845
+      },
+      {
+        "date": "2017-04-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 4.96295
+      },
+      {
+        "date": "2017-05-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 0.84819
+      },
+      {
+        "date": "2017-06-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 9.80495
+      },
+      {
+        "date": "2017-07-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 4.62932
+      },
+      {
+        "date": "2017-08-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 10.55135
+      },
+      {
+        "date": "2017-09-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 7.70279
+      },
+      {
+        "date": "2017-10-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 14.61277
+      },
+      {
+        "date": "2017-11-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 5.02428
+      },
+      {
+        "date": "2017-12-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 6.23742
+      },
+      {
+        "date": "2018-01-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 17.87431
+      },
+      {
+        "date": "2018-02-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 10.61962
+      },
+      {
+        "date": "2018-03-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 17.3292
+      },
+      {
+        "date": "2018-04-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 12.90429
+      },
+      {
+        "date": "2018-05-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 20.42568
+      },
+      {
+        "date": "2018-06-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 14.6709
+      },
+      {
+        "date": "2018-07-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 15.2613
+      },
+      {
+        "date": "2018-08-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 14.85022
+      },
+      {
+        "date": "2018-09-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 17.26266
+      },
+      {
+        "date": "2018-10-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 13.98252
+      },
+      {
+        "date": "2018-11-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 21.09711
+      },
+      {
+        "date": "2018-12-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 18.1976
+      },
+      {
+        "date": "2019-01-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 13.30615
+      },
+      {
+        "date": "2019-02-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 7.84493
+      },
+      {
+        "date": "2019-03-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 7.31886
+      },
+      {
+        "date": "2019-04-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 5.74378
+      },
+      {
+        "date": "2019-05-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 3.69156
+      },
+      {
+        "date": "2019-06-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -0.49793
+      },
+      {
+        "date": "2019-07-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -2.05841
+      },
+      {
+        "date": "2019-08-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -0.4162
+      },
+      {
+        "date": "2019-09-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -3.87262
+      },
+      {
+        "date": "2019-10-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -0.20537
+      },
+      {
+        "date": "2019-11-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -9.29681
+      },
+      {
+        "date": "2019-12-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -10.5488
+      },
+      {
+        "date": "2020-01-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -5.03866
+      },
+      {
+        "date": "2020-02-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -1.41523
+      },
+      {
+        "date": "2020-03-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -19.44786
+      },
+      {
+        "date": "2020-04-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -36.66117
+      },
+      {
+        "date": "2020-05-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -22.85911
+      },
+      {
+        "date": "2020-06-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -14.804
+      },
+      {
+        "date": "2020-07-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -7.27066
+      },
+      {
+        "date": "2020-08-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -10.43466
+      },
+      {
+        "date": "2020-09-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -8.60472
+      },
+      {
+        "date": "2020-10-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -6.73618
+      },
+      {
+        "date": "2020-11-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -0.98722
+      },
+      {
+        "date": "2020-12-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 1.10464
+      },
+      {
+        "date": "2021-01-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 1.12296
+      },
+      {
+        "date": "2021-02-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 11.28338
+      },
+      {
+        "date": "2021-03-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 43.70546
+      },
+      {
+        "date": "2021-04-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 103.12636
+      },
+      {
+        "date": "2021-05-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 76.49679
+      },
+      {
+        "date": "2021-06-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 68.02088
+      },
+      {
+        "date": "2021-07-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 69.20368
+      },
+      {
+        "date": "2021-08-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 70.41531
+      },
+      {
+        "date": "2021-09-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 67.08647
+      },
+      {
+        "date": "2021-10-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 66.82848
+      },
+      {
+        "date": "2021-11-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 63.03519
+      },
+      {
+        "date": "2021-12-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 68.56637
+      },
+      {
+        "date": "2022-01-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 55.99667
+      },
+      {
+        "date": "2022-02-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 50.4257
+      },
+      {
+        "date": "2022-03-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 43.25856
+      },
+      {
+        "date": "2022-04-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 26.98803
+      },
+      {
+        "date": "2022-05-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 15.93135
+      },
+      {
+        "date": "2022-06-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 9.30278
+      },
+      {
+        "date": "2022-07-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 5.07738
+      },
+      {
+        "date": "2022-08-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -7.37495
+      },
+      {
+        "date": "2022-09-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -0.61587
+      },
+      {
+        "date": "2022-10-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -7.52138
+      },
+      {
+        "date": "2022-11-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -4.49681
+      },
+      {
+        "date": "2022-12-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -4.73855
+      },
+      {
+        "date": "2023-01-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -7.51913
+      },
+      {
+        "date": "2023-02-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -15.5647
+      },
+      {
+        "date": "2023-03-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -21.11422
+      },
+      {
+        "date": "2023-04-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -15.89934
+      },
+      {
+        "date": "2023-05-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -18.92363
+      },
+      {
+        "date": "2023-06-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -18.34577
+      },
+      {
+        "date": "2023-07-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -25.87425
+      },
+      {
+        "date": "2023-08-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -8.48443
+      },
+      {
+        "date": "2023-09-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -14.17869
+      },
+      {
+        "date": "2023-10-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -18.47826
+      },
+      {
+        "date": "2023-11-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -18.41981
+      },
+      {
+        "date": "2023-12-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -21.06473
+      },
+      {
+        "date": "2024-01-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -18.52208
+      },
+      {
+        "date": "2024-02-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -14.22913
+      },
+      {
+        "date": "2024-03-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -15.45132
+      },
+      {
+        "date": "2024-04-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -23.749
+      },
+      {
+        "date": "2024-05-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -15.13426
+      },
+      {
+        "date": "2024-06-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -19.35589
+      },
+      {
+        "date": "2024-07-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -12.80502
+      },
+      {
+        "date": "2024-08-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -17.63756
+      },
+      {
+        "date": "2024-09-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -23.4508
+      },
+      {
+        "date": "2024-10-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -10.93567
+      },
+      {
+        "date": "2024-11-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -7.29539
+      },
+      {
+        "date": "2024-12-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -12.54514
+      },
+      {
+        "date": "2025-01-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -8.33727
+      },
+      {
+        "date": "2025-02-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -11.42688
+      },
+      {
+        "date": "2025-03-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -11.03423
+      },
+      {
+        "date": "2025-04-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -2.94002
+      },
+      {
+        "date": "2025-05-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -2.3921
+      },
+      {
+        "date": "2025-06-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -0.74204
+      },
+      {
+        "date": "2025-07-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -3.94456
+      },
+      {
+        "date": "2025-08-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -5.51706
+      },
+      {
+        "date": "2025-09-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": 7.8136
+      },
+      {
+        "date": "2025-10-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -2.17991
+      },
+      {
+        "date": "2025-11-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "YoY %",
+        "units": "Percent (%)",
+        "value": -11.0198
+      },
+      {
+        "date": "2016-01-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 2.85714
+      },
+      {
+        "date": "2016-02-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -4.02528
+      },
+      {
+        "date": "2016-03-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 6.22184
+      },
+      {
+        "date": "2016-04-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -5.31898
+      },
+      {
+        "date": "2016-05-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -0.44804
+      },
+      {
+        "date": "2016-06-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -0.60585
+      },
+      {
+        "date": "2016-07-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 3.83142
+      },
+      {
+        "date": "2016-08-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -4.78028
+      },
+      {
+        "date": "2016-09-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 3.36445
+      },
+      {
+        "date": "2016-10-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -4.72052
+      },
+      {
+        "date": "2016-11-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 6.79664
+      },
+      {
+        "date": "2016-12-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -0.11723
+      },
+      {
+        "date": "2017-01-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -5.81824
+      },
+      {
+        "date": "2017-02-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 5.44775
+      },
+      {
+        "date": "2017-03-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -1.89093
+      },
+      {
+        "date": "2017-04-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 4.81845
+      },
+      {
+        "date": "2017-05-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -4.35068
+      },
+      {
+        "date": "2017-06-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 8.22176
+      },
+      {
+        "date": "2017-07-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -1.06265
+      },
+      {
+        "date": "2017-08-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 0.60917
+      },
+      {
+        "date": "2017-09-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 0.70108
+      },
+      {
+        "date": "2017-10-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 1.39241
+      },
+      {
+        "date": "2017-11-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -2.13795
+      },
+      {
+        "date": "2017-12-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 1.03652
+      },
+      {
+        "date": "2018-01-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 4.49811
+      },
+      {
+        "date": "2018-02-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -1.04214
+      },
+      {
+        "date": "2018-03-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 4.05983
+      },
+      {
+        "date": "2018-04-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 0.86536
+      },
+      {
+        "date": "2018-05-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 2.02123
+      },
+      {
+        "date": "2018-06-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 3.05017
+      },
+      {
+        "date": "2018-07-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -0.55325
+      },
+      {
+        "date": "2018-08-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 0.25035
+      },
+      {
+        "date": "2018-09-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 2.81632
+      },
+      {
+        "date": "2018-10-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -1.4438
+      },
+      {
+        "date": "2018-11-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 3.97043
+      },
+      {
+        "date": "2018-12-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -1.38267
+      },
+      {
+        "date": "2019-01-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 0.17359
+      },
+      {
+        "date": "2019-02-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -5.81178
+      },
+      {
+        "date": "2019-03-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 3.55222
+      },
+      {
+        "date": "2019-04-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -0.61501
+      },
+      {
+        "date": "2019-05-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 0.04125
+      },
+      {
+        "date": "2019-06-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -1.1134
+      },
+      {
+        "date": "2019-07-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -2.11287
+      },
+      {
+        "date": "2019-08-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 1.93127
+      },
+      {
+        "date": "2019-09-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -0.7523
+      },
+      {
+        "date": "2019-10-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 2.31611
+      },
+      {
+        "date": "2019-11-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -5.50144
+      },
+      {
+        "date": "2019-12-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -2.7439
+      },
+      {
+        "date": "2020-01-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 6.34423
+      },
+      {
+        "date": "2020-02-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -2.21786
+      },
+      {
+        "date": "2020-03-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -15.38903
+      },
+      {
+        "date": "2020-04-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -21.85273
+      },
+      {
+        "date": "2020-05-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 21.84108
+      },
+      {
+        "date": "2020-06-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 9.2124
+      },
+      {
+        "date": "2020-07-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 6.54267
+      },
+      {
+        "date": "2020-08-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -1.54671
+      },
+      {
+        "date": "2020-09-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 1.27547
+      },
+      {
+        "date": "2020-10-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 4.40793
+      },
+      {
+        "date": "2020-11-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 0.32362
+      },
+      {
+        "date": "2020-12-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -0.68915
+      },
+      {
+        "date": "2021-01-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 6.3635
+      },
+      {
+        "date": "2021-02-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 7.60689
+      },
+      {
+        "date": "2021-03-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 9.26213
+      },
+      {
+        "date": "2021-04-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 10.46045
+      },
+      {
+        "date": "2021-05-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 5.86789
+      },
+      {
+        "date": "2021-06-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 3.96769
+      },
+      {
+        "date": "2021-07-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 7.29268
+      },
+      {
+        "date": "2021-08-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -0.84171
+      },
+      {
+        "date": "2021-09-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -0.70281
+      },
+      {
+        "date": "2021-10-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 4.24671
+      },
+      {
+        "date": "2021-11-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -1.9575
+      },
+      {
+        "date": "2021-12-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 2.6801
+      },
+      {
+        "date": "2022-01-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -1.56784
+      },
+      {
+        "date": "2022-02-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 3.76401
+      },
+      {
+        "date": "2022-03-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 4.05626
+      },
+      {
+        "date": "2022-04-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -2.08505
+      },
+      {
+        "date": "2022-05-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -3.34989
+      },
+      {
+        "date": "2022-06-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -1.97684
+      },
+      {
+        "date": "2022-07-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 3.14499
+      },
+      {
+        "date": "2022-08-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -12.59259
+      },
+      {
+        "date": "2022-09-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 6.54316
+      },
+      {
+        "date": "2022-10-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -2.99667
+      },
+      {
+        "date": "2022-11-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 1.24905
+      },
+      {
+        "date": "2022-12-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 2.42019
+      },
+      {
+        "date": "2023-01-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -4.44097
+      },
+      {
+        "date": "2023-02-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -5.26316
+      },
+      {
+        "date": "2023-03-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -2.78286
+      },
+      {
+        "date": "2023-04-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 4.3878
+      },
+      {
+        "date": "2023-05-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -6.82546
+      },
+      {
+        "date": "2023-06-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -1.2782
+      },
+      {
+        "date": "2023-07-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -6.36492
+      },
+      {
+        "date": "2023-08-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 7.91308
+      },
+      {
+        "date": "2023-09-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -0.08614
+      },
+      {
+        "date": "2023-10-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -7.85645
+      },
+      {
+        "date": "2023-11-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 1.32164
+      },
+      {
+        "date": "2023-12-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -0.90038
+      },
+      {
+        "date": "2024-01-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -1.36284
+      },
+      {
+        "date": "2024-02-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -0.27161
+      },
+      {
+        "date": "2024-03-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -4.16815
+      },
+      {
+        "date": "2024-04-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -5.85691
+      },
+      {
+        "date": "2024-05-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 3.70127
+      },
+      {
+        "date": "2024-06-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -6.18909
+      },
+      {
+        "date": "2024-07-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 1.24123
+      },
+      {
+        "date": "2024-08-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 1.9323
+      },
+      {
+        "date": "2024-09-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -7.13819
+      },
+      {
+        "date": "2024-10-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 7.20822
+      },
+      {
+        "date": "2024-11-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 5.4629
+      },
+      {
+        "date": "2024-12-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -6.51226
+      },
+      {
+        "date": "2025-01-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 3.38306
+      },
+      {
+        "date": "2025-02-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -3.63308
+      },
+      {
+        "date": "2025-03-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -3.74332
+      },
+      {
+        "date": "2025-04-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 2.70833
+      },
+      {
+        "date": "2025-05-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 4.28668
+      },
+      {
+        "date": "2025-06-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -4.60322
+      },
+      {
+        "date": "2025-07-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -2.02528
+      },
+      {
+        "date": "2025-08-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 0.2636
+      },
+      {
+        "date": "2025-09-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": 5.96375
+      },
+      {
+        "date": "2025-10-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -2.72917
+      },
+      {
+        "date": "2025-11-01T00:00:00",
+        "realtime_end": "2026-01-23",
+        "realtime_start": "2026-01-23",
+        "type": "MoM %",
+        "units": "Percent (%)",
+        "value": -4.06766
+      }
+    ]
+  },
+  "params": [
+    {
+      "bind": {
+        "input": "radio",
+        "name": "View: ",
+        "options": [
+          "Level",
+          "YoY %",
+          "MoM %"
+        ]
+      },
+      "name": "param_5",
+      "select": {
+        "fields": [
+          "type"
+        ],
+        "type": "point"
+      },
+      "value": "Level",
+      "views": [
+        "view_5"
+      ]
+    },
+    {
+      "name": "param_6",
+      "select": {
+        "encodings": [
+          "x"
+        ],
+        "type": "interval"
+      },
+      "views": [
+        "view_6"
+      ]
+    }
+  ],
+  "resolve": {
+    "scale": {
+      "x": "independent"
+    }
+  },
+  "title": {
+    "anchor": "start",
+    "color": "#2c3e50",
+    "fontSize": 18,
+    "fontWeight": "normal",
+    "subtitle": "Units: Level in Thousands (changes with selection)",
+    "subtitleColor": "#666",
+    "subtitleFontSize": 12,
+    "text": "Job Openings\u2014Total Nonfarm"
+  },
+  "vconcat": [
+    {
+      "height": 300,
+      "layer": [
+        {
+          "data": {
+            "name": "data-d35fd132196b494e2b103e66c6baa462"
+          },
+          "encoding": {
+            "tooltip": [
+              {
+                "field": "date",
+                "format": "%B %Y",
+                "title": "Date",
+                "type": "temporal"
+              },
+              {
+                "field": "value",
+                "format": ",.2f",
+                "title": "Value",
+                "type": "quantitative"
+              },
+              {
+                "field": "units",
+                "title": "Units",
+                "type": "nominal"
+              }
+            ],
+            "x": {
+              "axis": {
+                "format": "%Y",
+                "labelColor": "#555",
+                "labelFontSize": 11
+              },
+              "field": "date",
+              "scale": {
+                "domain": {
+                  "param": "param_6"
+                }
+              },
+              "title": "",
+              "type": "temporal"
+            },
+            "y": {
+              "axis": {
+                "grid": true,
+                "gridColor": "#E8E8E8",
+                "labelColor": "#555"
+              },
+              "field": "value",
+              "title": "Level in Thousands",
+              "type": "quantitative"
+            }
+          },
+          "mark": {
+            "color": "#2E86AB",
+            "strokeWidth": 3,
+            "type": "line"
+          },
+          "name": "view_5",
+          "transform": [
+            {
+              "filter": {
+                "param": "param_5"
+              }
+            }
+          ]
+        },
+        {
+          "data": {
+            "name": "data-67dd51329816a186197179336ae77f57"
+          },
+          "encoding": {
+            "y": {
+              "field": "y",
+              "type": "quantitative"
+            }
+          },
+          "mark": {
+            "color": "#C73E1D",
+            "opacity": 0.7,
+            "strokeDash": [
+              8,
+              4
+            ],
+            "strokeWidth": 2,
+            "type": "rule"
+          }
+        }
+      ],
+      "width": "container"
+    },
+    {
+      "data": {
+        "name": "data-d35fd132196b494e2b103e66c6baa462"
+      },
+      "encoding": {
+        "x": {
+          "axis": {
+            "format": "%Y",
+            "labelColor": "#666",
+            "labelFontSize": 10
+          },
+          "field": "date",
+          "title": "Drag to select date range",
+          "type": "temporal"
+        },
+        "y": {
+          "axis": null,
+          "field": "value",
+          "type": "quantitative"
+        }
+      },
+      "height": 40,
+      "mark": {
+        "color": "#2E86AB",
+        "strokeWidth": 1,
+        "type": "line"
+      },
+      "name": "view_6",
+      "transform": [
+        {
+          "filter": {
+            "param": "param_5"
+          }
+        }
+      ],
+      "width": "container"
+    }
+  ]
+};
+    
+    vegaEmbed('#vis', spec, {
+      actions: false,
+      renderer: 'svg',
+      width: 'container',
+      height: 'container'
+    }).catch(console.error);
+    
+    // Handle window resize
+    window.addEventListener('resize', () => {
+      vegaEmbed('#vis', spec, {
+        actions: false,
+        renderer: 'svg',
+        width: 'container',
+        height: 'container'
+      }).catch(console.error);
+    });
   </script>
 </body>
 </html>
