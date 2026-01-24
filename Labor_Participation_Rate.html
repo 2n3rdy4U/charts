@@ -4,59 +4,72 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        * {
+        * {{
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        }
-        html, body {
+        }}
+        html, body {{
             width: 100%;
             height: 100%;
             overflow: hidden;
-        }
-        #vis {
+        }}
+        #vis {{
             width: 100%;
             height: 100%;
             display: flex;
             flex-direction: column;
-        }
-        #vis .vega-embed {
+        }}
+        #vis .vega-embed {{
             width: 100% !important;
             flex: 1;
-        }
-        #vis .vega-embed details {
+        }}
+        #vis .vega-embed details {{
             position: absolute;
             right: 5px;
             top: 5px;
-        }
+        }}
         /* Style the radio buttons */
-        .vega-bindings {
+        .vega-bindings {{
             padding: 5px 0 10px 0;
             font-family: Georgia, serif;
             font-size: 13px;
-        }
-        .vega-bind {
+        }}
+        .vega-bind {{
             padding: 2px 0;
-        }
-        .vega-bind-name {
+        }}
+        .vega-bind-name {{
             font-weight: normal;
             color: #555;
-        }
-        .vega-bind input[type="radio"] {
+        }}
+        .vega-bind input[type="radio"] {{
             margin: 0 3px 0 8px;
-        }
+        }}
     </style>
     <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 </head>
 <body>
+    <div id="controls" style="padding:8px 0 12px 0; font-family: Georgia, serif;">
+        <button data-range="1">1M</button>
+        <button data-range="3">3M</button>
+        <button data-range="12">1Y</button>
+        <button data-range="60">5Y</button>
+        <button data-range="all">All</button>
+    </div>
     <div id="vis"></div>
     <script>
-        const spec = {
+        const originalSpec = {
   "$schema": "https://vega.github.io/schema/vega-lite/v6.1.0.json",
   "config": {
-    "axis": {
+    "axisX": {
+      "grid": false,
+      "labelFont": "Georgia, serif",
+      "titleFont": "Georgia, serif"
+    },
+    "axisY": {
+      "grid": true,
       "labelFont": "Georgia, serif",
       "titleFont": "Georgia, serif"
     },
@@ -910,7 +923,8 @@
   },
   "params": [
     {
-      "name": "param_c97a99acfc68b794",
+      "bind": "scales",
+      "name": "param_db82be42624d4632",
       "select": {
         "encodings": [
           "x"
@@ -939,7 +953,7 @@
               "field": "date",
               "scale": {
                 "domain": {
-                  "param": "param_c97a99acfc68b794"
+                  "param": "param_db82be42624d4632"
                 }
               },
               "title": "",
@@ -968,7 +982,7 @@
               "field": "date",
               "scale": {
                 "domain": {
-                  "param": "param_c97a99acfc68b794"
+                  "param": "param_db82be42624d4632"
                 }
               },
               "title": "",
@@ -1018,18 +1032,47 @@
     }
   ]
 };
-    
-        vegaEmbed('#vis', spec, {
-            actions: false,
-            renderer: 'svg'
-        }).catch(console.error);
-    
-        // Handle window resize
-        window.addEventListener('resize', () => {
+
+        function toSpecWithRange(months){
+            const spec = JSON.parse(JSON.stringify(originalSpec));
+            if(!spec.params || !spec.params.length) return spec;
+            if(months === 'all'){
+                if(spec.params[0]) delete spec.params[0].value;
+                return spec;
+            }
+            const end = new Date();
+            const start = new Date(end);
+            start.setMonth(end.getMonth() - Number(months));
+            const startISO = start.toISOString().slice(0,19);
+            const endISO = end.toISOString().slice(0,19);
+            spec.params[0].value = { x: [startISO, endISO] };
+            return spec;
+        }
+
+        function render(spec){
             vegaEmbed('#vis', spec, {
                 actions: false,
                 renderer: 'svg'
             }).catch(console.error);
+        }
+
+        // Hook up buttons
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('#controls button').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const r = btn.dataset.range;
+                    const s = toSpecWithRange(r);
+                    render(s);
+                });
+            });
+
+            // Initial render
+            render(originalSpec);
+
+            // Handle window resize by re-rendering current spec
+            window.addEventListener('resize', () => {
+                render(originalSpec);
+            });
         });
     </script>
 </body>
