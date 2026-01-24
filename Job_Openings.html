@@ -65,14 +65,15 @@
     },
     "view": {
       "continuousHeight": 300,
-      "continuousWidth": 300,
-      "strokeWidth": 0
+      "continuousWidth": 300
     }
   },
-  "data": {
-    "name": "data-ac888aa7900b93cadadf254c10c67d7b"
-  },
   "datasets": {
+    "data-43d771ff9cdc14c792f13dd4ee839bf0": [
+      {
+        "note": "Next Publication Date: Feb 03, 2026 09:00"
+      }
+    ],
     "data-ac888aa7900b93cadadf254c10c67d7b": [
       {
         "date": "2016-01-01T00:00:00",
@@ -923,129 +924,153 @@
       ]
     }
   ],
-  "resolve": {
-    "scale": {
-      "x": "independent"
-    }
-  },
-  "title": {
-    "anchor": "start",
-    "color": "#2c3e50",
-    "fontSize": 18,
-    "fontWeight": "normal",
-    "subtitleColor": "#666",
-    "subtitleFontSize": 12,
-    "text": "Job Openings\u2014Total Nonfarm"
-  },
   "vconcat": [
     {
-      "height": 300,
-      "layer": [
+      "data": {
+        "name": "data-ac888aa7900b93cadadf254c10c67d7b"
+      },
+      "title": {
+        "anchor": "start",
+        "color": "#2c3e50",
+        "fontSize": 18,
+        "fontWeight": "normal",
+        "subtitleColor": "#666",
+        "subtitleFontSize": 12,
+        "text": "Job Openings\u2014Total Nonfarm"
+      },
+      "vconcat": [
         {
-          "encoding": {
-            "x": {
-              "field": "date",
-              "scale": {
-                "domain": {
-                  "param": "param_3"
+          "height": 300,
+          "layer": [
+            {
+              "encoding": {
+                "x": {
+                  "field": "date",
+                  "scale": {
+                    "domain": {
+                      "param": "param_3"
+                    }
+                  },
+                  "title": "",
+                  "type": "temporal"
+                },
+                "y": {
+                  "field": "value",
+                  "title": "Level in Thousands",
+                  "type": "quantitative"
                 }
               },
-              "title": "",
-              "type": "temporal"
+              "mark": {
+                "color": "#2E86AB",
+                "opacity": 0.12,
+                "type": "area"
+              }
             },
-            "y": {
-              "field": "value",
-              "title": "Level in Thousands",
-              "type": "quantitative"
+            {
+              "encoding": {
+                "tooltip": [
+                  {
+                    "field": "date",
+                    "format": "%B %Y",
+                    "title": "Date",
+                    "type": "temporal"
+                  },
+                  {
+                    "field": "value",
+                    "format": ",.2f",
+                    "title": "Value",
+                    "type": "quantitative"
+                  },
+                  {
+                    "field": "units",
+                    "title": "Units",
+                    "type": "nominal"
+                  }
+                ],
+                "x": {
+                  "axis": {
+                    "format": "%Y",
+                    "labelColor": "#555",
+                    "labelFontSize": 11
+                  },
+                  "field": "date",
+                  "scale": {
+                    "domain": {
+                      "param": "param_3"
+                    }
+                  },
+                  "title": "",
+                  "type": "temporal"
+                },
+                "y": {
+                  "axis": {
+                    "grid": true,
+                    "gridColor": "#E8E8E8",
+                    "labelColor": "#555"
+                  },
+                  "field": "value",
+                  "title": "Level in Thousands",
+                  "type": "quantitative"
+                }
+              },
+              "mark": {
+                "color": "#2E86AB",
+                "strokeWidth": 3,
+                "type": "line"
+              }
             }
-          },
-          "mark": {
-            "color": "#2E86AB",
-            "opacity": 0.12,
-            "type": "area"
-          }
+          ],
+          "width": 800
         },
         {
           "encoding": {
-            "tooltip": [
-              {
-                "field": "date",
-                "format": "%B %Y",
-                "title": "Date",
-                "type": "temporal"
-              },
-              {
-                "field": "value",
-                "format": ",.2f",
-                "title": "Value",
-                "type": "quantitative"
-              },
-              {
-                "field": "units",
-                "title": "Units",
-                "type": "nominal"
-              }
-            ],
             "x": {
               "axis": {
                 "format": "%Y",
-                "labelColor": "#555",
-                "labelFontSize": 11
+                "labelColor": "#666",
+                "labelFontSize": 10
               },
               "field": "date",
-              "scale": {
-                "domain": {
-                  "param": "param_3"
-                }
-              },
-              "title": "",
+              "title": "Drag to select date range",
               "type": "temporal"
             },
             "y": {
-              "axis": {
-                "grid": true,
-                "gridColor": "#E8E8E8",
-                "labelColor": "#555"
-              },
+              "axis": null,
               "field": "value",
-              "title": "Level in Thousands",
               "type": "quantitative"
             }
           },
+          "height": 40,
           "mark": {
             "color": "#2E86AB",
-            "strokeWidth": 3,
+            "strokeWidth": 1,
             "type": "line"
-          }
+          },
+          "name": "view_3",
+          "width": 800
         }
-      ],
-      "width": 800
+      ]
     },
     {
+      "data": {
+        "name": "data-43d771ff9cdc14c792f13dd4ee839bf0"
+      },
       "encoding": {
-        "x": {
-          "axis": {
-            "format": "%Y",
-            "labelColor": "#666",
-            "labelFontSize": 10
-          },
-          "field": "date",
-          "title": "Drag to select date range",
-          "type": "temporal"
-        },
-        "y": {
-          "axis": null,
-          "field": "value",
-          "type": "quantitative"
+        "text": {
+          "field": "note",
+          "type": "nominal"
         }
       },
-      "height": 40,
+      "height": 20,
       "mark": {
-        "color": "#2E86AB",
-        "strokeWidth": 1,
-        "type": "line"
+        "align": "left",
+        "baseline": "top",
+        "color": "#888",
+        "dx": 0,
+        "dy": 0,
+        "fontSize": 12,
+        "type": "text"
       },
-      "name": "view_3",
       "width": 800
     }
   ]
