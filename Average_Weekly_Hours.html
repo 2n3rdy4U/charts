@@ -946,21 +946,6 @@
       }
     ]
   },
-  "params": [
-    {
-      "bind": "scales",
-      "name": "param_db82be42624d4632",
-      "select": {
-        "encodings": [
-          "x"
-        ],
-        "type": "interval"
-      },
-      "views": [
-        "view_248e4db49fb78b7e_1"
-      ]
-    }
-  ],
   "title": {
     "anchor": "start",
     "color": "#2c3e50",
@@ -976,11 +961,6 @@
           "encoding": {
             "x": {
               "field": "date",
-              "scale": {
-                "domain": {
-                  "param": "param_db82be42624d4632"
-                }
-              },
               "title": "",
               "type": "temporal"
             },
@@ -1005,11 +985,6 @@
                 "labelFontSize": 11
               },
               "field": "date",
-              "scale": {
-                "domain": {
-                  "param": "param_db82be42624d4632"
-                }
-              },
               "title": "",
               "type": "temporal"
             },
@@ -1026,33 +1001,6 @@
           }
         }
       ],
-      "width": 800
-    },
-    {
-      "encoding": {
-        "x": {
-          "axis": {
-            "format": "%Y",
-            "labelColor": "#666",
-            "labelFontSize": 10
-          },
-          "field": "date",
-          "title": "Drag to select date range",
-          "type": "temporal"
-        },
-        "y": {
-          "axis": null,
-          "field": "value",
-          "type": "quantitative"
-        }
-      },
-      "height": 40,
-      "mark": {
-        "color": "#2E86AB",
-        "strokeWidth": 1,
-        "type": "line"
-      },
-      "name": "view_248e4db49fb78b7e_1",
       "width": 800
     }
   ]
