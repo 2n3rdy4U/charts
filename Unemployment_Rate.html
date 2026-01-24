@@ -1,59 +1,59 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    html, body {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-    }
-    #vis {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-    }
-    #vis .vega-embed {
-      width: 100% !important;
-      flex: 1;
-    }
-    #vis .vega-embed details {
-      position: absolute;
-      right: 5px;
-      top: 5px;
-    }
-    /* Style the radio buttons */
-    .vega-bindings {
-      padding: 5px 0 10px 0;
-      font-family: Georgia, serif;
-      font-size: 13px;
-    }
-    .vega-bind {
-      padding: 2px 0;
-    }
-    .vega-bind-name {
-      font-weight: normal;
-      color: #555;
-    }
-    .vega-bind input[type="radio"] {
-      margin: 0 3px 0 8px;
-    }
-  </style>
-  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        #vis {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        #vis .vega-embed {
+            width: 100% !important;
+            flex: 1;
+        }
+        #vis .vega-embed details {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+        }
+        /* Style the radio buttons */
+        .vega-bindings {
+            padding: 5px 0 10px 0;
+            font-family: Georgia, serif;
+            font-size: 13px;
+        }
+        .vega-bind {
+            padding: 2px 0;
+        }
+        .vega-bind-name {
+            font-weight: normal;
+            color: #555;
+        }
+        .vega-bind input[type="radio"] {
+            margin: 0 3px 0 8px;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 </head>
 <body>
-  <div id="vis"></div>
-  <script>
-    const spec = {
+    <div id="vis"></div>
+    <script>
+        const spec = {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json",
   "config": {
     "axis": {
@@ -1024,22 +1024,18 @@
   ]
 };
     
-    vegaEmbed('#vis', spec, {
-      actions: false,
-      renderer: 'svg',
-      width: 'container',
-      height: 'container'
-    }).catch(console.error);
+        vegaEmbed('#vis', spec, {
+            actions: false,
+            renderer: 'svg'
+        }).catch(console.error);
     
-    // Handle window resize
-    window.addEventListener('resize', () => {
-      vegaEmbed('#vis', spec, {
-        actions: false,
-        renderer: 'svg',
-        width: 'container',
-        height: 'container'
-      }).catch(console.error);
-    });
-  </script>
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            vegaEmbed('#vis', spec, {
+                actions: false,
+                renderer: 'svg'
+            }).catch(console.error);
+        });
+    </script>
 </body>
 </html>
