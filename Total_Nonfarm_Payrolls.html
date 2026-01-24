@@ -45,18 +45,36 @@
         .vega-bind input[type="radio"] {{
             margin: 0 3px 0 8px;
         }}
+        /* Preset buttons */
+        #preset-buttons button {
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 6px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: Georgia, serif;
+            color: #2c3e50;
+        }
+        #preset-buttons button.active {
+            background: #2E86AB;
+            color: white;
+            border-color: #2E86AB;
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 </head>
 <body>
-    <div id="controls" style="padding:8px 0 12px 0; font-family: Georgia, serif;">
-        <button data-range="1">1M</button>
-        <button data-range="3">3M</button>
-        <button data-range="12">1Y</button>
-        <button data-range="60">5Y</button>
-        <button data-range="all">All</button>
+    <div id="controls" style="padding:8px 0 12px 0; font-family: Georgia, serif; display:flex; gap:8px; align-items:center;">
+        <div id="preset-buttons">
+            <button data-range="1">1M</button>
+            <button data-range="3">3M</button>
+            <button data-range="12">1Y</button>
+            <button data-range="60">5Y</button>
+            <button data-range="all">All</button>
+        </div>
+        <span id="range-label" style="margin-left:12px;color:#555;font-size:13px;"></span>
     </div>
     <div id="vis"></div>
     <script>
@@ -1040,11 +1058,28 @@
   ]
 };
 
+        function computeAxisFormat(startISO, endISO){
+            const start = new Date(startISO);
+            const end = new Date(endISO);
+            const days = (end - start) / (1000*60*60*24);
+            if(days <= 90) return "%b %d, %Y"; // ~3 months -> show day
+            if(days <= 365) return "%b %Y"; // ~1 year -> show month+year
+            return "%Y"; // multi-year -> show year only
+        }
+
         function toSpecWithRange(months){
             const spec = JSON.parse(JSON.stringify(originalSpec));
             if(!spec.params || !spec.params.length) return spec;
             if(months === 'all'){
                 if(spec.params[0]) delete spec.params[0].value;
+                // default to year ticks
+                if(spec.vconcat && spec.vconcat.length>0){
+                    spec.vconcat[0].layer.forEach(l => {
+                        if(l.encoding && l.encoding.x && l.encoding.x.axis) l.encoding.x.axis.format = "%Y";
+                    });
+                    if(spec.vconcat[1] && spec.vconcat[1].encoding && spec.vconcat[1].encoding.x && spec.vconcat[1].encoding.x.axis) spec.vconcat[1].encoding.x.axis.format = "%Y";
+                }
+                updateRangeLabel(null, null);
                 return spec;
             }
             const end = new Date();
@@ -1053,7 +1088,29 @@
             const startISO = start.toISOString().slice(0,19);
             const endISO = end.toISOString().slice(0,19);
             spec.params[0].value = { x: [startISO, endISO] };
+            const fmt = computeAxisFormat(startISO, endISO);
+            // Apply axis format to main chart and timeline
+            if(spec.vconcat && spec.vconcat.length>0){
+                spec.vconcat[0].layer.forEach(l => {
+                    if(l.encoding && l.encoding.x && l.encoding.x.axis) l.encoding.x.axis.format = fmt;
+                });
+                if(spec.vconcat[1] && spec.vconcat[1].encoding && spec.vconcat[1].encoding.x && spec.vconcat[1].encoding.x.axis) spec.vconcat[1].encoding.x.axis.format = fmt;
+            }
+            updateRangeLabel(startISO, endISO);
             return spec;
+        }
+
+        function formatShortDate(iso){
+            if(!iso) return '';
+            const d = new Date(iso);
+            return d.toLocaleDateString(undefined, {year:'numeric', month:'short', day:'numeric'});
+        }
+
+        function updateRangeLabel(startISO, endISO){
+            const el = document.getElementById('range-label');
+            if(!el) return;
+            if(!startISO || !endISO) { el.textContent = ''; return; }
+            el.textContent = `Showing: ${formatShortDate(startISO)} — ${formatShortDate(endISO)}`;
         }
 
         function render(spec){
@@ -1065,13 +1122,19 @@
 
         // Hook up buttons
         document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('#controls button').forEach(btn => {
+            // Button active-state handling
+            const buttons = document.querySelectorAll('#preset-buttons button');
+            buttons.forEach(btn => {
                 btn.addEventListener('click', () => {
+                    buttons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
                     const r = btn.dataset.range;
                     const s = toSpecWithRange(r);
                     render(s);
                 });
             });
+            // default active for 'All'
+            buttons[buttons.length-1].classList.add('active');
 
             // Initial render
             render(originalSpec);
