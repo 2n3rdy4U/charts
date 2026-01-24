@@ -933,65 +933,93 @@
     "color": "#2c3e50",
     "fontSize": 18,
     "fontWeight": "normal",
-    "subtitle": "Units: Level in Thousands",
+    "subtitle": "",
     "subtitleColor": "#666",
     "subtitleFontSize": 12,
     "text": "Job Openings\u2014Total Nonfarm"
   },
   "vconcat": [
     {
-      "encoding": {
-        "tooltip": [
-          {
-            "field": "date",
-            "format": "%B %Y",
-            "title": "Date",
-            "type": "temporal"
-          },
-          {
-            "field": "value",
-            "format": ",.2f",
-            "title": "Value",
-            "type": "quantitative"
-          },
-          {
-            "field": "units",
-            "title": "Units",
-            "type": "nominal"
-          }
-        ],
-        "x": {
-          "axis": {
-            "format": "%Y",
-            "labelColor": "#555",
-            "labelFontSize": 11
-          },
-          "field": "date",
-          "scale": {
-            "domain": {
-              "param": "param_3"
+      "height": 300,
+      "layer": [
+        {
+          "encoding": {
+            "x": {
+              "field": "date",
+              "scale": {
+                "domain": {
+                  "param": "param_3"
+                }
+              },
+              "title": "",
+              "type": "temporal"
+            },
+            "y": {
+              "field": "value",
+              "title": "Level in Thousands",
+              "type": "quantitative"
             }
           },
-          "title": "",
-          "type": "temporal"
+          "mark": {
+            "color": "#2E86AB",
+            "opacity": 0.12,
+            "type": "area"
+          }
         },
-        "y": {
-          "axis": {
-            "grid": true,
-            "gridColor": "#E8E8E8",
-            "labelColor": "#555"
+        {
+          "encoding": {
+            "tooltip": [
+              {
+                "field": "date",
+                "format": "%B %Y",
+                "title": "Date",
+                "type": "temporal"
+              },
+              {
+                "field": "value",
+                "format": ",.2f",
+                "title": "Value",
+                "type": "quantitative"
+              },
+              {
+                "field": "units",
+                "title": "Units",
+                "type": "nominal"
+              }
+            ],
+            "x": {
+              "axis": {
+                "format": "%Y",
+                "labelColor": "#555",
+                "labelFontSize": 11
+              },
+              "field": "date",
+              "scale": {
+                "domain": {
+                  "param": "param_3"
+                }
+              },
+              "title": "",
+              "type": "temporal"
+            },
+            "y": {
+              "axis": {
+                "grid": true,
+                "gridColor": "#E8E8E8",
+                "labelColor": "#555"
+              },
+              "field": "value",
+              "title": "Level in Thousands",
+              "type": "quantitative"
+            }
           },
-          "field": "value",
-          "title": "Level in Thousands",
-          "type": "quantitative"
+          "mark": {
+            "color": "#2E86AB",
+            "strokeWidth": 3,
+            "type": "line"
+          }
         }
-      },
-      "height": 300,
-      "mark": {
-        "color": "#2E86AB",
-        "strokeWidth": 3,
-        "type": "line"
-      },
+      ],
       "width": 800
     },
     {

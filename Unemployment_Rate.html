@@ -933,65 +933,93 @@
     "color": "#2c3e50",
     "fontSize": 18,
     "fontWeight": "normal",
-    "subtitle": "Units: Percent",
+    "subtitle": "",
     "subtitleColor": "#666",
     "subtitleFontSize": 12,
     "text": "Unemployment Rate"
   },
   "vconcat": [
     {
-      "encoding": {
-        "tooltip": [
-          {
-            "field": "date",
-            "format": "%B %Y",
-            "title": "Date",
-            "type": "temporal"
-          },
-          {
-            "field": "value",
-            "format": ",.2f",
-            "title": "Value",
-            "type": "quantitative"
-          },
-          {
-            "field": "units",
-            "title": "Units",
-            "type": "nominal"
-          }
-        ],
-        "x": {
-          "axis": {
-            "format": "%Y",
-            "labelColor": "#555",
-            "labelFontSize": 11
-          },
-          "field": "date",
-          "scale": {
-            "domain": {
-              "param": "param_2"
+      "height": 300,
+      "layer": [
+        {
+          "encoding": {
+            "x": {
+              "field": "date",
+              "scale": {
+                "domain": {
+                  "param": "param_2"
+                }
+              },
+              "title": "",
+              "type": "temporal"
+            },
+            "y": {
+              "field": "value",
+              "title": "Percent",
+              "type": "quantitative"
             }
           },
-          "title": "",
-          "type": "temporal"
+          "mark": {
+            "color": "#2E86AB",
+            "opacity": 0.12,
+            "type": "area"
+          }
         },
-        "y": {
-          "axis": {
-            "grid": true,
-            "gridColor": "#E8E8E8",
-            "labelColor": "#555"
+        {
+          "encoding": {
+            "tooltip": [
+              {
+                "field": "date",
+                "format": "%B %Y",
+                "title": "Date",
+                "type": "temporal"
+              },
+              {
+                "field": "value",
+                "format": ",.2f",
+                "title": "Value",
+                "type": "quantitative"
+              },
+              {
+                "field": "units",
+                "title": "Units",
+                "type": "nominal"
+              }
+            ],
+            "x": {
+              "axis": {
+                "format": "%Y",
+                "labelColor": "#555",
+                "labelFontSize": 11
+              },
+              "field": "date",
+              "scale": {
+                "domain": {
+                  "param": "param_2"
+                }
+              },
+              "title": "",
+              "type": "temporal"
+            },
+            "y": {
+              "axis": {
+                "grid": true,
+                "gridColor": "#E8E8E8",
+                "labelColor": "#555"
+              },
+              "field": "value",
+              "title": "Percent",
+              "type": "quantitative"
+            }
           },
-          "field": "value",
-          "title": "Percent",
-          "type": "quantitative"
+          "mark": {
+            "color": "#2E86AB",
+            "strokeWidth": 3,
+            "type": "line"
+          }
         }
-      },
-      "height": 300,
-      "mark": {
-        "color": "#2E86AB",
-        "strokeWidth": 3,
-        "type": "line"
-      },
+      ],
       "width": 800
     },
     {
