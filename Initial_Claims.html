@@ -3876,28 +3876,37 @@
 
         function toSpecWithRange(months){
             const spec = JSON.parse(JSON.stringify(originalSpec));
-            if(!spec.params || !spec.params.length) return spec;
+            // Remove any bound params (scale bindings) so explicit domains take effect
+            if(spec.params) delete spec.params;
+
             if(months === 'all'){
-                if(spec.params[0]) delete spec.params[0].value;
                 // default to year ticks
                 if(spec.vconcat && spec.vconcat.length>0){
                     spec.vconcat[0].layer.forEach(l => {
                         if(l.encoding && l.encoding.x && l.encoding.x.axis) l.encoding.x.axis.format = "%Y";
+                        if(l.encoding && l.encoding.x && l.encoding.x.scale) delete l.encoding.x.scale;
                     });
-                    if(spec.vconcat[1] && spec.vconcat[1].encoding && spec.vconcat[1].encoding.x && spec.vconcat[1].encoding.x.axis) spec.vconcat[1].encoding.x.axis.format = "%Y";
+                    if(spec.vconcat[1] && spec.vconcat[1].encoding && spec.vconcat[1].encoding.x && spec.vconcat[1].encoding.x.axis) {
+                        spec.vconcat[1].encoding.x.axis.format = "%Y";
+                        if(spec.vconcat[1].encoding.x.scale) delete spec.vconcat[1].encoding.x.scale;
+                    }
                 }
                 updateRangeLabel(null, null);
                 return spec;
             }
+
             const end = new Date();
             const start = new Date(end);
             start.setMonth(end.getMonth() - Number(months));
             const startISO = start.toISOString().slice(0,19);
             const endISO = end.toISOString().slice(0,19);
+
             // Apply explicit scale domain to main chart and timeline so the view actually zooms
             if(spec.vconcat && spec.vconcat.length>0){
                 spec.vconcat[0].layer.forEach(l => {
-                    if(l.encoding && l.encoding.x) l.encoding.x.scale = { domain: [startISO, endISO] };
+                    if(l.encoding && l.encoding.x) {
+                        l.encoding.x.scale = { domain: [startISO, endISO] };
+                    }
                 });
                 if(spec.vconcat[1] && spec.vconcat[1].encoding && spec.vconcat[1].encoding.x) spec.vconcat[1].encoding.x.scale = { domain: [startISO, endISO] };
             }
