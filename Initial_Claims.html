@@ -3894,7 +3894,13 @@
             start.setMonth(end.getMonth() - Number(months));
             const startISO = start.toISOString().slice(0,19);
             const endISO = end.toISOString().slice(0,19);
-            spec.params[0].value = { x: [startISO, endISO] };
+            // Apply explicit scale domain to main chart and timeline so the view actually zooms
+            if(spec.vconcat && spec.vconcat.length>0){
+                spec.vconcat[0].layer.forEach(l => {
+                    if(l.encoding && l.encoding.x) l.encoding.x.scale = { domain: [startISO, endISO] };
+                });
+                if(spec.vconcat[1] && spec.vconcat[1].encoding && spec.vconcat[1].encoding.x) spec.vconcat[1].encoding.x.scale = { domain: [startISO, endISO] };
+            }
             const fmt = computeAxisFormat(startISO, endISO);
             // Apply axis format to main chart and timeline
             if(spec.vconcat && spec.vconcat.length>0){
