@@ -54,7 +54,7 @@
     <div id="vis"></div>
     <script>
         const spec = {
-  "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json",
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.1.0.json",
   "config": {
     "axis": {
       "labelFont": "Georgia, serif",
@@ -350,7 +350,7 @@
   },
   "params": [
     {
-      "name": "param_8",
+      "name": "param_c97a99acfc68b794",
       "select": {
         "encodings": [
           "x"
@@ -358,7 +358,7 @@
         "type": "interval"
       },
       "views": [
-        "view_8"
+        "view_248e4db49fb78b7e_1"
       ]
     }
   ],
@@ -367,9 +367,6 @@
     "color": "#2c3e50",
     "fontSize": 18,
     "fontWeight": "normal",
-    "subtitle": "Next Publication Date: Jan 29, 2026 07:30",
-    "subtitleColor": "#666",
-    "subtitleFontSize": 12,
     "text": "Nonfarm Business Sector: Labor Productivity (Output per Hour) for All Workers"
   },
   "vconcat": [
@@ -382,7 +379,7 @@
               "field": "date",
               "scale": {
                 "domain": {
-                  "param": "param_8"
+                  "param": "param_c97a99acfc68b794"
                 }
               },
               "title": "",
@@ -402,25 +399,6 @@
         },
         {
           "encoding": {
-            "tooltip": [
-              {
-                "field": "date",
-                "format": "%B %Y",
-                "title": "Date",
-                "type": "temporal"
-              },
-              {
-                "field": "value",
-                "format": ",.2f",
-                "title": "Value",
-                "type": "quantitative"
-              },
-              {
-                "field": "units",
-                "title": "Units",
-                "type": "nominal"
-              }
-            ],
             "x": {
               "axis": {
                 "format": "%Y",
@@ -430,18 +408,13 @@
               "field": "date",
               "scale": {
                 "domain": {
-                  "param": "param_8"
+                  "param": "param_c97a99acfc68b794"
                 }
               },
               "title": "",
               "type": "temporal"
             },
             "y": {
-              "axis": {
-                "grid": true,
-                "gridColor": "#E8E8E8",
-                "labelColor": "#555"
-              },
               "field": "value",
               "title": null,
               "type": "quantitative"
@@ -480,7 +453,7 @@
         "strokeWidth": 1,
         "type": "line"
       },
-      "name": "view_8",
+      "name": "view_248e4db49fb78b7e_1",
       "width": 800
     }
   ]
