@@ -1044,10 +1044,15 @@
                     if(l.encoding && l.encoding.x){
                         // set a transform filter expression on the layer
                         l.transform = [{"filter": `datum.date >= '${startISO}' && datum.date <= '${endISO}'`}];
+                        // also set explicit scale domain to ensure axis tick calculations update
+                        if(!l.encoding.x.scale) l.encoding.x.scale = {};
+                        l.encoding.x.scale.domain = [startISO, endISO];
                     }
                 });
                 if(spec.vconcat[1] && spec.vconcat[1].encoding && spec.vconcat[1].encoding.x){
                     spec.vconcat[1].transform = [{"filter": `datum.date >= '${startISO}' && datum.date <= '${endISO}'`}];
+                    if(!spec.vconcat[1].encoding.x.scale) spec.vconcat[1].encoding.x.scale = {};
+                    spec.vconcat[1].encoding.x.scale.domain = [startISO, endISO];
                 }
             }
             const fmt = computeAxisFormat(startISO, endISO);
