@@ -3857,14 +3857,14 @@
                 spec.vconcat[0].layer.forEach(l => {
                     if(l.encoding && l.encoding.x){
                         // set a transform filter expression on the layer
-                        l.transform = [{"filter": `datum.date >= '${startISO}' && datum.date <= '${endISO}'`}];
+                        l.transform = [{"filter": `Date.parse(datum.date) >= Date.parse('${startISO}') && Date.parse(datum.date) <= Date.parse('${endISO}')`}];
                         // also set explicit scale domain to ensure axis tick calculations update
                         if(!l.encoding.x.scale) l.encoding.x.scale = {};
                         l.encoding.x.scale.domain = [startISO, endISO];
                     }
                 });
                 if(spec.vconcat[1] && spec.vconcat[1].encoding && spec.vconcat[1].encoding.x){
-                    spec.vconcat[1].transform = [{"filter": `datum.date >= '${startISO}' && datum.date <= '${endISO}'`}];
+                    spec.vconcat[1].transform = [{"filter": `Date.parse(datum.date) >= Date.parse('${startISO}') && Date.parse(datum.date) <= Date.parse('${endISO}')`}];
                     if(!spec.vconcat[1].encoding.x.scale) spec.vconcat[1].encoding.x.scale = {};
                     spec.vconcat[1].encoding.x.scale.domain = [startISO, endISO];
                 }
