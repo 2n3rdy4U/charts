@@ -448,6 +448,21 @@
             return "%Y"; // multi-year -> show year only
         }
 
+        // Compute global Y domain from the embedded dataset so presets can keep y-scale fixed
+        const __DATA_NAME__ = (originalSpec.data && originalSpec.data.name) ? originalSpec.data.name : null;
+        let GLOBAL_Y_DOMAIN = null;
+        if(__DATA_NAME__ && originalSpec.datasets && originalSpec.datasets[__DATA_NAME__]){
+            const vals = originalSpec.datasets[__DATA_NAME__].map(d => {
+                const v = d.value;
+                return (v === null || v === undefined) ? NaN : Number(v);
+            }).filter(v => !isNaN(v));
+            if(vals.length){
+                const ymin = Math.min.apply(null, vals);
+                const ymax = Math.max.apply(null, vals);
+                GLOBAL_Y_DOMAIN = [ymin, ymax];
+            }
+        }
+
         function toSpecWithRange(months){
             const spec = JSON.parse(JSON.stringify(originalSpec));
             // Remove any bound params (scale bindings) so explicit domains take effect
@@ -487,12 +502,23 @@
                         // also set explicit scale domain to ensure axis tick calculations update
                         if(!l.encoding.x.scale) l.encoding.x.scale = {};
                         l.encoding.x.scale.domain = [startISO, endISO];
+                        // fix y-scale to global domain so zooming doesn't rescale Y
+                        if(GLOBAL_Y_DOMAIN){
+                            if(!l.encoding.y) l.encoding.y = {};
+                            if(!l.encoding.y.scale) l.encoding.y.scale = {};
+                            l.encoding.y.scale.domain = GLOBAL_Y_DOMAIN;
+                        }
                     }
                 });
                 if(spec.vconcat[1] && spec.vconcat[1].encoding && spec.vconcat[1].encoding.x){
                     spec.vconcat[1].transform = [{"filter": `Date.parse(datum.date) >= Date.parse('${startISO}') && Date.parse(datum.date) <= Date.parse('${endISO}')`}];
                     if(!spec.vconcat[1].encoding.x.scale) spec.vconcat[1].encoding.x.scale = {};
                     spec.vconcat[1].encoding.x.scale.domain = [startISO, endISO];
+                    if(GLOBAL_Y_DOMAIN){
+                        if(!spec.vconcat[1].encoding.y) spec.vconcat[1].encoding.y = {};
+                        if(!spec.vconcat[1].encoding.y.scale) spec.vconcat[1].encoding.y.scale = {};
+                        spec.vconcat[1].encoding.y.scale.domain = GLOBAL_Y_DOMAIN;
+                    }
                 }
             }
             const fmt = computeAxisFormat(startISO, endISO);
