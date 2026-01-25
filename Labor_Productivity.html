@@ -497,9 +497,9 @@
             if(spec.vconcat && spec.vconcat.length>0){
                 spec.vconcat[0].layer.forEach(l => {
                     if(l.encoding && l.encoding.x){
-                        // set a transform filter expression on the layer
-                        l.transform = [{"filter": `Date.parse(datum.date) >= Date.parse('${startISO}') && Date.parse(datum.date) <= Date.parse('${endISO}')`}];
-                        // also set explicit scale domain to ensure axis tick calculations update
+                        // remove any layer transform (filter) to avoid expression incompatibilities
+                        if(l.transform) delete l.transform;
+                        // set explicit scale domain so the view zooms to the selected range
                         if(!l.encoding.x.scale) l.encoding.x.scale = {};
                         l.encoding.x.scale.domain = [startISO, endISO];
                         // fix y-scale to global domain so zooming doesn't rescale Y
@@ -511,7 +511,7 @@
                     }
                 });
                 if(spec.vconcat[1] && spec.vconcat[1].encoding && spec.vconcat[1].encoding.x){
-                    spec.vconcat[1].transform = [{"filter": `Date.parse(datum.date) >= Date.parse('${startISO}') && Date.parse(datum.date) <= Date.parse('${endISO}')`}];
+                    if(spec.vconcat[1].transform) delete spec.vconcat[1].transform;
                     if(!spec.vconcat[1].encoding.x.scale) spec.vconcat[1].encoding.x.scale = {};
                     spec.vconcat[1].encoding.x.scale.domain = [startISO, endISO];
                     if(GLOBAL_Y_DOMAIN){
