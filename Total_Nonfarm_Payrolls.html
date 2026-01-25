@@ -1029,6 +1029,27 @@
                 GLOBAL_Y_DOMAIN = [ymin, ymax];
             }
         }
+        // Capture original axis titles to preserve them when we modify the spec
+        let ORIGINAL_X_TITLE = null;
+        let ORIGINAL_Y_TITLE = null;
+        try{
+            if(originalSpec.vconcat && originalSpec.vconcat.length>0){
+                const layers = originalSpec.vconcat[0].layer || [];
+                for(let i=0;i<layers.length;i++){
+                    const enc = layers[i].encoding || {};
+                    if(!ORIGINAL_Y_TITLE && enc.y){
+                        ORIGINAL_Y_TITLE = enc.y.title || (enc.y.axis && enc.y.axis.title) || null;
+                    }
+                    if(!ORIGINAL_X_TITLE && enc.x){
+                        ORIGINAL_X_TITLE = enc.x.title || (enc.x.axis && enc.x.axis.title) || null;
+                    }
+                }
+                // fallback to vconcat[1] (timeline) x title
+                if(!ORIGINAL_X_TITLE && originalSpec.vconcat[1] && originalSpec.vconcat[1].encoding && originalSpec.vconcat[1].encoding.x){
+                    ORIGINAL_X_TITLE = originalSpec.vconcat[1].encoding.x.title || (originalSpec.vconcat[1].encoding.x.axis && originalSpec.vconcat[1].encoding.x.axis.title) || null;
+                }
+            }
+        }catch(e){}
 
         function toSpecWithRange(months){
             const spec = JSON.parse(JSON.stringify(originalSpec));
@@ -1075,6 +1096,15 @@
                             if(!l.encoding.y.scale) l.encoding.y.scale = {};
                             l.encoding.y.scale.domain = GLOBAL_Y_DOMAIN;
                         }
+                        // Ensure axis titles are preserved
+                        if(l.encoding.x){
+                            if(!l.encoding.x.axis) l.encoding.x.axis = {};
+                            if(ORIGINAL_X_TITLE) l.encoding.x.axis.title = ORIGINAL_X_TITLE;
+                        }
+                        if(l.encoding.y){
+                            if(!l.encoding.y.axis) l.encoding.y.axis = {};
+                            if(ORIGINAL_Y_TITLE) l.encoding.y.axis.title = ORIGINAL_Y_TITLE;
+                        }
                     }
                 });
                 if(spec.vconcat[1] && spec.vconcat[1].encoding && spec.vconcat[1].encoding.x){
@@ -1085,6 +1115,15 @@
                         if(!spec.vconcat[1].encoding.y) spec.vconcat[1].encoding.y = {};
                         if(!spec.vconcat[1].encoding.y.scale) spec.vconcat[1].encoding.y.scale = {};
                         spec.vconcat[1].encoding.y.scale.domain = GLOBAL_Y_DOMAIN;
+                        // preserve axis titles for timeline if present
+                        if(spec.vconcat[1].encoding.x){
+                            if(!spec.vconcat[1].encoding.x.axis) spec.vconcat[1].encoding.x.axis = {};
+                            if(ORIGINAL_X_TITLE) spec.vconcat[1].encoding.x.axis.title = ORIGINAL_X_TITLE;
+                        }
+                        if(spec.vconcat[1].encoding.y){
+                            if(!spec.vconcat[1].encoding.y.axis) spec.vconcat[1].encoding.y.axis = {};
+                            if(ORIGINAL_Y_TITLE) spec.vconcat[1].encoding.y.axis.title = ORIGINAL_Y_TITLE;
+                        }
                     }
                 }
             }
