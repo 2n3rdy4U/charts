@@ -3831,8 +3831,11 @@
                 // default to year ticks
                 if(spec.vconcat && spec.vconcat.length>0){
                     spec.vconcat[0].layer.forEach(l => {
-                        if(l.encoding && l.encoding.x && l.encoding.x.axis) l.encoding.x.axis.format = "%Y";
-                        if(l.encoding && l.encoding.x && l.encoding.x.scale) delete l.encoding.x.scale;
+                        if(l.encoding && l.encoding.x){
+                            if(!l.encoding.x.axis) l.encoding.x.axis = {};
+                            l.encoding.x.axis.format = "%Y";
+                            if(l.encoding.x.scale) delete l.encoding.x.scale;
+                        }
                     });
                     if(spec.vconcat[1] && spec.vconcat[1].encoding && spec.vconcat[1].encoding.x && spec.vconcat[1].encoding.x.axis) {
                         spec.vconcat[1].encoding.x.axis.format = "%Y";
@@ -3862,7 +3865,10 @@
             // Apply axis format to main chart and timeline
             if(spec.vconcat && spec.vconcat.length>0){
                 spec.vconcat[0].layer.forEach(l => {
-                    if(l.encoding && l.encoding.x && l.encoding.x.axis) l.encoding.x.axis.format = fmt;
+                    if(l.encoding && l.encoding.x){
+                        if(!l.encoding.x.axis) l.encoding.x.axis = {};
+                        l.encoding.x.axis.format = fmt;
+                    }
                 });
                 if(spec.vconcat[1] && spec.vconcat[1].encoding && spec.vconcat[1].encoding.x && spec.vconcat[1].encoding.x.axis) spec.vconcat[1].encoding.x.axis.format = fmt;
             }
