@@ -4622,6 +4622,19 @@
                     spec.encoding.x.title = 'Vintage Month';
                 }
 
+                // Shorten title/subtitle on mobile to reduce clipping.
+                if (spec.title) {
+                    if (typeof spec.title === 'string') {
+                        spec.title = spec.title.replace('Delinquency', 'DQ');
+                    } else {
+                        if (spec.title.text) {
+                            spec.title.text = String(spec.title.text).replace('Delinquency', 'DQ');
+                        }
+                        // Mobile: keep subtitle short (touch users don't have Shift-click).
+                        spec.title.subtitle = 'Tap legend to toggle series.';
+                    }
+                }
+
                 // Make legend selection multi-toggle work on touch (no Shift key).
                 if (Array.isArray(spec.params)) {
                     for (const p of spec.params) {
