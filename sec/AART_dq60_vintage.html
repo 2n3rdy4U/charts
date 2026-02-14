@@ -7,13 +7,16 @@
     html, body { margin: 0; padding: 0; width: 100%; height: 100%; }
     #vis { width: 100%; height: 100%; }
     .vega-embed { width: 100% !important; height: 100% !important; }
+    #status { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; font-size: 13px; color: #555; padding: 10px; }
+    pre { white-space: pre-wrap; word-break: break-word; }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 </head>
 <body>
-  <div id="vis"></div>
+    <div id="status">Loading chart…</div>
+    <div id="vis"></div>
   <script>
     const spec = {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json",
@@ -8189,7 +8192,26 @@
   },
   "width": "container"
 };
-    vegaEmbed('#vis', spec, {actions: false, renderer: 'canvas'});
+        const statusEl = document.getElementById('status');
+        const visEl = document.getElementById('vis');
+        try {
+            vegaEmbed('#vis', spec, {actions: false, renderer: 'canvas'})
+                .then(() => { if (statusEl) statusEl.style.display = 'none'; })
+                .catch((err) => {
+                    console.error('Vega embed failed', err);
+                    if (statusEl) {
+                        statusEl.style.display = 'block';
+                        statusEl.innerHTML = '<b>Chart failed to render.</b><br/><pre>' + (err && (err.stack || err.message) ? (err.stack || err.message) : String(err)) + '</pre>';
+                    }
+                    if (visEl) visEl.innerHTML = '';
+                });
+        } catch (err) {
+            console.error('Unexpected error', err);
+            if (statusEl) {
+                statusEl.style.display = 'block';
+                statusEl.innerHTML = '<b>Unexpected error.</b><br/><pre>' + (err && (err.stack || err.message) ? (err.stack || err.message) : String(err)) + '</pre>';
+            }
+        }
   </script>
 </body>
 </html>
