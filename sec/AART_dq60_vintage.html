@@ -17,7 +17,8 @@
             #vis {
                 height: 980px;
                 overscroll-behavior: contain;
-                touch-action: none;
+                /* Allow taps while reducing scroll/pinch conflicts */
+                touch-action: manipulation;
             }
         }
   </style>
@@ -4599,14 +4600,43 @@
                     offset: 10,
                     ...spec.config.title,
                 };
-                spec.padding = { top: 8, left: 6, right: 6, bottom: 6, ...(spec.padding || {}) };
+                spec.config.axis = {
+                    titleFontSize: 13,
+                    labelFontSize: 12,
+                    titlePadding: 10,
+                    labelPadding: 4,
+                    ...spec.config.axis,
+                };
+
+                // More internal padding so title/subtitle and x-axis title aren't clipped.
+                spec.padding = { top: 26, left: 8, right: 8, bottom: 44, ...(spec.padding || {}) };
+
+                // Simplify the x-axis title on mobile.
+                if (Array.isArray(spec.layer)) {
+                    for (const lyr of spec.layer) {
+                        if (lyr && lyr.encoding && lyr.encoding.x) {
+                            lyr.encoding.x.title = 'Vintage Month';
+                        }
+                    }
+                } else if (spec.encoding && spec.encoding.x) {
+                    spec.encoding.x.title = 'Vintage Month';
+                }
+
+                // Make legend selection multi-toggle work on touch (no Shift key).
+                if (Array.isArray(spec.params)) {
+                    for (const p of spec.params) {
+                        if (p && p.name === 'Series' && p.select) {
+                            p.select.toggle = 'true';
+                            p.select.clear = false;
+                        }
+                    }
+                }
 
                 // Prevent scroll gestures inside the iframe from being treated as page scroll
                 // when the user is trying to tap the legend or interact with the chart.
                 if (visEl) {
                     const stop = (e) => { try { e.preventDefault(); } catch (_) {} };
                     visEl.addEventListener('touchmove', stop, { passive: false });
-                    visEl.addEventListener('touchstart', stop, { passive: false });
                 }
             }
         } catch (e) {
