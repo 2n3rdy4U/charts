@@ -11,7 +11,7 @@
     pre { white-space: pre-wrap; word-break: break-word; }
 
         /* Mobile-only tweaks: give the chart more vertical room and avoid title clipping */
-        @media (max-width: 640px) and ((pointer: coarse) or (any-pointer: coarse)) {
+        @media (max-width: 640px) and (pointer: coarse), (max-width: 640px) and (any-pointer: coarse) {
             html, body { height: auto; }
             /* Increase height so bottom legend isn't clipped in typical iframes */
             #vis {
@@ -4439,7 +4439,7 @@
             "format": ".2%"
           },
           "field": "dq60_rate",
-          "title": "60+ Delinquency Rate",
+          "title": "60+ DQ Rate",
           "type": "quantitative"
         }
       },
@@ -4469,7 +4469,7 @@
             "format": ".2%"
           },
           "field": "dq60_rate",
-          "title": "60+ Delinquency Rate",
+          "title": "60+ DQ Rate",
           "type": "quantitative"
         }
       },
@@ -4529,7 +4529,7 @@
             "format": ".2%"
           },
           "field": "dq60_rate",
-          "title": "60+ Delinquency Rate",
+          "title": "60+ DQ Rate",
           "type": "quantitative"
         }
       },
@@ -4567,7 +4567,7 @@
   ],
   "title": {
     "subtitle": "Select legend item(s) to toggle series.",
-    "text": "AART 60+ Delinquency Vintage Curves (by Series)"
+    "text": "AART 60+ DQ Vintage Curves (by Series)"
   },
   "width": "container"
 };
@@ -4586,7 +4586,9 @@
             const isMobile = Boolean(isSmall && isTouch);
             if (isMobile && spec) {
                 spec.config = spec.config || {};
+                // Note: spread existing config FIRST so our mobile overrides win.
                 spec.config.legend = {
+                    ...(spec.config.legend || {}),
                     orient: 'bottom',
                     direction: 'horizontal',
                     columns: 2,
@@ -4594,21 +4596,52 @@
                     labelFontSize: 12,
                     symbolSize: 120,
                     padding: 6,
-                    ...spec.config.legend,
                 };
                 spec.config.title = {
+                    ...(spec.config.title || {}),
                     fontSize: 14,
                     subtitleFontSize: 11,
                     offset: 10,
-                    ...spec.config.title,
                 };
                 spec.config.axis = {
+                    ...(spec.config.axis || {}),
                     titleFontSize: 13,
                     labelFontSize: 12,
                     titlePadding: 10,
                     labelPadding: 4,
-                    ...spec.config.axis,
                 };
+
+                // Force legend placement on the encoding itself (more reliable than config alone).
+                const legendOverride = {
+                    orient: 'bottom',
+                    direction: 'horizontal',
+                    columns: 2,
+                    labelLimit: 120,
+                    labelFontSize: 12,
+                    symbolSize: 120,
+                    padding: 6,
+                    title: 'Series',
+                };
+                const applyLegend = (node) => {
+                    if (!node || typeof node !== 'object') return;
+                    if (node.encoding && node.encoding.color) {
+                        node.encoding.color.legend = { ...(node.encoding.color.legend || {}), ...legendOverride };
+                    }
+                    if (Array.isArray(node.layer)) {
+                        for (const child of node.layer) applyLegend(child);
+                    }
+                    if (node.spec) applyLegend(node.spec);
+                    if (Array.isArray(node.hconcat)) {
+                        for (const child of node.hconcat) applyLegend(child);
+                    }
+                    if (Array.isArray(node.vconcat)) {
+                        for (const child of node.vconcat) applyLegend(child);
+                    }
+                    if (Array.isArray(node.concat)) {
+                        for (const child of node.concat) applyLegend(child);
+                    }
+                };
+                applyLegend(spec);
 
                 // More internal padding so title/subtitle and x-axis title aren't clipped.
                 spec.padding = { top: 56, left: 10, right: 10, bottom: 70, ...(spec.padding || {}) };
@@ -4624,7 +4657,7 @@
                     spec.encoding.x.title = 'Vintage Month';
                 }
 
-                // Shorten title/subtitle on mobile to reduce clipping.
+                // Keep title/subtitle short on mobile to reduce clipping.
                 if (spec.title) {
                     if (typeof spec.title === 'string') {
                         spec.title = spec.title.replace('Delinquency', 'DQ');
