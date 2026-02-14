@@ -8034,15 +8034,7 @@
             "param": "Series",
             "value": 1.0
           },
-          "value": 0.0
-        },
-        "size": {
-          "condition": {
-            "empty": false,
-            "param": "Hover",
-            "value": 3
-          },
-          "value": 1.2
+          "value": 0.12
         },
         "x": {
           "axis": {
@@ -8062,9 +8054,47 @@
         }
       },
       "mark": {
+        "size": 1.2,
         "type": "line"
       },
       "name": "view_1"
+    },
+    {
+      "encoding": {
+        "color": {
+          "field": "Series Label",
+          "title": "Series",
+          "type": "nominal"
+        },
+        "x": {
+          "axis": {
+            "tickMinStep": 1
+          },
+          "field": "vintage_month",
+          "title": "Vintage Month (0 = first reporting observation)",
+          "type": "quantitative"
+        },
+        "y": {
+          "axis": {
+            "format": ".2%"
+          },
+          "field": "dq60_rate",
+          "title": "60+ Delinquency Rate",
+          "type": "quantitative"
+        }
+      },
+      "mark": {
+        "size": 3.0,
+        "type": "line"
+      },
+      "transform": [
+        {
+          "filter": {
+            "empty": true,
+            "param": "Series"
+          }
+        }
+      ]
     },
     {
       "encoding": {
@@ -8143,24 +8173,9 @@
   ],
   "params": [
     {
-      "name": "Hover",
-      "select": {
-        "clear": "mouseout",
-        "fields": [
-          "Series Label"
-        ],
-        "on": "mouseover",
-        "type": "point"
-      },
-      "views": [
-        "view_1"
-      ]
-    },
-    {
       "bind": "legend",
       "name": "Series",
       "select": {
-        "clear": "dblclick",
         "fields": [
           "Series Label"
         ],
@@ -8187,7 +8202,7 @@
     }
   ],
   "title": {
-    "subtitle": "Click legend items to toggle series. Double-click to reset.",
+    "subtitle": "Click legend items to toggle series.",
     "text": "AART 60+ Delinquency Vintage Curves (by Series)"
   },
   "width": "container"
