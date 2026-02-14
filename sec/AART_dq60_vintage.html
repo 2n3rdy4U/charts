@@ -13,7 +13,12 @@
         /* Mobile-only tweaks: give the chart more vertical room and avoid title clipping */
         @media (max-width: 640px) {
             html, body { height: auto; }
-            #vis { height: 820px; }
+            /* Increase height so bottom legend isn't clipped in typical iframes */
+            #vis {
+                height: 980px;
+                overscroll-behavior: contain;
+                touch-action: none;
+            }
         }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
@@ -4595,6 +4600,14 @@
                     ...spec.config.title,
                 };
                 spec.padding = { top: 8, left: 6, right: 6, bottom: 6, ...(spec.padding || {}) };
+
+                // Prevent scroll gestures inside the iframe from being treated as page scroll
+                // when the user is trying to tap the legend or interact with the chart.
+                if (visEl) {
+                    const stop = (e) => { try { e.preventDefault(); } catch (_) {} };
+                    visEl.addEventListener('touchmove', stop, { passive: false });
+                    visEl.addEventListener('touchstart', stop, { passive: false });
+                }
             }
         } catch (e) {
             // Non-fatal: fall back to desktop spec
