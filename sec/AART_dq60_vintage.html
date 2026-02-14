@@ -8016,79 +8016,140 @@
       }
     ]
   },
-  "encoding": {
-    "color": {
-      "field": "Series Label",
-      "title": "Series",
-      "type": "nominal"
-    },
-    "tooltip": [
-      {
-        "field": "Series Label",
-        "title": "Series",
-        "type": "nominal"
-      },
-      {
-        "field": "CIK",
-        "type": "nominal"
-      },
-      {
-        "field": "Entity Name",
-        "type": "nominal"
-      },
-      {
-        "field": "Reporting Date",
-        "title": "Reporting Date",
-        "type": "temporal"
-      },
-      {
-        "field": "dq60_rate",
-        "format": ".2%",
-        "title": "60+ Rate",
-        "type": "quantitative"
-      },
-      {
-        "field": "dq60_numerator",
-        "title": "60+ Loans",
-        "type": "quantitative"
-      },
-      {
-        "field": "loan_count_total",
-        "title": "Total Loans",
-        "type": "quantitative"
-      }
-    ],
-    "x": {
-      "axis": {
-        "tickMinStep": 1
-      },
-      "field": "vintage_month",
-      "title": "Vintage Month (0 = first reporting observation)",
-      "type": "quantitative"
-    },
-    "y": {
-      "axis": {
-        "format": ".2%"
-      },
-      "field": "dq60_rate",
-      "title": "60+ Delinquency Rate",
-      "type": "quantitative"
-    }
-  },
   "height": 480,
-  "mark": {
-    "type": "line"
-  },
+  "layer": [
+    {
+      "encoding": {
+        "color": {
+          "field": "Series Label",
+          "title": "Series",
+          "type": "nominal"
+        },
+        "strokeWidth": {
+          "condition": {
+            "empty": false,
+            "param": "Hover",
+            "value": 3
+          },
+          "value": 1.2
+        },
+        "x": {
+          "axis": {
+            "tickMinStep": 1
+          },
+          "field": "vintage_month",
+          "title": "Vintage Month (0 = first reporting observation)",
+          "type": "quantitative"
+        },
+        "y": {
+          "axis": {
+            "format": ".2%"
+          },
+          "field": "dq60_rate",
+          "title": "60+ Delinquency Rate",
+          "type": "quantitative"
+        }
+      },
+      "mark": {
+        "type": "line"
+      },
+      "name": "view_1"
+    },
+    {
+      "encoding": {
+        "color": {
+          "field": "Series Label",
+          "title": "Series",
+          "type": "nominal"
+        },
+        "tooltip": [
+          {
+            "field": "Series Label",
+            "title": "Series",
+            "type": "nominal"
+          },
+          {
+            "field": "CIK",
+            "type": "nominal"
+          },
+          {
+            "field": "Entity Name",
+            "type": "nominal"
+          },
+          {
+            "field": "Reporting Date",
+            "title": "Reporting Date",
+            "type": "temporal"
+          },
+          {
+            "field": "dq60_rate",
+            "format": ".2%",
+            "title": "60+ Rate",
+            "type": "quantitative"
+          },
+          {
+            "field": "dq60_numerator",
+            "title": "60+ Loans",
+            "type": "quantitative"
+          },
+          {
+            "field": "loan_count_total",
+            "title": "Total Loans",
+            "type": "quantitative"
+          }
+        ],
+        "x": {
+          "axis": {
+            "tickMinStep": 1
+          },
+          "field": "vintage_month",
+          "title": "Vintage Month (0 = first reporting observation)",
+          "type": "quantitative"
+        },
+        "y": {
+          "axis": {
+            "format": ".2%"
+          },
+          "field": "dq60_rate",
+          "title": "60+ Delinquency Rate",
+          "type": "quantitative"
+        }
+      },
+      "mark": {
+        "opacity": 0,
+        "size": 120,
+        "type": "point"
+      }
+    }
+  ],
   "params": [
     {
+      "name": "Hover",
+      "select": {
+        "clear": "mouseout",
+        "fields": [
+          "Series Label"
+        ],
+        "on": "mouseover",
+        "type": "point"
+      },
+      "views": [
+        "view_1"
+      ]
+    },
+    {
       "bind": "legend",
-      "name": "Select",
+      "name": "Series",
       "select": {
         "fields": [
           "Series Label"
         ],
+        "toggle": true,
         "type": "point"
-      }
+      },
+      "views": [
+        "view_1"
+      ]
     },
     {
       "bind": "scales",
@@ -8099,15 +8160,18 @@
           "y"
         ],
         "type": "interval"
-      }
+      },
+      "views": [
+        "view_1"
+      ]
     }
   ],
-  "title": "AART 60+ Delinquency Vintage Curves (by CIK)",
+  "title": "AART 60+ Delinquency Vintage Curves (by Series)",
   "transform": [
     {
       "filter": {
         "empty": true,
-        "param": "Select"
+        "param": "Series"
       }
     }
   ],
