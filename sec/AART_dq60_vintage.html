@@ -11,7 +11,7 @@
     pre { white-space: pre-wrap; word-break: break-word; }
 
         /* Mobile-only tweaks: give the chart more vertical room and avoid title clipping */
-        @media (max-width: 640px) {
+        @media (max-width: 640px) and (pointer: coarse) {
             html, body { height: auto; }
             /* Increase height so bottom legend isn't clipped in typical iframes */
             #vis {
@@ -4570,7 +4570,7 @@
     }
   ],
   "title": {
-    "subtitle": "Click a legend item to view one series; Shift-click to add/remove multiple series.",
+    "subtitle": "Select legend item(s) to toggle series.",
     "text": "AART 60+ Delinquency Vintage Curves (by Series)"
   },
   "width": "container"
@@ -4581,7 +4581,11 @@
         // Mobile-only spec tweaks: legend placement + title sizing/padding.
         // Desktop stays as-is.
         try {
-            const isMobile = window.matchMedia && window.matchMedia('(max-width: 640px)').matches;
+            const isMobile = (
+                window.matchMedia &&
+                window.matchMedia('(max-width: 640px)').matches &&
+                window.matchMedia('(pointer: coarse)').matches
+            );
             if (isMobile && spec) {
                 spec.config = spec.config || {};
                 spec.config.legend = {
@@ -4651,7 +4655,11 @@
         }
 
         try {
-            const isMobile = window.matchMedia && window.matchMedia('(max-width: 640px)').matches;
+            const isMobile = (
+                window.matchMedia &&
+                window.matchMedia('(max-width: 640px)').matches &&
+                window.matchMedia('(pointer: coarse)').matches
+            );
             const embedOptions = {actions: false, renderer: (isMobile ? 'svg' : 'canvas')};
             vegaEmbed('#vis', spec, embedOptions)
                 .then(() => { if (statusEl) statusEl.style.display = 'none'; })
