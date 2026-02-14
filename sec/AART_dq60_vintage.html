@@ -9,6 +9,12 @@
     .vega-embed { width: 100% !important; height: 100% !important; }
     #status { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; font-size: 13px; color: #555; padding: 10px; }
     pre { white-space: pre-wrap; word-break: break-word; }
+
+        /* Mobile-only tweaks: give the chart more vertical room and avoid title clipping */
+        @media (max-width: 640px) {
+            html, body { height: auto; }
+            #vis { height: 820px; }
+        }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
@@ -4565,6 +4571,36 @@
 };
         const statusEl = document.getElementById('status');
         const visEl = document.getElementById('vis');
+
+        // Mobile-only spec tweaks: legend placement + title sizing/padding.
+        // Desktop stays as-is.
+        try {
+            const isMobile = window.matchMedia && window.matchMedia('(max-width: 640px)').matches;
+            if (isMobile && spec) {
+                spec.config = spec.config || {};
+                spec.config.legend = {
+                    orient: 'bottom',
+                    direction: 'horizontal',
+                    columns: 2,
+                    labelLimit: 120,
+                    labelFontSize: 12,
+                    symbolSize: 120,
+                    padding: 6,
+                    ...spec.config.legend,
+                };
+                spec.config.title = {
+                    fontSize: 14,
+                    subtitleFontSize: 11,
+                    offset: 10,
+                    ...spec.config.title,
+                };
+                spec.padding = { top: 8, left: 6, right: 6, bottom: 6, ...(spec.padding || {}) };
+            }
+        } catch (e) {
+            // Non-fatal: fall back to desktop spec
+            console.warn('Mobile spec tweak failed', e);
+        }
+
         try {
             vegaEmbed('#vis', spec, {actions: false, renderer: 'canvas'})
                 .then(() => { if (statusEl) statusEl.style.display = 'none'; })
