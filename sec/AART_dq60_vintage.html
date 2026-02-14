@@ -15,7 +15,7 @@
             html, body { height: auto; }
             /* Increase height so bottom legend isn't clipped in typical iframes */
             #vis {
-                height: 980px;
+                height: 1200px;
                 overscroll-behavior: contain;
                 /* Allow taps while reducing scroll/pinch conflicts */
                 touch-action: manipulation;
@@ -4609,7 +4609,7 @@
                 };
 
                 // More internal padding so title/subtitle and x-axis title aren't clipped.
-                spec.padding = { top: 26, left: 8, right: 8, bottom: 44, ...(spec.padding || {}) };
+                spec.padding = { top: 56, left: 10, right: 10, bottom: 70, ...(spec.padding || {}) };
 
                 // Simplify the x-axis title on mobile.
                 if (Array.isArray(spec.layer)) {
@@ -4631,13 +4631,6 @@
                         }
                     }
                 }
-
-                // Prevent scroll gestures inside the iframe from being treated as page scroll
-                // when the user is trying to tap the legend or interact with the chart.
-                if (visEl) {
-                    const stop = (e) => { try { e.preventDefault(); } catch (_) {} };
-                    visEl.addEventListener('touchmove', stop, { passive: false });
-                }
             }
         } catch (e) {
             // Non-fatal: fall back to desktop spec
@@ -4645,7 +4638,9 @@
         }
 
         try {
-            vegaEmbed('#vis', spec, {actions: false, renderer: 'canvas'})
+            const isMobile = window.matchMedia && window.matchMedia('(max-width: 640px)').matches;
+            const embedOptions = {actions: false, renderer: (isMobile ? 'svg' : 'canvas')};
+            vegaEmbed('#vis', spec, embedOptions)
                 .then(() => { if (statusEl) statusEl.style.display = 'none'; })
                 .catch((err) => {
                     console.error('Vega embed failed', err);
