@@ -38,6 +38,7 @@
       "titleFontSize": 14
     },
     "title": {
+      "anchor": "middle",
       "fontSize": 16,
       "subtitleFontSize": 12
     },
@@ -4567,7 +4568,10 @@
   ],
   "title": {
     "subtitle": "Select legend item(s) to toggle series.",
-    "text": "AART 60+ DQ Vintage Curves"
+    "text": [
+      "Ally",
+      "AART 60+ DQ Vintage Curves"
+    ]
   },
   "width": "container"
 };
@@ -4663,7 +4667,11 @@
                         spec.title = spec.title.replace('Delinquency', 'DQ');
                     } else {
                         if (spec.title.text) {
-                            spec.title.text = String(spec.title.text).replace('Delinquency', 'DQ');
+                            if (Array.isArray(spec.title.text)) {
+                                spec.title.text = spec.title.text.map((t) => String(t).replace('Delinquency', 'DQ'));
+                            } else {
+                                spec.title.text = String(spec.title.text).replace('Delinquency', 'DQ');
+                            }
                         }
                         // Mobile: keep subtitle short (touch users don't have Shift-click).
                         spec.title.subtitle = 'Tap legend to toggle series.';
