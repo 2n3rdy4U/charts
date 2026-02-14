@@ -8025,6 +8025,14 @@
           "title": "Series",
           "type": "nominal"
         },
+        "opacity": {
+          "condition": {
+            "empty": true,
+            "param": "Series",
+            "value": 1.0
+          },
+          "value": 0.0
+        },
         "strokeWidth": {
           "condition": {
             "empty": false,
@@ -8119,7 +8127,15 @@
         "opacity": 0,
         "size": 120,
         "type": "point"
-      }
+      },
+      "transform": [
+        {
+          "filter": {
+            "empty": true,
+            "param": "Series"
+          }
+        }
+      ]
     }
   ],
   "params": [
@@ -8141,6 +8157,7 @@
       "bind": "legend",
       "name": "Series",
       "select": {
+        "clear": "dblclick",
         "fields": [
           "Series Label"
         ],
@@ -8166,15 +8183,10 @@
       ]
     }
   ],
-  "title": "AART 60+ Delinquency Vintage Curves (by Series)",
-  "transform": [
-    {
-      "filter": {
-        "empty": true,
-        "param": "Series"
-      }
-    }
-  ],
+  "title": {
+    "subtitle": "Click legend items to toggle series. Double-click to reset.",
+    "text": "AART 60+ Delinquency Vintage Curves (by Series)"
+  },
   "width": "container"
 };
     vegaEmbed('#vis', spec, {actions: false, renderer: 'canvas'});
