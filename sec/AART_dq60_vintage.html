@@ -64,7 +64,7 @@
     </div>
 
     <script>
-        const BUILD_ID = "2026-02-14 20:49";
+        const BUILD_ID = "2026-02-14 20:51";
         const ISSUERS = [{"code": "AART", "label": "AART (Ally)"}, {"code": "AMCAR", "label": "AMCAR (AmeriCredit)"}, {"code": "BLAST", "label": "BLAST (Bridgecrest)"}, {"code": "BMWOT", "label": "BMWOT (BMW)"}, {"code": "CAOT", "label": "CAOT (CarMax)"}, {"code": "CMXS", "label": "CMXS (CarMax)"}, {"code": "COPAR", "label": "COPAR (Capital)"}, {"code": "CRART", "label": "CRART (California)"}, {"code": "CRVNA", "label": "CRVNA (Carvana)"}, {"code": "DRIVE", "label": "DRIVE"}, {"code": "EART", "label": "EART (Exeter)"}, {"code": "FCAOT", "label": "FCAOT (Ford)"}, {"code": "FTAT", "label": "FTAT (Fifth)"}, {"code": "GMCAR", "label": "GMCAR (GM)"}, {"code": "HAROT", "label": "HAROT (Honda)"}, {"code": "HART", "label": "HART (Hyundai)"}, {"code": "MBART", "label": "MBART (Mercedes-Benz)"}, {"code": "NAROT", "label": "NAROT (Nissan)"}, {"code": "SDART", "label": "SDART (Santander)"}, {"code": "TAOT", "label": "TAOT (Toyota)"}, {"code": "USAOT", "label": "USAOT (Usaa)"}, {"code": "VALET", "label": "VALET (Volkswagen)"}, {"code": "WOART", "label": "WOART (World)"}, {"code": "WOSAT", "label": "WOSAT (World)"}];
         const DEFAULT_ISSUER = "AART";
         const DATA_BASE = "vintage";
@@ -176,7 +176,19 @@
                     "title": { "anchor": "middle", "fontSize": 16, "subtitleFontSize": 12 },
                     "view": { "continuousHeight": 300, "continuousWidth": 300 },
                 },
-                "data": { "url": dataUrl },
+                "data": {
+                    "url": dataUrl,
+                    "format": {
+                        "type": "csv",
+                        "parse": {
+                            "vintage_month": "number",
+                            "dq_rate": "number",
+                            "Reporting Date": "date",
+                            "bucket": "string",
+                            "Series Label": "string",
+                        },
+                    },
+                },
                 "height": 480,
                 "width": "container",
                 "title": {
