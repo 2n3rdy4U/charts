@@ -25,8 +25,9 @@
         .radio label { color: var(--text); font-size: 13px; }
         .radio span { color: var(--muted); font-size: 12.5px; margin-right: 4px; }
         .meta { font-size: 12px; color: var(--muted); white-space: nowrap; }
-        #vis { width: 100%; min-height: 680px; overflow-x: hidden; }
-        .vega-embed { width: 100% !important; }
+        #vis { width: 100%; min-height: 680px; padding-bottom: 24px; }
+        .vega-embed { width: 100% !important; height: auto !important; overflow: visible !important; }
+        .vega-embed svg, .vega-embed canvas { max-width: 100% !important; }
         pre { white-space: pre-wrap; word-break: break-word; }
 
         @media (max-width: 640px) and (pointer: coarse), (max-width: 640px) and (any-pointer: coarse) {
@@ -63,7 +64,7 @@
     </div>
 
     <script>
-        const BUILD_ID = "2026-02-15 09:15";
+        const BUILD_ID = "2026-02-15 10:49";
         const LAST_UPDATED_TEXT = "Feb 15";
         const ISSUERS = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax"}, {"code": "COPAR", "label": "Capital"}, {"code": "CRART", "label": "California"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DRIVE"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth"}, {"code": "GMCAR", "label": "GM"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "Usaa"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World"}, {"code": "WOSAT", "label": "World"}];
         const DEFAULT_ISSUER = "AART";
