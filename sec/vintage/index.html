@@ -64,7 +64,7 @@
     </div>
 
     <script>
-        const BUILD_ID = "2026-02-14 20:43";
+        const BUILD_ID = "2026-02-14 20:46";
         const ISSUERS = [{"code": "AART", "label": "AART (Ally)"}, {"code": "AMCAR", "label": "AMCAR (AmeriCredit)"}, {"code": "BLAST", "label": "BLAST (Bridgecrest)"}, {"code": "BMWOT", "label": "BMWOT (BMW)"}, {"code": "CAOT", "label": "CAOT (CarMax)"}, {"code": "CMXS", "label": "CMXS (CarMax)"}, {"code": "COPAR", "label": "COPAR (Capital)"}, {"code": "CRART", "label": "CRART (California)"}, {"code": "CRVNA", "label": "CRVNA (Carvana)"}, {"code": "DRIVE", "label": "DRIVE"}, {"code": "EART", "label": "EART (Exeter)"}, {"code": "FCAOT", "label": "FCAOT (Ford)"}, {"code": "FTAT", "label": "FTAT (Fifth)"}, {"code": "GMCAR", "label": "GMCAR (GM)"}, {"code": "HAROT", "label": "HAROT (Honda)"}, {"code": "HART", "label": "HART (Hyundai)"}, {"code": "MBART", "label": "MBART (Mercedes-Benz)"}, {"code": "NAROT", "label": "NAROT (Nissan)"}, {"code": "SDART", "label": "SDART (Santander)"}, {"code": "TAOT", "label": "TAOT (Toyota)"}, {"code": "USAOT", "label": "USAOT (Usaa)"}, {"code": "VALET", "label": "VALET (Volkswagen)"}, {"code": "WOART", "label": "WOART (World)"}, {"code": "WOSAT", "label": "WOSAT (World)"}];
         const DEFAULT_ISSUER = "AART";
         const DATA_BASE = ".";
@@ -240,7 +240,7 @@
             try {
                 if (statusEl) {
                     statusEl.style.display = 'block';
-                    statusEl.innerHTML = `<strong>Status:</strong> Loading data…<div style="margin-top:6px"><pre>${{csvUrl}}</pre></div>`;
+                    statusEl.innerHTML = `<strong>Status:</strong> Loading data…<div style="margin-top:6px"><pre>${csvUrl}</pre></div>`;
                 }
 
                 const resp = await fetch(csvUrl, { cache: 'no-store' });
@@ -259,10 +259,10 @@
                 const text = await resp.text();
                 const n60 = (text.match(/,60\+,/g) || []).length;
                 const n30 = (text.match(/,30-59,/g) || []).length;
-                const nRows = Math.max(0, text.split(/\r?\n/).length - 2);
+                const nRows = Math.max(0, text.split(String.fromCharCode(10)).length - 2);
                 if (statusEl) {
                     statusEl.style.display = 'block';
-                    statusEl.innerHTML = `<strong>Status:</strong> Data loaded (${{nRows}} rows). Bucket rows: 60+ = ${{n60}}, 30–59 = ${{n30}}. Rendering…`;
+                    statusEl.innerHTML = `<strong>Status:</strong> Data loaded (${nRows} rows). Bucket rows: 60+ = ${n60}, 30–59 = ${n30}. Rendering…`;
                 }
             } catch (e) {
                 if (statusEl) {
