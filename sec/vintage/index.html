@@ -63,7 +63,7 @@
     </div>
 
     <script>
-        const BUILD_ID = "2026-02-14 19:58";
+        const BUILD_ID = "2026-02-14 20:08";
         const ISSUERS = [{"code": "AART", "label": "AART (Ally)"}, {"code": "AMCAR", "label": "AMCAR (AmeriCredit)"}, {"code": "BLAST", "label": "BLAST (Bridgecrest)"}, {"code": "BMWOT", "label": "BMWOT (BMW)"}, {"code": "CAOT", "label": "CAOT (CarMax)"}, {"code": "CMXS", "label": "CMXS (CarMax)"}, {"code": "COPAR", "label": "COPAR (Capital)"}, {"code": "CRART", "label": "CRART (California)"}, {"code": "CRVNA", "label": "CRVNA (Carvana)"}, {"code": "DRIVE", "label": "DRIVE"}, {"code": "EART", "label": "EART (Exeter)"}, {"code": "FCAOT", "label": "FCAOT (Ford)"}, {"code": "FTAT", "label": "FTAT (Fifth)"}, {"code": "GMCAR", "label": "GMCAR (GM)"}, {"code": "HAROT", "label": "HAROT (Honda)"}, {"code": "HART", "label": "HART (Hyundai)"}, {"code": "MBART", "label": "MBART (Mercedes-Benz)"}, {"code": "NAROT", "label": "NAROT (Nissan)"}, {"code": "SDART", "label": "SDART (Santander)"}, {"code": "TAOT", "label": "TAOT (Toyota)"}, {"code": "USAOT", "label": "USAOT (Usaa)"}, {"code": "VALET", "label": "VALET (Volkswagen)"}, {"code": "WOART", "label": "WOART (World)"}, {"code": "WOSAT", "label": "WOSAT (World)"}];
         const DEFAULT_ISSUER = "AART";
 
@@ -155,7 +155,7 @@
             if (Array.isArray(spec.params)) {
                 for (const p of spec.params) {
                     if (p && p.name === 'Series' && p.select) {
-                        p.select.toggle = 'true';
+                        p.select.toggle = true;
                         p.select.clear = false;
                     }
                 }
@@ -193,46 +193,27 @@
                     },
                     { "name": "Bucket", "value": "60+" },
                 ],
-                "layer": [
-                    {
-                        "name": "view_1",
-                        "mark": { "type": "line", "size": 1.2 },
-                        "encoding": {
-                            "x": { "field": "vintage_month", "type": "quantitative", "title": "Vintage Month", "axis": {"tickMinStep": 1} },
-                            "y": { "field": "dq_rate", "type": "quantitative", "title": "DQ Rate", "axis": {"format": ".2%"} },
-                            "color": { "field": "Series Label", "type": "nominal", "title": "Series" },
-                            "opacity": {
-                                "condition": { "param": "Series", "empty": true, "value": 1.0 },
-                                "value": 0.12,
-                            },
-                        },
+                "mark": { "type": "line" },
+                "encoding": {
+                    "x": { "field": "vintage_month", "type": "quantitative", "title": "Vintage Month", "axis": {"tickMinStep": 1} },
+                    "y": { "field": "dq_rate", "type": "quantitative", "title": "DQ Rate", "axis": {"format": ".2%"} },
+                    "color": { "field": "Series Label", "type": "nominal", "title": "Series" },
+                    "opacity": {
+                        "condition": { "param": "Series", "empty": false, "value": 1.0 },
+                        "value": 0.12
                     },
-                    {
-                        "mark": { "type": "line", "size": 3.0 },
-                        "transform": [{ "filter": { "param": "Series", "empty": true } }],
-                        "encoding": {
-                            "x": { "field": "vintage_month", "type": "quantitative", "title": "Vintage Month", "axis": {"tickMinStep": 1} },
-                            "y": { "field": "dq_rate", "type": "quantitative", "title": "DQ Rate", "axis": {"format": ".2%"} },
-                            "color": { "field": "Series Label", "type": "nominal", "title": "Series" },
-                        },
+                    "size": {
+                        "condition": { "param": "Series", "empty": false, "value": 3.0 },
+                        "value": 1.2
                     },
-                    {
-                        "mark": { "type": "point", "opacity": 0, "size": 120 },
-                        "transform": [{ "filter": { "param": "Series", "empty": true } }],
-                        "encoding": {
-                            "x": { "field": "vintage_month", "type": "quantitative", "title": "Vintage Month", "axis": {"tickMinStep": 1} },
-                            "y": { "field": "dq_rate", "type": "quantitative", "title": "DQ Rate", "axis": {"format": ".2%"} },
-                            "color": { "field": "Series Label", "type": "nominal", "title": "Series" },
-                            "tooltip": [
-                                { "field": "Series Label", "type": "nominal", "title": "Series" },
-                                { "field": "bucket", "type": "nominal", "title": "Bucket" },
-                                { "field": "vintage_month", "type": "quantitative", "title": "Vintage Month" },
-                                { "field": "Reporting Date", "type": "temporal", "title": "Reporting Date" },
-                                { "field": "dq_rate", "type": "quantitative", "title": "Rate", "format": ".2%" },
-                            ],
-                        },
-                    },
-                ],
+                    "tooltip": [
+                        { "field": "Series Label", "type": "nominal", "title": "Series" },
+                        { "field": "bucket", "type": "nominal", "title": "Bucket" },
+                        { "field": "vintage_month", "type": "quantitative", "title": "Vintage Month" },
+                        { "field": "Reporting Date", "type": "temporal", "title": "Reporting Date" },
+                        { "field": "dq_rate", "type": "quantitative", "title": "Rate", "format": ".2%" },
+                    ]
+                }
             };
         }
 
