@@ -11,7 +11,7 @@
             --border: #e5e7eb;
             --bg: #ffffff;
         }
-        html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); }
+        html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); overflow-x: hidden; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; }
         .wrap { max-width: 1100px; margin: 0 auto; padding: 16px 14px 10px; }
         .top { display: flex; flex-wrap: wrap; align-items: end; gap: 12px 18px; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
@@ -25,7 +25,7 @@
         .radio label { color: var(--text); font-size: 13px; }
         .radio span { color: var(--muted); font-size: 12.5px; margin-right: 4px; }
         .meta { font-size: 12px; color: var(--muted); white-space: nowrap; }
-        #vis { width: 100%; min-height: 680px; }
+        #vis { width: 100%; min-height: 680px; overflow-x: hidden; }
         .vega-embed { width: 100% !important; }
         pre { white-space: pre-wrap; word-break: break-word; }
 
@@ -63,7 +63,7 @@
     </div>
 
     <script>
-        const BUILD_ID = "2026-02-15 09:09";
+        const BUILD_ID = "2026-02-15 09:15";
         const LAST_UPDATED_TEXT = "Feb 15";
         const ISSUERS = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax"}, {"code": "COPAR", "label": "Capital"}, {"code": "CRART", "label": "California"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DRIVE"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth"}, {"code": "GMCAR", "label": "GM"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "Usaa"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World"}, {"code": "WOSAT", "label": "World"}];
         const DEFAULT_ISSUER = "AART";
@@ -93,10 +93,10 @@
                 orient: 'bottom',
                 direction: 'horizontal',
                 columns: 3,
-                labelLimit: 120,
-                labelFontSize: 11,
-                symbolSize: 90,
-                padding: 6,
+                labelLimit: 90,
+                labelFontSize: 10,
+                symbolSize: 70,
+                padding: 4,
                 // Vega default symbolLimit is 30; raise it so "...N entries" never appears.
                 symbolLimit: 1000,
             };
@@ -117,11 +117,11 @@
             const legendOverride = {
                 orient: 'bottom',
                 direction: 'horizontal',
-                columns: 4,
-                labelLimit: 120,
-                labelFontSize: 12,
-                symbolSize: 120,
-                padding: 6,
+                columns: 3,
+                labelLimit: 90,
+                labelFontSize: 10,
+                symbolSize: 70,
+                padding: 4,
                 title: 'Series',
                 symbolLimit: 1000,
             };
