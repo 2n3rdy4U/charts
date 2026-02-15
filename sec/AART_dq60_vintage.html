@@ -25,9 +25,13 @@
         .radio label { color: var(--text); font-size: 13px; }
         .radio span { color: var(--muted); font-size: 12.5px; margin-right: 4px; }
         .meta { font-size: 12px; color: var(--muted); white-space: nowrap; }
-        #vis { width: 100%; min-height: 560px; }
+        #vis { width: 100%; min-height: 760px; }
         .vega-embed { width: 100% !important; }
         pre { white-space: pre-wrap; word-break: break-word; }
+
+        @media (max-width: 640px) and (pointer: coarse), (max-width: 640px) and (any-pointer: coarse) {
+            #vis { min-height: 1040px; }
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
@@ -59,7 +63,7 @@
     </div>
 
     <script>
-        const BUILD_ID = "2026-02-15 08:48";
+        const BUILD_ID = "2026-02-15 08:55";
         const LAST_UPDATED_TEXT = "Feb 15";
         const ISSUERS = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax"}, {"code": "COPAR", "label": "Capital"}, {"code": "CRART", "label": "California"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DRIVE"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth"}, {"code": "GMCAR", "label": "GM"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "Usaa"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World"}, {"code": "WOSAT", "label": "World"}];
         const DEFAULT_ISSUER = "AART";
@@ -88,10 +92,10 @@
                 ...(spec.config.legend || {}),
                 orient: 'bottom',
                 direction: 'horizontal',
-                columns: 2,
+                columns: 3,
                 labelLimit: 120,
-                labelFontSize: 12,
-                symbolSize: 120,
+                labelFontSize: 11,
+                symbolSize: 90,
                 padding: 6,
             };
             spec.config.title = {
@@ -141,7 +145,7 @@
 
             spec.padding = { top: 56, left: 10, right: 10, bottom: 70, ...(spec.padding || {}) };
             if (typeof spec.height === 'number') {
-                spec.height = Math.max(spec.height, 640);
+                spec.height = Math.max(spec.height, 720);
             }
             if (spec.title) {
                 if (typeof spec.title === 'string') {
@@ -209,7 +213,19 @@
                 "encoding": {
                     "x": { "field": "vintage_month", "type": "quantitative", "title": "Vintage Month", "axis": {"tickMinStep": 1} },
                     "y": { "field": "dq_rate", "type": "quantitative", "title": "DQ Rate", "axis": {"format": ".2%"} },
-                    "color": { "field": "series_label", "type": "nominal", "title": "Series" },
+                    "color": {
+                        "field": "series_label",
+                        "type": "nominal",
+                        "title": "Series",
+                        "legend": {
+                            "orient": "bottom",
+                            "direction": "horizontal",
+                            "columns": 4,
+                            "labelLimit": 160,
+                            "symbolSize": 110,
+                            "title": "Series"
+                        }
+                    },
                     "opacity": {
                         "condition": { "param": "Series", "empty": true, "value": 1.0 },
                         "value": 0.06
