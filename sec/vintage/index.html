@@ -48,7 +48,6 @@
                 <div>
                     <label>DQ Bucket</label><br/>
                     <div class="radio" role="group" aria-label="DQ Bucket">
-                        <span>Bucket:</span>
                         <label><input type="radio" name="bucket" value="60+" checked> 60+</label>
                         <label><input type="radio" name="bucket" value="30-59"> 30–59</label>
                     </div>
@@ -60,7 +59,7 @@
     </div>
 
     <script>
-        const BUILD_ID = "2026-02-14 21:47";
+        const BUILD_ID = "2026-02-14 21:56";
         const LAST_UPDATED_TEXT = "Feb 14";
         const ISSUERS = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax"}, {"code": "COPAR", "label": "Capital"}, {"code": "CRART", "label": "California"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DRIVE"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth"}, {"code": "GMCAR", "label": "GM"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "Usaa"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World"}, {"code": "WOSAT", "label": "World"}];
         const DEFAULT_ISSUER = "AART";
@@ -141,11 +140,14 @@
             applyLegend(spec);
 
             spec.padding = { top: 56, left: 10, right: 10, bottom: 70, ...(spec.padding || {}) };
+            if (typeof spec.height === 'number') {
+                spec.height = Math.max(spec.height, 560);
+            }
             if (spec.title) {
                 if (typeof spec.title === 'string') {
                     spec.title = spec.title.replace('Delinquency', 'DQ');
                 } else {
-                    spec.title.subtitle = 'Use Bucket control; tap legend to toggle series.';
+                    // No chart subtitle; top-of-page subtitle already explains controls.
                 }
             }
 
@@ -188,8 +190,7 @@
                 "height": 480,
                 "width": "container",
                 "title": {
-                    "text": titleText,
-                    "subtitle": "Use the Bucket selector, and select legend item(s) to toggle series.",
+                    "text": titleText
                 },
                 "transform": [{ "filter": { "field": "bucket", "equal": (bucketValue || "60+") } }],
                 "params": [
