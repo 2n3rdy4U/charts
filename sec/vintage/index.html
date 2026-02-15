@@ -63,7 +63,7 @@
     </div>
 
     <script>
-        const BUILD_ID = "2026-02-15 08:55";
+        const BUILD_ID = "2026-02-15 08:58";
         const LAST_UPDATED_TEXT = "Feb 15";
         const ISSUERS = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax"}, {"code": "COPAR", "label": "Capital"}, {"code": "CRART", "label": "California"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DRIVE"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth"}, {"code": "GMCAR", "label": "GM"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "Usaa"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World"}, {"code": "WOSAT", "label": "World"}];
         const DEFAULT_ISSUER = "AART";
@@ -172,7 +172,7 @@
             const titleText = issuerLabel ? [issuerLabel, `${issuerCode} Delinquency Vintage Curves`] : [`${issuerCode} Delinquency Vintage Curves`];
             return {
                 "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json",
-                "autosize": { "type": "fit", "contains": "padding" },
+                "autosize": { "type": "fit-x", "contains": "padding" },
                 "config": {
                     "axis": { "labelFontSize": 13, "titleFontSize": 14 },
                     "title": { "anchor": "middle", "fontSize": 16, "subtitleFontSize": 12 },
@@ -220,7 +220,7 @@
                         "legend": {
                             "orient": "bottom",
                             "direction": "horizontal",
-                            "columns": 4,
+                            "columns": 6,
                             "labelLimit": 160,
                             "symbolSize": 110,
                             "title": "Series"
