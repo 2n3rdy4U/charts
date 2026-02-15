@@ -26,7 +26,7 @@
         .radio label { color: var(--text); font-size: 13px; }
         .radio span { color: var(--muted); font-size: 12.5px; margin-right: 4px; }
         .meta { font-size: 12px; color: var(--muted); white-space: nowrap; }
-        #vis { width: 100%; min-height: 680px; padding-bottom: 24px; }
+        #vis { width: 100%; min-height: 620px; padding-bottom: 12px; }
         .vega-embed { width: 100% !important; max-width: 100% !important; height: auto !important; overflow: visible !important; }
         .vega-embed > div { max-width: 100% !important; }
         .vega-embed svg, .vega-embed canvas { max-width: 100% !important; }
@@ -34,7 +34,7 @@
 
         @media (max-width: 640px) and (pointer: coarse), (max-width: 640px) and (any-pointer: coarse) {
             .wrap { padding-left: 10px; padding-right: 10px; }
-            #vis { min-height: 980px; }
+            #vis { min-height: 760px; }
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
@@ -67,7 +67,7 @@
     </div>
 
     <script>
-        const BUILD_ID = "2026-02-15 10:52";
+        const BUILD_ID = "2026-02-15 10:58";
         const LAST_UPDATED_TEXT = "Feb 15";
         const ISSUERS = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax"}, {"code": "COPAR", "label": "Capital"}, {"code": "CRART", "label": "California"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DRIVE"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth"}, {"code": "GMCAR", "label": "GM"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "Usaa"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World"}, {"code": "WOSAT", "label": "World"}];
         const DEFAULT_ISSUER = "AART";
@@ -96,11 +96,13 @@
                 ...(spec.config.legend || {}),
                 orient: 'bottom',
                 direction: 'horizontal',
-                columns: 2,
-                labelLimit: 80,
-                labelFontSize: 10,
-                symbolSize: 70,
-                padding: 4,
+                columns: 4,
+                labelLimit: 60,
+                labelFontSize: 9,
+                symbolSize: 50,
+                rowPadding: 2,
+                columnPadding: 6,
+                padding: 2,
                 // Vega default symbolLimit is 30; raise it so "...N entries" never appears.
                 symbolLimit: 1000,
             };
@@ -121,11 +123,13 @@
             const legendOverride = {
                 orient: 'bottom',
                 direction: 'horizontal',
-                columns: 2,
-                labelLimit: 80,
-                labelFontSize: 10,
-                symbolSize: 70,
-                padding: 4,
+                columns: 4,
+                labelLimit: 60,
+                labelFontSize: 9,
+                symbolSize: 50,
+                rowPadding: 2,
+                columnPadding: 6,
+                padding: 2,
                 title: 'Series',
                 symbolLimit: 1000,
             };
@@ -151,7 +155,7 @@
             applyLegend(spec);
 
             if (typeof spec.height === 'number') {
-                spec.height = Math.max(spec.height, 520);
+                spec.height = Math.max(spec.height, 460);
             }
             if (spec.title) {
                 if (typeof spec.title === 'string') {
