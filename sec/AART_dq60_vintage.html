@@ -33,8 +33,8 @@
         pre { white-space: pre-wrap; word-break: break-word; }
 
         @media (max-width: 640px) and (pointer: coarse), (max-width: 640px) and (any-pointer: coarse) {
-            .wrap { padding-left: 10px; padding-right: 10px; }
-            #vis { min-height: 760px; }
+            .wrap { padding-left: 8px; padding-right: 8px; }
+            #vis { min-height: 700px; }
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
@@ -67,7 +67,7 @@
     </div>
 
     <script>
-        const BUILD_ID = "2026-02-15 10:58";
+        const BUILD_ID = "2026-02-15 11:02";
         const LAST_UPDATED_TEXT = "Feb 15";
         const ISSUERS = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax"}, {"code": "COPAR", "label": "Capital"}, {"code": "CRART", "label": "California"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DRIVE"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth"}, {"code": "GMCAR", "label": "GM"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "Usaa"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World"}, {"code": "WOSAT", "label": "World"}];
         const DEFAULT_ISSUER = "AART";
@@ -96,12 +96,12 @@
                 ...(spec.config.legend || {}),
                 orient: 'bottom',
                 direction: 'horizontal',
-                columns: 4,
-                labelLimit: 60,
+                columns: 2,
+                labelLimit: 72,
                 labelFontSize: 9,
-                symbolSize: 50,
+                symbolSize: 44,
                 rowPadding: 2,
-                columnPadding: 6,
+                columnPadding: 4,
                 padding: 2,
                 // Vega default symbolLimit is 30; raise it so "...N entries" never appears.
                 symbolLimit: 1000,
@@ -123,12 +123,12 @@
             const legendOverride = {
                 orient: 'bottom',
                 direction: 'horizontal',
-                columns: 4,
-                labelLimit: 60,
+                columns: 2,
+                labelLimit: 72,
                 labelFontSize: 9,
-                symbolSize: 50,
+                symbolSize: 44,
                 rowPadding: 2,
-                columnPadding: 6,
+                columnPadding: 4,
                 padding: 2,
                 title: 'Series',
                 symbolLimit: 1000,
@@ -155,7 +155,7 @@
             applyLegend(spec);
 
             if (typeof spec.height === 'number') {
-                spec.height = Math.max(spec.height, 460);
+                spec.height = 380;
             }
             if (spec.title) {
                 if (typeof spec.title === 'string') {
