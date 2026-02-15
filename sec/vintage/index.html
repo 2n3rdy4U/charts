@@ -25,8 +25,6 @@
         .radio label { color: var(--text); font-size: 13px; }
         .radio span { color: var(--muted); font-size: 12.5px; margin-right: 4px; }
         .meta { font-size: 12px; color: var(--muted); white-space: nowrap; }
-        #status { font-size: 13px; color: var(--muted); padding: 10px 0 6px; border: 1px solid var(--border); border-radius: 10px; background: #fff; margin-top: 12px; }
-        #status strong { color: var(--text); }
         #vis { width: 100%; min-height: 560px; }
         .vega-embed { width: 100% !important; }
         pre { white-space: pre-wrap; word-break: break-word; }
@@ -58,23 +56,21 @@
                 <div class="meta">Last updated: <span id="lastUpdated"></span></div>
             </div>
         </div>
-
-        <div id="status"><strong>Status:</strong> Initializing…</div>
         <div id="vis"></div>
     </div>
 
     <script>
-        const BUILD_ID = "2026-02-14 20:56";
-        const ISSUERS = [{"code": "AART", "label": "AART (Ally)"}, {"code": "AMCAR", "label": "AMCAR (AmeriCredit)"}, {"code": "BLAST", "label": "BLAST (Bridgecrest)"}, {"code": "BMWOT", "label": "BMWOT (BMW)"}, {"code": "CAOT", "label": "CAOT (CarMax)"}, {"code": "CMXS", "label": "CMXS (CarMax)"}, {"code": "COPAR", "label": "COPAR (Capital)"}, {"code": "CRART", "label": "CRART (California)"}, {"code": "CRVNA", "label": "CRVNA (Carvana)"}, {"code": "DRIVE", "label": "DRIVE"}, {"code": "EART", "label": "EART (Exeter)"}, {"code": "FCAOT", "label": "FCAOT (Ford)"}, {"code": "FTAT", "label": "FTAT (Fifth)"}, {"code": "GMCAR", "label": "GMCAR (GM)"}, {"code": "HAROT", "label": "HAROT (Honda)"}, {"code": "HART", "label": "HART (Hyundai)"}, {"code": "MBART", "label": "MBART (Mercedes-Benz)"}, {"code": "NAROT", "label": "NAROT (Nissan)"}, {"code": "SDART", "label": "SDART (Santander)"}, {"code": "TAOT", "label": "TAOT (Toyota)"}, {"code": "USAOT", "label": "USAOT (Usaa)"}, {"code": "VALET", "label": "VALET (Volkswagen)"}, {"code": "WOART", "label": "WOART (World)"}, {"code": "WOSAT", "label": "WOSAT (World)"}];
+        const BUILD_ID = "2026-02-14 21:47";
+        const LAST_UPDATED_TEXT = "Feb 14";
+        const ISSUERS = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax"}, {"code": "COPAR", "label": "Capital"}, {"code": "CRART", "label": "California"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DRIVE"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth"}, {"code": "GMCAR", "label": "GM"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "Usaa"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World"}, {"code": "WOSAT", "label": "World"}];
         const DEFAULT_ISSUER = "AART";
         const DATA_BASE = ".";
 
-        const statusEl = document.getElementById('status');
         const visEl = document.getElementById('vis');
         const issuerSelect = document.getElementById('issuerSelect');
         const lastUpdatedEl = document.getElementById('lastUpdated');
 
-        if (lastUpdatedEl) lastUpdatedEl.textContent = BUILD_ID;
+        if (lastUpdatedEl) lastUpdatedEl.textContent = LAST_UPDATED_TEXT;
 
         function isMobileTouch() {
             const isSmall = window.matchMedia && window.matchMedia('(max-width: 640px)').matches;
@@ -249,38 +245,19 @@
             const base = (DATA_BASE || '.').replace(/\/+$/, '');
             const csvUrl = `${base}/${issuerCode}.csv?b=${encodeURIComponent(BUILD_ID)}`;
             try {
-                if (statusEl) {
-                    statusEl.style.display = 'block';
-                    statusEl.innerHTML = `<strong>Status:</strong> Loading data…<div style="margin-top:6px"><pre>${csvUrl}</pre></div>`;
-                }
-
                 const resp = await fetch(csvUrl, { cache: 'no-store' });
                 if (!resp.ok) {
-                    if (statusEl) {
-                        statusEl.style.display = 'block';
-                        statusEl.innerHTML = '<b>Data failed to load.</b><br/>' +
+                    if (visEl) {
+                        visEl.innerHTML = '<b>Data failed to load.</b><br/>' +
                             '<div style="margin-top:6px">HTTP ' + resp.status + ' for:</div><pre>' + csvUrl + '</pre>';
                     }
-                    if (visEl) visEl.innerHTML = '';
                     currentView = null;
                     return;
                 }
-
-                // Lightweight diagnostics: count bucket rows (string match).
-                const text = await resp.text();
-                const n60 = (text.match(/,60\+,/g) || []).length;
-                const n30 = (text.match(/,30-59,/g) || []).length;
-                const nRows = Math.max(0, text.split(String.fromCharCode(10)).length - 2);
-                if (statusEl) {
-                    statusEl.style.display = 'block';
-                    statusEl.innerHTML = `<strong>Status:</strong> Data loaded (${nRows} rows). Bucket rows: 60+ = ${n60}, 30–59 = ${n30}. Rendering…`;
-                }
             } catch (e) {
-                if (statusEl) {
-                    statusEl.style.display = 'block';
-                    statusEl.innerHTML = '<b>Data failed to load.</b><br/><pre>' + (e && (e.message || e.stack) ? (e.message || e.stack) : String(e)) + '</pre>';
+                if (visEl) {
+                    visEl.innerHTML = '<b>Data failed to load.</b><br/><pre>' + (e && (e.message || e.stack) ? (e.message || e.stack) : String(e)) + '</pre>';
                 }
-                if (visEl) visEl.innerHTML = '';
                 currentView = null;
                 return;
             }
@@ -289,27 +266,20 @@
             applyMobileTweaks(spec);
 
             const embedOptions = { actions: false, renderer: (isMobileTouch() ? 'svg' : 'canvas') };
-            if (statusEl) statusEl.style.display = 'block';
+            if (visEl) visEl.innerHTML = '';
 
             try {
                 const result = await vegaEmbed('#vis', spec, embedOptions);
                 currentView = result && result.view ? result.view : null;
             } catch (err) {
                 console.error('Vega embed failed', err);
-                if (statusEl) {
-                    statusEl.style.display = 'block';
-                    statusEl.innerHTML = '<b>Chart failed to render.</b><br/><pre>' +
+                if (visEl) {
+                    visEl.innerHTML = '<b>Chart failed to render.</b><br/><pre>' +
                         (err && (err.stack || err.message) ? (err.stack || err.message) : String(err)) +
                         '</pre>';
                 }
-                if (visEl) visEl.innerHTML = '';
                 currentView = null;
                 return;
-            }
-
-            if (statusEl) {
-                statusEl.style.display = 'block';
-                statusEl.innerHTML = `<strong>Status:</strong> Rendered. If the plot is still blank, share a screenshot of this box.`;
             }
         }
 
@@ -337,11 +307,7 @@
             issuerSelect.addEventListener('change', () => {
                 embedChart().catch((err) => {
                     console.error('Embed failed', err);
-                    if (statusEl) {
-                        statusEl.style.display = 'block';
-                        statusEl.innerHTML = '<b>Chart failed to render.</b><br/><pre>' + (err && (err.stack || err.message) ? (err.stack || err.message) : String(err)) + '</pre>';
-                    }
-                    if (visEl) visEl.innerHTML = '';
+                    if (visEl) visEl.innerHTML = '<b>Chart failed to render.</b><br/><pre>' + (err && (err.stack || err.message) ? (err.stack || err.message) : String(err)) + '</pre>';
                 });
             });
 
@@ -350,11 +316,7 @@
                     // Re-embed so bucket filtering is always correct.
                     embedChart().catch((err) => {
                         console.error('Embed failed', err);
-                        if (statusEl) {
-                            statusEl.style.display = 'block';
-                            statusEl.innerHTML = '<b>Chart failed to render.</b><br/><pre>' + (err && (err.stack || err.message) ? (err.stack || err.message) : String(err)) + '</pre>';
-                        }
-                        if (visEl) visEl.innerHTML = '';
+                        if (visEl) visEl.innerHTML = '<b>Chart failed to render.</b><br/><pre>' + (err && (err.stack || err.message) ? (err.stack || err.message) : String(err)) + '</pre>';
                     });
                 });
             }
@@ -364,18 +326,11 @@
             initControls();
             embedChart().catch((err) => {
                 console.error('Embed failed', err);
-                if (statusEl) {
-                    statusEl.style.display = 'block';
-                    statusEl.innerHTML = '<b>Chart failed to render.</b><br/><pre>' + (err && (err.stack || err.message) ? (err.stack || err.message) : String(err)) + '</pre>';
-                }
-                if (visEl) visEl.innerHTML = '';
+                if (visEl) visEl.innerHTML = '<b>Chart failed to render.</b><br/><pre>' + (err && (err.stack || err.message) ? (err.stack || err.message) : String(err)) + '</pre>';
             });
         } catch (err) {
             console.error('Unexpected error', err);
-            if (statusEl) {
-                statusEl.style.display = 'block';
-                statusEl.innerHTML = '<b>Unexpected error.</b><br/><pre>' + (err && (err.stack || err.message) ? (err.stack || err.message) : String(err)) + '</pre>';
-            }
+            if (visEl) visEl.innerHTML = '<b>Unexpected error.</b><br/><pre>' + (err && (err.stack || err.message) ? (err.stack || err.message) : String(err)) + '</pre>';
         }
     </script>
 </body>
