@@ -67,7 +67,7 @@
     </div>
 
     <script>
-        const BUILD_ID = "2026-02-15 11:13";
+        const BUILD_ID = "2026-02-15 16:11";
         const LAST_UPDATED_TEXT = "Feb 15";
         const ISSUERS = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax"}, {"code": "COPAR", "label": "Capital One"}, {"code": "CRART", "label": "California"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DRIVE"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni"}];
         const DEFAULT_ISSUER = "AART";
@@ -263,6 +263,15 @@
             return (el && el.value) ? el.value : '60+';
         }
 
+        function renderError(title, detailHtml) {
+            if (!visEl) return;
+            visEl.innerHTML = `<b>${title}</b><br/>${detailHtml || ''}`;
+        }
+
+        function errText(err) {
+            return (err && (err.stack || err.message)) ? (err.stack || err.message) : String(err);
+        }
+
         async function embedChart() {
             const issuerCode = issuerSelect.value;
             const issuerObj = ISSUERS.find((x) => x.code === issuerCode);
@@ -275,17 +284,12 @@
             try {
                 const resp = await fetch(csvUrl, { cache: 'no-store' });
                 if (!resp.ok) {
-                    if (visEl) {
-                        visEl.innerHTML = '<b>Data failed to load.</b><br/>' +
-                            '<div style="margin-top:6px">HTTP ' + resp.status + ' for:</div><pre>' + csvUrl + '</pre>';
-                    }
+                    renderError('Data failed to load.', '<div style="margin-top:6px">HTTP ' + resp.status + ' for:</div><pre>' + csvUrl + '</pre>');
                     currentView = null;
                     return;
                 }
             } catch (e) {
-                if (visEl) {
-                    visEl.innerHTML = '<b>Data failed to load.</b><br/><pre>' + (e && (e.message || e.stack) ? (e.message || e.stack) : String(e)) + '</pre>';
-                }
+                renderError('Data failed to load.', '<pre>' + errText(e) + '</pre>');
                 currentView = null;
                 return;
             }
@@ -301,11 +305,7 @@
                 currentView = result && result.view ? result.view : null;
             } catch (err) {
                 console.error('Vega embed failed', err);
-                if (visEl) {
-                    visEl.innerHTML = '<b>Chart failed to render.</b><br/><pre>' +
-                        (err && (err.stack || err.message) ? (err.stack || err.message) : String(err)) +
-                        '</pre>';
-                }
+                renderError('Chart failed to render.', '<pre>' + errText(err) + '</pre>');
                 currentView = null;
                 return;
             }
@@ -335,7 +335,7 @@
             issuerSelect.addEventListener('change', () => {
                 embedChart().catch((err) => {
                     console.error('Embed failed', err);
-                    if (visEl) visEl.innerHTML = '<b>Chart failed to render.</b><br/><pre>' + (err && (err.stack || err.message) ? (err.stack || err.message) : String(err)) + '</pre>';
+                    renderError('Chart failed to render.', '<pre>' + errText(err) + '</pre>');
                 });
             });
 
@@ -344,7 +344,7 @@
                     // Re-embed so bucket filtering is always correct.
                     embedChart().catch((err) => {
                         console.error('Embed failed', err);
-                        if (visEl) visEl.innerHTML = '<b>Chart failed to render.</b><br/><pre>' + (err && (err.stack || err.message) ? (err.stack || err.message) : String(err)) + '</pre>';
+                        renderError('Chart failed to render.', '<pre>' + errText(err) + '</pre>');
                     });
                 });
             }
@@ -354,11 +354,11 @@
             initControls();
             embedChart().catch((err) => {
                 console.error('Embed failed', err);
-                if (visEl) visEl.innerHTML = '<b>Chart failed to render.</b><br/><pre>' + (err && (err.stack || err.message) ? (err.stack || err.message) : String(err)) + '</pre>';
+                renderError('Chart failed to render.', '<pre>' + errText(err) + '</pre>');
             });
         } catch (err) {
             console.error('Unexpected error', err);
-            if (visEl) visEl.innerHTML = '<b>Unexpected error.</b><br/><pre>' + (err && (err.stack || err.message) ? (err.stack || err.message) : String(err)) + '</pre>';
+            renderError('Unexpected error.', '<pre>' + errText(err) + '</pre>');
         }
     </script>
 </body>
