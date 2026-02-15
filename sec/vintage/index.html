@@ -63,9 +63,10 @@
     </div>
 
     <script>
-        const BUILD_ID = "2026-02-14 20:12";
+        const BUILD_ID = "2026-02-14 20:17";
         const ISSUERS = [{"code": "AART", "label": "AART (Ally)"}, {"code": "AMCAR", "label": "AMCAR (AmeriCredit)"}, {"code": "BLAST", "label": "BLAST (Bridgecrest)"}, {"code": "BMWOT", "label": "BMWOT (BMW)"}, {"code": "CAOT", "label": "CAOT (CarMax)"}, {"code": "CMXS", "label": "CMXS (CarMax)"}, {"code": "COPAR", "label": "COPAR (Capital)"}, {"code": "CRART", "label": "CRART (California)"}, {"code": "CRVNA", "label": "CRVNA (Carvana)"}, {"code": "DRIVE", "label": "DRIVE"}, {"code": "EART", "label": "EART (Exeter)"}, {"code": "FCAOT", "label": "FCAOT (Ford)"}, {"code": "FTAT", "label": "FTAT (Fifth)"}, {"code": "GMCAR", "label": "GMCAR (GM)"}, {"code": "HAROT", "label": "HAROT (Honda)"}, {"code": "HART", "label": "HART (Hyundai)"}, {"code": "MBART", "label": "MBART (Mercedes-Benz)"}, {"code": "NAROT", "label": "NAROT (Nissan)"}, {"code": "SDART", "label": "SDART (Santander)"}, {"code": "TAOT", "label": "TAOT (Toyota)"}, {"code": "USAOT", "label": "USAOT (Usaa)"}, {"code": "VALET", "label": "VALET (Volkswagen)"}, {"code": "WOART", "label": "WOART (World)"}, {"code": "WOSAT", "label": "WOSAT (World)"}];
         const DEFAULT_ISSUER = "AART";
+        const DATA_BASE = ".";
 
         const statusEl = document.getElementById('status');
         const visEl = document.getElementById('vis');
@@ -163,10 +164,12 @@
         }
 
         function buildSpec(issuerCode, issuerLabel) {
-            const dataUrl = `./${issuerCode}.csv?b=${encodeURIComponent(BUILD_ID)}`;
+            const base = (DATA_BASE || '.').replace(/\/+$/, '');
+            const dataUrl = `${base}/${issuerCode}.csv?b=${encodeURIComponent(BUILD_ID)}`;
             const titleText = issuerLabel ? [issuerLabel, `${issuerCode} Delinquency Vintage Curves`] : [`${issuerCode} Delinquency Vintage Curves`];
             return {
                 "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json",
+                "autosize": { "type": "fit", "contains": "padding" },
                 "config": {
                     "axis": { "labelFontSize": 13, "titleFontSize": 14 },
                     "title": { "anchor": "middle", "fontSize": 16, "subtitleFontSize": 12 },
@@ -199,8 +202,8 @@
                     "y": { "field": "dq_rate", "type": "quantitative", "title": "DQ Rate", "axis": {"format": ".2%"} },
                     "color": { "field": "Series Label", "type": "nominal", "title": "Series" },
                     "opacity": {
-                        "condition": { "param": "Series", "empty": false, "value": 1.0 },
-                        "value": 0.12
+                        "condition": { "param": "Series", "empty": true, "value": 1.0 },
+                        "value": 0.06
                     },
                     "size": {
                         "condition": { "param": "Series", "empty": false, "value": 3.0 },
@@ -223,6 +226,31 @@
             const issuerCode = issuerSelect.value;
             const issuerObj = ISSUERS.find((x) => x.code === issuerCode);
             const issuerLabel = issuerObj ? issuerObj.label : issuerCode;
+
+            // Preflight the data URL so missing CSVs show a visible message.
+            const base = (DATA_BASE || '.').replace(/\/+$/, '');
+            const csvUrl = `${base}/${issuerCode}.csv?b=${encodeURIComponent(BUILD_ID)}`;
+            try {
+                const resp = await fetch(csvUrl, { cache: 'no-store' });
+                if (!resp.ok) {
+                    if (statusEl) {
+                        statusEl.style.display = 'block';
+                        statusEl.innerHTML = '<b>Data failed to load.</b><br/>' +
+                            '<div style="margin-top:6px">HTTP ' + resp.status + ' for:</div><pre>' + csvUrl + '</pre>';
+                    }
+                    if (visEl) visEl.innerHTML = '';
+                    currentView = null;
+                    return;
+                }
+            } catch (e) {
+                if (statusEl) {
+                    statusEl.style.display = 'block';
+                    statusEl.innerHTML = '<b>Data failed to load.</b><br/><pre>' + (e && (e.message || e.stack) ? (e.message || e.stack) : String(e)) + '</pre>';
+                }
+                if (visEl) visEl.innerHTML = '';
+                currentView = null;
+                return;
+            }
 
             const spec = buildSpec(issuerCode, issuerLabel);
             applyMobileTweaks(spec);
