@@ -1,4 +1,4 @@
-Series Label,Reporting Date,vintage_month,bucket,dq_rate
+series_label,reporting_date,vintage_month,bucket,dq_rate
 HART 1699234,2017-02-28,0,60+,0.0
 HART 1699234,2017-03-31,1,60+,0.0006910538571321265
 HART 1699234,2017-04-30,2,60+,0.0011756084155241382

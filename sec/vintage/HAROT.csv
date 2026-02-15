@@ -1,4 +1,4 @@
-Series Label,Reporting Date,vintage_month,bucket,dq_rate
+series_label,reporting_date,vintage_month,bucket,dq_rate
 HAROT 1697574,2017-04-30,0,60+,0.00038145539906103286
 HAROT 1697574,2017-05-31,1,60+,0.0006985004532822091
 HAROT 1697574,2017-06-30,2,60+,0.0007222715440058985

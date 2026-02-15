@@ -1,4 +1,4 @@
-Series Label,Reporting Date,vintage_month,bucket,dq_rate
+series_label,reporting_date,vintage_month,bucket,dq_rate
 CMXS 2025329,2024-07-31,0,60+,0.012477425710064029
 CMXS 2025329,2024-08-31,1,60+,0.0243641946465523
 CMXS 2025329,2024-09-30,2,60+,0.02732165973972883

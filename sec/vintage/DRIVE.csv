@@ -1,4 +1,4 @@
-Series Label,Reporting Date,vintage_month,bucket,dq_rate
+series_label,reporting_date,vintage_month,bucket,dq_rate
 DRIVE 2017-1,2017-06-30,0,60+,0.0013523246755155738
 DRIVE 2017-1,2017-07-31,1,60+,0.01864760467078098
 DRIVE 2017-1,2017-08-31,2,60+,0.038958511132072646

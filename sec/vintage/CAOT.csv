@@ -1,4 +1,4 @@
-Series Label,Reporting Date,vintage_month,bucket,dq_rate
+series_label,reporting_date,vintage_month,bucket,dq_rate
 CAOT 2017-1,2017-02-28,0,60+,0.0016643078052104628
 CAOT 2017-1,2017-03-31,1,60+,0.003061129008541753
 CAOT 2017-1,2017-04-30,2,60+,0.004262621035285786

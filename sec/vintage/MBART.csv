@@ -1,4 +1,4 @@
-Series Label,Reporting Date,vintage_month,bucket,dq_rate
+series_label,reporting_date,vintage_month,bucket,dq_rate
 MBART 2018-1,2018-06-30,0,60+,0.0
 MBART 2018-1,2018-07-31,1,60+,9.36768149882904e-05
 MBART 2018-1,2018-08-31,2,60+,0.00040448261914392445

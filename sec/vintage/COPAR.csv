@@ -1,4 +1,4 @@
-Series Label,Reporting Date,vintage_month,bucket,dq_rate
+series_label,reporting_date,vintage_month,bucket,dq_rate
 COPAR 2019-1,2019-05-31,0,60+,1.5672016048144433e-05
 COPAR 2019-1,2019-06-30,1,60+,9.530768497633192e-05
 COPAR 2019-1,2019-07-31,2,60+,0.00017730782249875078

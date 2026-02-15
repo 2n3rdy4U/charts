@@ -1,4 +1,4 @@
-Series Label,Reporting Date,vintage_month,bucket,dq_rate
+series_label,reporting_date,vintage_month,bucket,dq_rate
 WOART 1702011,2017-03-31,0,60+,0.0
 WOART 1702011,2017-04-30,1,60+,0.0014179308459751265
 WOART 1702011,2017-05-31,2,60+,0.0025337104975443835

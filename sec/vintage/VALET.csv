@@ -1,4 +1,4 @@
-Series Label,Reporting Date,vintage_month,bucket,dq_rate
+series_label,reporting_date,vintage_month,bucket,dq_rate
 VALET 2018-1,2018-07-31,0,60+,0.0007032951952930682
 VALET 2018-1,2018-08-31,1,60+,0.0006277573369138752
 VALET 2018-1,2018-09-28,2,60+,0.0010474178487102559

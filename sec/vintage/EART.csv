@@ -1,4 +1,4 @@
-Series Label,Reporting Date,vintage_month,bucket,dq_rate
+series_label,reporting_date,vintage_month,bucket,dq_rate
 EART 2020-3,2020-09-30,0,60+,0.0008782352637288836
 EART 2020-3,2020-10-31,1,60+,0.012558212547747371
 EART 2020-3,2020-11-30,2,60+,0.02718441462187988

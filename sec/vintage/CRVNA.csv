@@ -1,4 +1,4 @@
-Series Label,Reporting Date,vintage_month,bucket,dq_rate
+series_label,reporting_date,vintage_month,bucket,dq_rate
 CRVNA 1801738,2020-10-31,0,60+,0.0
 CRVNA 1801738,2020-12-31,2,60+,0.0
 CRVNA 1801738,2021-01-31,3,60+,0.0
