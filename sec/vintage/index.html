@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SEC Vintage Delinquency</title>
+    <style>
+        :root {
+            --text: #111827;
+            --muted: #6b7280;
+            --border: #e5e7eb;
+            --bg: #ffffff;
+        }
+        html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; }
+        .wrap { max-width: 1100px; margin: 0 auto; padding: 16px 14px 10px; }
+        .top { display: flex; flex-wrap: wrap; align-items: end; gap: 12px 18px; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
+        .titleblock { flex: 1 1 340px; min-width: 260px; }
+        h1 { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: 0.2px; }
+        .subtitle { margin-top: 4px; font-size: 12.5px; color: var(--muted); line-height: 1.35; }
+        .controls { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; }
+        label { font-size: 12.5px; color: var(--muted); }
+        select { font-size: 13px; padding: 6px 10px; border: 1px solid var(--border); border-radius: 8px; background: #fff; }
+        .radio { display: inline-flex; gap: 10px; align-items: center; padding: 6px 10px; border: 1px solid var(--border); border-radius: 8px; }
+        .radio label { color: var(--text); font-size: 13px; }
+        .radio span { color: var(--muted); font-size: 12.5px; margin-right: 4px; }
+        .meta { font-size: 12px; color: var(--muted); white-space: nowrap; }
+        #status { font-size: 13px; color: var(--muted); padding: 10px 0 6px; }
+        #vis { width: 100%; min-height: 560px; }
+        .vega-embed { width: 100% !important; }
+        pre { white-space: pre-wrap; word-break: break-word; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+</head>
+<body>
+    <div class="wrap">
+        <div class="top">
+            <div class="titleblock">
+                <h1>SEC Vintage Delinquency</h1>
+                <div class="subtitle">Select an issuer and DQ bucket. Use the chart legend to toggle individual series.</div>
+            </div>
+            <div class="controls">
+                <div>
+                    <label for="issuerSelect">Issuer</label><br/>
+                    <select id="issuerSelect"></select>
+                </div>
+                <div>
+                    <label>DQ Bucket</label><br/>
+                    <div class="radio" role="group" aria-label="DQ Bucket">
+                        <span>Bucket:</span>
+                        <label><input type="radio" name="bucket" value="60+" checked> 60+</label>
+                        <label><input type="radio" name="bucket" value="30-59"> 30–59</label>
+                    </div>
+                </div>
+                <div class="meta">Last updated: <span id="lastUpdated"></span></div>
+            </div>
+        </div>
+
+        <div id="status">Loading chart…</div>
+        <div id="vis"></div>
+    </div>
+
+    <script>
+        const BUILD_ID = "2026-02-14 19:40";
+        const ISSUERS = [{"code": "AART", "label": "AART (Ally)"}, {"code": "AMCAR", "label": "AMCAR (AmeriCredit)"}, {"code": "BLAST", "label": "BLAST (Bridgecrest)"}, {"code": "BMWOT", "label": "BMWOT (BMW)"}, {"code": "CAOT", "label": "CAOT (CarMax)"}, {"code": "CMXS", "label": "CMXS (CarMax)"}, {"code": "COPAR", "label": "COPAR (Capital)"}, {"code": "CRART", "label": "CRART (California)"}, {"code": "CRVNA", "label": "CRVNA (Carvana)"}, {"code": "DRIVE", "label": "DRIVE"}, {"code": "EART", "label": "EART (Exeter)"}, {"code": "FCAOT", "label": "FCAOT (Ford)"}, {"code": "FTAT", "label": "FTAT (Fifth)"}, {"code": "GMCAR", "label": "GMCAR (GM)"}, {"code": "HAROT", "label": "HAROT (Honda)"}, {"code": "HART", "label": "HART (Hyundai)"}, {"code": "MBART", "label": "MBART (Mercedes-Benz)"}, {"code": "NAROT", "label": "NAROT (Nissan)"}, {"code": "SDART", "label": "SDART (Santander)"}, {"code": "TAOT", "label": "TAOT (Toyota)"}, {"code": "USAOT", "label": "USAOT (Usaa)"}, {"code": "VALET", "label": "VALET (Volkswagen)"}, {"code": "WOART", "label": "WOART (World)"}, {"code": "WOSAT", "label": "WOSAT (World)"}];
+        const DEFAULT_ISSUER = "AART";
+
+        const statusEl = document.getElementById('status');
+        const visEl = document.getElementById('vis');
+        const issuerSelect = document.getElementById('issuerSelect');
+        const lastUpdatedEl = document.getElementById('lastUpdated');
+
+        if (lastUpdatedEl) lastUpdatedEl.textContent = BUILD_ID;
+
+        function isMobileTouch() {
+            const isSmall = window.matchMedia && window.matchMedia('(max-width: 640px)').matches;
+            const isTouch = (
+                (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) ||
+                (window.matchMedia && window.matchMedia('(any-pointer: coarse)').matches) ||
+                (navigator && (navigator.maxTouchPoints || 0) > 0)
+            );
+            return Boolean(isSmall && isTouch);
+        }
+
+        function applyMobileTweaks(spec) {
+            if (!isMobileTouch() || !spec) return;
+            spec.config = spec.config || {};
+            spec.config.legend = {
+                ...(spec.config.legend || {}),
+                orient: 'bottom',
+                direction: 'horizontal',
+                columns: 2,
+                labelLimit: 120,
+                labelFontSize: 12,
+                symbolSize: 120,
+                padding: 6,
+            };
+            spec.config.title = {
+                ...(spec.config.title || {}),
+                fontSize: 14,
+                subtitleFontSize: 11,
+                offset: 10,
+            };
+            spec.config.axis = {
+                ...(spec.config.axis || {}),
+                titleFontSize: 13,
+                labelFontSize: 12,
+                titlePadding: 10,
+                labelPadding: 4,
+            };
+
+            const legendOverride = {
+                orient: 'bottom',
+                direction: 'horizontal',
+                columns: 2,
+                labelLimit: 120,
+                labelFontSize: 12,
+                symbolSize: 120,
+                padding: 6,
+                title: 'Series',
+            };
+            const applyLegend = (node) => {
+                if (!node || typeof node !== 'object') return;
+                if (node.encoding && node.encoding.color) {
+                    node.encoding.color.legend = { ...(node.encoding.color.legend || {}), ...legendOverride };
+                }
+                if (Array.isArray(node.layer)) {
+                    for (const child of node.layer) applyLegend(child);
+                }
+                if (node.spec) applyLegend(node.spec);
+                if (Array.isArray(node.hconcat)) {
+                    for (const child of node.hconcat) applyLegend(child);
+                }
+                if (Array.isArray(node.vconcat)) {
+                    for (const child of node.vconcat) applyLegend(child);
+                }
+                if (Array.isArray(node.concat)) {
+                    for (const child of node.concat) applyLegend(child);
+                }
+            };
+            applyLegend(spec);
+
+            spec.padding = { top: 56, left: 10, right: 10, bottom: 70, ...(spec.padding || {}) };
+            if (spec.title) {
+                if (typeof spec.title === 'string') {
+                    spec.title = spec.title.replace('Delinquency', 'DQ');
+                } else {
+                    spec.title.subtitle = 'Use Bucket control; tap legend to toggle series.';
+                }
+            }
+
+            // Make legend selection multi-toggle work on touch (no Shift key).
+            if (Array.isArray(spec.params)) {
+                for (const p of spec.params) {
+                    if (p && p.name === 'Series' && p.select) {
+                        p.select.toggle = 'true';
+                        p.select.clear = false;
+                    }
+                }
+            }
+        }
+
+        function buildSpec(issuerCode, issuerLabel) {
+            const dataUrl = `./${issuerCode}.csv?b=${encodeURIComponent(BUILD_ID)}`;
+            const titleText = issuerLabel ? [issuerLabel, `${issuerCode} Delinquency Vintage Curves`] : [`${issuerCode} Delinquency Vintage Curves`];
+            return {
+                "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json",
+                "config": {
+                    "axis": { "labelFontSize": 13, "titleFontSize": 14 },
+                    "title": { "anchor": "middle", "fontSize": 16, "subtitleFontSize": 12 },
+                    "view": { "continuousHeight": 300, "continuousWidth": 300 },
+                },
+                "data": { "url": dataUrl },
+                "height": 480,
+                "width": "container",
+                "title": {
+                    "text": titleText,
+                    "subtitle": "Use the Bucket selector, and select legend item(s) to toggle series.",
+                },
+                "transform": [{ "filter": "(datum.bucket === Bucket)" }],
+                "params": [
+                    {
+                        "name": "Series",
+                        "bind": "legend",
+                        "select": {
+                            "type": "point",
+                            "fields": ["Series Label"],
+                            "toggle": true,
+                            "clear": false,
+                        },
+                        "views": ["view_1"],
+                    },
+                    { "name": "Bucket", "value": "60+" },
+                ],
+                "layer": [
+                    {
+                        "name": "view_1",
+                        "mark": { "type": "line", "size": 1.2 },
+                        "encoding": {
+                            "x": { "field": "vintage_month", "type": "quantitative", "title": "Vintage Month", "axis": {"tickMinStep": 1} },
+                            "y": { "field": "dq_rate", "type": "quantitative", "title": "DQ Rate", "axis": {"format": ".2%"} },
+                            "color": { "field": "Series Label", "type": "nominal", "title": "Series" },
+                            "opacity": {
+                                "condition": { "param": "Series", "empty": true, "value": 1.0 },
+                                "value": 0.12,
+                            },
+                        },
+                    },
+                    {
+                        "mark": { "type": "line", "size": 3.0 },
+                        "transform": [{ "filter": { "param": "Series", "empty": true } }],
+                        "encoding": {
+                            "x": { "field": "vintage_month", "type": "quantitative", "title": "Vintage Month", "axis": {"tickMinStep": 1} },
+                            "y": { "field": "dq_rate", "type": "quantitative", "title": "DQ Rate", "axis": {"format": ".2%"} },
+                            "color": { "field": "Series Label", "type": "nominal", "title": "Series" },
+                        },
+                    },
+                    {
+                        "mark": { "type": "point", "opacity": 0, "size": 120 },
+                        "transform": [{ "filter": { "param": "Series", "empty": true } }],
+                        "encoding": {
+                            "x": { "field": "vintage_month", "type": "quantitative", "title": "Vintage Month", "axis": {"tickMinStep": 1} },
+                            "y": { "field": "dq_rate", "type": "quantitative", "title": "DQ Rate", "axis": {"format": ".2%"} },
+                            "color": { "field": "Series Label", "type": "nominal", "title": "Series" },
+                            "tooltip": [
+                                { "field": "Series Label", "type": "nominal", "title": "Series" },
+                                { "field": "bucket", "type": "nominal", "title": "Bucket" },
+                                { "field": "vintage_month", "type": "quantitative", "title": "Vintage Month" },
+                                { "field": "Reporting Date", "type": "temporal", "title": "Reporting Date" },
+                                { "field": "dq_rate", "type": "quantitative", "title": "Rate", "format": ".2%" },
+                            ],
+                        },
+                    },
+                ],
+            };
+        }
+
+        let currentView = null;
+
+        async function embedChart() {
+            const issuerCode = issuerSelect.value;
+            const issuerObj = ISSUERS.find((x) => x.code === issuerCode);
+            const issuerLabel = issuerObj ? issuerObj.label : issuerCode;
+
+            const spec = buildSpec(issuerCode, issuerLabel);
+            applyMobileTweaks(spec);
+
+            const embedOptions = { actions: false, renderer: (isMobileTouch() ? 'svg' : 'canvas') };
+            if (statusEl) statusEl.style.display = 'block';
+            if (statusEl) statusEl.textContent = 'Loading chart…';
+
+            const result = await vegaEmbed('#vis', spec, embedOptions);
+            currentView = result && result.view ? result.view : null;
+
+            // Apply currently selected bucket (page-level control).
+            const bucket = document.querySelector('input[name="bucket"]:checked')?.value || '60+';
+            if (currentView && typeof currentView.signal === 'function') {
+                currentView.signal('Bucket', bucket).run();
+            }
+
+            if (statusEl) statusEl.style.display = 'none';
+        }
+
+        function initControls() {
+            issuerSelect.innerHTML = '';
+            for (const it of ISSUERS) {
+                const opt = document.createElement('option');
+                opt.value = it.code;
+                opt.textContent = it.label || it.code;
+                issuerSelect.appendChild(opt);
+            }
+
+            const params = new URLSearchParams(window.location.search || '');
+            const issuerFromUrl = (params.get('issuer') || '').toUpperCase();
+            const bucketFromUrl = params.get('bucket');
+
+            issuerSelect.value = (ISSUERS.some((x) => x.code === issuerFromUrl) ? issuerFromUrl : DEFAULT_ISSUER);
+            if (!issuerSelect.value && ISSUERS.length) issuerSelect.value = ISSUERS[0].code;
+
+            if (bucketFromUrl === '30-59' || bucketFromUrl === '60+') {
+                const el = document.querySelector(`input[name="bucket"][value="${bucketFromUrl}"]`);
+                if (el) el.checked = true;
+            }
+
+            issuerSelect.addEventListener('change', () => {
+                embedChart().catch((err) => {
+                    console.error('Embed failed', err);
+                    if (statusEl) {
+                        statusEl.style.display = 'block';
+                        statusEl.innerHTML = '<b>Chart failed to render.</b><br/><pre>' + (err && (err.stack || err.message) ? (err.stack || err.message) : String(err)) + '</pre>';
+                    }
+                    if (visEl) visEl.innerHTML = '';
+                });
+            });
+
+            for (const radio of document.querySelectorAll('input[name="bucket"]')) {
+                radio.addEventListener('change', () => {
+                    const bucket = document.querySelector('input[name="bucket"]:checked')?.value || '60+';
+                    if (currentView && typeof currentView.signal === 'function') {
+                        try { currentView.signal('Bucket', bucket).run(); } catch (e) { console.warn('Bucket signal failed', e); }
+                    } else {
+                        // If no view yet, embed will apply bucket.
+                    }
+                });
+            }
+        }
+
+        try {
+            initControls();
+            embedChart().catch((err) => {
+                console.error('Embed failed', err);
+                if (statusEl) {
+                    statusEl.style.display = 'block';
+                    statusEl.innerHTML = '<b>Chart failed to render.</b><br/><pre>' + (err && (err.stack || err.message) ? (err.stack || err.message) : String(err)) + '</pre>';
+                }
+                if (visEl) visEl.innerHTML = '';
+            });
+        } catch (err) {
+            console.error('Unexpected error', err);
+            if (statusEl) {
+                statusEl.style.display = 'block';
+                statusEl.innerHTML = '<b>Unexpected error.</b><br/><pre>' + (err && (err.stack || err.message) ? (err.stack || err.message) : String(err)) + '</pre>';
+            }
+        }
+    </script>
+</body>
+</html>
