@@ -25,7 +25,8 @@
         .radio label { color: var(--text); font-size: 13px; }
         .radio span { color: var(--muted); font-size: 12.5px; margin-right: 4px; }
         .meta { font-size: 12px; color: var(--muted); white-space: nowrap; }
-        #status { font-size: 13px; color: var(--muted); padding: 10px 0 6px; }
+        #status { font-size: 13px; color: var(--muted); padding: 10px 0 6px; border: 1px solid var(--border); border-radius: 10px; background: #fff; margin-top: 12px; }
+        #status strong { color: var(--text); }
         #vis { width: 100%; min-height: 560px; }
         .vega-embed { width: 100% !important; }
         pre { white-space: pre-wrap; word-break: break-word; }
@@ -58,12 +59,12 @@
             </div>
         </div>
 
-        <div id="status">Loading chart…</div>
+        <div id="status"><strong>Status:</strong> Initializing…</div>
         <div id="vis"></div>
     </div>
 
     <script>
-        const BUILD_ID = "2026-02-14 20:17";
+        const BUILD_ID = "2026-02-14 20:32";
         const ISSUERS = [{"code": "AART", "label": "AART (Ally)"}, {"code": "AMCAR", "label": "AMCAR (AmeriCredit)"}, {"code": "BLAST", "label": "BLAST (Bridgecrest)"}, {"code": "BMWOT", "label": "BMWOT (BMW)"}, {"code": "CAOT", "label": "CAOT (CarMax)"}, {"code": "CMXS", "label": "CMXS (CarMax)"}, {"code": "COPAR", "label": "COPAR (Capital)"}, {"code": "CRART", "label": "CRART (California)"}, {"code": "CRVNA", "label": "CRVNA (Carvana)"}, {"code": "DRIVE", "label": "DRIVE"}, {"code": "EART", "label": "EART (Exeter)"}, {"code": "FCAOT", "label": "FCAOT (Ford)"}, {"code": "FTAT", "label": "FTAT (Fifth)"}, {"code": "GMCAR", "label": "GMCAR (GM)"}, {"code": "HAROT", "label": "HAROT (Honda)"}, {"code": "HART", "label": "HART (Hyundai)"}, {"code": "MBART", "label": "MBART (Mercedes-Benz)"}, {"code": "NAROT", "label": "NAROT (Nissan)"}, {"code": "SDART", "label": "SDART (Santander)"}, {"code": "TAOT", "label": "TAOT (Toyota)"}, {"code": "USAOT", "label": "USAOT (Usaa)"}, {"code": "VALET", "label": "VALET (Volkswagen)"}, {"code": "WOART", "label": "WOART (World)"}, {"code": "WOSAT", "label": "WOSAT (World)"}];
         const DEFAULT_ISSUER = "AART";
         const DATA_BASE = ".";
@@ -163,7 +164,7 @@
             }
         }
 
-        function buildSpec(issuerCode, issuerLabel) {
+        function buildSpec(issuerCode, issuerLabel, bucketValue) {
             const base = (DATA_BASE || '.').replace(/\/+$/, '');
             const dataUrl = `${base}/${issuerCode}.csv?b=${encodeURIComponent(BUILD_ID)}`;
             const titleText = issuerLabel ? [issuerLabel, `${issuerCode} Delinquency Vintage Curves`] : [`${issuerCode} Delinquency Vintage Curves`];
@@ -182,7 +183,7 @@
                     "text": titleText,
                     "subtitle": "Use the Bucket selector, and select legend item(s) to toggle series.",
                 },
-                "transform": [{ "filter": "(datum.bucket === Bucket)" }],
+                "transform": [{ "filter": "(datum.bucket === param('Bucket'))" }],
                 "params": [
                     {
                         "name": "Series",
@@ -194,7 +195,7 @@
                             "clear": false,
                         },
                     },
-                    { "name": "Bucket", "value": "60+" },
+                    { "name": "Bucket", "value": (bucketValue || "60+") },
                 ],
                 "mark": { "type": "line" },
                 "encoding": {
@@ -226,11 +227,17 @@
             const issuerCode = issuerSelect.value;
             const issuerObj = ISSUERS.find((x) => x.code === issuerCode);
             const issuerLabel = issuerObj ? issuerObj.label : issuerCode;
+            const bucket = document.querySelector('input[name="bucket"]:checked')?.value || '60+';
 
             // Preflight the data URL so missing CSVs show a visible message.
             const base = (DATA_BASE || '.').replace(/\/+$/, '');
             const csvUrl = `${base}/${issuerCode}.csv?b=${encodeURIComponent(BUILD_ID)}`;
             try {
+                if (statusEl) {
+                    statusEl.style.display = 'block';
+                    statusEl.innerHTML = `<strong>Status:</strong> Loading data…<div style="margin-top:6px"><pre>${{csvUrl}}</pre></div>`;
+                }
+
                 const resp = await fetch(csvUrl, { cache: 'no-store' });
                 if (!resp.ok) {
                     if (statusEl) {
@@ -242,6 +249,17 @@
                     currentView = null;
                     return;
                 }
+
+                // Lightweight diagnostics: count bucket rows (string match).
+                const text = await resp.text();
+                const n60 = (text.match(/,60\+,/g) || []).length;
+                const n30 = (text.match(/,30-59,/g) || []).length;
+                const nRows = Math.max(0, text.split(/?
+/).length - 2);
+                if (statusEl) {
+                    statusEl.style.display = 'block';
+                    statusEl.innerHTML = `<strong>Status:</strong> Data loaded (${{nRows}} rows). Bucket rows: 60+ = ${{n60}}, 30–59 = ${{n30}}. Rendering…`;
+                }
             } catch (e) {
                 if (statusEl) {
                     statusEl.style.display = 'block';
@@ -252,12 +270,11 @@
                 return;
             }
 
-            const spec = buildSpec(issuerCode, issuerLabel);
+            const spec = buildSpec(issuerCode, issuerLabel, bucket);
             applyMobileTweaks(spec);
 
             const embedOptions = { actions: false, renderer: (isMobileTouch() ? 'svg' : 'canvas') };
             if (statusEl) statusEl.style.display = 'block';
-            if (statusEl) statusEl.textContent = 'Loading chart…';
 
             try {
                 const result = await vegaEmbed('#vis', spec, embedOptions);
@@ -275,13 +292,10 @@
                 return;
             }
 
-            // Apply currently selected bucket (page-level control).
-            const bucket = document.querySelector('input[name="bucket"]:checked')?.value || '60+';
-            if (currentView && typeof currentView.signal === 'function') {
-                currentView.signal('Bucket', bucket).run();
+            if (statusEl) {
+                statusEl.style.display = 'block';
+                statusEl.innerHTML = `<strong>Status:</strong> Rendered. If the plot is still blank, share a screenshot of this box.`;
             }
-
-            if (statusEl) statusEl.style.display = 'none';
         }
 
         function initControls() {
@@ -318,12 +332,15 @@
 
             for (const radio of document.querySelectorAll('input[name="bucket"]')) {
                 radio.addEventListener('change', () => {
-                    const bucket = document.querySelector('input[name="bucket"]:checked')?.value || '60+';
-                    if (currentView && typeof currentView.signal === 'function') {
-                        try { currentView.signal('Bucket', bucket).run(); } catch (e) { console.warn('Bucket signal failed', e); }
-                    } else {
-                        // If no view yet, embed will apply bucket.
-                    }
+                    // Re-embed so bucket filtering is always correct.
+                    embedChart().catch((err) => {
+                        console.error('Embed failed', err);
+                        if (statusEl) {
+                            statusEl.style.display = 'block';
+                            statusEl.innerHTML = '<b>Chart failed to render.</b><br/><pre>' + (err && (err.stack || err.message) ? (err.stack || err.message) : String(err)) + '</pre>';
+                        }
+                        if (visEl) visEl.innerHTML = '';
+                    });
                 });
             }
         }
