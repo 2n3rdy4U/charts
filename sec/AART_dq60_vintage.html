@@ -26,7 +26,7 @@
         .radio label { color: var(--text); font-size: 13px; }
         .radio span { color: var(--muted); font-size: 12.5px; margin-right: 4px; }
         .meta { font-size: 12px; color: var(--muted); white-space: nowrap; }
-        #vis { width: 100%; min-height: 620px; padding-bottom: 12px; }
+        #vis { width: 100%; min-height: 850px; padding-bottom: 12px; overflow: visible; }
         .vega-embed { width: 100% !important; max-width: 100% !important; height: auto !important; overflow: visible !important; }
         .vega-embed > div { max-width: 100% !important; }
         .vega-embed svg, .vega-embed canvas { max-width: 100% !important; }
@@ -34,7 +34,7 @@
 
         @media (max-width: 640px) and (pointer: coarse), (max-width: 640px) and (any-pointer: coarse) {
             .wrap { padding-left: 8px; padding-right: 8px; }
-            #vis { min-height: 700px; }
+            #vis { min-height: 1200px; }
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
@@ -67,9 +67,9 @@
     </div>
 
     <script>
-        const BUILD_ID = "2026-02-20 13:35";
+        const BUILD_ID = "2026-02-20 22:21";
         const LAST_UPDATED_TEXT = "Feb 20";
-        const ISSUERS = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax"}, {"code": "COPAR", "label": "Capital One"}, {"code": "CRART", "label": "California"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DRIVE"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni"}];
+        const ISSUERS = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax"}, {"code": "COPAR", "label": "Capital One"}, {"code": "CRART", "label": "California"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DRIVE"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni"}];
         const DEFAULT_ISSUER = "AART";
         const DATA_BASE = "vintage";
 
@@ -303,6 +303,18 @@
             try {
                 const result = await vegaEmbed('#vis', spec, embedOptions);
                 currentView = result && result.view ? result.view : null;
+
+                // After render, ensure #vis is tall enough for the actual chart+legend.
+                requestAnimationFrame(() => {
+                    if (!visEl) return;
+                    const embed = visEl.querySelector('.vega-embed');
+                    if (embed) {
+                        const needed = embed.scrollHeight + 24;
+                        if (needed > visEl.offsetHeight) {
+                            visEl.style.minHeight = needed + 'px';
+                        }
+                    }
+                });
             } catch (err) {
                 console.error('Vega embed failed', err);
                 renderError('Chart failed to render.', '<pre>' + errText(err) + '</pre>');
