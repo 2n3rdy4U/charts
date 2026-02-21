@@ -11,10 +11,10 @@
             --border: #e5e7eb;
             --bg: #ffffff;
         }
-        html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); }
+        html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); overflow: hidden; height: 100%; }
         *, *::before, *::after { box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; }
-        .wrap { max-width: 1100px; margin: 0 auto; padding: 16px 14px 10px; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; display: flex; flex-direction: column; }
+        .wrap { flex: 1; display: flex; flex-direction: column; max-width: 1100px; width: 100%; margin: 0 auto; padding: 16px 14px 10px; overflow: hidden; }
         .top { display: flex; flex-wrap: wrap; align-items: end; gap: 12px 18px; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
         .titleblock { flex: 1 1 340px; min-width: 260px; }
         h1 { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: 0.2px; }
@@ -26,15 +26,14 @@
         .radio label { color: var(--text); font-size: 13px; }
         .radio span { color: var(--muted); font-size: 12.5px; margin-right: 4px; }
         .meta { font-size: 12px; color: var(--muted); white-space: nowrap; }
-        #vis { width: 100%; min-height: 850px; padding-bottom: 12px; overflow: visible; }
-        .vega-embed { width: 100% !important; max-width: 100% !important; height: auto !important; overflow: visible !important; }
-        .vega-embed > div { max-width: 100% !important; }
+        #vis { flex: 1; width: 100%; min-height: 0; overflow: hidden; }
+        .vega-embed { width: 100% !important; max-width: 100% !important; height: 100% !important; overflow: hidden !important; }
+        .vega-embed > div { max-width: 100% !important; height: 100% !important; }
         .vega-embed svg, .vega-embed canvas { max-width: 100% !important; }
         pre { white-space: pre-wrap; word-break: break-word; }
 
         @media (max-width: 640px) and (pointer: coarse), (max-width: 640px) and (any-pointer: coarse) {
             .wrap { padding-left: 8px; padding-right: 8px; }
-            #vis { min-height: 1200px; }
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
@@ -67,8 +66,8 @@
     </div>
 
     <script>
-        const BUILD_ID = "2026-02-20 22:28";
-        const LAST_UPDATED_TEXT = "Feb 20";
+        const BUILD_ID = "2026-02-21 14:19";
+        const LAST_UPDATED_TEXT = "Feb 21";
         const ISSUERS = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax"}, {"code": "COPAR", "label": "Capital One"}, {"code": "CRART", "label": "California"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DRIVE"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni"}];
         const DEFAULT_ISSUER = "AART";
         const DATA_BASE = ".";
@@ -182,7 +181,7 @@
             const titleText = issuerLabel ? [issuerLabel, `${issuerCode} DQ Vintage Curves`] : [`${issuerCode} DQ Vintage Curves`];
             return {
                 "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json",
-                "autosize": { "type": "fit-x", "contains": "padding" },
+                "autosize": { "type": "fit", "contains": "padding" },
                 "config": {
                     "axis": { "labelFontSize": 13, "titleFontSize": 14 },
                     "title": { "anchor": "middle", "fontSize": 16, "subtitleFontSize": 12 },
@@ -201,7 +200,7 @@
                         },
                     },
                 },
-                "height": 440,
+                "height": "container",
                 "width": "container",
                 "title": {
                     "text": titleText
@@ -311,18 +310,6 @@
             try {
                 const result = await vegaEmbed('#vis', spec, embedOptions);
                 currentView = result && result.view ? result.view : null;
-
-                // After render, ensure #vis is tall enough for the actual chart+legend.
-                requestAnimationFrame(() => {
-                    if (!visEl) return;
-                    const embed = visEl.querySelector('.vega-embed');
-                    if (embed) {
-                        const needed = embed.scrollHeight + 24;
-                        if (needed > visEl.offsetHeight) {
-                            visEl.style.minHeight = needed + 'px';
-                        }
-                    }
-                });
             } catch (err) {
                 console.error('Vega embed failed', err);
                 renderError('Chart failed to render.', '<pre>' + errText(err) + '</pre>');
