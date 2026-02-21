@@ -45,7 +45,7 @@
     <div class="wrap">
         <div class="top">
             <div class="titleblock">
-                <h1>SEC Vintage Delinquency</h1>
+                <h1 id="pageTitle">SEC Vintage Delinquency</h1>
                 <div class="subtitle">Select an issuer and DQ bucket. Use the chart legend to toggle individual series.</div>
             </div>
             <div class="controls">
@@ -67,7 +67,7 @@
     </div>
 
     <script>
-        const BUILD_ID = "2026-02-20 22:21";
+        const BUILD_ID = "2026-02-20 22:28";
         const LAST_UPDATED_TEXT = "Feb 20";
         const ISSUERS = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax"}, {"code": "COPAR", "label": "Capital One"}, {"code": "CRART", "label": "California"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DRIVE"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni"}];
         const DEFAULT_ISSUER = "AART";
@@ -277,6 +277,14 @@
             const issuerObj = ISSUERS.find((x) => x.code === issuerCode);
             const issuerLabel = issuerObj ? issuerObj.label : issuerCode;
             const bucket = getSelectedBucket();
+
+            // Update the page heading to reflect the selected issuer.
+            const pageTitleEl = document.getElementById('pageTitle');
+            if (pageTitleEl) {
+                pageTitleEl.textContent = issuerLabel
+                    ? `${issuerLabel} — ${issuerCode} Vintage Delinquency`
+                    : `${issuerCode} Vintage Delinquency`;
+            }
 
             // Preflight the data URL so missing CSVs show a visible message.
             const base = (DATA_BASE || '.').replace(/\/+$/, '');
