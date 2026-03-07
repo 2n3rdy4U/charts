@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>SEC Vintage Delinquency</title>
+    <title>AART Vintage Delinquency</title>
     <style>
         :root {
             --text: #111827;
@@ -44,7 +44,7 @@
     <div class="wrap">
         <div class="top">
             <div class="titleblock">
-                <h1 id="pageTitle">SEC Vintage Delinquency</h1>
+                <h1 id="pageTitle">AART Vintage Delinquency</h1>
                 <div class="subtitle">Select an issuer and DQ bucket. Use the chart legend to toggle individual series.</div>
             </div>
             <div class="controls">
@@ -70,7 +70,7 @@
         const LAST_UPDATED_TEXT = "Mar 7";
         const ISSUERS = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax"}, {"code": "COPAR", "label": "Capital One"}, {"code": "CRART", "label": "California"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DRIVE"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni"}];
         const DEFAULT_ISSUER = "AART";
-        const DATA_BASE = ".";
+        const DATA_BASE = "vintage";
 
         const visEl = document.getElementById('vis');
         const issuerSelect = document.getElementById('issuerSelect');
