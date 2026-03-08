@@ -463,6 +463,11 @@
   function toMonthStart(dateStr) {
     return dateStr ? dateStr.substring(0, 7) + '-01' : dateStr;
   }
+  const _MO = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function fmtDateLabel(dateStr) {
+    // "2026-01-01" → "Jan 2026" — pure string, no Date object, no timezone issue
+    return _MO[parseInt(dateStr.substring(5, 7), 10) - 1] + ' ' + dateStr.substring(0, 4);
+  }
 
   // Time series mode: aggregate by issuer → one point per (issuer, month)
   function aggregateTimeSeries(rows) {
@@ -505,6 +510,7 @@
       result.push({
         series: issuerLabel[g.issuer_code] || g.issuer_code,
         reporting_date: g.reporting_date,
+        date_label: fmtDateLabel(g.reporting_date),
         vintage_month: 0,
         loan_count: total,
         dq_rate: dqRate(g, total),
@@ -529,6 +535,7 @@
         result.push({
           series: 'All Issuers (avg)',
           reporting_date: date,
+          date_label: fmtDateLabel(date),
           vintage_month: 0,
           loan_count: total,
           dq_rate: dqRate(agg, total),
@@ -616,7 +623,7 @@
         },
         "tooltip": [
           {"field":"series","type":"nominal","title":"Series"},
-          {"field":"reporting_date","type":"temporal","title":"Date","timeUnit":"utcyearmonth"},
+          {"field":"date_label","type":"nominal","title":"Date"},
           {"field":"vintage_month","type":"quantitative","title":"Vintage Month"},
           {"field":"dq_rate","type":"quantitative","title":yLabel,"format":yFmt},
           {"field":"loan_count","type":"quantitative","title":"Loans","format":",d"},
