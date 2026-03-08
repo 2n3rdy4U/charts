@@ -566,8 +566,8 @@
     const xEnc = isVintage
       ? { field:'vintage_month', type:'quantitative',
            title:'Months Since Issuance', axis:{ tickMinStep:1 } }
-      : { field:'reporting_date', type:'temporal', title:'Reporting Date',
-           axis:{ tickCount:'year', format:"%Y", labelAngle:0, labelOverlap:false } };
+      : { field:'reporting_date', type:'temporal', timeUnit:'utcyearmonth', title:'Reporting Date',
+           axis:{ tickCount:{utcyear:1}, format:"%Y", labelAngle:0, labelOverlap:false } };
 
     const subtitle = isVintage
       ? 'Months since deal issuance · click legend to highlight'
@@ -616,7 +616,7 @@
         },
         "tooltip": [
           {"field":"series","type":"nominal","title":"Series"},
-          {"field":"reporting_date","type":"temporal","title":"Date","timeUnit":"yearmonth"},
+          {"field":"reporting_date","type":"temporal","title":"Date","timeUnit":"utcyearmonth"},
           {"field":"vintage_month","type":"quantitative","title":"Vintage Month"},
           {"field":"dq_rate","type":"quantitative","title":yLabel,"format":yFmt},
           {"field":"loan_count","type":"quantitative","title":"Loans","format":",d"},
