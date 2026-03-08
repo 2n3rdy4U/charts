@@ -92,19 +92,6 @@
     #tblWrap tr:hover td { filter:brightness(0.95); }
     /* ── filter bar separator ── */
     .bar-sep { width:1px; background:var(--border); align-self:stretch; margin:2px 8px; flex-shrink:0; }
-    /* ── info button + popover ── */
-    .info-btn { background:none; border:none; cursor:pointer; font-size:13px; color:var(--muted);
-                padding:0 2px; line-height:1; vertical-align:middle; }
-    .info-btn:hover { color:var(--text); }
-    .info-popover { position:absolute; z-index:200; background:#fff; border:1px solid var(--border);
-                    border-radius:6px; box-shadow:0 4px 16px rgba(0,0,0,.12);
-                    padding:12px 14px; width:340px; font-size:12px; line-height:1.55;
-                    color:var(--text); }
-    .info-popover h4 { margin:0 0 7px; font-size:12px; font-weight:600; color:var(--text); }
-    .info-popover ul { margin:0; padding-left:16px; }
-    .info-popover li { margin-bottom:5px; }
-    .info-popover li:last-child { margin-bottom:0; }
-    .info-popover b { font-weight:600; }
     /* ── table title ── */
     .tbl-title { font-size:13px; font-weight:600; color:var(--text); padding:6px 4px 2px; }
     .tbl-subtitle { font-size:11px; color:var(--muted); padding:0 4px 6px; }
@@ -191,10 +178,20 @@
         <button data-display="seasonal">Year Overlay</button>
       </div>
     </div>
+    <div class="bar-sep"></div>
+    <div class="ctrl">
+      <label class="lbl">Pool</label>
+      <div class="btn-group" id="poolGroup">
+        <button data-pool="all" class="active"
+          title="All outstanding loans included. Rate dips when new deals close reflect real origination cohorts entering the pool. Comparable to DataDepot.">All pools</button>
+        <button data-pool="seasoned"
+          title="Excludes deal series in their first 6 months. Eliminates new-origination dilution dips, but produces higher rates than DataDepot since newly-issued (mostly current) loans are removed from the denominator.">Seasoned (&gt;6 mo)</button>
+      </div>
+    </div>
   </div>
 
   <!-- ── Row 3: shared filters (DQ Status + Credit Score) ── -->
-  <div class="fbar" id="sharedBar" style="position:relative;">
+  <div class="fbar" id="sharedBar">
     <div class="ctrl">
       <label class="lbl">DQ Status</label>
       <select id="dqSel">
@@ -221,22 +218,6 @@
         </div>
       </div>
     </div>
-    <div style="margin-left:auto;display:flex;align-items:center;">
-      <button class="info-btn" id="infoBtn" type="button" title="Methodology">ⓘ</button>
-    </div>
-  </div>
-
-  <!-- ── Methodology popover (hidden until ⓘ clicked) ── -->
-  <div class="info-popover" id="infoPopover" hidden>
-    <h4>Methodology</h4>
-    <ul>
-      <li><b>All avg:</b> Balance-weighted delinquency rate across selected issuers, computed monthly. Only months with ≥ 10 loans are included.</li>
-      <li><b>DQ rate:</b> Loan counts in the selected DPD bucket ÷ total loans, filtered by the chosen credit score range.</li>
-      <li><b>Vintage chart:</b> X-axis = months since each series' first reporting date. Series with fewer than 6 months of history are excluded.</li>
-      <li><b>YOY (table):</b> Annual calendar-year averages; partial years compare to the same months in the prior year.</li>
-      <li><b>YOY (chart):</b> Each monthly point vs. the same month one year prior.</li>
-      <li><b>Source:</b> SEC ABS-EE loan-level filings via EDGAR.</li>
-    </ul>
   </div>
 
   <!-- ── Chart / Table ── -->
@@ -247,7 +228,7 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-03-08 13:29";
+  const BUILD_ID   = "2026-03-08 16:01";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -258,9 +239,13 @@
   // ── State ────────────────────────────────────────────────────────────
   let mode            = 'vintage';
   let vintageRows     = [];          // per-issuer CSV rows
-  let summaryRows     = [];          // _summary.csv rows
+  let summaryRows     = [];          // _summary.csv rows (all pools)
+  let seasonedRows    = [];          // _summary_seasoned.csv rows
   let summaryReady    = false;
   let summaryPending  = null;        // Promise
+  let seasonedReady   = false;
+  let seasonedPending = null;        // Promise (lazy-loaded)
+  let poolMode        = 'all';       // 'all' | 'seasoned'
   let selectedIssuers = new Set();   // for time series comparison
   let showAllAvg      = false;
   let ficoMin = 300, ficoMax = 900;
@@ -328,7 +313,6 @@
     cb.addEventListener('change', () => { showAllAvg = cb.checked; updateIssuerBtn(); render(); });
     lbl.appendChild(cb);
     lbl.appendChild(document.createTextNode(' All avg (cross-issuer)'));
-    lbl.title = 'Balance-weighted avg DQ rate across selected issuers, computed monthly';
     issuerPanel.appendChild(lbl);
     const sep = document.createElement('div'); sep.className = 'multi-sel-sep';
     issuerPanel.appendChild(sep);
@@ -439,18 +423,37 @@
     return rows;
   }
 
-  // Pre-load summary CSV in background
+  // Pre-load all-pools summary CSV in background
   summaryPending = fetchCSV('_summary.csv').then(rows => {
     summaryRows  = rows;
     summaryReady = true;
-    // Populate TS date dropdowns
     const dates = rows.map(r => r.reporting_date);
     populateDates(tsDateFromSel, tsDateToSel, dates);
     if (mode === 'timeseries') render();
   }).catch(err => {
     console.warn('Summary CSV failed to load:', err);
-    summaryReady = true;  // prevent perpetual loading state
+    summaryReady = true;
   });
+
+  // Lazy-load seasoned summary (fetched only when user first selects "Seasoned")
+  function ensureSeasonedLoaded() {
+    if (seasonedPending) return seasonedPending;
+    seasonedPending = fetchCSV('_summary_seasoned.csv').then(rows => {
+      seasonedRows  = rows;
+      seasonedReady = true;
+    }).catch(err => {
+      console.warn('Seasoned CSV failed to load:', err);
+      seasonedReady = true;
+    });
+    return seasonedPending;
+  }
+
+  function activeSummaryRows() {
+    return poolMode === 'seasoned' ? seasonedRows : summaryRows;
+  }
+  function activeSummaryReady() {
+    return poolMode === 'seasoned' ? seasonedReady : summaryReady;
+  }
 
   // ── Aggregation helpers ──────────────────────────────────────────────
 
@@ -609,7 +612,8 @@
 
     const subtitle = isVintage
       ? 'Months since deal issuance · click legend to highlight'
-      : 'Seasoned deals (>6 months) · click legend to highlight';
+      : (poolMode === 'seasoned' ? 'Seasoned pools (>6 mo) · click legend to highlight'
+                                 : 'All pools · click legend to highlight');
 
     return {
       "$schema":"https://vega.github.io/schema/vega-lite/v5.json",
@@ -732,7 +736,8 @@
     const tblWrap = document.getElementById('tblWrap');
     vis.style.display     = 'none';
     tblWrap.style.display = 'block';
-    const subtitle = 'Seasoned deals (>6 months) · annual averages of monthly readings';
+    const subtitle = (poolMode === 'seasoned' ? 'Seasoned pools (>6 mo)' : 'All pools')
+                   + ' · annual averages of monthly readings';
     let headerHtml = `<div class="tbl-title">${title || 'Issuer Comparison'} — Time Series</div>`
                    + `<div class="tbl-subtitle">${subtitle}</div>`;
 
@@ -847,13 +852,13 @@
       renderChart(data, title);
 
     } else {
-      if (!summaryReady) { showMsg('Loading summary data…'); return; }
-      if (!summaryRows.length) { showMsg('Summary data unavailable.', true); return; }
+      if (!activeSummaryReady()) { showMsg('Loading summary data…'); return; }
+      if (!activeSummaryRows().length) { showMsg('Summary data unavailable.', true); return; }
       if (selectedIssuers.size === 0 && !showAllAvg) {
         showMsg('Select at least one issuer chip above to draw a chart.');
         return;
       }
-      const rawData = aggregateTimeSeries(summaryRows);
+      const rawData = aggregateTimeSeries(activeSummaryRows());
       if (!rawData.length) { showMsg('No data for selected filters.'); return; }
       const data = applyTransform(rawData);
       if (!data.length) { showMsg('No data — YOY transforms require 12+ months of history.'); return; }
@@ -870,38 +875,10 @@
           : aggregateAnnual(data);
         if (!annualData.length) { showMsg('No data — YOY requires 12+ months of history.'); return; }
         renderTable(annualData, yFmt, rawData, title);
-      } else if (displayMode === 'seasonal') {
-        const seasonalData = aggregateSeasonal(rawData);
-        if (!seasonalData.length) { showMsg('No data for selected filters.'); return; }
-        renderSeasonalChart(seasonalData, title);
       } else {
         renderChart(data, title);
       }
     }
-  }
-
-  // ── Seasonal aggregation: collapse series → (year, month) ────────────
-  function aggregateSeasonal(rawData) {
-    // Weighted average across all selected series per calendar month
-    const byYearMonth = new Map();
-    for (const d of rawData) {
-      const year      = d.reporting_date.substring(0, 4);
-      const month_num = parseInt(d.reporting_date.substring(5, 7), 10);
-      const key       = year + '-' + String(month_num).padStart(2, '0');
-      if (!byYearMonth.has(key))
-        byYearMonth.set(key, { year, month_num, loans: 0, wsum: 0 });
-      const g = byYearMonth.get(key);
-      g.loans += d.loan_count;
-      g.wsum  += d.dq_rate * d.loan_count;
-    }
-    return [...byYearMonth.values()]
-      .map(g => ({
-        year:        g.year,
-        month_num:   g.month_num,
-        month_label: _MO[g.month_num - 1],
-        dq_rate:     g.loans > 0 ? g.wsum / g.loans : 0,
-      }))
-      .sort((a, b) => a.year.localeCompare(b.year) || a.month_num - b.month_num);
   }
 
   async function renderChart(data, title) {
@@ -910,68 +887,6 @@
     document.getElementById('vis').innerHTML = '';
     try {
       await vegaEmbed('#vis', buildSpec(data, title), { actions:false, renderer:'canvas' });
-    } catch (err) {
-      showMsg('Chart failed: ' + String(err), true);
-    }
-  }
-
-  async function renderSeasonalChart(data, title) {
-    document.getElementById('tblWrap').style.display = 'none';
-    document.getElementById('vis').style.display = 'block';
-    document.getElementById('vis').innerHTML = '';
-    const yLabel = dqFilter === '60+'    ? '60+ DPD Rate'
-                 : dqFilter === '30-59'  ? '30–59 DPD Rate'
-                 : dqFilter === 'any-dq' ? 'Any DQ (30+) Rate'
-                 :                        'Current Rate';
-    const spec = {
-      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-      "autosize": {"type":"fit","contains":"padding"},
-      "config": {
-        "axis":  {"labelFontSize":13,"titleFontSize":14},
-        "title": {"anchor":"middle","fontSize":15,"subtitleFontSize":11},
-        "view":  {"continuousHeight":300,"continuousWidth":300},
-      },
-      "data":   {"values": data},
-      "width":  "container",
-      "height": "container",
-      "title":  {"text": `${title} — Year Overlay`,
-                 "subtitle": "Each line = one calendar year · click legend to highlight"},
-      "params": [{"name":"Yr","bind":"legend",
-                  "select":{"type":"point","fields":["year"],"toggle":true,"clear":false}}],
-      "mark": {"type":"line","point":{"size":160,"filled":true,"strokeWidth":0}},
-      "encoding": {
-        "x": {
-          "field": "month_num", "type": "ordinal", "title": "Month",
-          "axis": {"labelExpr": "['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][datum.value - 1]",
-                   "labelAngle": 0}
-        },
-        "y": {
-          "field": "dq_rate", "type": "quantitative", "title": yLabel,
-          "axis": {"format": ".2%"}
-        },
-        "color": {
-          "field": "year", "type": "ordinal", "title": "Year",
-          "scale": {"scheme": "tableau10"},
-          "legend": {"orient":"bottom","direction":"horizontal","columns":8,
-                     "symbolSize":110,"labelLimit":80},
-        },
-        "opacity": {
-          "condition": {"param":"Yr","empty":true,"value":1.0},
-          "value": 0.2,
-        },
-        "size": {
-          "condition": {"param":"Yr","empty":false,"value":3.0},
-          "value": 1.5,
-        },
-        "tooltip": [
-          {"field":"year","type":"ordinal","title":"Year"},
-          {"field":"month_label","type":"nominal","title":"Month"},
-          {"field":"dq_rate","type":"quantitative","title":yLabel,"format":".2%"},
-        ],
-      },
-    };
-    try {
-      await vegaEmbed('#vis', spec, { actions:false, renderer:'canvas' });
     } catch (err) {
       showMsg('Chart failed: ' + String(err), true);
     }
@@ -1066,24 +981,18 @@
     render();
   });
 
-  // ── Methodology popover ──────────────────────────────────────────────
-  (function() {
-    const btn     = document.getElementById('infoBtn');
-    const popover = document.getElementById('infoPopover');
-    btn.addEventListener('click', e => {
-      e.stopPropagation();
-      const hidden = popover.hidden;
-      popover.hidden = !hidden;
-      if (!hidden) return;
-      // Position below the ⓘ button
-      const br = btn.getBoundingClientRect();
-      const pr = document.getElementById('sharedBar').getBoundingClientRect();
-      popover.style.top  = (br.bottom - pr.top + 6) + 'px';
-      popover.style.right = '0px';
-    });
-    document.addEventListener('click', () => { popover.hidden = true; });
-    popover.addEventListener('click', e => e.stopPropagation());
-  })();
+  document.getElementById('poolGroup').addEventListener('click', async e => {
+    const b = e.target.closest('button[data-pool]');
+    if (!b) return;
+    poolMode = b.dataset.pool;
+    for (const btn of document.querySelectorAll('#poolGroup button'))
+      btn.classList.toggle('active', btn.dataset.pool === poolMode);
+    if (poolMode === 'seasoned' && !seasonedPending) {
+      showMsg('Loading seasoned data…');
+      await ensureSeasonedLoaded();
+    }
+    render();
+  });
 
   // ── Init ─────────────────────────────────────────────────────────────
   document.body.dataset.mode = 'vintage';
