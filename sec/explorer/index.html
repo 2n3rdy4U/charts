@@ -245,7 +245,7 @@
   const issuerSel = document.getElementById('issuerSel');
   for (const it of ISSUERS) {
     const o = document.createElement('option');
-    o.value = it.code; o.textContent = it.label || it.code;
+    o.value = it.code; o.textContent = issuerLabel[it.code];
     issuerSel.appendChild(o);
   }
   const defCode = ISSUERS.some(x => x.code === DEFAULT_ISSUER)
@@ -315,7 +315,7 @@
       syncSelectAll(); updateIssuerBtn(); render();
     });
     lbl.appendChild(cb);
-    lbl.appendChild(document.createTextNode(' ' + (it.label || it.code)));
+    lbl.appendChild(document.createTextNode(' ' + issuerLabel[it.code]));
     issuerPanel.appendChild(lbl);
   }
 
