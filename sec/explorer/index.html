@@ -228,11 +228,11 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-03-08 16:01";
+  const BUILD_ID   = "2026-03-08 16:14";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
-  const LAST_UPDATED   = "Mar 8";
+  const LAST_UPDATED   = "March 8, 2026";
 
   document.getElementById('lastUpdated').textContent = LAST_UPDATED;
 
@@ -875,6 +875,10 @@
           : aggregateAnnual(data);
         if (!annualData.length) { showMsg('No data — YOY requires 12+ months of history.'); return; }
         renderTable(annualData, yFmt, rawData, title);
+      } else if (displayMode === 'seasonal') {
+        const seasonalData = aggregateSeasonal(rawData);
+        if (!seasonalData.length) { showMsg('No data for selected filters.'); return; }
+        renderSeasonalChart(seasonalData, title);
       } else {
         renderChart(data, title);
       }
@@ -887,6 +891,92 @@
     document.getElementById('vis').innerHTML = '';
     try {
       await vegaEmbed('#vis', buildSpec(data, title), { actions:false, renderer:'canvas' });
+    } catch (err) {
+      showMsg('Chart failed: ' + String(err), true);
+    }
+  }
+
+  // ── Seasonal aggregation: collapse series → (year, month) ────────────
+  function aggregateSeasonal(rawData) {
+    const byYearMonth = new Map();
+    for (const d of rawData) {
+      const year      = d.reporting_date.substring(0, 4);
+      const month_num = parseInt(d.reporting_date.substring(5, 7), 10);
+      const key       = year + '-' + String(month_num).padStart(2, '0');
+      if (!byYearMonth.has(key))
+        byYearMonth.set(key, { year, month_num, loans: 0, wsum: 0 });
+      const g = byYearMonth.get(key);
+      g.loans += d.loan_count;
+      g.wsum  += d.dq_rate * d.loan_count;
+    }
+    return [...byYearMonth.values()]
+      .map(g => ({
+        year:        g.year,
+        month_num:   g.month_num,
+        month_label: _MO[g.month_num - 1],
+        dq_rate:     g.loans > 0 ? g.wsum / g.loans : 0,
+      }))
+      .sort((a, b) => a.year.localeCompare(b.year) || a.month_num - b.month_num);
+  }
+
+  async function renderSeasonalChart(data, title) {
+    document.getElementById('tblWrap').style.display = 'none';
+    document.getElementById('vis').style.display = 'block';
+    document.getElementById('vis').innerHTML = '';
+    const yLabel = dqFilter === '60+'    ? '60+ DPD Rate'
+                 : dqFilter === '30-59'  ? '30–59 DPD Rate'
+                 : dqFilter === 'any-dq' ? 'Any DQ (30+) Rate'
+                 :                        'Current Rate';
+    const poolLabel = poolMode === 'seasoned' ? 'Seasoned pools (>6 mo)' : 'All pools';
+    const spec = {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "autosize": {"type":"fit","contains":"padding"},
+      "config": {
+        "axis":  {"labelFontSize":13,"titleFontSize":14},
+        "title": {"anchor":"middle","fontSize":15,"subtitleFontSize":11},
+        "view":  {"continuousHeight":300,"continuousWidth":300},
+      },
+      "data":   {"values": data},
+      "width":  "container",
+      "height": "container",
+      "title":  {"text": `${title} — Year Overlay`,
+                 "subtitle": `${poolLabel} · each line = one calendar year · click legend to highlight`},
+      "params": [{"name":"Yr","bind":"legend",
+                  "select":{"type":"point","fields":["year"],"toggle":true,"clear":false}}],
+      "mark": {"type":"line","point":{"size":160,"filled":true,"strokeWidth":0}},
+      "encoding": {
+        "x": {
+          "field": "month_num", "type": "ordinal", "title": "Month",
+          "axis": {"labelExpr": "['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][datum.value - 1]",
+                   "labelAngle": 0}
+        },
+        "y": {
+          "field": "dq_rate", "type": "quantitative", "title": yLabel,
+          "axis": {"format": ".2%"}
+        },
+        "color": {
+          "field": "year", "type": "ordinal", "title": "Year",
+          "scale": {"scheme": "tableau10"},
+          "legend": {"orient":"bottom","direction":"horizontal","columns":8,
+                     "symbolSize":110,"labelLimit":80},
+        },
+        "opacity": {
+          "condition": {"param":"Yr","empty":true,"value":1.0},
+          "value": 0.2,
+        },
+        "size": {
+          "condition": {"param":"Yr","empty":false,"value":3.0},
+          "value": 1.5,
+        },
+        "tooltip": [
+          {"field":"year","type":"ordinal","title":"Year"},
+          {"field":"month_label","type":"nominal","title":"Month"},
+          {"field":"dq_rate","type":"quantitative","title":yLabel,"format":".2%"},
+        ],
+      },
+    };
+    try {
+      await vegaEmbed('#vis', spec, { actions:false, renderer:'canvas' });
     } catch (err) {
       showMsg('Chart failed: ' + String(err), true);
     }
