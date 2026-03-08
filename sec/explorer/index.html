@@ -239,7 +239,7 @@
   let displayMode = 'chart';  // 'chart' | 'table'
 
   // Build issuer label map: code → label
-  const issuerLabel = Object.fromEntries(ISSUERS.map(x => [x.code, x.label || x.code]));
+  const issuerLabel = Object.fromEntries(ISSUERS.map(x => [x.code, `${x.label || x.code} (${x.code})`]));
 
   // ── Issuer dropdown (vintage) ────────────────────────────────────────
   const issuerSel = document.getElementById('issuerSel');
