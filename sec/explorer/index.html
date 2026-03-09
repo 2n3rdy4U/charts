@@ -132,7 +132,7 @@
       <div class="brand-sub">Auto ABS loan performance · select filters below</div>
     </div>
     <div class="btn-group" id="modeGroup">
-      <button data-mode="vintage" class="active">Vintage Curves</button>
+      <button data-mode="vintage" class="active" title="X-axis = months since each deal series&#39; first reporting date. Aligns deals of different ages so you can compare how delinquency evolves over a series&#39; life, regardless of when it was issued.">Vintage Curves</button>
       <button data-mode="timeseries">Time Series</button>
     </div>
     <div class="meta-date">Updated: <span id="lastUpdated"></span></div>
@@ -206,7 +206,7 @@
   <!-- ── Row 3: shared filters (DQ Status + Credit Score) ── -->
   <div class="fbar" id="sharedBar" style="position:relative;">
     <div class="ctrl">
-      <label class="lbl">DQ Status</label>
+      <label class="lbl" title="Delinquency rate = loans in the selected past-due bucket ÷ total active loans (balance &gt; $10, FICO 300&#8211;900). &#10;&#10;60+ DPD: seriously delinquent. &#10;30&#8211;59 DPD: early-stage delinquency. &#10;Any DQ (30+): combined. &#10;Current: loans with no reported delinquency." style="cursor:help;">DQ Status</label>
       <select id="dqSel">
         <option value="60+">60+ DPD</option>
         <option value="30-59">30–59 DPD</option>
@@ -240,8 +240,6 @@
   <div class="info-popover" id="infoPopover" hidden>
     <h4>Methodology</h4>
     <ul>
-      <li><b>DQ rate:</b> Loans in the selected DPD bucket ÷ total active loans (balance &gt; $10, FICO 300–900).</li>
-      <li><b>Vintage chart:</b> X-axis = months since each series' first reporting date.</li>
       <li><b>YOY (table):</b> Annual calendar-year averages; partial years compare to the same months in the prior year.</li>
       <li><b>YOY (chart):</b> Each monthly point vs. the same month one year prior.</li>
       <li><b>Source:</b> SEC ABS-EE loan-level filings via EDGAR.</li>
@@ -256,7 +254,7 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-03-09 06:40";
+  const BUILD_ID   = "2026-03-09 06:52";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
