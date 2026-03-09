@@ -240,9 +240,6 @@
   <div class="info-popover" id="infoPopover" hidden>
     <h4>Methodology</h4>
     <ul>
-      <li><b>All pools:</b> Includes every outstanding loan. DQ rate dips after a large new deal closes are real — they reflect a fresh cohort of current loans entering the pool.</li>
-      <li><b>Seasoned (&gt;6 mo):</b> Excludes deal series in their first 6 months, which removes new-origination dip effects. Trade-off: tends to overstate the market DQ rate because newly-issued (low-DQ) loans are excluded from the denominator.</li>
-      <li><b>All Issuers (avg):</b> A <b>loan-count–weighted</b> aggregate — delinquent loans and total loans are summed across all issuers, then divided. Every loan has equal weight regardless of deal size. Because large prime issuers (e.g. Ally, Toyota, Honda) hold far more loans than smaller subprime issuers, this rate will be noticeably lower than a simple average across deals, which would give a small trust equal weight to a large one.</li>
       <li><b>DQ rate:</b> Loans in the selected DPD bucket ÷ total active loans (balance &gt; $10, FICO 300–900).</li>
       <li><b>Vintage chart:</b> X-axis = months since each series' first reporting date.</li>
       <li><b>YOY (table):</b> Annual calendar-year averages; partial years compare to the same months in the prior year.</li>
@@ -259,7 +256,7 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-03-09 06:35";
+  const BUILD_ID   = "2026-03-09 06:40";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -344,6 +341,7 @@
     cb.addEventListener('change', () => { showAllAvg = cb.checked; updateIssuerBtn(); render(); });
     lbl.appendChild(cb);
     lbl.appendChild(document.createTextNode(' All avg (cross-issuer)'));
+    lbl.title = 'Loan-count–weighted aggregate across all issuers: delinquent loans and total loans are summed across all issuers before dividing. Every loan has equal weight regardless of deal size. Because large prime issuers hold far more loans than smaller subprime issuers, this rate will be noticeably lower than a simple average across deals.';
     issuerPanel.appendChild(lbl);
     const sep = document.createElement('div'); sep.className = 'multi-sel-sep';
     issuerPanel.appendChild(sep);
@@ -598,7 +596,7 @@
         const total = agg.cur + agg.d3059 + agg.d60;
         if (total < 10) continue;
         result.push({
-          series: 'All Issuers (avg)',
+          series: 'All avg (cross-issuer)',
           reporting_date: date,
           date_label: fmtDateLabel(date),
           vintage_month: 0,
@@ -682,7 +680,7 @@
         },
         "size": {
           "condition": [
-            {"test":"datum.series === 'All Issuers (avg)'","value":4.0},
+            {"test":"datum.series === 'All avg (cross-issuer)'","value":4.0},
             {"param":"Series","empty":false,"value":3.0},
           ],
           "value":1.5,
