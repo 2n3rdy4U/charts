@@ -113,9 +113,12 @@
     body[data-mode="vintage"]    .vintage-only { display:flex; }
     body[data-mode="timeseries"] .ts-only      { display:flex; }
     @media (max-width:640px) {
-      body { overflow:auto; }
-      .wrap { overflow:visible; padding:10px; }
-      #vis { min-height:360px; height:420px; }
+      html, body { height:auto; overflow:auto; }
+      body { overflow-y:auto; }
+      .wrap { overflow:visible; padding:8px; height:auto; min-height:0; }
+      .bar-sep { display:none; }
+      #vis { min-height:320px; height:380px; max-height:440px; }
+      #tblWrap { max-height:420px; }
     }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
@@ -146,12 +149,12 @@
     </div>
     <div class="bar-sep"></div>
     <div class="ctrl">
-      <label class="lbl">From</label>
-      <select id="dateFrom" style="width:104px;"></select>
-    </div>
-    <div class="ctrl">
-      <label class="lbl">To</label>
-      <select id="dateTo" style="width:104px;"></select>
+      <label class="lbl">Date Range</label>
+      <div style="display:flex;align-items:center;gap:4px;">
+        <select id="dateFrom" style="width:96px;"></select>
+        <span style="font-size:11px;color:var(--muted);">–</span>
+        <select id="dateTo" style="width:96px;"></select>
+      </div>
     </div>
   </div>
 
@@ -166,12 +169,12 @@
     </div>
     <div class="bar-sep"></div>
     <div class="ctrl">
-      <label class="lbl">From</label>
-      <select id="tsDateFrom" style="width:104px;"></select>
-    </div>
-    <div class="ctrl">
-      <label class="lbl">To</label>
-      <select id="tsDateTo" style="width:104px;"></select>
+      <label class="lbl">Date Range</label>
+      <div style="display:flex;align-items:center;gap:4px;">
+        <select id="tsDateFrom" style="width:96px;"></select>
+        <span style="font-size:11px;color:var(--muted);">–</span>
+        <select id="tsDateTo" style="width:96px;"></select>
+      </div>
     </div>
     <div class="bar-sep"></div>
     <div class="ctrl">
@@ -252,7 +255,7 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-03-09 07:00";
+  const BUILD_ID   = "2026-03-09 19:05";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
