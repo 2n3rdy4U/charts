@@ -196,9 +196,9 @@
       <label class="lbl">Pool</label>
       <div class="btn-group" id="poolGroup">
         <button data-pool="all" class="active"
-          title="All outstanding loans included. Rate dips when new deals close reflect real origination cohorts entering the pool. Comparable to DataDepot.">All pools</button>
+          title="Includes all outstanding loans. Temporary DQ rate dips after a large new deal closes are real — they reflect a fresh cohort of current loans entering the pool.">All pools</button>
         <button data-pool="seasoned"
-          title="Excludes deal series in their first 6 months. Eliminates new-origination dilution dips, but produces higher rates than DataDepot since newly-issued (mostly current) loans are removed from the denominator.">Seasoned (&gt;6 mo)</button>
+          title="Excludes deal series in their first 6 months, removing new-origination dip effects. Note: this tends to overstate the market DQ rate because newly-issued (low-DQ) loans are excluded from the denominator.">Seasoned (&gt;6 mo)</button>
       </div>
     </div>
   </div>
@@ -240,10 +240,10 @@
   <div class="info-popover" id="infoPopover" hidden>
     <h4>Methodology</h4>
     <ul>
-      <li><b>All pools:</b> All outstanding loans included. Rate dips when new deals close reflect real origination cohorts entering the pool. Comparable to DataDepot.</li>
-      <li><b>Seasoned (&gt;6 mo):</b> Excludes series in their first 6 months. Eliminates new-origination dilution dips, but produces higher rates since newly-issued (mostly current) loans are removed from the denominator.</li>
-      <li><b>All Issuers (avg):</b> <b>Loan-count–weighted</b> rate: numerator and denominator counts are summed across all issuers before dividing. Each individual loan carries equal weight regardless of deal size. This produces a lower rate than a simple average of per-series rates, because large prime pools (e.g. Ally, Toyota, Honda) with low DQ dominate by volume. Internal DataDepot figures labeled "Marketwide" may differ because they average per-series rates, giving equal weight to each deal series regardless of pool size — which inflates the aggregate when smaller, higher-DQ subprime trusts are present.</li>
-      <li><b>DQ rate:</b> Loan counts in the selected DPD bucket ÷ total loans with balance &gt; $10, filtered by the chosen credit score range (FICO 300–900).</li>
+      <li><b>All pools:</b> Includes every outstanding loan. DQ rate dips after a large new deal closes are real — they reflect a fresh cohort of current loans entering the pool.</li>
+      <li><b>Seasoned (&gt;6 mo):</b> Excludes deal series in their first 6 months, which removes new-origination dip effects. Trade-off: tends to overstate the market DQ rate because newly-issued (low-DQ) loans are excluded from the denominator.</li>
+      <li><b>All Issuers (avg):</b> A <b>loan-count–weighted</b> aggregate — delinquent loans and total loans are summed across all issuers, then divided. Every loan has equal weight regardless of deal size. Because large prime issuers (e.g. Ally, Toyota, Honda) hold far more loans than smaller subprime issuers, this rate will be noticeably lower than a simple average across deals, which would give a small trust equal weight to a large one.</li>
+      <li><b>DQ rate:</b> Loans in the selected DPD bucket ÷ total active loans (balance &gt; $10, FICO 300–900).</li>
       <li><b>Vintage chart:</b> X-axis = months since each series' first reporting date.</li>
       <li><b>YOY (table):</b> Annual calendar-year averages; partial years compare to the same months in the prior year.</li>
       <li><b>YOY (chart):</b> Each monthly point vs. the same month one year prior.</li>
@@ -259,11 +259,11 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-03-08 19:28";
+  const BUILD_ID   = "2026-03-09 06:29";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
-  const LAST_UPDATED   = "Mar 8";
+  const LAST_UPDATED   = "Mar 9";
 
   document.getElementById('lastUpdated').textContent = LAST_UPDATED;
 
