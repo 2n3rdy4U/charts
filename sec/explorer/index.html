@@ -176,10 +176,10 @@
     <div class="bar-sep"></div>
     <div class="ctrl">
       <label class="lbl">Transform</label>
-      <select id="transformSel">
-        <option value="rate">Rate (DPD %)</option>
-        <option value="yoy-delta">YOY change (pp)</option>
-        <option value="yoy-pct">YOY % change</option>
+      <select id="transformSel" title="Monthly delinquency rate for the selected DPD bucket.">
+        <option value="rate"      title="Monthly delinquency rate for the selected DPD bucket.">Rate (DPD %)</option>
+        <option value="yoy-delta" title="Each point = this month&#39;s rate minus the same month one year earlier, in percentage points.">YOY change (pp)</option>
+        <option value="yoy-pct"  title="Each point = percentage change vs. the same month one year earlier. In table view, computed on annual averages.">YOY % change</option>
       </select>
     </div>
     <div class="bar-sep"></div>
@@ -240,8 +240,6 @@
   <div class="info-popover" id="infoPopover" hidden>
     <h4>Methodology</h4>
     <ul>
-      <li><b>YOY (table):</b> Annual calendar-year averages; partial years compare to the same months in the prior year.</li>
-      <li><b>YOY (chart):</b> Each monthly point vs. the same month one year prior.</li>
       <li><b>Source:</b> SEC ABS-EE loan-level filings via EDGAR.</li>
     </ul>
   </div>
@@ -254,7 +252,7 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-03-09 06:52";
+  const BUILD_ID   = "2026-03-09 06:54";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -763,8 +761,13 @@
     const tblWrap = document.getElementById('tblWrap');
     vis.style.display     = 'none';
     tblWrap.style.display = 'block';
-    const subtitle = (poolMode === 'seasoned' ? 'Seasoned pools (>6 mo)' : 'All pools')
-                   + ' · annual averages of monthly readings';
+    const poolLabel = poolMode === 'seasoned' ? 'Seasoned pools (>6 mo)' : 'All pools';
+    const transformNote = transform === 'yoy-delta'
+      ? 'each row = calendar-year avg of monthly rates; change = year N minus year N−1 (pp)'
+      : transform === 'yoy-pct'
+      ? 'each row = calendar-year avg of monthly rates; change = (year N ÷ year N−1) − 1; partial years compare only matched months'
+      : 'annual averages of monthly readings; partial years show available months only';
+    const subtitle = `${poolLabel} · ${transformNote}`;
     let headerHtml = `<div class="tbl-title">${title || 'Issuer Comparison'} — Time Series</div>`
                    + `<div class="tbl-subtitle">${subtitle}</div>`;
 
@@ -1086,7 +1089,12 @@
 
   const transformSel = document.getElementById('transformSel');
   if (transformSel) {
-    transformSel.addEventListener('change', () => { transform = transformSel.value; render(); });
+    function syncTransformTitle() {
+      const opt = transformSel.options[transformSel.selectedIndex];
+      transformSel.title = opt ? (opt.title || '') : '';
+    }
+    transformSel.addEventListener('change', () => { transform = transformSel.value; syncTransformTitle(); render(); });
+    syncTransformTitle();
   }
 
   document.getElementById('displayGroup').addEventListener('click', e => {
