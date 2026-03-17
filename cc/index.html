@@ -165,7 +165,7 @@ function makeSpec(field, title, fmtAx, fmtTip) {
         encoding: {
           x:     {field:"date",   type:"temporal"},
           y:     {field:field,    type:"quantitative"},
-          color: {field:"ticker", type:"nominal", legend:null}
+          color: {field:"ticker", type:"nominal"}
         }
       },
       // Layer 3: Visible dot + tooltip on hovered point
@@ -174,7 +174,7 @@ function makeSpec(field, title, fmtAx, fmtTip) {
         encoding: {
           x:      {field:"date",   type:"temporal"},
           y:      {field:field,    type:"quantitative"},
-          color:  {field:"ticker", type:"nominal", legend:null},
+          color:  {field:"ticker", type:"nominal"},
           stroke: {field:"ticker", type:"nominal", legend:null},
           opacity: {condition:{param:"hvr", empty:false, value:1}, value:0},
           tooltip: [
