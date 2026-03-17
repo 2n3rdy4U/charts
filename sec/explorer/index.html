@@ -108,6 +108,15 @@
     /* ── table title ── */
     .tbl-title { font-size:13px; font-weight:600; color:var(--text); padding:6px 4px 2px; }
     .tbl-subtitle { font-size:11px; color:var(--muted); padding:0 4px 6px; }
+    /* ── toast notification ── */
+    #toast {
+      position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(20px);
+      background:#1f2937; color:#fff; font-size:12.5px; padding:9px 16px;
+      border-radius:8px; box-shadow:0 4px 14px rgba(0,0,0,.25);
+      opacity:0; pointer-events:none; transition:opacity .2s, transform .2s;
+      z-index:9999; max-width:320px; text-align:center; line-height:1.4;
+    }
+    #toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
     /* ── mode visibility ── */
     .vintage-only, .ts-only { display:none; }
     body[data-mode="vintage"]    .vintage-only { display:flex; }
@@ -252,10 +261,11 @@
   <div id="tblWrap"></div>
 
 </div>
+<div id="toast"></div>
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-03-17 15:48";
+  const BUILD_ID   = "2026-03-17 19:25";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -279,6 +289,16 @@
   let dqFilter    = '60+';
   let transform   = 'rate';   // 'rate' | 'yoy-delta' | 'yoy-pct'
   let displayMode = 'chart';  // 'chart' | 'table'
+
+  // ── Toast notification ───────────────────────────────────────────────
+  let _toastTimer = null;
+  function showToast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(_toastTimer);
+    _toastTimer = setTimeout(() => el.classList.remove('show'), 4000);
+  }
 
   // Build issuer label map: code → label
   const issuerLabel = Object.fromEntries(ISSUERS.map(x => [x.code, `${x.label || x.code} (${x.code})`]));
@@ -337,7 +357,14 @@
     const lbl = document.createElement('label');
     const cb  = document.createElement('input');
     cb.type = 'checkbox'; cb.value = '__all__';
-    cb.addEventListener('change', () => { showAllAvg = cb.checked; updateIssuerBtn(); render(); });
+    cb.addEventListener('change', () => {
+      if (cb.checked && displayMode === 'seasonal' && selectedIssuers.size > 0) {
+        cb.checked = false;
+        showToast('Year Overlay supports one issuer or All avg — not both. Deselect the current issuer first.');
+        return;
+      }
+      showAllAvg = cb.checked; updateIssuerBtn(); render();
+    });
     lbl.appendChild(cb);
     lbl.appendChild(document.createTextNode(' All avg (cross-issuer)'));
     lbl.title = 'Loan-count–weighted aggregate across all issuers: delinquent loans and total loans are summed across all issuers before dividing. Every loan has equal weight regardless of deal size. Because large prime issuers hold far more loans than smaller subprime issuers, this rate will be noticeably lower than a simple average across deals.';
@@ -353,6 +380,11 @@
     cb.title = it.code;
     issuerCbs.push(cb);
     cb.addEventListener('change', () => {
+      if (cb.checked && displayMode === 'seasonal' && (selectedIssuers.size >= 1 || showAllAvg)) {
+        cb.checked = false;
+        showToast('Year Overlay supports one issuer at a time. Deselect the current selection first, or use All avg.');
+        return;
+      }
       if (cb.checked) selectedIssuers.add(it.code);
       else selectedIssuers.delete(it.code);
       syncSelectAll(); updateIssuerBtn(); render();
@@ -1103,6 +1135,26 @@
     const b = e.target.closest('button[data-display]');
     if (!b) return;
     displayMode = b.dataset.display;
+    if (displayMode === 'seasonal' && selectedIssuers.size > 1) {
+      // Keep only the first selected issuer; uncheck the rest
+      const keep = [...selectedIssuers][0];
+      for (const code of [...selectedIssuers]) {
+        if (code !== keep) {
+          selectedIssuers.delete(code);
+          const cb = issuerPanel.querySelector(`input[value="${code}"]`);
+          if (cb) cb.checked = false;
+        }
+      }
+      syncSelectAll(); updateIssuerBtn();
+      showToast('Year Overlay works with one issuer at a time. Extra selections were removed.');
+    } else if (displayMode === 'seasonal' && selectedIssuers.size >= 1 && showAllAvg) {
+      // Can't have both an issuer and All avg
+      showAllAvg = false;
+      const allCb = issuerPanel.querySelector('input[value="__all__"]');
+      if (allCb) allCb.checked = false;
+      updateIssuerBtn();
+      showToast('Year Overlay works with one issuer at a time. All avg was deselected.');
+    }
     for (const btn of document.querySelectorAll('#displayGroup button'))
       btn.classList.toggle('active', btn.dataset.display === displayMode);
     render();
