@@ -14,21 +14,26 @@
   h1{font-size:20px;font-weight:700;margin:0 0 4px}
   .sub{color:#64748b;font-size:12px;margin-bottom:2px}
   .hint{color:#94a3b8;font-size:11px;margin-bottom:16px}
-  h2{font-size:14px;font-weight:600;margin:24px 0 6px;color:#334155}
+  h2{font-size:14px;font-weight:600;margin:24px 0 4px;color:#334155}
   .chart{background:#fff;border:1px solid #e2e8f0;border-radius:8px;
-           padding:12px 8px 8px;margin-bottom:16px;width:100%;box-sizing:border-box;overflow:visible}
+           padding:12px 8px 8px;margin-bottom:16px;width:100%;box-sizing:border-box}
   footer{margin-top:32px;font-size:11px;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:10px}
+  /* Main header bar (includes date inputs) */
   .range-bar{display:flex;align-items:center;gap:8px;margin-bottom:20px;flex-wrap:wrap}
-  .range-bar button{padding:4px 12px;font-size:12px;border-radius:4px;border:1px solid #cbd5e1;
-                     background:#fff;cursor:pointer;color:#475569;transition:all 0.15s}
-  .range-bar button:hover{background:#f1f5f9}
-  .range-bar button.active{background:#1e40af;color:#fff;border-color:#1e40af}
+  .range-bar button,.rng-btn{padding:4px 12px;font-size:12px;border-radius:4px;
+                              border:1px solid #cbd5e1;background:#fff;cursor:pointer;
+                              color:#475569;transition:all 0.15s}
+  .range-bar button:hover,.rng-btn:hover{background:#f1f5f9}
+  .range-bar button.active,.rng-btn.active{background:#1e40af;color:#fff;border-color:#1e40af}
   .range-bar .sep{color:#94a3b8;font-size:12px;margin:0 2px}
   .range-bar input[type=date]{font-size:12px;padding:3px 6px;border:1px solid #cbd5e1;
                                border-radius:4px;color:#475569}
   .range-bar .apply{padding:4px 10px;font-size:12px;background:#475569;color:#fff;
                      border:none;border-radius:4px;cursor:pointer}
   .range-bar .apply:hover{background:#334155}
+  /* Mini bar above each chart — preset buttons only, no date inputs */
+  .range-bar.mini{margin-bottom:6px;margin-top:0;gap:6px}
+  .range-bar.mini .rng-btn{padding:3px 10px;font-size:11px}
 </style>
 </head>
 <body>
@@ -39,10 +44,10 @@
 <div class="hint">Hover near any line for values · Click a trust line to highlight · Click again to reset</div>
 
 <div class="range-bar">
-  <button class="active" onclick="setPreset('ITD',this)">ITD</button>
-  <button onclick="setPreset('10YR',this)">10YR</button>
-  <button onclick="setPreset('5YR',this)">5YR</button>
-  <button onclick="setPreset('1YR',this)">1YR</button>
+  <button class="rng-btn active" data-key="ITD"  onclick="setPreset('ITD',this)">ITD</button>
+  <button class="rng-btn"        data-key="10YR" onclick="setPreset('10YR',this)">10YR</button>
+  <button class="rng-btn"        data-key="5YR"  onclick="setPreset('5YR',this)">5YR</button>
+  <button class="rng-btn"        data-key="1YR"  onclick="setPreset('1YR',this)">1YR</button>
   <span class="sep">|</span>
   <input type="date" id="date-from" min="2006-01-31" max="2026-03-17">
   <span class="sep">to</span>
@@ -51,18 +56,23 @@
 </div>
 
 <h2>Monthly Payment Rate (%)</h2>
+<div class="range-bar mini"><button class="rng-btn" data-key="ITD"  onclick="setPreset('ITD',this)">ITD</button><button class="rng-btn" data-key="10YR" onclick="setPreset('10YR',this)">10YR</button><button class="rng-btn" data-key="5YR"  onclick="setPreset('5YR',this)">5YR</button><button class="rng-btn" data-key="1YR"  onclick="setPreset('1YR',this)">1YR</button></div>
 <div class="chart" id="chart-pr"></div>
 
 <h2>Excess Spread (%)</h2>
+<div class="range-bar mini"><button class="rng-btn" data-key="ITD"  onclick="setPreset('ITD',this)">ITD</button><button class="rng-btn" data-key="10YR" onclick="setPreset('10YR',this)">10YR</button><button class="rng-btn" data-key="5YR"  onclick="setPreset('5YR',this)">5YR</button><button class="rng-btn" data-key="1YR"  onclick="setPreset('1YR',this)">1YR</button></div>
 <div class="chart" id="chart-xs"></div>
 
 <h2>Net Default Rate (%)</h2>
+<div class="range-bar mini"><button class="rng-btn" data-key="ITD"  onclick="setPreset('ITD',this)">ITD</button><button class="rng-btn" data-key="10YR" onclick="setPreset('10YR',this)">10YR</button><button class="rng-btn" data-key="5YR"  onclick="setPreset('5YR',this)">5YR</button><button class="rng-btn" data-key="1YR"  onclick="setPreset('1YR',this)">1YR</button></div>
 <div class="chart" id="chart-dr"></div>
 
 <h2>Total 30+ Day Delinquency (%)</h2>
+<div class="range-bar mini"><button class="rng-btn" data-key="ITD"  onclick="setPreset('ITD',this)">ITD</button><button class="rng-btn" data-key="10YR" onclick="setPreset('10YR',this)">10YR</button><button class="rng-btn" data-key="5YR"  onclick="setPreset('5YR',this)">5YR</button><button class="rng-btn" data-key="1YR"  onclick="setPreset('1YR',this)">1YR</button></div>
 <div class="chart" id="chart-dq"></div>
 
 <h2>Trust Receivables Balance ($B)</h2>
+<div class="range-bar mini"><button class="rng-btn" data-key="ITD"  onclick="setPreset('ITD',this)">ITD</button><button class="rng-btn" data-key="10YR" onclick="setPreset('10YR',this)">10YR</button><button class="rng-btn" data-key="5YR"  onclick="setPreset('5YR',this)">5YR</button><button class="rng-btn" data-key="1YR"  onclick="setPreset('1YR',this)">1YR</button></div>
 <div class="chart" id="chart-bal"></div>
 
 <footer>Source: SEC EDGAR 10-D filings · Data: 2006–present</footer>
@@ -81,15 +91,17 @@ function isoShift(years) {
   return d.toISOString().slice(0, 10);
 }
 
+// Sync active state across ALL preset buttons (main bar + all mini bars)
 function setPreset(key, btn) {
-  document.querySelectorAll('.range-bar button').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
+  document.querySelectorAll('.rng-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.key === key);
+  });
   document.getElementById('date-from').value = '';
   document.getElementById('date-to').value   = '';
-  if      (key === 'ITD')  { currentStart = null;          }
-  else if (key === '10YR') { currentStart = isoShift(10);  }
-  else if (key === '5YR')  { currentStart = isoShift(5);   }
-  else                     { currentStart = isoShift(1);   }
+  if      (key === 'ITD')  { currentStart = null;         }
+  else if (key === '10YR') { currentStart = isoShift(10); }
+  else if (key === '5YR')  { currentStart = isoShift(5);  }
+  else                     { currentStart = isoShift(1);  }
   currentEnd = null;
   embedAll();
 }
@@ -98,7 +110,7 @@ function applyCustom() {
   const f = document.getElementById('date-from').value;
   const t = document.getElementById('date-to').value;
   if (!f && !t) return;
-  document.querySelectorAll('.range-bar button').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.rng-btn').forEach(b => b.classList.remove('active'));
   currentStart = f || null;
   currentEnd   = t || null;
   embedAll();
@@ -109,7 +121,7 @@ function axCfg() {
   const s   = new Date(currentStart);
   const e   = currentEnd ? new Date(currentEnd) : new Date(TODAY);
   const yrs = (e - s) / 3.156e10;
-  if (yrs >= 2) return {fmt:'%Y', ticks:'year', angle:0};
+  if (yrs >= 2)   return {fmt:'%Y', ticks:'year', angle:0};
   if (yrs >= 0.4) return {fmt:'%b %Y', ticks:{interval:'month',step:2}, angle:-30};
   return {fmt:'%b %Y', ticks:{interval:'month',step:1}, angle:-45};
 }
@@ -124,12 +136,12 @@ function makeSpec(field, title, fmtAx, fmtTip) {
   });
   return {
     $schema: "https://vega.github.io/schema/vega-lite/v5.json",
-    width: "container", height: 300,
-    autosize: {type:"fit-x", contains:"padding"},
-    padding: {top:5, right:5, bottom:45, left:5},
+    // height = plot area only; axes + legend are added on top automatically
+    width: "container", height: 220,
+    autosize: {type:"fit-x"},
     data: {values: vals},
     layer: [
-      // Layer 1: Lines — opacity/weight driven by sel (click-to-highlight)
+      // Layer 1: Lines — opacity/weight driven by sel; generates the trust legend
       {
         mark: {type:"line", strokeWidth:2},
         encoding: {
@@ -138,7 +150,7 @@ function makeSpec(field, title, fmtAx, fmtTip) {
                       tickCount:ax.ticks, labelOverlap:true}},
           y: {field:field, type:"quantitative", title:title,
                axis:{format:fmtAx, gridOpacity:0.5}},
-          color:       {field:"ticker", type:"nominal", legend:null, scale:{scheme:"tableau10"}},
+          color:       {field:"ticker", type:"nominal", scale:{scheme:"tableau10"}},
           opacity:     {condition:{param:"sel", value:1}, value:0.07},
           strokeWidth: {condition:{param:"sel", value:2.5}, value:0.6}
         }
@@ -183,7 +195,7 @@ function makeSpec(field, title, fmtAx, fmtTip) {
       view:    {stroke:null},
       background: "transparent",
       axis:    {labelFontSize:11, titleFontSize:11, titlePadding:8},
-      legend:  {disable:true},
+      legend:  {orient:"bottom", columns:5, labelFontSize:10, symbolSize:80, padding:6},
       tooltip: {theme:"light"}
     }
   };
