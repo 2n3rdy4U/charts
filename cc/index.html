@@ -180,7 +180,7 @@ function makeSpec(field, title, fmtAx, fmtTip) {
           x: {field:"date", type:"temporal", title:null,
                axis:{format:ax.fmt, labelAngle:ax.angle, gridOpacity:0.3,
                       tickCount:ax.ticks, labelOverlap:true}},
-          y: {field:field, type:"quantitative", title:title,
+          y: {field:field, type:"quantitative", title:null,
                axis:{format:fmtAx, gridOpacity:0.5}},
           color:       {field:"ticker", type:"nominal", legend:null, scale:clr},
           opacity:     {field:"_op", type:"quantitative", scale:null, legend:null},
