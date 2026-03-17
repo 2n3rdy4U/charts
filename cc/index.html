@@ -16,7 +16,7 @@
   .hint{color:#94a3b8;font-size:11px;margin-bottom:16px}
   h2{font-size:14px;font-weight:600;margin:24px 0 6px;color:#334155}
   .chart{background:#fff;border:1px solid #e2e8f0;border-radius:8px;
-           padding:12px 8px 8px;margin-bottom:16px;width:100%;box-sizing:border-box}
+           padding:12px 8px 8px;margin-bottom:16px;width:100%;box-sizing:border-box;overflow:visible}
   footer{margin-top:32px;font-size:11px;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:10px}
   .range-bar{display:flex;align-items:center;gap:8px;margin-bottom:20px;flex-wrap:wrap}
   .range-bar button{padding:4px 12px;font-size:12px;border-radius:4px;border:1px solid #cbd5e1;
@@ -86,10 +86,10 @@ function setPreset(key, btn) {
   btn.classList.add('active');
   document.getElementById('date-from').value = '';
   document.getElementById('date-to').value   = '';
-  currentStart = key === 'ITD'  ? null
-               : key === '10YR' ? isoShift(10)
-               : key === '5YR'  ? isoShift(5)
-               :                  isoShift(1);
+  if      (key === 'ITD')  { currentStart = null;          }
+  else if (key === '10YR') { currentStart = isoShift(10);  }
+  else if (key === '5YR')  { currentStart = isoShift(5);   }
+  else                     { currentStart = isoShift(1);   }
   currentEnd = null;
   embedAll();
 }
@@ -105,12 +105,12 @@ function applyCustom() {
 }
 
 function axCfg() {
-  if (!currentStart) return {fmt:'%Y', ticks:'year', angle:-30};
+  if (!currentStart) return {fmt:'%Y', ticks:'year', angle:0};
   const s   = new Date(currentStart);
   const e   = currentEnd ? new Date(currentEnd) : new Date(TODAY);
   const yrs = (e - s) / 3.156e10;
-  if (yrs > 5) return {fmt:'%Y', ticks:'year', angle:-30};
-  if (yrs > 1) return {fmt:"%b '%y", ticks:{interval:'month',step:3}, angle:-45};
+  if (yrs >= 2) return {fmt:'%Y', ticks:'year', angle:0};
+  if (yrs >= 0.4) return {fmt:'%b %Y', ticks:{interval:'month',step:2}, angle:-30};
   return {fmt:'%b %Y', ticks:{interval:'month',step:1}, angle:-45};
 }
 
@@ -124,9 +124,9 @@ function makeSpec(field, title, fmtAx, fmtTip) {
   });
   return {
     $schema: "https://vega.github.io/schema/vega-lite/v5.json",
-    width: "container", height: 280,
+    width: "container", height: 300,
     autosize: {type:"fit-x", contains:"padding"},
-    padding: {top:5, right:5, bottom:24, left:5},
+    padding: {top:5, right:5, bottom:45, left:5},
     data: {values: vals},
     layer: [
       // Layer 1: Lines — opacity/weight driven by sel (click-to-highlight)
@@ -183,6 +183,7 @@ function makeSpec(field, title, fmtAx, fmtTip) {
       view:    {stroke:null},
       background: "transparent",
       axis:    {labelFontSize:11, titleFontSize:11, titlePadding:8},
+      legend:  {disable:true},
       tooltip: {theme:"light"}
     }
   };
