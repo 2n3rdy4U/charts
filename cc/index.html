@@ -16,7 +16,8 @@
   .hint{color:#94a3b8;font-size:11px;margin-bottom:16px}
   h2{font-size:14px;font-weight:600;margin:24px 0 4px;color:#334155}
   .chart{background:#fff;border:1px solid #e2e8f0;border-radius:8px;
-           padding:12px 8px 8px;margin-bottom:16px;width:100%;box-sizing:border-box}
+           padding:12px 8px 8px;margin-bottom:16px;width:100%;box-sizing:border-box;overflow:visible}
+  .chart svg{overflow:visible}
   footer{margin-top:32px;font-size:11px;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:10px}
   /* Main header bar (includes date inputs) */
   .range-bar{display:flex;align-items:center;gap:8px;margin-bottom:20px;flex-wrap:wrap}
@@ -137,7 +138,7 @@ function makeSpec(field, title, fmtAx, fmtTip) {
   return {
     $schema: "https://vega.github.io/schema/vega-lite/v5.json",
     // height = plot area only; axes + legend are added on top automatically
-    width: "container", height: 220,
+    width: "container", height: 240,
     autosize: {type:"fit-x"},
     data: {values: vals},
     layer: [
@@ -205,7 +206,7 @@ function makeSpec(field, title, fmtAx, fmtTip) {
   };
 }
 
-const OPTS = {renderer:"canvas", actions:false};
+const OPTS = {renderer:"svg", actions:false};
 const CHARTS = [
   ['#chart-pr',  'payment_rate',       'Payment Rate (%)',     '.0f', '.2f'],
   ['#chart-xs',  'excess_spread',      'Excess Spread (%)',    '.0f', '.2f'],
