@@ -66,7 +66,7 @@
     </div>
 
     <script>
-        const BUILD_ID = "2026-03-17 13:20";
+        const BUILD_ID = "2026-03-17 14:35";
         const LAST_UPDATED_TEXT = "Mar 17";
         const ISSUERS = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax"}, {"code": "COPAR", "label": "Capital One"}, {"code": "CRART", "label": "California"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DRIVE"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni"}];
         const DEFAULT_ISSUER = "AART";
@@ -248,7 +248,7 @@
                         { "field": "series_label", "type": "nominal", "title": "Series" },
                         { "field": "bucket", "type": "nominal", "title": "Bucket" },
                         { "field": "vintage_month", "type": "quantitative", "title": "Vintage Month" },
-                        { "field": "reporting_date", "type": "temporal", "title": "Reporting Date" },
+                        { "field": "reporting_date", "type": "temporal", "title": "Reporting for", "format": "%b %Y" },
                         { "field": "dq_rate", "type": "quantitative", "title": "Rate", "format": ".1%" },
                     ]
                 }
