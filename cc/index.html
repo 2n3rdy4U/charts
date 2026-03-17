@@ -41,7 +41,7 @@
 <h1>Credit Card ABS — Trust Performance</h1>
 <div class="sub">Last updated March 17, 2026</div>
 <div class="sub">Source: Monthly 10-D servicer certificates</div>
-<div class="hint">Hover near any line for values · Click a trust line to highlight · Click again to reset</div>
+<div class="hint">Hover near any line for values · Click a trust name in the legend below each chart to highlight · Click again to deselect · Multiple selections supported</div>
 
 <div class="range-bar">
   <button class="rng-btn active" data-key="ITD"  onclick="setPreset('ITD',this)">ITD</button>
@@ -141,8 +141,13 @@ function makeSpec(field, title, fmtAx, fmtTip) {
     autosize: {type:"fit-x"},
     data: {values: vals},
     layer: [
-      // Layer 1: Lines — opacity/weight driven by sel; generates the trust legend
+      // Layer 1: Lines — sel bound to legend for click-to-highlight (multi-select)
       {
+        params: [{
+          name: "sel",
+          select: {type:"point", fields:["ticker"]},
+          bind: "legend"
+        }],
         mark: {type:"line", strokeWidth:2},
         encoding: {
           x: {field:"date", type:"temporal", title:null,
@@ -150,16 +155,15 @@ function makeSpec(field, title, fmtAx, fmtTip) {
                       tickCount:ax.ticks, labelOverlap:true}},
           y: {field:field, type:"quantitative", title:title,
                axis:{format:fmtAx, gridOpacity:0.5}},
-          color:       {field:"ticker", type:"nominal", scale:{scheme:"tableau10"}},
+          color:       {field:"ticker", type:"nominal", title:"Legend", scale:{scheme:"tableau10"}},
           opacity:     {condition:{param:"sel", value:1}, value:0.07},
           strokeWidth: {condition:{param:"sel", value:2.5}, value:0.6}
         }
       },
-      // Layer 2: Large invisible circles — nearest hover + click-to-highlight
+      // Layer 2: Large invisible circles — nearest hover only
       {
         params: [
-          {name:"hvr", select:{type:"point", nearest:true, on:"mouseover", clear:"mouseout"}},
-          {name:"sel", select:{type:"point", fields:["ticker"]}}
+          {name:"hvr", select:{type:"point", nearest:true, on:"mouseover", clear:"mouseout"}}
         ],
         mark: {type:"circle", opacity:0, size:900},
         encoding: {
