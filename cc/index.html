@@ -16,10 +16,7 @@
   .hint{color:#94a3b8;font-size:11px;margin-bottom:16px}
   h2{font-size:14px;font-weight:600;margin:24px 0 4px;color:#334155}
   .chart{background:#fff;border:1px solid #e2e8f0;border-radius:8px;
-           padding:0;margin-bottom:16px;width:100%;box-sizing:border-box;
-           height:300px;overflow:hidden}
-  .chart .vega-embed{width:100%;height:100%}
-  .chart .vega-embed svg{width:100%;height:100%}
+           padding:0;margin-bottom:16px;width:100%;box-sizing:border-box}
   footer{margin-top:32px;font-size:11px;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:10px}
   /* Main header bar (includes date inputs) */
   .range-bar{display:flex;align-items:center;gap:8px;margin-bottom:20px;flex-wrap:wrap}
@@ -172,8 +169,8 @@ function makeSpec(field, title, fmtAx, fmtTip) {
   }));
   return {
     $schema: "https://vega.github.io/schema/vega-lite/v5.json",
-    width: "container", height: "container",
-    autosize: {type:"fit"},
+    width: "container", height: 260,
+    autosize: {type:"fit-x"},
     data: {values: vals},
     layer: [
       // Layer 1: Lines — opacity/width from _op/_sw fields (driven by JS selectedTrusts)
