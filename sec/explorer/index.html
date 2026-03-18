@@ -265,7 +265,7 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-03-17 19:25";
+  const BUILD_ID   = "2026-03-17 20:03";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -366,8 +366,8 @@
       showAllAvg = cb.checked; updateIssuerBtn(); render();
     });
     lbl.appendChild(cb);
-    lbl.appendChild(document.createTextNode(' All avg (cross-issuer)'));
-    lbl.title = 'Loan-count–weighted aggregate across all issuers: delinquent loans and total loans are summed across all issuers before dividing. Every loan has equal weight regardless of deal size. Because large prime issuers hold far more loans than smaller subprime issuers, this rate will be noticeably lower than a simple average across deals.';
+    lbl.appendChild(document.createTextNode(' All Issuers'));
+    lbl.title = 'Loan-count–weighted aggregate: delinquent loans and total loans are summed across all issuers before dividing. Every loan has equal weight regardless of deal size. Because large prime issuers hold far more loans than smaller subprime issuers, this rate will be noticeably lower than a simple average across deals.';
     issuerPanel.appendChild(lbl);
     const sep = document.createElement('div'); sep.className = 'multi-sel-sep';
     issuerPanel.appendChild(sep);
@@ -395,8 +395,11 @@
   }
 
   function updateIssuerBtn() {
+    if (showAllAvg || selectedIssuers.size === ISSUERS.length) {
+      issuerBtn.textContent = 'All Issuers ▾';
+      return;
+    }
     const parts = [];
-    if (showAllAvg) parts.push('All avg');
     for (const c of selectedIssuers) parts.push(issuerLabel[c] || c);
     if (parts.length === 0) {
       issuerBtn.textContent = 'Select issuers ▾';
@@ -626,7 +629,7 @@
         const total = agg.cur + agg.d3059 + agg.d60;
         if (total < 10) continue;
         result.push({
-          series: 'All avg (cross-issuer)',
+          series: 'All Issuers',
           reporting_date: date,
           date_label: fmtDateLabel(date),
           vintage_month: 0,
@@ -690,7 +693,7 @@
         "name":"Series","bind":"legend",
         "select": {"type":"point","fields":["series"],"toggle":true,"clear":false},
       }],
-      "mark": {"type":"line","point":{"size":200,"filled":true,"strokeWidth":0}},
+      "mark": {"type":"line","point":{"size":600,"filled":true,"strokeWidth":0}},
       "encoding": {
         "x": xEnc,
         "y": {
@@ -710,7 +713,7 @@
         },
         "size": {
           "condition": [
-            {"test":"datum.series === 'All avg (cross-issuer)'","value":4.0},
+            {"test":"datum.series === 'All Issuers'","value":4.0},
             {"param":"Series","empty":false,"value":3.0},
           ],
           "value":1.5,
@@ -1007,7 +1010,7 @@
                  "subtitle": `${poolLabel} · each line = one calendar year · click legend to highlight`},
       "params": [{"name":"Yr","bind":"legend",
                   "select":{"type":"point","fields":["year"],"toggle":true,"clear":false}}],
-      "mark": {"type":"line","point":{"size":160,"filled":true,"strokeWidth":0}},
+      "mark": {"type":"line","point":{"size":600,"filled":true,"strokeWidth":0}},
       "encoding": {
         "x": {
           "field": "month_num", "type": "ordinal", "title": "Month",
@@ -1135,26 +1138,27 @@
     const b = e.target.closest('button[data-display]');
     if (!b) return;
     displayMode = b.dataset.display;
-    if (displayMode === 'seasonal' && selectedIssuers.size > 1) {
-      // Keep only the first selected issuer; uncheck the rest
-      const keep = [...selectedIssuers][0];
+
+    if (displayMode === 'seasonal') {
+      // Year Overlay: always reset to All Issuers aggregate
       for (const code of [...selectedIssuers]) {
-        if (code !== keep) {
-          selectedIssuers.delete(code);
-          const cb = issuerPanel.querySelector(`input[value="${code}"]`);
-          if (cb) cb.checked = false;
-        }
+        selectedIssuers.delete(code);
+        const cb = issuerPanel.querySelector(`input[value="${code}"]`);
+        if (cb) cb.checked = false;
       }
-      syncSelectAll(); updateIssuerBtn();
-      showToast('Year Overlay works with one issuer at a time. Extra selections were removed.');
-    } else if (displayMode === 'seasonal' && selectedIssuers.size >= 1 && showAllAvg) {
-      // Can't have both an issuer and All avg
-      showAllAvg = false;
+      syncSelectAll();
+      showAllAvg = true;
       const allCb = issuerPanel.querySelector('input[value="__all__"]');
-      if (allCb) allCb.checked = false;
+      if (allCb) allCb.checked = true;
       updateIssuerBtn();
-      showToast('Year Overlay works with one issuer at a time. All avg was deselected.');
+    } else if (displayMode === 'table') {
+      // Table: default to all issuers selected if nothing is chosen
+      if (selectedIssuers.size === 0 && !showAllAvg) {
+        for (const cb of issuerCbs) { cb.checked = true; selectedIssuers.add(cb.value); }
+        syncSelectAll(); updateIssuerBtn();
+      }
     }
+
     for (const btn of document.querySelectorAll('#displayGroup button'))
       btn.classList.toggle('active', btn.dataset.display === displayMode);
     render();
