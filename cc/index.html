@@ -253,19 +253,17 @@ function embedAll() {
     vegaEmbed(id, makeSpec(field, title, fmtAx, fmtTip, chartWidth(id)), OPTS)
   );
   Promise.all(renders).then(() => {
-    function sendHeight() {
-      const h = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
-      window.parent.postMessage({type:'ccChartHeight', height:h}, '*');
-    }
-    sendHeight();
-    setTimeout(sendHeight, 300);
-    setTimeout(sendHeight, 1000);
-    setTimeout(sendHeight, 2500);
+    const h = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+    window.parent.postMessage({type:'ccChartHeight', height:h}, '*');
   });
 }
 
 embedAll();
+let _lastW = 0;
 window.addEventListener('resize', () => {
+  const w = document.documentElement.clientWidth;
+  if (Math.abs(w - _lastW) < 5) return;   // ignore height-only changes (iframe resize feedback)
+  _lastW = w;
   clearTimeout(window._rzTimer);
   window._rzTimer = setTimeout(embedAll, 150);
 });
