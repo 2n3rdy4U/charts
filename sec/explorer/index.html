@@ -269,7 +269,7 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-03-18 19:22";
+  const BUILD_ID   = "2026-03-18 19:31";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -691,6 +691,24 @@
       : (poolMode === 'seasoned' ? 'Seasoned pools (>6 mo) · click legend to highlight'
                                  : 'All pools · click legend to highlight');
 
+    const colorEnc = {
+      "field":"series","type":"nominal","title":"Series",
+      "legend":{
+        "orient":"bottom","direction":"horizontal",
+        "columns":8,"labelLimit":90,"symbolSize":110,"symbolLimit":1000,
+      },
+    };
+    const colorEncNoLegend = {"field":"series","type":"nominal","legend":null};
+    const yEnc = {
+      "field":"dq_rate","type":"quantitative","title":yLabel,
+      "axis":{"format":yFmt},
+    };
+    const tooltipEnc = [
+      {"field":"series","type":"nominal","title":"Series"},
+      {"field":"date_label","type":"nominal","title":"Date"},
+      {"field":"dq_rate","type":"quantitative","title":yLabel,"format":yFmt},
+    ];
+
     return {
       "$schema":"https://vega.github.io/schema/vega-lite/v5.json",
       "autosize": {"type":"fit","contains":"padding"},
@@ -698,46 +716,70 @@
         "axis":  {"labelFontSize":13,"titleFontSize":14},
         "title": {"anchor":"middle","fontSize":15,"subtitleFontSize":11},
         "view":  {"continuousHeight":300,"continuousWidth":300},
+        "tooltip": {"theme":"light"},
       },
       "data":   {"values": data},
       "width":  "container",
       "height": "container",
       "title":  {"text": `${title} — ${chartType}`, "subtitle": subtitle},
-      "params": [{
-        "name":"Series","bind":"legend",
-        "select": {"type":"point","fields":["series"],"toggle":true,"clear":false},
-      }],
-      "mark": {"type":"line","point":{"size":80,"filled":true,"strokeWidth":0}},
-      "encoding": {
-        "x": xEnc,
-        "y": {
-          "field":"dq_rate","type":"quantitative","title":yLabel,
-          "axis":{"format":yFmt},
-        },
-        "color": {
-          "field":"series","type":"nominal","title":"Series",
-          "legend":{
-            "orient":"bottom","direction":"horizontal",
-            "columns":8,"labelLimit":90,"symbolSize":110,"symbolLimit":1000,
+      "layer": [
+        {
+          // Layer 1: lines + legend-bind selection
+          "params": [{
+            "name":"Series","bind":"legend",
+            "select": {"type":"point","fields":["series"],"toggle":true,"clear":false},
+          }],
+          "mark": {"type":"line"},
+          "encoding": {
+            "x": xEnc,
+            "y": yEnc,
+            "color": colorEnc,
+            "opacity": {
+              "condition":{"param":"Series","empty":true,"value":1.0},
+              "value":0.25,
+            },
+            "size": {
+              "condition": [
+                {"test":"datum.series === 'All Issuers'","value":4.0},
+                {"param":"Series","empty":false,"value":3.0},
+              ],
+              "value":1.5,
+            },
           },
         },
-        "opacity": {
-          "condition":{"param":"Series","empty":true,"value":1.0},
-          "value":0.25,
+        {
+          // Layer 2: large invisible circles — nearest:true captures hover
+          // anywhere close to a data point without triggering across the whole chart
+          "params": [{
+            "name":"hover",
+            "select":{"type":"point","nearest":true,"on":"mouseover","clear":"mouseout"},
+          }],
+          "mark": {"type":"circle","opacity":0,"size":900},
+          "encoding": {
+            "x": xEnc,
+            "y": yEnc,
+            "color": colorEncNoLegend,
+          },
         },
-        "size": {
-          "condition": [
-            {"test":"datum.series === 'All Issuers'","value":4.0},
-            {"param":"Series","empty":false,"value":3.0},
-          ],
-          "value":1.5,
+        {
+          // Layer 3: visible dot + tooltip — appears only on hovered point
+          "mark": {"type":"point","filled":true,"size":90,"strokeWidth":1.5},
+          "encoding": {
+            "x": xEnc,
+            "y": yEnc,
+            "color": colorEncNoLegend,
+            "stroke": colorEncNoLegend,
+            "opacity": {"condition":{"param":"hover","empty":false,"value":1},"value":0},
+            "tooltip": tooltipEnc,
+          },
         },
-        "tooltip": [
-          {"field":"series","type":"nominal","title":"Series"},
-          {"field":"date_label","type":"nominal","title":"Date"},
-          {"field":"dq_rate","type":"quantitative","title":yLabel,"format":yFmt},
-        ],
-      },
+        {
+          // Layer 4: vertical crosshair at hovered point
+          "transform": [{"filter":{"param":"hover","empty":false}}],
+          "mark": {"type":"rule","color":"#94a3b8","strokeWidth":1,"strokeDash":[3,3]},
+          "encoding": {"x": xEnc},
+        },
+      ],
     };
   }
 
