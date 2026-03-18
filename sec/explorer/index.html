@@ -74,6 +74,8 @@
     #vis { flex:1; width:100%; min-height:0; overflow:hidden; }
     .vega-embed { width:100% !important; height:100% !important; }
     .vega-embed > div { height:100% !important; }
+    /* suppress Vega-Lite's selection-highlight background rect on legend entries */
+    .vega-embed svg .role-legend-entry rect.background { fill:none !important; }
     .loading { padding:20px; font-size:13px; color:var(--muted); }
     .err { color:#dc2626; }
     /* ── annual table ── */
@@ -93,8 +95,8 @@
     /* ── filter bar separator ── */
     .bar-sep { width:1px; background:var(--border); align-self:stretch; margin:2px 8px; flex-shrink:0; }
     /* ── info button + popover ── */
-    .info-btn { background:none; border:none; cursor:pointer; font-size:13px; color:var(--muted);
-                padding:0 2px; line-height:1; vertical-align:middle; }
+    .info-btn { background:none; border:none; cursor:pointer; font-size:16px; color:var(--muted);
+                padding:6px 10px; line-height:1; vertical-align:middle; }
     .info-btn:hover { color:var(--text); }
     .info-popover { position:absolute; z-index:200; background:#fff; border:1px solid var(--border);
                     border-radius:6px; box-shadow:0 4px 16px rgba(0,0,0,.12);
@@ -223,7 +225,7 @@
         <option value="60+">60+ DPD</option>
         <option value="30-59">30–59 DPD</option>
         <option value="any-dq">30+ DPD</option>
-        <option value="current">Current (&lt; 30 DPD)</option>
+        <option value="current">&lt; 30 DPD (Current)</option>
       </select>
     </div>
     <div class="bar-sep"></div>
@@ -265,7 +267,7 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-03-18 11:08";
+  const BUILD_ID   = "2026-03-18 11:18";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -666,7 +668,7 @@
     // Y-axis: label and format depend on DQ filter and (for TS) transform
     let yLabel = {
       '60+':'60+ DPD Rate', '30-59':'30–59 DPD Rate',
-      'any-dq':'30+ DPD Rate', 'current':'Current (<30 DPD) Rate',
+      'any-dq':'30+ DPD Rate', 'current':'< 30 DPD (Current) Rate',
     }[dqFilter] || 'Rate';
     let yFmt = '.2%';
     if (!isVintage) {
@@ -702,7 +704,7 @@
         "name":"Series","bind":"legend",
         "select": {"type":"point","fields":["series"],"toggle":true,"clear":false},
       }],
-      "mark": {"type":"line","point":{"size":600,"filled":true,"strokeWidth":0,"opacity":0}},
+      "mark": {"type":"line","point":{"size":600,"filled":true,"strokeWidth":0}},
       "encoding": {
         "x": xEnc,
         "y": {
@@ -713,7 +715,7 @@
           "field":"series","type":"nominal","title":"Series",
           "legend":{
             "orient":"bottom","direction":"horizontal",
-            "columns":6,"labelLimit":110,"symbolSize":110,"symbolLimit":1000,
+            "columns":8,"labelLimit":90,"symbolSize":110,"symbolLimit":1000,
           },
         },
         "opacity": {
@@ -1002,7 +1004,7 @@
     const yLabel = dqFilter === '60+'    ? '60+ DPD Rate'
                  : dqFilter === '30-59'  ? '30–59 DPD Rate'
                  : dqFilter === 'any-dq' ? '30+ DPD Rate'
-                 :                        'Current Rate';
+                 :                        '< 30 DPD (Current) Rate';
     const poolLabel = poolMode === 'seasoned' ? 'Seasoned pools (>6 mo)' : 'All pools';
     const spec = {
       "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
@@ -1019,7 +1021,7 @@
                  "subtitle": `${poolLabel} · each line = one calendar year · click legend to highlight`},
       "params": [{"name":"Yr","bind":"legend",
                   "select":{"type":"point","fields":["year"],"toggle":true,"clear":false}}],
-      "mark": {"type":"line","point":{"size":600,"filled":true,"strokeWidth":0,"opacity":0}},
+      "mark": {"type":"line","point":{"size":600,"filled":true,"strokeWidth":0}},
       "encoding": {
         "x": {
           "field": "month_num", "type": "ordinal", "title": "Month",
