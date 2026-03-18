@@ -265,11 +265,11 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-03-17 20:50";
+  const BUILD_ID   = "2026-03-18 10:31";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
-  const LAST_UPDATED   = "Mar 17";
+  const LAST_UPDATED   = "Mar 18";
 
   document.getElementById('lastUpdated').textContent = LAST_UPDATED;
 
@@ -535,7 +535,7 @@
       const key = `${r.series}||${r.reporting_date}||${r.vintage_month}`;
       if (!grouped.has(key)) {
         grouped.set(key, {
-          series: r.series, reporting_date: r.reporting_date,
+          series: shortSeries(r.series), reporting_date: r.reporting_date,
           vintage_month: r.vintage_month, cur: 0, d3059: 0, d60: 0,
         });
       }
@@ -648,6 +648,13 @@
     else if (dqFilter === '30-59')  return g.d3059 / total;
     else if (dqFilter === 'any-dq') return (g.d3059 + g.d60) / total;
     else                            return g.cur / total;
+  }
+
+  // Strip issuer prefix from series name for legend display.
+  // "AART 2017-1" → "2017-1", "SDART 2023-P1" → "2023-P1", etc.
+  function shortSeries(s) {
+    const m = s.match(/(\d{4}-\S+)$/);
+    return m ? m[1] : s;
   }
 
   // ── Vega-Lite spec ───────────────────────────────────────────────────
