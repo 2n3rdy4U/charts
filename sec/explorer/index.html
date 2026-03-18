@@ -265,7 +265,7 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-03-17 20:07";
+  const BUILD_ID   = "2026-03-17 20:13";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -331,9 +331,10 @@
     }
   }
 
-  // "Select all" row
+  // "Show All Issuers" row
   (function() {
     const lbl = document.createElement('label');
+    lbl.id = 'showAllRow';
     selectAllCb = document.createElement('input');
     selectAllCb.type = 'checkbox';
     selectAllCb.addEventListener('change', () => {
@@ -1139,8 +1140,11 @@
     if (!b) return;
     displayMode = b.dataset.display;
 
+    const showAllRow = document.getElementById('showAllRow');
+    if (showAllRow) showAllRow.style.display = (displayMode === 'seasonal') ? 'none' : '';
+
     if (displayMode === 'seasonal') {
-      // Year Overlay: always reset to All Issuers aggregate
+      // Year Overlay: always reset to All Issuers aggregate, hide Show All Issuers
       for (const code of [...selectedIssuers]) {
         selectedIssuers.delete(code);
         const cb = issuerPanel.querySelector(`input[value="${code}"]`);
