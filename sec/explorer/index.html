@@ -269,7 +269,7 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-03-18 11:31";
+  const BUILD_ID   = "2026-03-18 11:36";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -691,12 +691,6 @@
       : (poolMode === 'seasoned' ? 'Seasoned pools (>6 mo) · click legend to highlight'
                                  : 'All pools · click legend to highlight');
 
-    const yEnc = {
-      "field":"dq_rate","type":"quantitative","title":yLabel,
-      "axis":{"format":yFmt},
-    };
-    const colorEncNoLegend = {"field":"series","type":"nominal","legend":null};
-
     return {
       "$schema":"https://vega.github.io/schema/vega-lite/v5.json",
       "autosize": {"type":"fit","contains":"padding"},
@@ -709,58 +703,41 @@
       "width":  "container",
       "height": "container",
       "title":  {"text": `${title} — ${chartType}`, "subtitle": subtitle},
-      "layer": [
-        {
-          // ── Layer 1: lines + legend-bind selection ──────────────────
-          "params": [{
-            "name":"Series","bind":"legend",
-            "select": {"type":"point","fields":["series"],"toggle":true,"clear":false},
-          }],
-          "mark": {"type":"line"},
-          "encoding": {
-            "x": xEnc,
-            "y": yEnc,
-            "color": {
-              "field":"series","type":"nominal","title":"Series",
-              "legend":{
-                "orient":"bottom","direction":"horizontal",
-                "columns":8,"labelLimit":90,"symbolSize":110,"symbolLimit":1000,
-              },
-            },
-            "opacity": {
-              "condition":{"param":"Series","empty":true,"value":1.0},
-              "value":0.25,
-            },
-            "size": {
-              "condition": [
-                {"test":"datum.series === 'All Issuers'","value":4.0},
-                {"param":"Series","empty":false,"value":3.0},
-              ],
-              "value":1.5,
-            },
+      "params": [{
+        "name":"Series","bind":"legend",
+        "select": {"type":"point","fields":["series"],"toggle":true,"clear":false},
+      }],
+      "mark": {"type":"line","point":{"size":80,"filled":true,"strokeWidth":0}},
+      "encoding": {
+        "x": xEnc,
+        "y": {
+          "field":"dq_rate","type":"quantitative","title":yLabel,
+          "axis":{"format":yFmt},
+        },
+        "color": {
+          "field":"series","type":"nominal","title":"Series",
+          "legend":{
+            "orient":"bottom","direction":"horizontal",
+            "columns":8,"labelLimit":90,"symbolSize":110,"symbolLimit":1000,
           },
         },
-        {
-          // ── Layer 2: nearest-point hover → tooltip ──────────────────
-          // Invisible points; nearest:true snaps to the closest data
-          // point anywhere in the chart, so users never need to aim at a line.
-          "params": [{
-            "name":"hover",
-            "select":{"type":"point","on":"mouseover","nearest":true,"clear":"mouseout"},
-          }],
-          "mark": {"type":"point","opacity":0,"size":400},
-          "encoding": {
-            "x": xEnc,
-            "y": yEnc,
-            "color": colorEncNoLegend,
-            "tooltip": [
-              {"field":"series","type":"nominal","title":"Series"},
-              {"field":"date_label","type":"nominal","title":"Date"},
-              {"field":"dq_rate","type":"quantitative","title":yLabel,"format":yFmt},
-            ],
-          },
+        "opacity": {
+          "condition":{"param":"Series","empty":true,"value":1.0},
+          "value":0.25,
         },
-      ],
+        "size": {
+          "condition": [
+            {"test":"datum.series === 'All Issuers'","value":4.0},
+            {"param":"Series","empty":false,"value":3.0},
+          ],
+          "value":1.5,
+        },
+        "tooltip": [
+          {"field":"series","type":"nominal","title":"Series"},
+          {"field":"date_label","type":"nominal","title":"Date"},
+          {"field":"dq_rate","type":"quantitative","title":yLabel,"format":yFmt},
+        ],
+      },
     };
   }
 
