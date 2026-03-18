@@ -253,8 +253,14 @@ function embedAll() {
     vegaEmbed(id, makeSpec(field, title, fmtAx, fmtTip, chartWidth(id)), OPTS)
   );
   Promise.all(renders).then(() => {
-    const h = document.documentElement.scrollHeight;
-    window.parent.postMessage({type:'ccChartHeight', height:h}, '*');
+    function sendHeight() {
+      const h = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+      window.parent.postMessage({type:'ccChartHeight', height:h}, '*');
+    }
+    sendHeight();
+    setTimeout(sendHeight, 300);
+    setTimeout(sendHeight, 1000);
+    setTimeout(sendHeight, 2500);
   });
 }
 
