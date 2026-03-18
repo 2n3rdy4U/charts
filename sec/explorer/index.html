@@ -218,11 +218,11 @@
   <!-- ── Row 3: shared filters (DQ Status + Credit Score) ── -->
   <div class="fbar" id="sharedBar" style="position:relative;">
     <div class="ctrl">
-      <label class="lbl" title="Delinquency rate = loans in the selected past-due bucket ÷ total active loans (balance &gt; $10, FICO 300&#8211;900). &#10;&#10;60+ DPD: seriously delinquent. &#10;30&#8211;59 DPD: early-stage delinquency. &#10;Any DQ (30+): combined. &#10;Current: loans with no reported delinquency." style="cursor:help;">DQ Status</label>
+      <label class="lbl" title="Delinquency rate = loans in the selected past-due bucket ÷ total active loans (balance &gt; $10, FICO 300&#8211;900). &#10;&#10;60+ DPD: seriously delinquent. &#10;30&#8211;59 DPD: early-stage delinquency. &#10;30+ DPD: combined 30–59 and 60+.&#10;Current: loans with no reported delinquency." style="cursor:help;">DQ Status</label>
       <select id="dqSel">
         <option value="60+">60+ DPD</option>
         <option value="30-59">30–59 DPD</option>
-        <option value="any-dq">Any DQ (30+)</option>
+        <option value="any-dq">30+ DPD</option>
         <option value="current">Current (&lt; 30 DPD)</option>
       </select>
     </div>
@@ -265,7 +265,7 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-03-18 10:41";
+  const BUILD_ID   = "2026-03-18 11:08";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -666,7 +666,7 @@
     // Y-axis: label and format depend on DQ filter and (for TS) transform
     let yLabel = {
       '60+':'60+ DPD Rate', '30-59':'30–59 DPD Rate',
-      'any-dq':'Any DQ (30+) Rate', 'current':'Current (<30 DPD) Rate',
+      'any-dq':'30+ DPD Rate', 'current':'Current (<30 DPD) Rate',
     }[dqFilter] || 'Rate';
     let yFmt = '.2%';
     if (!isVintage) {
@@ -702,7 +702,7 @@
         "name":"Series","bind":"legend",
         "select": {"type":"point","fields":["series"],"toggle":true,"clear":false},
       }],
-      "mark": {"type":"line","point":{"size":600,"filled":true,"strokeWidth":0}},
+      "mark": {"type":"line","point":{"size":600,"filled":true,"strokeWidth":0,"opacity":0}},
       "encoding": {
         "x": xEnc,
         "y": {
@@ -1001,7 +1001,7 @@
     document.getElementById('vis').innerHTML = '';
     const yLabel = dqFilter === '60+'    ? '60+ DPD Rate'
                  : dqFilter === '30-59'  ? '30–59 DPD Rate'
-                 : dqFilter === 'any-dq' ? 'Any DQ (30+) Rate'
+                 : dqFilter === 'any-dq' ? '30+ DPD Rate'
                  :                        'Current Rate';
     const poolLabel = poolMode === 'seasoned' ? 'Seasoned pools (>6 mo)' : 'All pools';
     const spec = {
@@ -1019,7 +1019,7 @@
                  "subtitle": `${poolLabel} · each line = one calendar year · click legend to highlight`},
       "params": [{"name":"Yr","bind":"legend",
                   "select":{"type":"point","fields":["year"],"toggle":true,"clear":false}}],
-      "mark": {"type":"line","point":{"size":600,"filled":true,"strokeWidth":0}},
+      "mark": {"type":"line","point":{"size":600,"filled":true,"strokeWidth":0,"opacity":0}},
       "encoding": {
         "x": {
           "field": "month_num", "type": "ordinal", "title": "Month",
