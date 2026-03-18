@@ -250,8 +250,12 @@ const CHARTS = [
 ];
 
 function embedAll() {
-  for (const [id, field, title, fmtAx, fmtTip] of CHARTS)
-    vegaEmbed(id, makeSpec(field, title, fmtAx, fmtTip, chartWidth(id)), OPTS);
+  const renders = CHARTS.map(([id, field, title, fmtAx, fmtTip]) =>
+    vegaEmbed(id, makeSpec(field, title, fmtAx, fmtTip, chartWidth(id)), OPTS)
+  );
+  Promise.all(renders).then(() => {
+    if (window.parentIFrame) window.parentIFrame.size();
+  });
 }
 
 embedAll();
