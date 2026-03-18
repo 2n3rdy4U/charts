@@ -265,7 +265,7 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-03-18 10:31";
+  const BUILD_ID   = "2026-03-18 10:41";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -651,10 +651,11 @@
   }
 
   // Strip issuer prefix from series name for legend display.
-  // "AART 2017-1" → "2017-1", "SDART 2023-P1" → "2023-P1", etc.
+  // Handles: "AART 2017-1" → "2017-1", "Honda Auto ... 2017-1 Owner Trust" → "2017-1",
+  //          "ALLY ... 2025- 1" → "2025-1" (normalises mid-token spaces).
   function shortSeries(s) {
-    const m = s.match(/(\d{4}-\S+)$/);
-    return m ? m[1] : s;
+    const m = s.match(/\d{4}-\s*[A-Za-z0-9]+/);
+    return m ? m[0].replace(/\s/g, '') : s;
   }
 
   // ── Vega-Lite spec ───────────────────────────────────────────────────
