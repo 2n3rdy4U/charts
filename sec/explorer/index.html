@@ -95,10 +95,11 @@
     /* ── filter bar separator ── */
     .bar-sep { width:1px; background:var(--border); align-self:stretch; margin:2px 8px; flex-shrink:0; }
     /* ── info button + popover ── */
-    .info-btn { background:none; border:none; cursor:pointer; font-size:20px; color:var(--muted);
-                padding:12px 20px; line-height:1; vertical-align:middle;
-                min-width:44px; min-height:44px; display:inline-flex; align-items:center; justify-content:center; }
-    .info-btn:hover { color:var(--text); }
+    .info-btn { background:var(--border); border:none; cursor:pointer; font-size:13px;
+                font-weight:600; color:var(--muted); border-radius:50%;
+                width:26px; height:26px; display:inline-flex; align-items:center;
+                justify-content:center; line-height:1; flex-shrink:0; transition:background .15s,color .15s; }
+    .info-btn:hover { background:#d0d5dd; color:var(--text); }
     .info-popover { position:absolute; z-index:200; background:#fff; border:1px solid var(--border);
                     border-radius:6px; box-shadow:0 4px 16px rgba(0,0,0,.12);
                     padding:12px 14px; width:340px; font-size:12px; line-height:1.55;
@@ -247,7 +248,7 @@
       </div>
     </div>
     <div style="margin-left:auto;display:flex;align-items:center;">
-      <button class="info-btn" id="infoBtn" type="button" title="Methodology">ⓘ</button>
+      <button class="info-btn" id="infoBtn" type="button" title="Methodology">i</button>
     </div>
   </div>
 
@@ -268,7 +269,7 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-03-18 11:24";
+  const BUILD_ID   = "2026-03-18 11:28";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
