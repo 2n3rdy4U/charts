@@ -265,7 +265,7 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-03-17 20:03";
+  const BUILD_ID   = "2026-03-17 20:07";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -346,7 +346,7 @@
       updateIssuerBtn(); render();
     });
     lbl.appendChild(selectAllCb);
-    lbl.appendChild(document.createTextNode(' Select all issuers'));
+    lbl.appendChild(document.createTextNode(' Show All Issuers'));
     issuerPanel.appendChild(lbl);
     const sep = document.createElement('div'); sep.className = 'multi-sel-sep';
     issuerPanel.appendChild(sep);
@@ -1152,11 +1152,12 @@
       if (allCb) allCb.checked = true;
       updateIssuerBtn();
     } else if (displayMode === 'table') {
-      // Table: default to all issuers selected if nothing is chosen
-      if (selectedIssuers.size === 0 && !showAllAvg) {
-        for (const cb of issuerCbs) { cb.checked = true; selectedIssuers.add(cb.value); }
-        syncSelectAll(); updateIssuerBtn();
-      }
+      // Table: always default to all issuers selected
+      showAllAvg = false;
+      const allCb2 = issuerPanel.querySelector('input[value="__all__"]');
+      if (allCb2) allCb2.checked = false;
+      for (const cb of issuerCbs) { cb.checked = true; selectedIssuers.add(cb.value); }
+      syncSelectAll(); updateIssuerBtn();
     }
 
     for (const btn of document.querySelectorAll('#displayGroup button'))
