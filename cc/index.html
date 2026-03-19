@@ -154,7 +154,13 @@ function axCfg() {
   return {fmt:'%b %Y', ticks:{interval:'month',step:1}, angle:-45};
 }
 
-function makeSpec(field, title, fmtAx, fmtTip) {
+function chartWidth(id) {
+  const el = document.querySelector(id);
+  if (!el) return 800;
+  return Math.max(el.getBoundingClientRect().width - 26, 300);
+}
+
+function makeSpec(field, title, fmtAx, fmtTip, w) {
   const ax   = axCfg();
   const clr  = {domain: TICKERS, range: COLORS};
   const pad  = {top:5, right:14, bottom: ax.angle < 0 ? 55 : 32, left:62};
@@ -170,10 +176,10 @@ function makeSpec(field, title, fmtAx, fmtTip) {
   }));
   return {
     $schema: "https://vega.github.io/schema/vega-lite/v5.json",
-    width: "container",
+    width: w - pad.left - pad.right,
     height: 220,
     padding: pad,
-    autosize: {type:"fit-x"},
+    autosize: {type:"pad"},
     data: {values: vals},
     layer: [
       // Layer 1: Lines — opacity/width from _op/_sw fields (driven by JS selectedTrusts)
@@ -243,7 +249,7 @@ const CHARTS = [
 
 function embedAll() {
   const renders = CHARTS.map(([id, field, title, fmtAx, fmtTip]) =>
-    vegaEmbed(id, makeSpec(field, title, fmtAx, fmtTip), OPTS)
+    vegaEmbed(id, makeSpec(field, title, fmtAx, fmtTip, chartWidth(id)), OPTS)
   );
   Promise.all(renders).then(() => {
     const h = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
