@@ -16,7 +16,7 @@
   .hint{color:#94a3b8;font-size:11px;margin-bottom:16px}
   h2{font-size:14px;font-weight:600;margin:24px 0 4px;color:#334155}
   .chart{background:#fff;border:1px solid #e2e8f0;border-radius:8px;
-           padding:12px 12px 12px;margin-bottom:16px;width:100%;box-sizing:border-box;overflow:hidden}
+           padding:12px 12px 12px;margin-bottom:16px;width:100%;box-sizing:border-box}
   footer{margin-top:32px;font-size:11px;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:10px}
   /* Main header bar (includes date inputs) */
   .range-bar{display:flex;align-items:center;gap:8px;margin-bottom:20px;flex-wrap:wrap}
@@ -154,31 +154,10 @@ function axCfg() {
   return {fmt:'%b %Y', ticks:{interval:'month',step:1}, angle:-45};
 }
 
-let _chartW = 0;  // content-area width, set by ResizeObserver
-(function() {
-  const el = document.querySelector('#chart-pr');
-  if (!el) return;
-  new ResizeObserver(entries => {
-    const w = Math.floor(entries[0].contentRect.width);
-    if (w === _chartW) return;
-    _chartW = w;
-    clearTimeout(window._roTimer);
-    window._roTimer = setTimeout(embedAll, 80);
-  }).observe(el);
-})();
-
-function chartWidth() {
-  if (_chartW > 100) return _chartW;
-  // fallback before ResizeObserver fires
-  const el = document.querySelector('#chart-pr');
-  if (!el) return 800;
-  return Math.max(Math.floor(el.getBoundingClientRect().width) - 26, 300);
-}
-
-function makeSpec(field, title, fmtAx, fmtTip, w) {
+function makeSpec(field, title, fmtAx, fmtTip) {
   const ax   = axCfg();
   const clr  = {domain: TICKERS, range: COLORS};
-  const pad  = {top:5, right:14, bottom: ax.angle < 0 ? 55 : 32, left:62};
+  const pad  = {top:5, right:16, bottom: ax.angle < 0 ? 55 : 32, left:62};
   const vals = DATA.filter(d => {
     if (d[field] == null) return false;
     if (currentStart && d.date < currentStart) return false;
@@ -191,10 +170,10 @@ function makeSpec(field, title, fmtAx, fmtTip, w) {
   }));
   return {
     $schema: "https://vega.github.io/schema/vega-lite/v5.json",
-    width: w - pad.left - pad.right,
+    width: "container",
     height: 220,
     padding: pad,
-    autosize: {type:"pad"},
+    autosize: {type:"fit-x"},
     data: {values: vals},
     layer: [
       // Layer 1: Lines — opacity/width from _op/_sw fields (driven by JS selectedTrusts)
@@ -264,7 +243,7 @@ const CHARTS = [
 
 function embedAll() {
   const renders = CHARTS.map(([id, field, title, fmtAx, fmtTip]) =>
-    vegaEmbed(id, makeSpec(field, title, fmtAx, fmtTip, chartWidth()), OPTS)
+    vegaEmbed(id, makeSpec(field, title, fmtAx, fmtTip), OPTS)
   );
   Promise.all(renders).then(() => {
     const h = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
