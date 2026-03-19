@@ -269,11 +269,11 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-03-18 19:31";
+  const BUILD_ID   = "2026-03-19 12:45";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
-  const LAST_UPDATED   = "Mar 18";
+  const LAST_UPDATED   = "Mar 19";
 
   document.getElementById('lastUpdated').textContent = LAST_UPDATED;
 
@@ -1051,6 +1051,16 @@
                  : dqFilter === 'any-dq' ? '30+ DPD Rate'
                  :                        '< 30 DPD (Current) Rate';
     const poolLabel = poolMode === 'seasoned' ? 'Seasoned pools (>6 mo)' : 'All pools';
+    const clrSeasonal = {"field":"year","type":"ordinal","scale":{"scheme":"tableau10"}};
+    const clrSeasonalNoLeg = {...clrSeasonal, "legend":null};
+    const xSeasonal = {
+      "field":"month_num","type":"ordinal","title":"Month",
+      "axis":{"labelExpr":"['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][datum.value - 1]",
+               "labelAngle":0},
+    };
+    const xSeasonalNoAxis = {"field":"month_num","type":"ordinal"};
+    const ySeasonal = {"field":"dq_rate","type":"quantitative","title":yLabel,"axis":{"format":".2%"}};
+    const ySeasonalNoAxis = {"field":"dq_rate","type":"quantitative"};
     const spec = {
       "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
       "autosize": {"type":"fit","contains":"padding"},
@@ -1064,39 +1074,55 @@
       "height": "container",
       "title":  {"text": `${title} — Year Overlay`,
                  "subtitle": `${poolLabel} · each line = one calendar year · click legend to highlight`},
-      "params": [{"name":"Yr","bind":"legend",
-                  "select":{"type":"point","fields":["year"],"toggle":true,"clear":false}}],
-      "mark": {"type":"line","point":{"size":80,"filled":true,"strokeWidth":0}},
-      "encoding": {
-        "x": {
-          "field": "month_num", "type": "ordinal", "title": "Month",
-          "axis": {"labelExpr": "['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][datum.value - 1]",
-                   "labelAngle": 0}
+      "layer": [
+        // Layer 1: lines + legend-bind year selection
+        {
+          "params": [{"name":"Yr","bind":"legend",
+                      "select":{"type":"point","fields":["year"],"toggle":true,"clear":false}}],
+          "mark": {"type":"line"},
+          "encoding": {
+            "x": xSeasonal,
+            "y": ySeasonal,
+            "color": {...clrSeasonal,"title":"Year",
+                      "legend":{"orient":"bottom","direction":"horizontal","columns":8,
+                                "symbolSize":110,"labelLimit":80}},
+            "opacity": {"condition":{"param":"Yr","empty":true,"value":1.0},"value":0.2},
+            "size":    {"condition":{"param":"Yr","empty":false,"value":3.0},"value":1.5},
+          },
         },
-        "y": {
-          "field": "dq_rate", "type": "quantitative", "title": yLabel,
-          "axis": {"format": ".2%"}
+        // Layer 2: large invisible circles for nearest-point hover detection
+        {
+          "params": [{"name":"hvr","select":{"type":"point","nearest":true,"on":"mouseover","clear":"mouseout"}}],
+          "mark": {"type":"circle","opacity":0,"size":900},
+          "encoding": {
+            "x": xSeasonalNoAxis,
+            "y": ySeasonalNoAxis,
+            "color": clrSeasonalNoLeg,
+          },
         },
-        "color": {
-          "field": "year", "type": "ordinal", "title": "Year",
-          "scale": {"scheme": "tableau10"},
-          "legend": {"orient":"bottom","direction":"horizontal","columns":8,
-                     "symbolSize":110,"labelLimit":80},
+        // Layer 3: visible dot + tooltip, shown only on hover
+        {
+          "mark": {"type":"point","filled":true,"size":90,"strokeWidth":1.5},
+          "encoding": {
+            "x":      xSeasonalNoAxis,
+            "y":      ySeasonalNoAxis,
+            "color":  clrSeasonalNoLeg,
+            "stroke": clrSeasonalNoLeg,
+            "opacity": {"condition":{"param":"hvr","empty":false,"value":1},"value":0},
+            "tooltip": [
+              {"field":"year","type":"ordinal","title":"Year"},
+              {"field":"month_label","type":"nominal","title":"Month"},
+              {"field":"dq_rate","type":"quantitative","title":yLabel,"format":".2%"},
+            ],
+          },
         },
-        "opacity": {
-          "condition": {"param":"Yr","empty":true,"value":1.0},
-          "value": 0.2,
+        // Layer 4: vertical crosshair at hovered month
+        {
+          "transform": [{"filter":{"param":"hvr","empty":false}}],
+          "mark": {"type":"rule","color":"#94a3b8","strokeWidth":1,"strokeDash":[3,3]},
+          "encoding": {"x": xSeasonalNoAxis},
         },
-        "size": {
-          "condition": {"param":"Yr","empty":false,"value":3.0},
-          "value": 1.5,
-        },
-        "tooltip": [
-          {"field":"year","type":"ordinal","title":"Year"},
-          {"field":"month_label","type":"nominal","title":"Month"},
-          {"field":"dq_rate","type":"quantitative","title":yLabel,"format":".2%"},
-        ],
-      },
+      ],
     };
     try {
       await vegaEmbed('#vis', spec, { actions:false, renderer:'svg' });
