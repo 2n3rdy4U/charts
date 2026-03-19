@@ -154,14 +154,7 @@ function axCfg() {
   return {fmt:'%b %Y', ticks:{interval:'month',step:1}, angle:-45};
 }
 
-function chartWidth(id) {
-  const el = document.querySelector(id);
-  if (!el) return 800;
-  const w = el.getBoundingClientRect().width - 24;  // subtract .chart padding
-  return Math.max(w, 300);
-}
-
-function makeSpec(field, title, fmtAx, fmtTip, w) {
+function makeSpec(field, title, fmtAx, fmtTip) {
   const ax   = axCfg();
   const clr  = {domain: TICKERS, range: COLORS};
   const pad  = {top:5, right:14, bottom: ax.angle < 0 ? 55 : 32, left:62};
@@ -177,10 +170,10 @@ function makeSpec(field, title, fmtAx, fmtTip, w) {
   }));
   return {
     $schema: "https://vega.github.io/schema/vega-lite/v5.json",
-    width: w - pad.left - pad.right,
+    width: "container",
     height: 220,
     padding: pad,
-    autosize: {type:"pad"},
+    autosize: {type:"fit-x"},
     data: {values: vals},
     layer: [
       // Layer 1: Lines — opacity/width from _op/_sw fields (driven by JS selectedTrusts)
@@ -209,7 +202,7 @@ function makeSpec(field, title, fmtAx, fmtTip, w) {
       },
       // Layer 3: Visible dot + tooltip on hovered point
       {
-        mark: {type:"point", filled:true, size:90, strokeWidth:1.5},
+        mark: {type:"point", filled:true, size:90, strokeWidth:1.5, clip:true},
         encoding: {
           x:      {field:"date",   type:"temporal"},
           y:      {field:field,    type:"quantitative"},
@@ -231,7 +224,7 @@ function makeSpec(field, title, fmtAx, fmtTip, w) {
       }
     ],
     config: {
-      view:    {stroke:null},
+      view:    {stroke:null, clip:true},
       background: "transparent",
       axis:    {labelFontSize:11, titleFontSize:11, titlePadding:8},
       tooltip: {theme:"light"}
@@ -250,7 +243,7 @@ const CHARTS = [
 
 function embedAll() {
   const renders = CHARTS.map(([id, field, title, fmtAx, fmtTip]) =>
-    vegaEmbed(id, makeSpec(field, title, fmtAx, fmtTip, chartWidth(id)), OPTS)
+    vegaEmbed(id, makeSpec(field, title, fmtAx, fmtTip), OPTS)
   );
   Promise.all(renders).then(() => {
     const h = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
