@@ -125,6 +125,17 @@
     .vintage-only, .ts-only { display:none; }
     body[data-mode="vintage"]    .vintage-only { display:flex; }
     body[data-mode="timeseries"] .ts-only      { display:flex; }
+    /* ── export region fills remaining height ── */
+    #export-region { flex:1; display:flex; flex-direction:column; min-height:0; }
+    /* ── mode tab strip ── */
+    .mode-tabs { display:flex; border-bottom:2px solid var(--border); flex-shrink:0; margin:0 -14px; padding:0 14px; }
+    .mode-tab {
+      border:none; background:none; padding:8px 16px 7px; font-size:13px; font-weight:500;
+      cursor:pointer; color:var(--muted); border-bottom:2px solid transparent; margin-bottom:-2px;
+      transition:color .15s,border-color .15s; white-space:nowrap;
+    }
+    .mode-tab.active { color:var(--accent); border-bottom-color:var(--accent); font-weight:600; }
+    .mode-tab:hover:not(.active) { color:var(--text); background:#f9fafb; }
     @media (max-width:640px) {
       html, body { height:auto; overflow:auto; }
       body { overflow-y:auto; }
@@ -148,13 +159,13 @@
       <div class="brand-title">ABS Data Explorer</div>
       <div class="brand-sub">Auto ABS loan performance · select filters below</div>
     </div>
-    <div class="btn-group" id="modeGroup">
-      <button data-mode="vintage" class="active" title="X-axis = months since each deal series&#39; first reporting date. Aligns deals of different ages so you can compare how delinquency evolves over a series&#39; life, regardless of when it was issued.">Vintage Curves</button>
-      <button data-mode="timeseries">Time Series</button>
-    </div>
     <div class="meta-date">Updated: <span id="lastUpdated"></span></div>
     <button id="export-btn" onclick="exportExplorer()" title="Download chart as PNG" style="padding:4px 7px;border:1px solid var(--border);border-radius:5px;background:#fff;cursor:pointer;color:var(--muted);margin-left:8px;display:inline-flex;align-items:center;line-height:1;"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></button>
   </div>
+  <nav class="mode-tabs" id="modeGroup">
+    <button class="mode-tab active" data-mode="vintage" title="X-axis = months since each deal series&#39; first reporting date. Aligns deals of different ages so you can compare how delinquency evolves over a series&#39; life, regardless of when it was issued.">Vintage Curves</button>
+    <button class="mode-tab" data-mode="timeseries">Time Series</button>
+  </nav>
 
   <!-- ── Row 2a: vintage controls (issuer + date range) ── -->
   <div class="fbar vintage-only" id="vintageBar">
@@ -273,7 +284,7 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-03-27 11:22";
+  const BUILD_ID   = "2026-03-27 11:40";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -1157,8 +1168,11 @@
   function setMode(m) {
     mode = m;
     document.body.dataset.mode = m;
-    for (const b of document.querySelectorAll('#modeGroup button'))
+    for (const b of document.querySelectorAll('#modeGroup .mode-tab'))
       b.classList.toggle('active', b.dataset.mode === m);
+    const _u = new URL(window.location.href);
+    _u.searchParams.set('view', m);
+    history.pushState({}, '', _u);
     if (m === 'timeseries') {
       initTsSelection();
       render();
@@ -1286,8 +1300,13 @@
   })();
 
   // ── Init ─────────────────────────────────────────────────────────────
-  document.body.dataset.mode = 'vintage';
-  loadVintageAndRender();
+  const _initView = new URLSearchParams(window.location.search).get('view');
+  if (_initView === 'timeseries') {
+    setMode('timeseries');
+  } else {
+    document.body.dataset.mode = 'vintage';
+    loadVintageAndRender();
+  }
 
 })();
 
