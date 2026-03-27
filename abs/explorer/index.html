@@ -274,17 +274,15 @@
   </div>
 
   <!-- ── Chart / Table ── -->
-  <div id="export-region" style="background:#fff">
-    <div id="vis"><div class="loading">Loading…</div></div>
-    <div id="tblWrap"></div>
-  </div>
+  <div id="vis"><div class="loading">Loading…</div></div>
+  <div id="tblWrap"></div>
 
 </div>
 <div id="toast"></div>
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-03-27 11:40";
+  const BUILD_ID   = "2026-03-27 14:10";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -1320,11 +1318,11 @@ function _playShutter() {
 
 function exportExplorer() {
   _playShutter();
-  var el = document.getElementById('export-region');
+  var el = document.getElementById('vis');
   var mode = document.body.dataset.mode || 'vintage';
   var date = new Date().toISOString().slice(0, 10);
   var btn = document.getElementById('export-btn');
-  btn.style.visibility = 'hidden';
+  btn.style.display = 'none';
   var stamp = document.createElement('div');
   stamp.style.cssText = 'padding:5px 16px 4px;font-size:10px;color:#94a3b8;font-family:inherit;text-align:right;border-top:1px solid #e5e7eb;margin-top:6px;';
   stamp.textContent = 'Consumer Credit Matters · consumercreditmatters.com';
@@ -1332,13 +1330,13 @@ function exportExplorer() {
   htmlToImage.toPng(el, {pixelRatio:2, backgroundColor:'#ffffff'})
     .then(function(url) {
       el.removeChild(stamp);
-      btn.style.visibility = '';
+      btn.style.display = '';
       var a = document.createElement('a');
       a.href = url; a.download = 'ccm-abs-explorer-' + mode + '-' + date + '.png'; a.click();
     })
     .catch(function(e) {
       if (el.contains(stamp)) el.removeChild(stamp);
-      btn.style.visibility = '';
+      btn.style.display = '';
       console.error('PNG export failed:', e);
     });
 }
