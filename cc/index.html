@@ -85,6 +85,16 @@
   <!-- ── Control bar (outside export region) ── -->
   <div class="ctrl-bar" id="ctrl-bar">
     <div class="ctrl-row">
+      <span class="ctrl-label">Trusts</span>
+      <div class="metric-sel" id="trustSel">
+        <button class="metric-sel-btn" id="trustBtn" type="button">All trusts &#9662;</button>
+        <div class="metric-sel-panel" id="trustPanel" hidden>
+          <label><input type="checkbox" checked data-trust="AMXCA"> AMXCA</label><label><input type="checkbox" checked data-trust="BACCT"> BACCT</label><label><input type="checkbox" checked data-trust="CCCIT"> CCCIT</label><label><input type="checkbox" checked data-trust="CHAIT"> CHAIT</label><label><input type="checkbox" checked data-trust="COMET"> COMET</label><label><input type="checkbox" checked data-trust="DRYROCK"> DRYROCK</label><label><input type="checkbox" checked data-trust="FNBO"> FNBO</label><label><input type="checkbox" checked data-trust="SYNIT"> SYNIT</label><label><input type="checkbox" checked data-trust="WFCARD"> WFCARD</label><label><input type="checkbox" checked data-trust="WFNN"> WFNN</label>
+          <div class="metric-sel-sep"></div>
+          <label><input type="checkbox" id="trustAll" checked> <em>All trusts</em></label>
+        </div>
+      </div>
+      <div class="ctrl-sep"></div>
       <span class="ctrl-label">Metrics</span>
       <div class="metric-sel" id="metricSel">
         <button class="metric-sel-btn" id="metricBtn" type="button">All metrics &#9662;</button>
@@ -152,17 +162,54 @@ const COLORS  = ["#4e79a7", "#f28e2b", "#e15759", "#76b7b2", "#59a14f", "#edc948
 let currentStart  = null;   // null = show all (ITD)
 let currentEnd    = null;
 let selectedTrusts = new Set();  // empty = all highlighted
+let visibleTrusts  = new Set(TICKERS); // dropdown-controlled
 
 function toggleTrust(trust) {
+  if (!visibleTrusts.has(trust)) return;
   if (selectedTrusts.has(trust)) selectedTrusts.delete(trust);
   else selectedTrusts.add(trust);
-  // Sync dimmed state on every legend across all charts
   document.querySelectorAll('.leg-item').forEach(el => {
+    if (!visibleTrusts.has(el.dataset.trust)) return;
     el.classList.toggle('dimmed',
       selectedTrusts.size > 0 && !selectedTrusts.has(el.dataset.trust));
   });
   embedAll();
 }
+
+// ── Trust dropdown ───────────────────────────────────────────────────────
+function _setTrustVisible(ticker, show) {
+  if (show) visibleTrusts.add(ticker);
+  else { visibleTrusts.delete(ticker); selectedTrusts.delete(ticker); }
+  document.querySelectorAll('.leg-item[data-trust="' + ticker + '"]').forEach(el => {
+    el.style.display = show ? '' : 'none';
+  });
+}
+function _updateTrustBtn() {
+  const n = visibleTrusts.size, total = TICKERS.length;
+  document.getElementById('trustBtn').textContent =
+    (n === total ? 'All trusts' : n === 0 ? 'None selected' : n + ' / ' + total + ' trusts') + ' ▾';
+}
+document.getElementById('trustBtn').addEventListener('click', function(e) {
+  e.stopPropagation();
+  const p = document.getElementById('trustPanel'); p.hidden = !p.hidden;
+  document.getElementById('metricPanel').hidden = true;
+});
+document.getElementById('trustPanel').addEventListener('click', function(e) { e.stopPropagation(); });
+document.getElementById('trustPanel').addEventListener('change', function(e) {
+  const inp = e.target;
+  if (inp.id === 'trustAll') {
+    document.querySelectorAll('#trustPanel input[data-trust]').forEach(cb => {
+      cb.checked = inp.checked;
+      _setTrustVisible(cb.dataset.trust, inp.checked);
+    });
+  } else if (inp.dataset.trust) {
+    _setTrustVisible(inp.dataset.trust, inp.checked);
+    const cbs = [...document.querySelectorAll('#trustPanel input[data-trust]')];
+    document.getElementById('trustAll').checked = cbs.every(cb => cb.checked);
+  }
+  _updateTrustBtn();
+  embedAll();
+});
 
 function isoShift(years) {
   const d = new Date(TODAY);
@@ -212,6 +259,7 @@ function makeSpec(field, title, fmtAx, fmtTip) {
   const pad  = {top:5, right:16, bottom: ax.angle < 0 ? 55 : 32, left:62};
   const vals = DATA.filter(d => {
     if (d[field] == null) return false;
+    if (!visibleTrusts.has(d.ticker)) return false;
     if (currentStart && d.date < currentStart) return false;
     if (currentEnd   && d.date > currentEnd)   return false;
     return true;
@@ -331,8 +379,12 @@ document.getElementById('metricBtn').addEventListener('click', function(e) {
   e.stopPropagation();
   const p = document.getElementById('metricPanel');
   p.hidden = !p.hidden;
+  document.getElementById('trustPanel').hidden = true;
 });
-document.addEventListener('click', function() { document.getElementById('metricPanel').hidden = true; });
+document.addEventListener('click', function() {
+  document.getElementById('metricPanel').hidden = true;
+  document.getElementById('trustPanel').hidden  = true;
+});
 document.getElementById('metricPanel').addEventListener('click', function(e) { e.stopPropagation(); });
 document.getElementById('metricPanel').addEventListener('change', function(e) {
   const inp = e.target;
