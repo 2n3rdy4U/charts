@@ -301,8 +301,25 @@ function _exportPng(el, filename) {
 
 function exportCcChart(sectionId, slug) {
   var el = document.getElementById(sectionId);
+  var btn = el ? el.querySelector('.export-btn') : null;
+  if (btn) btn.style.display = 'none';
   var date = new Date().toISOString().slice(0, 10);
-  _exportPng(el, 'ccm-' + slug + '-' + date + '.png');
+  var stamp = document.createElement('div');
+  stamp.style.cssText = 'padding:5px 16px 4px;font-size:10px;color:#94a3b8;font-family:inherit;text-align:right;border-top:1px solid #e2e8f0;margin-top:4px;';
+  stamp.textContent = 'Consumer Credit Matters · consumercreditmatters.com';
+  el.appendChild(stamp);
+  _playShutter();
+  htmlToImage.toPng(el, {pixelRatio:2, backgroundColor:'#ffffff'})
+    .then(function(url) {
+      el.removeChild(stamp);
+      if (btn) btn.style.display = '';
+      var a = document.createElement('a'); a.href = url; a.download = 'ccm-' + slug + '-' + date + '.png'; a.click();
+    })
+    .catch(function(e) {
+      if (el.contains(stamp)) el.removeChild(stamp);
+      if (btn) btn.style.display = '';
+      console.error('PNG export failed:', e);
+    });
 }
 </script>
 </body>
