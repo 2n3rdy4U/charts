@@ -9,108 +9,122 @@
 <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
 <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 <style>
+  *,*::before,*::after{box-sizing:border-box}
   body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;
         font-size:13px;background:#f8fafc;margin:0;padding:0}
-  .wrap{max-width:1140px;margin:0 auto;padding:24px 16px 48px}
-  h1{font-size:20px;font-weight:700;margin:0 0 4px}
-  .sub{color:#64748b;font-size:12px;margin-bottom:2px}
-  .hint{color:#94a3b8;font-size:11px;margin-bottom:16px}
-  h2{font-size:14px;font-weight:600;margin:24px 0 4px;color:#334155}
-  .chart{background:#fff;border:1px solid #e2e8f0;border-radius:8px;
-           padding:12px 12px 12px;margin-bottom:16px;width:100%;box-sizing:border-box}
-  footer{margin-top:32px;font-size:11px;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:10px}
-  /* Main header bar (includes date inputs) */
-  .range-bar{display:flex;align-items:center;gap:8px;margin-bottom:20px;flex-wrap:wrap}
-  .range-bar button,.rng-btn{padding:4px 12px;font-size:12px;border-radius:4px;
-                              border:1px solid #cbd5e1;background:#fff;cursor:pointer;
-                              color:#475569;transition:all 0.15s}
-  .range-bar button:hover,.rng-btn:hover{background:#f1f5f9}
-  .range-bar button.active,.rng-btn.active{background:#1e40af;color:#fff;border-color:#1e40af}
-  .range-bar .sep{color:#94a3b8;font-size:12px;margin:0 2px}
-  .range-bar input[type=date]{font-size:12px;padding:3px 6px;border:1px solid #cbd5e1;
-                               border-radius:4px;color:#475569}
-  .range-bar .apply{padding:4px 10px;font-size:12px;background:#475569;color:#fff;
-                     border:none;border-radius:4px;cursor:pointer}
-  .range-bar .apply:hover{background:#334155}
-  /* Mini bar above each chart — preset buttons only, no date inputs */
-  .range-bar.mini{margin-bottom:6px;margin-top:0;gap:6px}
-  .range-bar.mini .rng-btn{padding:3px 10px;font-size:11px}
-  /* Export button */
-  .export-btn{padding:3px 6px;border-radius:4px;border:1px solid #cbd5e1;
-               background:#fff;cursor:pointer;color:#475569;transition:all 0.15s;
-               display:inline-flex;align-items:center;line-height:1}
-  .export-btn:hover{background:#f1f5f9}
-  /* Chart section wrapper */
-  .chart-section{background:#fff;margin-bottom:8px}
-  .chart-header{display:flex;align-items:center;justify-content:space-between;
-                 margin-bottom:4px}
-  .chart-header h2{margin:0}
-  /* Custom HTML legend below each chart */
-  .chart-legend{display:flex;flex-wrap:wrap;gap:6px 14px;padding:8px 8px 6px;
-                 border-top:1px solid #e2e8f0;margin-top:2px}
+  .wrap{max-width:1140px;margin:0 auto;padding:16px 16px 48px}
+  footer{margin-top:24px;font-size:11px;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:10px}
+  /* ── Page header ── */
+  .page-hdr{display:flex;align-items:center;gap:12px;padding-bottom:10px;
+             border-bottom:1px solid #e2e8f0;margin-bottom:12px}
+  .brand{flex:1}
+  .brand-title{font-size:16px;font-weight:700;color:#0f172a}
+  .brand-sub{font-size:11px;color:#64748b;margin-top:2px}
+  /* ── Control bar ── */
+  .ctrl-bar{background:#fff;border:1px solid #e2e8f0;border-radius:8px;
+             padding:10px 14px;margin-bottom:14px}
+  .ctrl-row{display:flex;align-items:center;flex-wrap:wrap;gap:6px 12px}
+  .ctrl-row+.ctrl-row{margin-top:8px;border-top:1px solid #f1f5f9;padding-top:8px}
+  .ctrl-label{font-size:11px;font-weight:600;color:#94a3b8;white-space:nowrap;min-width:36px}
+  .ctrl-sep{width:1px;background:#e2e8f0;align-self:stretch;margin:0 4px;flex-shrink:0}
+  /* ── Metric toggle buttons ── */
+  .metric-btn{padding:3px 10px;font-size:12px;border-radius:4px;border:1px solid #cbd5e1;
+               background:#fff;cursor:pointer;color:#475569;transition:all 0.15s}
+  .metric-btn:hover{background:#f1f5f9}
+  .metric-btn.active{background:#1e40af;color:#fff;border-color:#1e40af}
+  /* ── Range buttons ── */
+  .rng-btn{padding:3px 10px;font-size:12px;border-radius:4px;border:1px solid #cbd5e1;
+            background:#fff;cursor:pointer;color:#475569;transition:all 0.15s}
+  .rng-btn:hover{background:#f1f5f9}
+  .rng-btn.active{background:#1e40af;color:#fff;border-color:#1e40af}
+  input[type=date]{font-size:12px;padding:3px 6px;border:1px solid #cbd5e1;
+                    border-radius:4px;color:#475569}
+  .apply-btn{padding:3px 10px;font-size:12px;background:#475569;color:#fff;
+              border:none;border-radius:4px;cursor:pointer}
+  .apply-btn:hover{background:#334155}
+  /* ── Trust legend ── */
   .leg-item{display:inline-flex;align-items:center;gap:5px;font-size:11px;
              cursor:pointer;color:#475569;padding:2px 5px;border-radius:3px;
              user-select:none;transition:opacity 0.18s}
   .leg-item:hover{background:#f1f5f9}
   .leg-item.dimmed{opacity:0.28}
   .leg-sw{display:inline-block;width:14px;height:3px;border-radius:2px;flex-shrink:0}
+  /* ── Chart sections ── */
+  .chart-section{background:#fff;border:1px solid #e2e8f0;border-radius:8px;
+                  padding:12px;margin-bottom:10px}
+  .chart-section.hidden{display:none}
+  .chart-title{font-size:13px;font-weight:600;color:#334155;margin-bottom:6px}
+  .chart{width:100%}
+  /* ── Export button (camera) ── */
+  .export-btn{padding:4px 7px;border:1px solid #cbd5e1;border-radius:5px;background:#fff;
+               cursor:pointer;color:#475569;display:inline-flex;align-items:center;line-height:1}
+  .export-btn:hover{background:#f1f5f9}
 </style>
 </head>
 <body>
 <div class="wrap">
-<h1>Credit Card ABS — Trust Performance</h1>
-<div class="sub">Last updated March 27, 2026</div>
-<div class="sub">Source: Monthly 10-D servicer certificates</div>
-<div class="hint">Hover near any line for values · Click a trust name in the legend to highlight · Click again to deselect · Multi-select supported</div>
 
-<div class="range-bar">
-  <button class="rng-btn active" data-key="ITD"  onclick="setPreset('ITD',this)">ITD</button>
-  <button class="rng-btn"        data-key="10YR" onclick="setPreset('10YR',this)">10YR</button>
-  <button class="rng-btn"        data-key="5YR"  onclick="setPreset('5YR',this)">5YR</button>
-  <button class="rng-btn"        data-key="1YR"  onclick="setPreset('1YR',this)">1YR</button>
-  <span class="sep">|</span>
-  <input type="date" id="date-from" min="2006-01-31" max="2026-03-27">
-  <span class="sep">to</span>
-  <input type="date" id="date-to"   min="2006-01-31" max="2026-03-27">
-  <button class="apply" onclick="applyCustom()">Apply</button>
-</div>
+  <!-- ── Page header ── -->
+  <div class="page-hdr">
+    <div class="brand">
+      <div class="brand-title">Credit Card ABS — Trust Performance</div>
+      <div class="brand-sub">Monthly 10-D servicer certificates · Updated March 27, 2026</div>
+    </div>
+    <button class="export-btn" id="export-btn" onclick="exportCcPage()" title="Download as PNG"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></button>
+  </div>
 
-<div class="chart-section" id="section-pr">
-<div class="chart-header"><h2>Monthly Payment Rate (%)</h2><button class="export-btn" title="Download chart as PNG" onclick="exportCcChart('section-pr','monthly-payment-rate')"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></button></div>
-<div class="range-bar mini"><button class="rng-btn" data-key="ITD"  onclick="setPreset('ITD',this)">ITD</button><button class="rng-btn" data-key="10YR" onclick="setPreset('10YR',this)">10YR</button><button class="rng-btn" data-key="5YR"  onclick="setPreset('5YR',this)">5YR</button><button class="rng-btn" data-key="1YR"  onclick="setPreset('1YR',this)">1YR</button></div>
-<div class="chart" id="chart-pr"></div>
-<div class="chart-legend"><span class="leg-item" data-trust="AMXCA" onclick="toggleTrust('AMXCA')"><span class="leg-sw" style="background:#4e79a7"></span>AMXCA</span><span class="leg-item" data-trust="BACCT" onclick="toggleTrust('BACCT')"><span class="leg-sw" style="background:#f28e2b"></span>BACCT</span><span class="leg-item" data-trust="CCCIT" onclick="toggleTrust('CCCIT')"><span class="leg-sw" style="background:#e15759"></span>CCCIT</span><span class="leg-item" data-trust="CHAIT" onclick="toggleTrust('CHAIT')"><span class="leg-sw" style="background:#76b7b2"></span>CHAIT</span><span class="leg-item" data-trust="COMET" onclick="toggleTrust('COMET')"><span class="leg-sw" style="background:#59a14f"></span>COMET</span><span class="leg-item" data-trust="DRYROCK" onclick="toggleTrust('DRYROCK')"><span class="leg-sw" style="background:#edc948"></span>DRYROCK</span><span class="leg-item" data-trust="FNBO" onclick="toggleTrust('FNBO')"><span class="leg-sw" style="background:#b07aa1"></span>FNBO</span><span class="leg-item" data-trust="SYNIT" onclick="toggleTrust('SYNIT')"><span class="leg-sw" style="background:#ff9da7"></span>SYNIT</span><span class="leg-item" data-trust="WFCARD" onclick="toggleTrust('WFCARD')"><span class="leg-sw" style="background:#9c755f"></span>WFCARD</span><span class="leg-item" data-trust="WFNN" onclick="toggleTrust('WFNN')"><span class="leg-sw" style="background:#bab0ac"></span>WFNN</span></div>
-</div>
+  <!-- ── Control bar (outside export region) ── -->
+  <div class="ctrl-bar" id="ctrl-bar">
+    <div class="ctrl-row">
+      <span class="ctrl-label">Show</span>
+      <button class="metric-btn active" data-metric="pr"  onclick="toggleMetric('pr')">Pmt Rate</button>
+      <button class="metric-btn active" data-metric="xs"  onclick="toggleMetric('xs')">Excess Spread</button>
+      <button class="metric-btn active" data-metric="dr"  onclick="toggleMetric('dr')">Net Default</button>
+      <button class="metric-btn active" data-metric="dq"  onclick="toggleMetric('dq')">30+ DQ</button>
+      <button class="metric-btn active" data-metric="bal" onclick="toggleMetric('bal')">Balance</button>
+      <div class="ctrl-sep"></div>
+      <span class="ctrl-label">Range</span>
+      <button class="rng-btn active" data-key="ITD"  onclick="setPreset('ITD')">ITD</button>
+      <button class="rng-btn"        data-key="10YR" onclick="setPreset('10YR')">10YR</button>
+      <button class="rng-btn"        data-key="5YR"  onclick="setPreset('5YR')">5YR</button>
+      <button class="rng-btn"        data-key="1YR"  onclick="setPreset('1YR')">1YR</button>
+      <span style="font-size:11px;color:#94a3b8;margin:0 2px;">|</span>
+      <input type="date" id="date-from" min="2006-01-31" max="2026-03-27">
+      <span style="font-size:11px;color:#94a3b8;">to</span>
+      <input type="date" id="date-to" min="2006-01-31" max="2026-03-27">
+      <button class="apply-btn" onclick="applyCustom()">Apply</button>
+    </div>
+    <div class="ctrl-row">
+      <span class="ctrl-label" title="Click to highlight · click again to deselect · multi-select supported">Trusts</span>
+      <span class="leg-item" data-trust="AMXCA" onclick="toggleTrust('AMXCA')"><span class="leg-sw" style="background:#4e79a7"></span>AMXCA</span><span class="leg-item" data-trust="BACCT" onclick="toggleTrust('BACCT')"><span class="leg-sw" style="background:#f28e2b"></span>BACCT</span><span class="leg-item" data-trust="CCCIT" onclick="toggleTrust('CCCIT')"><span class="leg-sw" style="background:#e15759"></span>CCCIT</span><span class="leg-item" data-trust="CHAIT" onclick="toggleTrust('CHAIT')"><span class="leg-sw" style="background:#76b7b2"></span>CHAIT</span><span class="leg-item" data-trust="COMET" onclick="toggleTrust('COMET')"><span class="leg-sw" style="background:#59a14f"></span>COMET</span><span class="leg-item" data-trust="DRYROCK" onclick="toggleTrust('DRYROCK')"><span class="leg-sw" style="background:#edc948"></span>DRYROCK</span><span class="leg-item" data-trust="FNBO" onclick="toggleTrust('FNBO')"><span class="leg-sw" style="background:#b07aa1"></span>FNBO</span><span class="leg-item" data-trust="SYNIT" onclick="toggleTrust('SYNIT')"><span class="leg-sw" style="background:#ff9da7"></span>SYNIT</span><span class="leg-item" data-trust="WFCARD" onclick="toggleTrust('WFCARD')"><span class="leg-sw" style="background:#9c755f"></span>WFCARD</span><span class="leg-item" data-trust="WFNN" onclick="toggleTrust('WFNN')"><span class="leg-sw" style="background:#bab0ac"></span>WFNN</span>
+    </div>
+  </div>
 
-<div class="chart-section" id="section-xs">
-<div class="chart-header"><h2>Excess Spread (%)</h2><button class="export-btn" title="Download chart as PNG" onclick="exportCcChart('section-xs','excess-spread')"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></button></div>
-<div class="range-bar mini"><button class="rng-btn" data-key="ITD"  onclick="setPreset('ITD',this)">ITD</button><button class="rng-btn" data-key="10YR" onclick="setPreset('10YR',this)">10YR</button><button class="rng-btn" data-key="5YR"  onclick="setPreset('5YR',this)">5YR</button><button class="rng-btn" data-key="1YR"  onclick="setPreset('1YR',this)">1YR</button></div>
-<div class="chart" id="chart-xs"></div>
-<div class="chart-legend"><span class="leg-item" data-trust="AMXCA" onclick="toggleTrust('AMXCA')"><span class="leg-sw" style="background:#4e79a7"></span>AMXCA</span><span class="leg-item" data-trust="BACCT" onclick="toggleTrust('BACCT')"><span class="leg-sw" style="background:#f28e2b"></span>BACCT</span><span class="leg-item" data-trust="CCCIT" onclick="toggleTrust('CCCIT')"><span class="leg-sw" style="background:#e15759"></span>CCCIT</span><span class="leg-item" data-trust="CHAIT" onclick="toggleTrust('CHAIT')"><span class="leg-sw" style="background:#76b7b2"></span>CHAIT</span><span class="leg-item" data-trust="COMET" onclick="toggleTrust('COMET')"><span class="leg-sw" style="background:#59a14f"></span>COMET</span><span class="leg-item" data-trust="DRYROCK" onclick="toggleTrust('DRYROCK')"><span class="leg-sw" style="background:#edc948"></span>DRYROCK</span><span class="leg-item" data-trust="FNBO" onclick="toggleTrust('FNBO')"><span class="leg-sw" style="background:#b07aa1"></span>FNBO</span><span class="leg-item" data-trust="SYNIT" onclick="toggleTrust('SYNIT')"><span class="leg-sw" style="background:#ff9da7"></span>SYNIT</span><span class="leg-item" data-trust="WFCARD" onclick="toggleTrust('WFCARD')"><span class="leg-sw" style="background:#9c755f"></span>WFCARD</span><span class="leg-item" data-trust="WFNN" onclick="toggleTrust('WFNN')"><span class="leg-sw" style="background:#bab0ac"></span>WFNN</span></div>
-</div>
+  <!-- ── Charts region (PNG export target) ── -->
+  <div id="charts-region">
+    <div class="chart-section" id="section-pr">
+      <div class="chart-title">Monthly Payment Rate (%)</div>
+      <div class="chart" id="chart-pr"></div>
+    </div>
+    <div class="chart-section" id="section-xs">
+      <div class="chart-title">Excess Spread (%)</div>
+      <div class="chart" id="chart-xs"></div>
+    </div>
+    <div class="chart-section" id="section-dr">
+      <div class="chart-title">Net Default Rate (%)</div>
+      <div class="chart" id="chart-dr"></div>
+    </div>
+    <div class="chart-section" id="section-dq">
+      <div class="chart-title">Total 30+ Day Delinquency (%)</div>
+      <div class="chart" id="chart-dq"></div>
+    </div>
+    <div class="chart-section" id="section-bal">
+      <div class="chart-title">Trust Receivables Balance ($B)</div>
+      <div class="chart" id="chart-bal"></div>
+    </div>
+  </div>
 
-<div class="chart-section" id="section-dr">
-<div class="chart-header"><h2>Net Default Rate (%)</h2><button class="export-btn" title="Download chart as PNG" onclick="exportCcChart('section-dr','net-default-rate')"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></button></div>
-<div class="range-bar mini"><button class="rng-btn" data-key="ITD"  onclick="setPreset('ITD',this)">ITD</button><button class="rng-btn" data-key="10YR" onclick="setPreset('10YR',this)">10YR</button><button class="rng-btn" data-key="5YR"  onclick="setPreset('5YR',this)">5YR</button><button class="rng-btn" data-key="1YR"  onclick="setPreset('1YR',this)">1YR</button></div>
-<div class="chart" id="chart-dr"></div>
-<div class="chart-legend"><span class="leg-item" data-trust="AMXCA" onclick="toggleTrust('AMXCA')"><span class="leg-sw" style="background:#4e79a7"></span>AMXCA</span><span class="leg-item" data-trust="BACCT" onclick="toggleTrust('BACCT')"><span class="leg-sw" style="background:#f28e2b"></span>BACCT</span><span class="leg-item" data-trust="CCCIT" onclick="toggleTrust('CCCIT')"><span class="leg-sw" style="background:#e15759"></span>CCCIT</span><span class="leg-item" data-trust="CHAIT" onclick="toggleTrust('CHAIT')"><span class="leg-sw" style="background:#76b7b2"></span>CHAIT</span><span class="leg-item" data-trust="COMET" onclick="toggleTrust('COMET')"><span class="leg-sw" style="background:#59a14f"></span>COMET</span><span class="leg-item" data-trust="DRYROCK" onclick="toggleTrust('DRYROCK')"><span class="leg-sw" style="background:#edc948"></span>DRYROCK</span><span class="leg-item" data-trust="FNBO" onclick="toggleTrust('FNBO')"><span class="leg-sw" style="background:#b07aa1"></span>FNBO</span><span class="leg-item" data-trust="SYNIT" onclick="toggleTrust('SYNIT')"><span class="leg-sw" style="background:#ff9da7"></span>SYNIT</span><span class="leg-item" data-trust="WFCARD" onclick="toggleTrust('WFCARD')"><span class="leg-sw" style="background:#9c755f"></span>WFCARD</span><span class="leg-item" data-trust="WFNN" onclick="toggleTrust('WFNN')"><span class="leg-sw" style="background:#bab0ac"></span>WFNN</span></div>
-</div>
-
-<div class="chart-section" id="section-dq">
-<div class="chart-header"><h2>Total 30+ Day Delinquency (%)</h2><button class="export-btn" title="Download chart as PNG" onclick="exportCcChart('section-dq','30-day-delinquency')"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></button></div>
-<div class="range-bar mini"><button class="rng-btn" data-key="ITD"  onclick="setPreset('ITD',this)">ITD</button><button class="rng-btn" data-key="10YR" onclick="setPreset('10YR',this)">10YR</button><button class="rng-btn" data-key="5YR"  onclick="setPreset('5YR',this)">5YR</button><button class="rng-btn" data-key="1YR"  onclick="setPreset('1YR',this)">1YR</button></div>
-<div class="chart" id="chart-dq"></div>
-<div class="chart-legend"><span class="leg-item" data-trust="AMXCA" onclick="toggleTrust('AMXCA')"><span class="leg-sw" style="background:#4e79a7"></span>AMXCA</span><span class="leg-item" data-trust="BACCT" onclick="toggleTrust('BACCT')"><span class="leg-sw" style="background:#f28e2b"></span>BACCT</span><span class="leg-item" data-trust="CCCIT" onclick="toggleTrust('CCCIT')"><span class="leg-sw" style="background:#e15759"></span>CCCIT</span><span class="leg-item" data-trust="CHAIT" onclick="toggleTrust('CHAIT')"><span class="leg-sw" style="background:#76b7b2"></span>CHAIT</span><span class="leg-item" data-trust="COMET" onclick="toggleTrust('COMET')"><span class="leg-sw" style="background:#59a14f"></span>COMET</span><span class="leg-item" data-trust="DRYROCK" onclick="toggleTrust('DRYROCK')"><span class="leg-sw" style="background:#edc948"></span>DRYROCK</span><span class="leg-item" data-trust="FNBO" onclick="toggleTrust('FNBO')"><span class="leg-sw" style="background:#b07aa1"></span>FNBO</span><span class="leg-item" data-trust="SYNIT" onclick="toggleTrust('SYNIT')"><span class="leg-sw" style="background:#ff9da7"></span>SYNIT</span><span class="leg-item" data-trust="WFCARD" onclick="toggleTrust('WFCARD')"><span class="leg-sw" style="background:#9c755f"></span>WFCARD</span><span class="leg-item" data-trust="WFNN" onclick="toggleTrust('WFNN')"><span class="leg-sw" style="background:#bab0ac"></span>WFNN</span></div>
-</div>
-
-<div class="chart-section" id="section-bal">
-<div class="chart-header"><h2>Trust Receivables Balance ($B)</h2><button class="export-btn" title="Download chart as PNG" onclick="exportCcChart('section-bal','trust-receivables-balance')"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></button></div>
-<div class="range-bar mini"><button class="rng-btn" data-key="ITD"  onclick="setPreset('ITD',this)">ITD</button><button class="rng-btn" data-key="10YR" onclick="setPreset('10YR',this)">10YR</button><button class="rng-btn" data-key="5YR"  onclick="setPreset('5YR',this)">5YR</button><button class="rng-btn" data-key="1YR"  onclick="setPreset('1YR',this)">1YR</button></div>
-<div class="chart" id="chart-bal"></div>
-<div class="chart-legend"><span class="leg-item" data-trust="AMXCA" onclick="toggleTrust('AMXCA')"><span class="leg-sw" style="background:#4e79a7"></span>AMXCA</span><span class="leg-item" data-trust="BACCT" onclick="toggleTrust('BACCT')"><span class="leg-sw" style="background:#f28e2b"></span>BACCT</span><span class="leg-item" data-trust="CCCIT" onclick="toggleTrust('CCCIT')"><span class="leg-sw" style="background:#e15759"></span>CCCIT</span><span class="leg-item" data-trust="CHAIT" onclick="toggleTrust('CHAIT')"><span class="leg-sw" style="background:#76b7b2"></span>CHAIT</span><span class="leg-item" data-trust="COMET" onclick="toggleTrust('COMET')"><span class="leg-sw" style="background:#59a14f"></span>COMET</span><span class="leg-item" data-trust="DRYROCK" onclick="toggleTrust('DRYROCK')"><span class="leg-sw" style="background:#edc948"></span>DRYROCK</span><span class="leg-item" data-trust="FNBO" onclick="toggleTrust('FNBO')"><span class="leg-sw" style="background:#b07aa1"></span>FNBO</span><span class="leg-item" data-trust="SYNIT" onclick="toggleTrust('SYNIT')"><span class="leg-sw" style="background:#ff9da7"></span>SYNIT</span><span class="leg-item" data-trust="WFCARD" onclick="toggleTrust('WFCARD')"><span class="leg-sw" style="background:#9c755f"></span>WFCARD</span><span class="leg-item" data-trust="WFNN" onclick="toggleTrust('WFNN')"><span class="leg-sw" style="background:#bab0ac"></span>WFNN</span></div>
-</div>
-
-<footer>Source: SEC EDGAR 10-D filings · Data: 2006–present</footer>
+  <footer>Source: SEC EDGAR 10-D filings · Data: 2006–present</footer>
 </div>
 
 <script>
@@ -140,8 +154,7 @@ function isoShift(years) {
   return d.toISOString().slice(0, 10);
 }
 
-// Sync active state across ALL preset buttons (main bar + all mini bars)
-function setPreset(key, btn) {
+function setPreset(key) {
   document.querySelectorAll('.rng-btn').forEach(b => {
     b.classList.toggle('active', b.dataset.key === key);
   });
@@ -254,22 +267,38 @@ function makeSpec(field, title, fmtAx, fmtTip) {
 }
 
 const OPTS = {renderer:"svg", actions:false};
-const CHARTS = [
-  ['#chart-pr',  'payment_rate',       'Payment Rate (%)',     '.0f', '.2f'],
-  ['#chart-xs',  'excess_spread',      'Excess Spread (%)',    '.0f', '.2f'],
-  ['#chart-dr',  'default_rate',       'Net Default Rate (%)', '.0f', '.2f'],
-  ['#chart-dq',  'delinquency_30plus', '30+ DQ Rate (%)',      '.0f', '.2f'],
-  ['#chart-bal', 'balance_bn',         'Balance ($B)',          '.0f', '.1f'],
+const METRICS = [
+  {id:'pr',  sel:'#chart-pr',  field:'payment_rate',       title:'Monthly Payment Rate (%)',       fmtAx:'.1f', fmtTip:'.2f'},
+  {id:'xs',  sel:'#chart-xs',  field:'excess_spread',      title:'Excess Spread (%)',              fmtAx:'.1f', fmtTip:'.2f'},
+  {id:'dr',  sel:'#chart-dr',  field:'default_rate',       title:'Net Default Rate (%)',           fmtAx:'.2f', fmtTip:'.3f'},
+  {id:'dq',  sel:'#chart-dq',  field:'delinquency_30plus', title:'30+ Day Delinquency (%)',        fmtAx:'.2f', fmtTip:'.3f'},
+  {id:'bal', sel:'#chart-bal', field:'balance_bn',          title:'Trust Receivables Balance ($B)', fmtAx:'.0f', fmtTip:'.1f'},
 ];
 
+function postHeight() {
+  const h = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+  window.parent.postMessage({type:'ccChartHeight', height:h}, '*');
+}
+
 function embedAll() {
-  const renders = CHARTS.map(([id, field, title, fmtAx, fmtTip]) =>
-    vegaEmbed(id, makeSpec(field, title, fmtAx, fmtTip), OPTS)
-  );
-  Promise.all(renders).then(() => {
-    const h = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
-    window.parent.postMessage({type:'ccChartHeight', height:h}, '*');
-  });
+  const renders = METRICS
+    .filter(m => !document.getElementById('section-' + m.id).classList.contains('hidden'))
+    .map(m => vegaEmbed(m.sel, makeSpec(m.field, m.title, m.fmtAx, m.fmtTip), OPTS));
+  Promise.all(renders).then(postHeight);
+}
+
+function toggleMetric(id) {
+  const btn = document.querySelector('.metric-btn[data-metric="' + id + '"]');
+  const sec = document.getElementById('section-' + id);
+  if (!btn || !sec) return;
+  const nowHidden = sec.classList.toggle('hidden');
+  btn.classList.toggle('active', !nowHidden);
+  if (!nowHidden) {
+    const m = METRICS.find(x => x.id === id);
+    if (m) vegaEmbed(m.sel, makeSpec(m.field, m.title, m.fmtAx, m.fmtTip), OPTS).then(postHeight);
+  } else {
+    postHeight();
+  }
 }
 
 embedAll();
@@ -299,11 +328,11 @@ function _exportPng(el, filename) {
     });
 }
 
-function exportCcChart(sectionId, slug) {
-  var el = document.getElementById(sectionId);
-  var btn = el ? el.querySelector('.export-btn') : null;
-  if (btn) btn.style.display = 'none';
+function exportCcPage() {
+  var el = document.getElementById('charts-region');
+  var btn = document.getElementById('export-btn');
   var date = new Date().toISOString().slice(0, 10);
+  if (btn) btn.style.display = 'none';
   var stamp = document.createElement('div');
   stamp.style.cssText = 'padding:5px 16px 4px;font-size:10px;color:#94a3b8;font-family:inherit;text-align:right;border-top:1px solid #e2e8f0;margin-top:4px;';
   stamp.textContent = 'Consumer Credit Matters · consumercreditmatters.com';
@@ -313,7 +342,7 @@ function exportCcChart(sectionId, slug) {
     .then(function(url) {
       el.removeChild(stamp);
       if (btn) btn.style.display = '';
-      var a = document.createElement('a'); a.href = url; a.download = 'ccm-' + slug + '-' + date + '.png'; a.click();
+      var a = document.createElement('a'); a.href = url; a.download = 'ccm-cc-trust-' + date + '.png'; a.click();
     })
     .catch(function(e) {
       if (el.contains(stamp)) el.removeChild(stamp);
