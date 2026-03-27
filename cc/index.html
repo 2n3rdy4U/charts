@@ -27,11 +27,20 @@
   .ctrl-row+.ctrl-row{margin-top:8px;border-top:1px solid #f1f5f9;padding-top:8px}
   .ctrl-label{font-size:11px;font-weight:600;color:#94a3b8;white-space:nowrap;min-width:36px}
   .ctrl-sep{width:1px;background:#e2e8f0;align-self:stretch;margin:0 4px;flex-shrink:0}
-  /* ── Metric toggle buttons ── */
-  .metric-btn{padding:3px 10px;font-size:12px;border-radius:4px;border:1px solid #cbd5e1;
-               background:#fff;cursor:pointer;color:#475569;transition:all 0.15s}
-  .metric-btn:hover{background:#f1f5f9}
-  .metric-btn.active{background:#1e40af;color:#fff;border-color:#1e40af}
+  /* ── Metric multi-select dropdown ── */
+  .metric-sel{position:relative;display:inline-block}
+  .metric-sel-btn{font-size:12.5px;padding:4px 10px;border:1px solid #cbd5e1;border-radius:6px;
+                   background:#fff;cursor:pointer;color:#475569;white-space:nowrap;min-width:120px;
+                   text-align:left}
+  .metric-sel-btn:hover{background:#f1f5f9}
+  .metric-sel-panel{position:absolute;top:calc(100% + 4px);left:0;z-index:200;background:#fff;
+                     border:1px solid #cbd5e1;border-radius:8px;box-shadow:0 4px 14px rgba(0,0,0,.12);
+                     padding:5px 0;min-width:200px}
+  .metric-sel-panel label{display:flex;align-items:center;gap:7px;padding:4px 12px;
+                           font-size:12.5px;cursor:pointer;user-select:none;color:#475569}
+  .metric-sel-panel label:hover{background:#f1f5f9}
+  .metric-sel-panel input[type=checkbox]{cursor:pointer;accent-color:#1e40af}
+  .metric-sel-sep{height:1px;background:#e2e8f0;margin:4px 8px}
   /* ── Range buttons ── */
   .rng-btn{padding:3px 10px;font-size:12px;border-radius:4px;border:1px solid #cbd5e1;
             background:#fff;cursor:pointer;color:#475569;transition:all 0.15s}
@@ -39,9 +48,9 @@
   .rng-btn.active{background:#1e40af;color:#fff;border-color:#1e40af}
   input[type=date]{font-size:12px;padding:3px 6px;border:1px solid #cbd5e1;
                     border-radius:4px;color:#475569}
-  .apply-btn{padding:3px 10px;font-size:12px;background:#475569;color:#fff;
-              border:none;border-radius:4px;cursor:pointer}
-  .apply-btn:hover{background:#334155}
+  /* ── Chart legend (bottom of each section) ── */
+  .chart-legend{display:flex;flex-wrap:wrap;gap:4px 12px;padding:8px 4px 4px;
+                 border-top:1px solid #e2e8f0;margin-top:4px}
   /* ── Trust legend ── */
   .leg-item{display:inline-flex;align-items:center;gap:5px;font-size:11px;
              cursor:pointer;color:#475569;padding:2px 5px;border-radius:3px;
@@ -76,12 +85,19 @@
   <!-- ── Control bar (outside export region) ── -->
   <div class="ctrl-bar" id="ctrl-bar">
     <div class="ctrl-row">
-      <span class="ctrl-label">Show</span>
-      <button class="metric-btn active" data-metric="pr"  onclick="toggleMetric('pr')">Pmt Rate</button>
-      <button class="metric-btn active" data-metric="xs"  onclick="toggleMetric('xs')">Excess Spread</button>
-      <button class="metric-btn active" data-metric="dr"  onclick="toggleMetric('dr')">Net Default</button>
-      <button class="metric-btn active" data-metric="dq"  onclick="toggleMetric('dq')">30+ DQ</button>
-      <button class="metric-btn active" data-metric="bal" onclick="toggleMetric('bal')">Balance</button>
+      <span class="ctrl-label">Metrics</span>
+      <div class="metric-sel" id="metricSel">
+        <button class="metric-sel-btn" id="metricBtn" type="button">All metrics &#9662;</button>
+        <div class="metric-sel-panel" id="metricPanel" hidden>
+          <label><input type="checkbox" checked data-metric="pr"> Monthly Payment Rate</label>
+          <label><input type="checkbox" checked data-metric="xs"> Excess Spread</label>
+          <label><input type="checkbox" checked data-metric="dr"> Net Default Rate</label>
+          <label><input type="checkbox" checked data-metric="dq"> 30+ Day Delinquency</label>
+          <label><input type="checkbox" checked data-metric="bal"> Trust Balance ($B)</label>
+          <div class="metric-sel-sep"></div>
+          <label><input type="checkbox" id="metricAll" checked> <em>All metrics</em></label>
+        </div>
+      </div>
       <div class="ctrl-sep"></div>
       <span class="ctrl-label">Range</span>
       <button class="rng-btn active" data-key="ITD"  onclick="setPreset('ITD')">ITD</button>
@@ -92,11 +108,6 @@
       <input type="date" id="date-from" min="2006-01-31" max="2026-03-27">
       <span style="font-size:11px;color:#94a3b8;">to</span>
       <input type="date" id="date-to" min="2006-01-31" max="2026-03-27">
-      <button class="apply-btn" onclick="applyCustom()">Apply</button>
-    </div>
-    <div class="ctrl-row">
-      <span class="ctrl-label" title="Click to highlight · click again to deselect · multi-select supported">Trusts</span>
-      <span class="leg-item" data-trust="AMXCA" onclick="toggleTrust('AMXCA')"><span class="leg-sw" style="background:#4e79a7"></span>AMXCA</span><span class="leg-item" data-trust="BACCT" onclick="toggleTrust('BACCT')"><span class="leg-sw" style="background:#f28e2b"></span>BACCT</span><span class="leg-item" data-trust="CCCIT" onclick="toggleTrust('CCCIT')"><span class="leg-sw" style="background:#e15759"></span>CCCIT</span><span class="leg-item" data-trust="CHAIT" onclick="toggleTrust('CHAIT')"><span class="leg-sw" style="background:#76b7b2"></span>CHAIT</span><span class="leg-item" data-trust="COMET" onclick="toggleTrust('COMET')"><span class="leg-sw" style="background:#59a14f"></span>COMET</span><span class="leg-item" data-trust="DRYROCK" onclick="toggleTrust('DRYROCK')"><span class="leg-sw" style="background:#edc948"></span>DRYROCK</span><span class="leg-item" data-trust="FNBO" onclick="toggleTrust('FNBO')"><span class="leg-sw" style="background:#b07aa1"></span>FNBO</span><span class="leg-item" data-trust="SYNIT" onclick="toggleTrust('SYNIT')"><span class="leg-sw" style="background:#ff9da7"></span>SYNIT</span><span class="leg-item" data-trust="WFCARD" onclick="toggleTrust('WFCARD')"><span class="leg-sw" style="background:#9c755f"></span>WFCARD</span><span class="leg-item" data-trust="WFNN" onclick="toggleTrust('WFNN')"><span class="leg-sw" style="background:#bab0ac"></span>WFNN</span>
     </div>
   </div>
 
@@ -105,22 +116,27 @@
     <div class="chart-section" id="section-pr">
       <div class="chart-title">Monthly Payment Rate (%)</div>
       <div class="chart" id="chart-pr"></div>
+      <div class="chart-legend"><span class="leg-item" data-trust="AMXCA" onclick="toggleTrust('AMXCA')"><span class="leg-sw" style="background:#4e79a7"></span>AMXCA</span><span class="leg-item" data-trust="BACCT" onclick="toggleTrust('BACCT')"><span class="leg-sw" style="background:#f28e2b"></span>BACCT</span><span class="leg-item" data-trust="CCCIT" onclick="toggleTrust('CCCIT')"><span class="leg-sw" style="background:#e15759"></span>CCCIT</span><span class="leg-item" data-trust="CHAIT" onclick="toggleTrust('CHAIT')"><span class="leg-sw" style="background:#76b7b2"></span>CHAIT</span><span class="leg-item" data-trust="COMET" onclick="toggleTrust('COMET')"><span class="leg-sw" style="background:#59a14f"></span>COMET</span><span class="leg-item" data-trust="DRYROCK" onclick="toggleTrust('DRYROCK')"><span class="leg-sw" style="background:#edc948"></span>DRYROCK</span><span class="leg-item" data-trust="FNBO" onclick="toggleTrust('FNBO')"><span class="leg-sw" style="background:#b07aa1"></span>FNBO</span><span class="leg-item" data-trust="SYNIT" onclick="toggleTrust('SYNIT')"><span class="leg-sw" style="background:#ff9da7"></span>SYNIT</span><span class="leg-item" data-trust="WFCARD" onclick="toggleTrust('WFCARD')"><span class="leg-sw" style="background:#9c755f"></span>WFCARD</span><span class="leg-item" data-trust="WFNN" onclick="toggleTrust('WFNN')"><span class="leg-sw" style="background:#bab0ac"></span>WFNN</span></div>
     </div>
     <div class="chart-section" id="section-xs">
       <div class="chart-title">Excess Spread (%)</div>
       <div class="chart" id="chart-xs"></div>
+      <div class="chart-legend"><span class="leg-item" data-trust="AMXCA" onclick="toggleTrust('AMXCA')"><span class="leg-sw" style="background:#4e79a7"></span>AMXCA</span><span class="leg-item" data-trust="BACCT" onclick="toggleTrust('BACCT')"><span class="leg-sw" style="background:#f28e2b"></span>BACCT</span><span class="leg-item" data-trust="CCCIT" onclick="toggleTrust('CCCIT')"><span class="leg-sw" style="background:#e15759"></span>CCCIT</span><span class="leg-item" data-trust="CHAIT" onclick="toggleTrust('CHAIT')"><span class="leg-sw" style="background:#76b7b2"></span>CHAIT</span><span class="leg-item" data-trust="COMET" onclick="toggleTrust('COMET')"><span class="leg-sw" style="background:#59a14f"></span>COMET</span><span class="leg-item" data-trust="DRYROCK" onclick="toggleTrust('DRYROCK')"><span class="leg-sw" style="background:#edc948"></span>DRYROCK</span><span class="leg-item" data-trust="FNBO" onclick="toggleTrust('FNBO')"><span class="leg-sw" style="background:#b07aa1"></span>FNBO</span><span class="leg-item" data-trust="SYNIT" onclick="toggleTrust('SYNIT')"><span class="leg-sw" style="background:#ff9da7"></span>SYNIT</span><span class="leg-item" data-trust="WFCARD" onclick="toggleTrust('WFCARD')"><span class="leg-sw" style="background:#9c755f"></span>WFCARD</span><span class="leg-item" data-trust="WFNN" onclick="toggleTrust('WFNN')"><span class="leg-sw" style="background:#bab0ac"></span>WFNN</span></div>
     </div>
     <div class="chart-section" id="section-dr">
       <div class="chart-title">Net Default Rate (%)</div>
       <div class="chart" id="chart-dr"></div>
+      <div class="chart-legend"><span class="leg-item" data-trust="AMXCA" onclick="toggleTrust('AMXCA')"><span class="leg-sw" style="background:#4e79a7"></span>AMXCA</span><span class="leg-item" data-trust="BACCT" onclick="toggleTrust('BACCT')"><span class="leg-sw" style="background:#f28e2b"></span>BACCT</span><span class="leg-item" data-trust="CCCIT" onclick="toggleTrust('CCCIT')"><span class="leg-sw" style="background:#e15759"></span>CCCIT</span><span class="leg-item" data-trust="CHAIT" onclick="toggleTrust('CHAIT')"><span class="leg-sw" style="background:#76b7b2"></span>CHAIT</span><span class="leg-item" data-trust="COMET" onclick="toggleTrust('COMET')"><span class="leg-sw" style="background:#59a14f"></span>COMET</span><span class="leg-item" data-trust="DRYROCK" onclick="toggleTrust('DRYROCK')"><span class="leg-sw" style="background:#edc948"></span>DRYROCK</span><span class="leg-item" data-trust="FNBO" onclick="toggleTrust('FNBO')"><span class="leg-sw" style="background:#b07aa1"></span>FNBO</span><span class="leg-item" data-trust="SYNIT" onclick="toggleTrust('SYNIT')"><span class="leg-sw" style="background:#ff9da7"></span>SYNIT</span><span class="leg-item" data-trust="WFCARD" onclick="toggleTrust('WFCARD')"><span class="leg-sw" style="background:#9c755f"></span>WFCARD</span><span class="leg-item" data-trust="WFNN" onclick="toggleTrust('WFNN')"><span class="leg-sw" style="background:#bab0ac"></span>WFNN</span></div>
     </div>
     <div class="chart-section" id="section-dq">
       <div class="chart-title">Total 30+ Day Delinquency (%)</div>
       <div class="chart" id="chart-dq"></div>
+      <div class="chart-legend"><span class="leg-item" data-trust="AMXCA" onclick="toggleTrust('AMXCA')"><span class="leg-sw" style="background:#4e79a7"></span>AMXCA</span><span class="leg-item" data-trust="BACCT" onclick="toggleTrust('BACCT')"><span class="leg-sw" style="background:#f28e2b"></span>BACCT</span><span class="leg-item" data-trust="CCCIT" onclick="toggleTrust('CCCIT')"><span class="leg-sw" style="background:#e15759"></span>CCCIT</span><span class="leg-item" data-trust="CHAIT" onclick="toggleTrust('CHAIT')"><span class="leg-sw" style="background:#76b7b2"></span>CHAIT</span><span class="leg-item" data-trust="COMET" onclick="toggleTrust('COMET')"><span class="leg-sw" style="background:#59a14f"></span>COMET</span><span class="leg-item" data-trust="DRYROCK" onclick="toggleTrust('DRYROCK')"><span class="leg-sw" style="background:#edc948"></span>DRYROCK</span><span class="leg-item" data-trust="FNBO" onclick="toggleTrust('FNBO')"><span class="leg-sw" style="background:#b07aa1"></span>FNBO</span><span class="leg-item" data-trust="SYNIT" onclick="toggleTrust('SYNIT')"><span class="leg-sw" style="background:#ff9da7"></span>SYNIT</span><span class="leg-item" data-trust="WFCARD" onclick="toggleTrust('WFCARD')"><span class="leg-sw" style="background:#9c755f"></span>WFCARD</span><span class="leg-item" data-trust="WFNN" onclick="toggleTrust('WFNN')"><span class="leg-sw" style="background:#bab0ac"></span>WFNN</span></div>
     </div>
     <div class="chart-section" id="section-bal">
       <div class="chart-title">Trust Receivables Balance ($B)</div>
       <div class="chart" id="chart-bal"></div>
+      <div class="chart-legend"><span class="leg-item" data-trust="AMXCA" onclick="toggleTrust('AMXCA')"><span class="leg-sw" style="background:#4e79a7"></span>AMXCA</span><span class="leg-item" data-trust="BACCT" onclick="toggleTrust('BACCT')"><span class="leg-sw" style="background:#f28e2b"></span>BACCT</span><span class="leg-item" data-trust="CCCIT" onclick="toggleTrust('CCCIT')"><span class="leg-sw" style="background:#e15759"></span>CCCIT</span><span class="leg-item" data-trust="CHAIT" onclick="toggleTrust('CHAIT')"><span class="leg-sw" style="background:#76b7b2"></span>CHAIT</span><span class="leg-item" data-trust="COMET" onclick="toggleTrust('COMET')"><span class="leg-sw" style="background:#59a14f"></span>COMET</span><span class="leg-item" data-trust="DRYROCK" onclick="toggleTrust('DRYROCK')"><span class="leg-sw" style="background:#edc948"></span>DRYROCK</span><span class="leg-item" data-trust="FNBO" onclick="toggleTrust('FNBO')"><span class="leg-sw" style="background:#b07aa1"></span>FNBO</span><span class="leg-item" data-trust="SYNIT" onclick="toggleTrust('SYNIT')"><span class="leg-sw" style="background:#ff9da7"></span>SYNIT</span><span class="leg-item" data-trust="WFCARD" onclick="toggleTrust('WFCARD')"><span class="leg-sw" style="background:#9c755f"></span>WFCARD</span><span class="leg-item" data-trust="WFNN" onclick="toggleTrust('WFNN')"><span class="leg-sw" style="background:#bab0ac"></span>WFNN</span></div>
     </div>
   </div>
 
@@ -177,6 +193,8 @@ function applyCustom() {
   currentEnd   = t || null;
   embedAll();
 }
+document.getElementById('date-from').addEventListener('change', applyCustom);
+document.getElementById('date-to').addEventListener('change', applyCustom);
 
 function axCfg() {
   if (!currentStart) return {fmt:'%Y', ticks:'year', angle:0};
@@ -270,8 +288,8 @@ const OPTS = {renderer:"svg", actions:false};
 const METRICS = [
   {id:'pr',  sel:'#chart-pr',  field:'payment_rate',       title:'Monthly Payment Rate (%)',       fmtAx:'.1f', fmtTip:'.2f'},
   {id:'xs',  sel:'#chart-xs',  field:'excess_spread',      title:'Excess Spread (%)',              fmtAx:'.1f', fmtTip:'.2f'},
-  {id:'dr',  sel:'#chart-dr',  field:'default_rate',       title:'Net Default Rate (%)',           fmtAx:'.2f', fmtTip:'.3f'},
-  {id:'dq',  sel:'#chart-dq',  field:'delinquency_30plus', title:'30+ Day Delinquency (%)',        fmtAx:'.2f', fmtTip:'.3f'},
+  {id:'dr',  sel:'#chart-dr',  field:'default_rate',       title:'Net Default Rate (%)',           fmtAx:'.2f', fmtTip:'.2f'},
+  {id:'dq',  sel:'#chart-dq',  field:'delinquency_30plus', title:'30+ Day Delinquency (%)',        fmtAx:'.2f', fmtTip:'.2f'},
   {id:'bal', sel:'#chart-bal', field:'balance_bn',          title:'Trust Receivables Balance ($B)', fmtAx:'.0f', fmtTip:'.1f'},
 ];
 
@@ -287,19 +305,48 @@ function embedAll() {
   Promise.all(renders).then(postHeight);
 }
 
-function toggleMetric(id) {
-  const btn = document.querySelector('.metric-btn[data-metric="' + id + '"]');
+// ── Metric dropdown ─────────────────────────────────────────────────────
+function _setMetricVisible(id, show) {
   const sec = document.getElementById('section-' + id);
-  if (!btn || !sec) return;
-  const nowHidden = sec.classList.toggle('hidden');
-  btn.classList.toggle('active', !nowHidden);
-  if (!nowHidden) {
+  if (!sec) return;
+  sec.classList.toggle('hidden', !show);
+  if (show) {
     const m = METRICS.find(x => x.id === id);
     if (m) vegaEmbed(m.sel, makeSpec(m.field, m.title, m.fmtAx, m.fmtTip), OPTS).then(postHeight);
   } else {
     postHeight();
   }
 }
+function _updateMetricBtn() {
+  const cbs = [...document.querySelectorAll('#metricPanel input[data-metric]')];
+  const n = cbs.filter(cb => cb.checked).length;
+  document.getElementById('metricBtn').textContent =
+    (n === cbs.length ? 'All metrics' : n === 0 ? 'None selected' : n + ' of ' + cbs.length + ' metrics') + ' ▾';
+}
+function _updateSelectAll() {
+  const cbs = [...document.querySelectorAll('#metricPanel input[data-metric]')];
+  document.getElementById('metricAll').checked = cbs.every(cb => cb.checked);
+}
+document.getElementById('metricBtn').addEventListener('click', function(e) {
+  e.stopPropagation();
+  const p = document.getElementById('metricPanel');
+  p.hidden = !p.hidden;
+});
+document.addEventListener('click', function() { document.getElementById('metricPanel').hidden = true; });
+document.getElementById('metricPanel').addEventListener('click', function(e) { e.stopPropagation(); });
+document.getElementById('metricPanel').addEventListener('change', function(e) {
+  const inp = e.target;
+  if (inp.id === 'metricAll') {
+    document.querySelectorAll('#metricPanel input[data-metric]').forEach(cb => {
+      cb.checked = inp.checked;
+      _setMetricVisible(cb.dataset.metric, inp.checked);
+    });
+  } else if (inp.dataset.metric) {
+    _setMetricVisible(inp.dataset.metric, inp.checked);
+    _updateSelectAll();
+  }
+  _updateMetricBtn();
+});
 
 embedAll();
 
