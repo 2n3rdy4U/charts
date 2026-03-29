@@ -83,7 +83,7 @@
     const sectionEl = document.createElement('div');
     sectionEl.className = 'nav-section';
 
-    // Section-level link (e.g. Newsletter, Podcast) — no accordion
+    // Section-level external link (e.g. Newsletter, Podcast)
     if (section.type === 'link') {
       const header = document.createElement('a');
       header.className = 'nav-section-header nav-section-link';
@@ -96,6 +96,25 @@
         ${section.badge ? badgeHTML(section.badge) : ''}
         ${externalIconSVG()}
       `;
+      sectionEl.appendChild(header);
+      rail.appendChild(sectionEl);
+      return;
+    }
+
+    // Section-level direct panel (single destination, no accordion)
+    if (section.type === 'panel') {
+      const header = document.createElement('div');
+      header.className = 'nav-section-header';
+      header.setAttribute('role', 'button');
+      header.innerHTML = `
+        ${iconSVG(section.icon)}
+        <span class="nav-section-label">${section.label}</span>
+        ${section.badge ? badgeHTML(section.badge) : ''}
+      `;
+      header.addEventListener('click', () => {
+        loadPanel({ id: section.id, label: section.label, url: section.url },
+                  section.label, header);
+      });
       sectionEl.appendChild(header);
       rail.appendChild(sectionEl);
       return;
@@ -171,8 +190,22 @@
           <span class="tile-action">Open</span>
           ${externalIconSVG()}
         </div>`;
+    } else if (section.type === 'panel') {
+      // Direct panel section — load URL immediately on tile click
+      tile.innerHTML = `
+        ${tileSVG(section.icon)}
+        <div class="tile-label">${section.label}</div>
+        <div class="tile-desc">${section.description || ''}</div>
+        <div class="tile-footer">
+          <span class="tile-action">Explore</span>
+        </div>`;
+      tile.addEventListener('click', () => {
+        const navHeader = rail.querySelector(`[role="button"]`);
+        loadPanel({ id: section.id, label: section.label, url: section.url },
+                  section.label, tile);
+      });
     } else {
-      // Load first item on click; open accordion in nav
+      // Accordion section — load first item on click; open accordion in nav
       const firstItem = section.items[0];
       tile.innerHTML = `
         ${tileSVG(section.icon)}

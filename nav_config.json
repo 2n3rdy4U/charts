@@ -37,16 +37,8 @@
       "description": "Key economic indicators from FRED — employment, inflation, consumer spending, and credit conditions.",
       "icon": "globe",
       "badge": null,
-      "type": "accordion",
-      "items": [
-        {
-          "id": "macro-economic",
-          "label": "Economic Data Dashboard",
-          "type": "panel",
-          "url": "https://2n3rdy4u.github.io/charts/macro/index.html",
-          "badge": null
-        }
-      ]
+      "type": "panel",
+      "url": "https://2n3rdy4u.github.io/charts/macro/index.html"
     },
     {
       "id": "data-calendar",

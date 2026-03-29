@@ -295,16 +295,11 @@ html, body {
 /* ── Content area ──────────────────────────────────────────────── */
 #panel-content {
   flex: 1;
-  overflow: hidden;
   position: relative;
+  overflow: hidden;
 }
 
-/* Welcome state: no padding, fills dark bg */
-#panel-content:has(#welcome) {
-  overflow-y: auto;
-}
-
-/* Chart state: iframe sits flush, content area is already white */
+/* Chart state: iframe sits flush */
 #panel-content iframe {
   position: absolute;
   inset: 0;
@@ -316,14 +311,17 @@ html, body {
 }
 
 /* ── Welcome / hub panel ───────────────────────────────────────── */
+/* Absolute fill so height is always resolved — centering works    */
 #welcome {
+  position: absolute;
+  inset: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100%;
+  justify-content: center;
   overflow-y: auto;
-  padding: 48px 40px 40px;
-  gap: 36px;
+  padding: 40px 40px 120px; /* pull content up to true optical center */
+  gap: 40px;
   background: var(--color-bg);
 }
 
@@ -331,41 +329,51 @@ html, body {
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
 #welcome .welcome-title {
-  font-size: 26px;
+  font-size: 30px;
   font-weight: 700;
   color: var(--color-text);
   letter-spacing: -0.02em;
 }
 
 #welcome .welcome-sub {
-  font-size: 14px;
+  font-size: 15px;
   color: var(--color-muted);
   line-height: 1.6;
 }
 
 /* ── Tile grid ─────────────────────────────────────────────────── */
+/* 6 narrow columns — each tile spans 2, giving a 3-up top row.
+   The 4th and 5th tiles are explicitly placed to center them:
+   cols 2-3 and 4-5, leaving one empty col on each side.        */
 .tile-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 20px;
   width: 100%;
-  max-width: 900px;
+  max-width: 1000px;
 }
+
+.tile                { grid-column: span 2; }
+.tile:nth-child(4)   { grid-column: 2 / span 2; }
+.tile:nth-child(5)   { grid-column: 4 / span 2; }
 
 .tile {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 10px;
-  padding: 22px 20px 18px;
+  border-radius: 12px;
+  padding: 32px 28px 24px;
+  min-height: 200px;
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  transition: border-color var(--transition), background var(--transition), transform var(--transition);
+  gap: 12px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  transition: border-color var(--transition), background var(--transition),
+              transform var(--transition), box-shadow var(--transition);
   text-decoration: none;
   color: inherit;
   position: relative;
@@ -374,27 +382,28 @@ html, body {
 .tile:hover {
   border-color: var(--color-accent);
   background: var(--color-accent-dim);
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(59,126,255,0.12);
 }
 
 .tile-icon {
-  width: 28px;
-  height: 28px;
+  width: 34px;
+  height: 34px;
   color: var(--color-accent);
   flex-shrink: 0;
 }
 
 .tile-label {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--color-text);
   letter-spacing: 0.01em;
 }
 
 .tile-desc {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--color-muted);
-  line-height: 1.6;
+  line-height: 1.65;
   flex: 1;
 }
 
@@ -402,20 +411,20 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 4px;
+  margin-top: 8px;
 }
 
 .tile-action {
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--color-accent);
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
 .tile-ext-icon {
-  width: 12px;
-  height: 12px;
+  width: 13px;
+  height: 13px;
   color: var(--color-muted);
 }
 
@@ -452,4 +461,40 @@ html, body {
       "main   main";
   }
   #rail { display: none; }
+
+  /* Welcome screen: compact single-column layout fits iPhone 12 Pro
+     without scrolling (788px usable height after 56px header)      */
+  #welcome {
+    padding: 10px 16px 8px;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .welcome-header { gap: 2px; }
+  #welcome .welcome-title { font-size: 16px; }
+  #welcome .welcome-sub   { font-size: 11px; }
+
+  .tile-grid {
+    grid-template-columns: 1fr;
+    gap: 7px;
+    max-width: 100%;
+  }
+
+  /* Override explicit column placements for mobile */
+  .tile,
+  .tile:nth-child(4),
+  .tile:nth-child(5) {
+    grid-column: 1;
+    min-height: 0;
+    padding: 10px 14px 9px;
+    gap: 4px;
+    border-radius: 9px;
+  }
+
+  /* Compact tile internals on mobile */
+  .tile .tile-icon   { width: 18px; height: 18px; }
+  .tile .tile-label  { font-size: 13px; }
+  .tile .tile-desc   { font-size: 11px; line-height: 1.45; }
+  .tile .tile-footer { margin-top: 3px; }
+  .tile .tile-action { font-size: 10px; }
 }
