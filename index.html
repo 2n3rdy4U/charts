@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- ── Primary SEO ─────────────────────────────────────── -->
+  <title>Consumer Credit Matters — Data Platform</title>
+  <meta name="description" content="Data-driven analysis of consumer credit markets. Explore loan-level ABS performance, new issuance activity, credit card trends, and key macroeconomic indicators." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://www.consumercreditmatters.com/" />
+
+  <!-- ── Open Graph (LinkedIn, social sharing) ───────────── -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.consumercreditmatters.com/" />
+  <meta property="og:title" content="Consumer Credit Matters — Data Platform" />
+  <meta property="og:description" content="Data-driven analysis of consumer credit markets. Explore loan-level ABS performance, new issuance activity, credit card trends, and key macroeconomic indicators." />
+  <!-- og:image: add logo URL here once available -->
+  <!-- <meta property="og:image" content="https://www.consumercreditmatters.com/logo.png" /> -->
+
+  <!-- ── Twitter / X card ────────────────────────────────── -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Consumer Credit Matters — Data Platform" />
+  <meta name="twitter:description" content="Data-driven analysis of consumer credit markets. Explore loan-level ABS performance, new issuance activity, credit card trends, and key macroeconomic indicators." />
+  <!-- twitter:image: add logo URL here once available -->
+  <!-- <meta name="twitter:image" content="https://www.consumercreditmatters.com/logo.png" /> -->
+
+  <!-- ── Structured data (Google rich results) ───────────── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Consumer Credit Matters Data Platform",
+    "url": "https://www.consumercreditmatters.com/",
+    "description": "Data-driven analysis of consumer credit markets. Loan-level ABS performance, new issuance activity, credit card trends, and macroeconomic indicators.",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Web",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Consumer Credit Matters",
+      "url": "https://www.consumercreditmatters.com/"
+    }
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app">
+
+    <!-- ── Header ─────────────────────────────────────────── -->
+    <header id="header">
+      <div class="brand">
+        <span class="brand-name">Consumer Credit Matters</span>
+        <span class="brand-sub">Data Platform</span>
+      </div>
+      <nav class="header-right">
+        <a href="https://www.consumercreditmatters.com/podcasts" target="_blank" rel="noopener">Podcast</a>
+        <a href="https://www.consumercreditmatters.com/newsletter" target="_blank" rel="noopener" class="btn-primary">Subscribe</a>
+      </nav>
+    </header>
+
+    <!-- ── Left rail (built by app.js) ───────────────────── -->
+    <nav id="rail" aria-label="Data modules"></nav>
+
+    <!-- ── Main content ──────────────────────────────────── -->
+    <main id="main">
+
+      <!-- Breadcrumb bar -->
+      <div id="panel-bar">
+        <span id="panel-section-label" style="color:var(--color-muted)"></span>
+        <span class="panel-sep" id="panel-sep" style="display:none">›</span>
+        <span id="panel-title"></span>
+      </div>
+
+      <!-- Loading spinner (shown while iframe loads) -->
+      <div id="panel-loading">
+        <div class="spinner"></div>
+      </div>
+
+      <!-- Content area: iframe or welcome state -->
+      <div id="panel-content">
+        <div id="welcome">
+          <div class="welcome-header">
+            <div class="welcome-title">Consumer Credit Matters</div>
+            <div class="welcome-sub">Data-driven analysis of consumer credit markets.</div>
+          </div>
+          <div class="tile-grid" id="tile-grid">
+            <!-- Populated by app.js -->
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    // Show separator in breadcrumb only when a panel is active
+    const sep   = document.getElementById('panel-sep');
+    const title = document.getElementById('panel-title');
+    const obs   = new MutationObserver(() => {
+      sep.style.display = title.textContent ? 'inline' : 'none';
+    });
+    obs.observe(title, { childList: true, characterData: true, subtree: true });
+  </script>
+</body>
+</html>

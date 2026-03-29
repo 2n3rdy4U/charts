@@ -1,0 +1,94 @@
+{
+  "sections": [
+    {
+      "id": "abs-data",
+      "label": "ABS Data",
+      "description": "Loan-level performance, delinquency trends, and new issuance data across auto and credit card ABS trusts.",
+      "icon": "chart-bar",
+      "badge": null,
+      "type": "accordion",
+      "items": [
+        {
+          "id": "abs-auto",
+          "label": "Auto",
+          "type": "panel",
+          "url": "https://2n3rdy4u.github.io/charts/abs/explorer/index.html",
+          "badge": null
+        },
+        {
+          "id": "abs-credit-card",
+          "label": "Credit Card",
+          "type": "panel",
+          "url": "https://2n3rdy4u.github.io/charts/cc/index.html",
+          "badge": null
+        },
+        {
+          "id": "abs-issuance",
+          "label": "Issuance",
+          "type": "panel",
+          "url": "https://2n3rdy4u.github.io/charts/abs/issuance/index.html",
+          "badge": null
+        }
+      ]
+    },
+    {
+      "id": "macro-data",
+      "label": "Macro Data",
+      "description": "Key economic indicators from FRED — employment, inflation, consumer spending, and credit conditions.",
+      "icon": "globe",
+      "badge": null,
+      "type": "accordion",
+      "items": [
+        {
+          "id": "macro-economic",
+          "label": "Economic Data Dashboard",
+          "type": "panel",
+          "url": "https://2n3rdy4u.github.io/charts/macro/index.html",
+          "badge": null
+        }
+      ]
+    },
+    {
+      "id": "data-calendar",
+      "label": "Data Calendar",
+      "description": "ABS filing schedules and upcoming data release dates across all tracked trusts and agencies.",
+      "icon": "calendar",
+      "badge": null,
+      "type": "accordion",
+      "items": [
+        {
+          "id": "cal-abs-schedule",
+          "label": "ABS Filing Schedule",
+          "type": "panel",
+          "url": "https://2n3rdy4u.github.io/charts/abs/schedule/ABSEE_Update_Schedule.html",
+          "badge": null
+        },
+        {
+          "id": "cal-calendar-view",
+          "label": "Calendar View",
+          "type": "panel",
+          "url": "https://2n3rdy4u.github.io/charts/abs/schedule/Data_Cal_Calendar.html",
+          "badge": null
+        }
+      ]
+    },
+    {
+      "id": "newsletter",
+      "label": "Newsletter",
+      "description": "Data-driven analysis and commentary on consumer credit markets, delivered to your inbox.",
+      "icon": "document",
+      "badge": null,
+      "type": "link",
+      "url": "https://www.consumercreditmatters.com/newsletter"
+    },
+    {
+      "id": "podcast",
+      "label": "Podcast",
+      "description": "Conversations on consumer credit, securitization, and the broader macroeconomic landscape.",
+      "icon": "microphone",
+      "badge": null,
+      "type": "link",
+      "url": "https://www.consumercreditmatters.com/podcasts"
+    }
+  ]
+}
