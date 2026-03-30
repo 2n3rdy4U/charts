@@ -99,6 +99,29 @@
 
   <script src="app.js"></script>
   <script>
+    // Mobile warning banner — shown only on screens narrower than 768px
+    (function() {
+      if (window.innerWidth >= 768) return;
+      var banner = document.createElement('div');
+      banner.id = 'mobile-warning';
+      banner.style.cssText = [
+        'position:fixed', 'top:0', 'left:0', 'right:0', 'z-index:999999',
+        'background:#152240', 'color:#e8edf8',
+        'font-family:system-ui,sans-serif', 'font-size:13px', 'line-height:1.5',
+        'padding:12px 16px 10px', 'display:flex', 'align-items:flex-start',
+        'gap:12px', 'box-shadow:0 2px 8px rgba(0,0,0,0.3)'
+      ].join(';');
+      banner.innerHTML =
+        '<span style="flex:1">⚠️ <strong>Designed for desktop.</strong> ' +
+        'Some features may not display correctly on mobile.</span>' +
+        '<button onclick="document.getElementById(\'mobile-warning\').remove()" style="' +
+        'background:none;border:1px solid rgba(255,255,255,0.3);color:#e8edf8;' +
+        'border-radius:4px;padding:2px 10px;cursor:pointer;font-size:12px;' +
+        'white-space:nowrap;flex-shrink:0">OK</button>';
+      document.body.appendChild(banner);
+    })();
+  </script>
+  <script>
     // Show separator in breadcrumb only when a panel is active
     const sep   = document.getElementById('panel-sep');
     const title = document.getElementById('panel-title');
