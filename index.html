@@ -53,6 +53,9 @@
 
     <!-- ── Header ─────────────────────────────────────────── -->
     <header id="header">
+      <button id="hamburger" aria-label="Open navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
       <div class="brand">
         <span class="brand-name">Consumer Credit Matters</span>
         <span class="brand-sub">Data Platform</span>
@@ -61,6 +64,9 @@
         <a href="https://www.consumercreditmatters.com/newsletter" target="_blank" rel="noopener" class="btn-primary">Subscribe</a>
       </nav>
     </header>
+
+    <!-- ── Nav backdrop (mobile drawer overlay) ──────────── -->
+    <div id="nav-backdrop" aria-hidden="true"></div>
 
     <!-- ── Left rail (built by app.js) ───────────────────── -->
     <nav id="rail" aria-label="Data modules"></nav>

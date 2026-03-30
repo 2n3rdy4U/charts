@@ -52,7 +52,7 @@ html, body {
   grid-template-areas:
     "header header"
     "rail   main";
-  height: 100vh;
+  height: 100dvh;
   overflow: hidden;
 }
 
@@ -452,7 +452,28 @@ html, body {
 
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* ── Responsive: collapse rail on narrow screens ───────────────── */
+/* ── Hamburger button (hidden on desktop) ───────────────────────── */
+#hamburger {
+  display: none;
+}
+
+/* ── Nav backdrop (mobile drawer overlay) ───────────────────────── */
+#nav-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 190;
+  opacity: 0;
+  transition: opacity 220ms ease;
+}
+
+#nav-backdrop.visible {
+  display: block;
+  opacity: 1;
+}
+
+/* ── Responsive: slide-out drawer on narrow screens ─────────────── */
 @media (max-width: 768px) {
   #app {
     grid-template-columns: 0 1fr;
@@ -460,9 +481,60 @@ html, body {
       "header header"
       "main   main";
   }
-  #rail { display: none; }
 
-  /* Welcome screen: fits iPhone 17 Pro (706px usable after header+banner) */
+  /* Rail becomes a fixed slide-in drawer */
+  #rail {
+    position: fixed;
+    top: 0;
+    left: -260px;
+    width: 260px;
+    height: 100dvh;
+    z-index: 200;
+    padding-top: 16px;
+    border-right: none;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.4);
+    transition: left 220ms ease;
+    overflow-y: auto;
+  }
+
+  #rail.open {
+    left: 0;
+  }
+
+  /* Hamburger button */
+  #hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 36px;
+    height: 36px;
+    padding: 6px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    flex-shrink: 0;
+    border-radius: var(--radius);
+    transition: background var(--transition);
+  }
+
+  #hamburger:hover { background: var(--color-shell-hover); }
+
+  #hamburger span {
+    display: block;
+    height: 2px;
+    width: 100%;
+    background: var(--color-shell-text);
+    border-radius: 2px;
+    transition: transform 220ms ease, opacity 220ms ease;
+  }
+
+  /* Animate to X when open */
+  #hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  #hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  #hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* Welcome screen */
   #welcome {
     padding: 6px 14px 6px;
     gap: 6px;

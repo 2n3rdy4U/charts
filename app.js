@@ -69,8 +69,33 @@
   const panelTitle    = document.getElementById('panel-title');
   const panelSection  = document.getElementById('panel-section-label');
   const welcome       = document.getElementById('welcome');
+  const hamburger     = document.getElementById('hamburger');
+  const backdrop      = document.getElementById('nav-backdrop');
 
   let activeItemId = null;
+
+  // ── Mobile drawer ────────────────────────────────────────────
+  function openDrawer() {
+    rail.classList.add('open');
+    backdrop.classList.add('visible');
+    hamburger.classList.add('open');
+    hamburger.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeDrawer() {
+    rail.classList.remove('open');
+    backdrop.classList.remove('visible');
+    hamburger.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  hamburger.addEventListener('click', () => {
+    rail.classList.contains('open') ? closeDrawer() : openDrawer();
+  });
+
+  backdrop.addEventListener('click', closeDrawer);
 
   // ── Build nav ────────────────────────────────────────────────
   config.sections.forEach((section, sIdx) => {
@@ -114,6 +139,7 @@
       header.addEventListener('click', () => {
         loadPanel({ id: section.id, label: section.label, url: section.url },
                   section.label, header);
+        closeDrawer();
       });
       sectionEl.appendChild(header);
       rail.appendChild(sectionEl);
@@ -144,7 +170,7 @@
         <span>${item.label}</span>
         ${item.badge ? badgeHTML(item.badge) : ''}
       `;
-      el.addEventListener('click', () => loadPanel(item, section.label, el));
+      el.addEventListener('click', () => { loadPanel(item, section.label, el); closeDrawer(); });
       itemsEl.appendChild(el);
     });
 
