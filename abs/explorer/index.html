@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ABS Data Explorer</title>
+  <title>Auto ABS Data Explorer</title>
   <style>
     :root {
       --text:#111827; --muted:#6b7280; --border:#e5e7eb;
@@ -17,7 +17,7 @@
     body { display:flex; flex-direction:column; overflow:hidden; }
     .wrap {
       flex:1; display:flex; flex-direction:column; max-width:1200px; width:100%;
-      margin:0 auto; padding:10px 14px 6px; overflow:hidden;
+      margin:0 auto; padding:10px 14px 16px; overflow:hidden;
     }
     /* ── header ── */
     .hdr {
@@ -71,7 +71,7 @@
     .multi-sel-panel input[type=checkbox] { cursor:pointer; accent-color:var(--accent); }
     .multi-sel-sep { height:1px; background:var(--border); margin:4px 8px; }
     /* ── chart ── */
-    #vis { flex:1; width:100%; min-height:0; overflow:hidden; }
+    #vis { flex:1; width:100%; min-height:0; overflow:hidden; margin-bottom:8px; }
     .vega-embed { width:100% !important; height:100% !important; }
     .vega-embed > div { height:100% !important; }
     /* suppress Vega-Lite's selection-highlight background rect on legend entries */
@@ -79,7 +79,7 @@
     .loading { padding:20px; font-size:13px; color:var(--muted); }
     .err { color:#dc2626; }
     /* ── annual table ── */
-    #tblWrap { flex:1; width:100%; min-height:0; overflow:auto; display:none; padding:8px 4px; box-sizing:border-box; }
+    #tblWrap { flex:1; width:100%; min-height:0; overflow:auto; display:none; padding:8px 4px 16px; box-sizing:border-box; }
     #tblWrap table { border-collapse:collapse; font-size:12px; white-space:nowrap; }
     #tblWrap th {
       position:sticky; top:0; background:#f3f4f6; border:1px solid var(--border);
@@ -112,6 +112,13 @@
     /* ── table title ── */
     .tbl-title { font-size:13px; font-weight:600; color:var(--text); padding:6px 4px 2px; }
     .tbl-subtitle { font-size:11px; color:var(--muted); padding:0 4px 6px; }
+    /* ── source attribution footer ── */
+    #source-bar {
+      flex-shrink:0; padding:5px 4px 3px;
+      font-size:10px; color:var(--muted);
+      text-align:right; border-top:1px solid var(--border);
+      margin-top:4px; line-height:1.4;
+    }
     /* ── toast notification ── */
     #toast {
       position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(20px);
@@ -144,6 +151,17 @@
       #vis { min-height:320px; height:380px; max-height:440px; }
       #tblWrap { max-height:420px; }
     }
+    @media print {
+      html, body { height:auto; overflow:visible; }
+      body { display:block; }
+      .wrap { overflow:visible; max-width:100%; padding:12px 18px 24px; }
+      .hdr, .mode-tabs { display:flex !important; }
+      .fbar, .btn-group, #export-btn, #toast { display:none !important; }
+      #export-region { display:block; }
+      #vis { overflow:visible; height:auto; min-height:400px; page-break-inside:avoid; margin-bottom:0; }
+      #tblWrap { overflow:visible; height:auto; display:block !important; page-break-inside:avoid; padding-bottom:24px; }
+      #source-bar { display:block !important; }
+    }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/html-to-image@1/dist/html-to-image.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
@@ -156,7 +174,7 @@
   <!-- ── Row 1: header (title + mode toggle + last updated) ── -->
   <div class="hdr">
     <div class="brand">
-      <div class="brand-title">ABS Data Explorer</div>
+      <div class="brand-title">Auto ABS Data Explorer</div>
       <div class="brand-sub">Auto ABS loan performance · select filters below</div>
     </div>
     <div class="meta-date">Updated: <span id="lastUpdated"></span></div>
@@ -274,15 +292,18 @@
   </div>
 
   <!-- ── Chart / Table ── -->
-  <div id="vis"><div class="loading">Loading…</div></div>
-  <div id="tblWrap"></div>
+  <div id="export-region">
+    <div id="vis"><div class="loading">Loading…</div></div>
+    <div id="tblWrap"></div>
+    <div id="source-bar">Source: SEC ABS-EE loan-level filings, EDGAR &middot; Consumer Credit Matters</div>
+  </div>
 
 </div>
 <div id="toast"></div>
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-03-31 09:42";
+  const BUILD_ID   = "2026-03-31 14:33";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -306,6 +327,8 @@
   let dqFilter    = '60+';
   let transform   = 'rate';   // 'rate' | 'yoy-delta' | 'yoy-pct'
   let displayMode = 'chart';  // 'chart' | 'table'
+  let heatmapEnabled = true;
+  let _lastTableArgs = null;
 
   // ── Toast notification ───────────────────────────────────────────────
   let _toastTimer = null;
@@ -863,6 +886,7 @@
   }
 
   function renderTable(annualData, yFmt, monthlyData, title) {
+    _lastTableArgs = {annualData, yFmt, monthlyData, title};
     const vis     = document.getElementById('vis');
     const tblWrap = document.getElementById('tblWrap');
     vis.style.display     = 'none';
@@ -876,6 +900,33 @@
     const subtitle = `${poolLabel} · ${transformNote}`;
     let headerHtml = `<div class="tbl-title">${title || 'Issuer Comparison'} — Time Series</div>`
                    + `<div class="tbl-subtitle">${subtitle}</div>`;
+
+    // ── Heatmap toggle button ──
+    headerHtml += '<div style="display:flex;align-items:center;justify-content:flex-end;padding:2px 4px 4px;">'
+      + '<button id="heatmapToggle"'
+      + ' onclick="heatmapEnabled=!heatmapEnabled;'
+      + 'document.getElementById('heatmapToggle').textContent='Heat map: '+(heatmapEnabled?'ON':'OFF');'
+      + 'document.getElementById('heatmapToggle').style.color=heatmapEnabled?'var(--accent)':'var(--muted)';'
+      + 'if(_lastTableArgs)renderTable(_lastTableArgs.annualData,_lastTableArgs.yFmt,_lastTableArgs.monthlyData,_lastTableArgs.title);"'
+      + ' style="font-size:11px;padding:3px 8px;border:1px solid var(--border);border-radius:5px;background:#fff;cursor:pointer;color:var(--accent);transition:color .15s;">'
+      + 'Heat map: ON'
+      + '</button></div>';
+
+    // ── Heatmap legend ──
+    const legendHtml = isYoy
+      ? '<div style="display:flex;align-items:center;gap:8px;padding:2px 4px 8px;font-size:10.5px;color:var(--muted);">'
+        + '<span>Improving</span>'
+        + '<div style="width:140px;height:10px;border-radius:3px;'
+        + 'background:linear-gradient(to right,rgba(0,210,0,0.45),rgba(255,255,255,0.8),rgba(255,80,80,0.45));'
+        + 'border:1px solid var(--border);flex-shrink:0;"></div>'
+        + '<span>Worsening</span></div>'
+      : '<div style="display:flex;align-items:center;gap:8px;padding:2px 4px 8px;font-size:10.5px;color:var(--muted);">'
+        + '<span>Lower DQ</span>'
+        + '<div style="width:140px;height:10px;border-radius:3px;'
+        + 'background:linear-gradient(to right,rgba(255,255,255,0.9),rgba(255,89,89,0.5));'
+        + 'border:1px solid var(--border);flex-shrink:0;"></div>'
+        + '<span>Higher DQ</span></div>';
+    headerHtml += legendHtml;
 
     // Collect unique years (columns) and series (rows)
     const yearsSet  = new Set(), seriesSet = new Set();
@@ -901,6 +952,7 @@
     // Heat-map colour helper
     const isYoy = transform !== 'rate';
     function cellBg(val, yr) {
+      if (!heatmapEnabled) return '';
       if (val == null) return '';
       const lo = colMin[yr], hi = colMax[yr];
       if (lo === hi) return '';
@@ -1318,24 +1370,18 @@ function _playShutter() {
 
 function exportExplorer() {
   _playShutter();
-  var el = document.getElementById('vis');
-  var mode = document.body.dataset.mode || 'vintage';
-  var date = new Date().toISOString().slice(0, 10);
+  var el  = document.getElementById('export-region');
+  var md  = document.body.dataset.mode || 'vintage';
+  var dt  = new Date().toISOString().slice(0, 10);
   var btn = document.getElementById('export-btn');
   btn.style.display = 'none';
-  var stamp = document.createElement('div');
-  stamp.style.cssText = 'padding:5px 16px 4px;font-size:10px;color:#94a3b8;font-family:inherit;text-align:right;border-top:1px solid #e5e7eb;margin-top:6px;';
-  stamp.textContent = 'Consumer Credit Matters · consumercreditmatters.com';
-  el.appendChild(stamp);
   htmlToImage.toPng(el, {pixelRatio:2, backgroundColor:'#ffffff'})
     .then(function(url) {
-      el.removeChild(stamp);
       btn.style.display = '';
       var a = document.createElement('a');
-      a.href = url; a.download = 'ccm-abs-explorer-' + mode + '-' + date + '.png'; a.click();
+      a.href = url; a.download = 'ccm-abs-explorer-' + md + '-' + dt + '.png'; a.click();
     })
     .catch(function(e) {
-      if (el.contains(stamp)) el.removeChild(stamp);
       btn.style.display = '';
       console.error('PNG export failed:', e);
     });
