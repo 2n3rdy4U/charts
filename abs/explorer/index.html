@@ -303,7 +303,7 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-03-31 14:33";
+  const BUILD_ID   = "2026-03-31 14:53";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -904,11 +904,7 @@
     // ── Heatmap toggle button ──
     headerHtml += '<div style="display:flex;align-items:center;justify-content:flex-end;padding:2px 4px 4px;">'
       + '<button id="heatmapToggle"'
-      + ' onclick="heatmapEnabled=!heatmapEnabled;'
-      + 'document.getElementById('heatmapToggle').textContent='Heat map: '+(heatmapEnabled?'ON':'OFF');'
-      + 'document.getElementById('heatmapToggle').style.color=heatmapEnabled?'var(--accent)':'var(--muted)';'
-      + 'if(_lastTableArgs)renderTable(_lastTableArgs.annualData,_lastTableArgs.yFmt,_lastTableArgs.monthlyData,_lastTableArgs.title);"'
-      + ' style="font-size:11px;padding:3px 8px;border:1px solid var(--border);border-radius:5px;background:#fff;cursor:pointer;color:var(--accent);transition:color .15s;">'
+      + ' style="font-size:11px;padding:3px 8px;border:1px solid var(--border);border-radius:5px;background:#fff;cursor:pointer;transition:color .15s;">'
       + 'Heat map: ON'
       + '</button></div>';
 
@@ -1020,6 +1016,19 @@
         `<sup style="font-size:9px;">†</sup> Partial year — ${notes.join(' · ')}</p>`;
     }
     tblWrap.innerHTML = headerHtml + html;
+
+    // Attach heatmap toggle listener (must be after innerHTML is set)
+    const heatBtn = document.getElementById('heatmapToggle');
+    if (heatBtn) {
+      heatBtn.style.color = heatmapEnabled ? 'var(--accent)' : 'var(--muted)';
+      heatBtn.textContent = 'Heat map: ' + (heatmapEnabled ? 'ON' : 'OFF');
+      heatBtn.addEventListener('click', function() {
+        heatmapEnabled = !heatmapEnabled;
+        this.textContent = 'Heat map: ' + (heatmapEnabled ? 'ON' : 'OFF');
+        this.style.color = heatmapEnabled ? 'var(--accent)' : 'var(--muted)';
+        if (_lastTableArgs) renderTable(_lastTableArgs.annualData, _lastTableArgs.yFmt, _lastTableArgs.monthlyData, _lastTableArgs.title);
+      });
+    }
   }
 
   // ── Render ───────────────────────────────────────────────────────────
