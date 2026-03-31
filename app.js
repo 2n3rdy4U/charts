@@ -61,7 +61,9 @@
   }
 
   // ── Init ──────────────────────────────────────────────────────
-  const config = await fetch('nav_config.json').then(r => r.json());
+  const NAV_CONFIG_VERSION = '20260331-1825';
+  const config = await fetch(`nav_config.json?v=${encodeURIComponent(NAV_CONFIG_VERSION)}`, { cache: 'no-store' })
+    .then(r => r.json());
 
   const rail          = document.getElementById('rail');
   const panelContent  = document.getElementById('panel-content');
@@ -163,26 +165,6 @@
     itemsEl.className = 'nav-items';
 
     section.items.forEach(item => {
-      if (item.type === 'group') {
-        // Non-clickable group label
-        const groupLabel = document.createElement('div');
-        groupLabel.className = 'nav-group-label';
-        groupLabel.textContent = item.label;
-        itemsEl.appendChild(groupLabel);
-        // Sub-items under the group
-        (item.items || []).forEach(subItem => {
-          const el = document.createElement('div');
-          el.className = 'nav-item nav-item--sub';
-          el.dataset.id = subItem.id;
-          el.innerHTML = `
-            <span>${subItem.label}</span>
-            ${subItem.badge ? badgeHTML(subItem.badge) : ''}
-          `;
-          el.addEventListener('click', () => { loadPanel(subItem, section.label, el); closeDrawer(); });
-          itemsEl.appendChild(el);
-        });
-        return;
-      }
       const el = document.createElement('div');
       el.className = 'nav-item';
       el.dataset.id = item.id;
@@ -213,18 +195,6 @@
     sectionEl.appendChild(itemsEl);
     rail.appendChild(sectionEl);
   });
-
-  // ── Helper: find first loadable panel item in a section ─────────
-  function firstPanelItem(section) {
-    for (const item of (section.items || [])) {
-      if (item.type === 'group') {
-        if (item.items && item.items.length) return item.items[0];
-      } else {
-        return item;
-      }
-    }
-    return null;
-  }
 
   // ── Build welcome tile grid ───────────────────────────────────
   const tileGrid = document.getElementById('tile-grid');
@@ -264,7 +234,7 @@
       });
     } else {
       // Accordion section — load first item on click; open accordion in nav
-      const firstItem = firstPanelItem(section);
+      const firstItem = section.items[0];
       tile.innerHTML = `
         ${tileSVG(section.icon)}
         <div class="tile-label">${section.label}</div>
@@ -280,11 +250,9 @@
             if (!h.classList.contains('open')) h.click();
           }
         });
-        // Load first panel item
-        if (firstItem) {
-          const navItem = rail.querySelector(`[data-id="${firstItem.id}"]`);
-          if (navItem) loadPanel(firstItem, section.label, navItem);
-        }
+        // Load first item
+        const navItem = rail.querySelector(`[data-id="${firstItem.id}"]`);
+        if (navItem) loadPanel(firstItem, section.label, navItem);
       });
     }
 
