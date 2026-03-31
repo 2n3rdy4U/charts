@@ -10,7 +10,7 @@
       "items": [
         {
           "id": "abs-auto-group",
-          "label": "Auto ABS",
+          "label": "Auto",
           "type": "group",
           "items": [
             {
@@ -18,13 +18,6 @@
               "label": "Data Explorer",
               "type": "panel",
               "url": "https://2n3rdy4u.github.io/charts/abs/explorer/index.html",
-              "badge": null
-            },
-            {
-              "id": "abs-issuance",
-              "label": "Issuance Activity",
-              "type": "panel",
-              "url": "https://2n3rdy4u.github.io/charts/abs/issuance/index.html",
               "badge": null
             },
             {
@@ -41,6 +34,13 @@
           "label": "Credit Card",
           "type": "panel",
           "url": "https://2n3rdy4u.github.io/charts/cc/index.html",
+          "badge": null
+        },
+        {
+          "id": "abs-issuance",
+          "label": "Issuance Activity",
+          "type": "panel",
+          "url": "https://2n3rdy4u.github.io/charts/abs/issuance/index.html",
           "badge": null
         }
       ]
