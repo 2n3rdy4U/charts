@@ -907,6 +907,8 @@
       + 'Heat map: ON'
       + '</button></div>';
 
+    const isYoy = transform !== 'rate';
+
     // ── Heatmap legend ──
     const legendHtml = isYoy
       ? '<div style="display:flex;align-items:center;gap:8px;padding:2px 4px 8px;font-size:10.5px;color:var(--muted);">'
@@ -945,7 +947,6 @@
     }
 
     // Heat-map colour helper
-    const isYoy = transform !== 'rate';
     function cellBg(val, yr) {
       if (!heatmapEnabled) return '';
       if (val == null) return '';
