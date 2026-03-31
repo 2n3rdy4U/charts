@@ -7,7 +7,7 @@
   <style>
     :root {
       --text:#111827; --muted:#6b7280; --border:#e5e7eb;
-      --bg:#ffffff; --accent:#2563eb; --btn-bg:#f3f4f6;
+      --bg:#ffffff; --accent:#1e40af; --btn-bg:#f3f4f6;
     }
     *, *::before, *::after { box-sizing:border-box; }
     html, body {
@@ -46,7 +46,7 @@
       border:none; background:var(--btn-bg); font-size:12px; padding:4px 9px;
       cursor:pointer; color:var(--text); transition:background 0.12s;
     }
-    .btn-group button.active  { background:var(--accent); color:#fff; }
+    .btn-group button.active  { background:#dbeafe; color:#1e40af; border-color:#1e40af; }
     .btn-group button:hover:not(.active) { background:#e5e7eb; }
     /* ── custom multi-select dropdown ── */
     .multi-sel { position:relative; display:inline-block; }
@@ -282,11 +282,11 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-03-28 02:09";
+  const BUILD_ID   = "2026-03-31 09:42";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
-  const LAST_UPDATED   = "Mar 28";
+  const LAST_UPDATED   = "Mar 31";
 
   document.getElementById('lastUpdated').textContent = LAST_UPDATED;
 
