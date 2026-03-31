@@ -48,6 +48,13 @@
     }
     .btn-group button.active  { background:#dbeafe; color:#1e40af; border-color:#1e40af; }
     .btn-group button:hover:not(.active) { background:#e5e7eb; }
+    .toggle-btn {
+      border:1px solid var(--border); border-radius:6px; background:#fff;
+      font-size:12px; padding:4px 9px; cursor:pointer; color:var(--muted);
+      transition:color .15s, border-color .15s, background .15s;
+      height:28px;
+    }
+    .toggle-btn.active { color:var(--accent); border-color:#93c5fd; background:#eff6ff; }
     /* ── custom multi-select dropdown ── */
     .multi-sel { position:relative; display:inline-block; }
     .multi-sel-btn {
@@ -79,7 +86,7 @@
     .loading { padding:20px; font-size:13px; color:var(--muted); }
     .err { color:#dc2626; }
     /* ── annual table ── */
-    #tblWrap { flex:1; width:100%; min-height:0; overflow:auto; display:none; padding:8px 4px 16px; box-sizing:border-box; }
+    #tblWrap { flex:0 0 auto; width:100%; min-height:0; overflow:auto; display:none; padding:8px 4px 6px; box-sizing:border-box; }
     #tblWrap table { border-collapse:collapse; font-size:12px; white-space:nowrap; }
     #tblWrap th {
       position:sticky; top:0; background:#f3f4f6; border:1px solid var(--border);
@@ -114,7 +121,7 @@
     .tbl-subtitle { font-size:11px; color:var(--muted); padding:0 4px 6px; }
     /* ── source attribution footer ── */
     #source-bar {
-      flex-shrink:0; padding:2px 0 6px;
+      flex-shrink:0; margin-top:2px; padding:0 0 6px;
       font-size:11px; color:var(--muted);
       line-height:1.4;
     }
@@ -160,6 +167,7 @@
       #vis { overflow:visible; height:auto; min-height:400px; page-break-inside:avoid; margin-bottom:0; }
       #tblWrap { overflow:visible; height:auto; display:block !important; page-break-inside:avoid; padding-bottom:24px; }
       #source-bar { font-size:11px; padding:2px 0 8px; }
+      #heatmapCtrl, #heatmapSep { display:none !important; }
     }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/html-to-image@1/dist/html-to-image.min.js"></script>
@@ -236,6 +244,11 @@
         <button data-display="table">Table</button>
         <button data-display="seasonal">Year Overlay</button>
       </div>
+    </div>
+    <div class="bar-sep" id="heatmapSep" style="display:none;"></div>
+    <div class="ctrl" id="heatmapCtrl" style="display:none;">
+      <label class="lbl">Table Style</label>
+      <button id="heatmapToggle" type="button" class="toggle-btn" aria-pressed="true">Heat Map: ON</button>
     </div>
     <div class="bar-sep"></div>
     <div class="ctrl">
@@ -327,6 +340,7 @@
   let transform   = 'rate';   // 'rate' | 'yoy-delta' | 'yoy-pct'
   let displayMode = 'chart';  // 'chart' | 'table'
   let heatmapEnabled = true;
+  const MIN_TABLE_YEAR = 2017;
   let _lastTableArgs = null;
 
   // ── Toast notification ───────────────────────────────────────────────
@@ -457,6 +471,30 @@
       if (cb) cb.checked = true;
       updateIssuerBtn();
     }
+  }
+
+  const heatmapCtrl = document.getElementById('heatmapCtrl');
+  const heatmapSep  = document.getElementById('heatmapSep');
+  const heatmapBtn  = document.getElementById('heatmapToggle');
+
+  function syncHeatmapToggle() {
+    const show = mode === 'timeseries' && displayMode === 'table';
+    if (heatmapCtrl) heatmapCtrl.style.display = show ? 'flex' : 'none';
+    if (heatmapSep) heatmapSep.style.display = show ? 'block' : 'none';
+    if (!heatmapBtn) return;
+    heatmapBtn.classList.toggle('active', heatmapEnabled);
+    heatmapBtn.setAttribute('aria-pressed', heatmapEnabled ? 'true' : 'false');
+    heatmapBtn.textContent = 'Heat Map: ' + (heatmapEnabled ? 'ON' : 'OFF');
+  }
+
+  if (heatmapBtn) {
+    heatmapBtn.addEventListener('click', () => {
+      heatmapEnabled = !heatmapEnabled;
+      syncHeatmapToggle();
+      if (_lastTableArgs && mode === 'timeseries' && displayMode === 'table') {
+        renderTable(_lastTableArgs.annualData, _lastTableArgs.yFmt, _lastTableArgs.monthlyData, _lastTableArgs.title);
+      }
+    });
   }
 
   issuerBtn.addEventListener('click', e => {
@@ -901,13 +939,6 @@
       let headerHtml = `<div class="tbl-title">${title || 'Issuer Comparison'} — Time Series</div>`
                      + `<div class="tbl-subtitle">${subtitle}</div>`;
 
-      // ── Heatmap toggle button ──
-      headerHtml += '<div style="display:flex;align-items:center;justify-content:flex-end;padding:2px 4px 4px;">'
-        + '<button id="heatmapToggle"'
-        + ' style="font-size:11px;padding:3px 8px;border:1px solid var(--border);border-radius:5px;background:#fff;cursor:pointer;transition:color .15s;">'
-        + 'Heat map: ON'
-        + '</button></div>';
-
       const isYoy = transform !== 'rate';
 
       // ── Heatmap legend ──
@@ -929,14 +960,22 @@
       // Collect unique years (columns) and series (rows)
       const yearsSet  = new Set(), seriesSet = new Set();
       for (const d of annualData) { yearsSet.add(d.year); seriesSet.add(d.series); }
-      const years  = [...yearsSet].sort();
-      const series = [...seriesSet].sort();
+      const years  = [...yearsSet].filter(yr => Number(yr) >= MIN_TABLE_YEAR).sort();
+      if (!years.length) {
+        showMsg(`No annual table data from ${MIN_TABLE_YEAR} onward for selected filters.`);
+        return;
+      }
 
       // Build lookup: series → year → value
       const lookup = new Map();
       for (const d of annualData) {
         if (!lookup.has(d.series)) lookup.set(d.series, new Map());
         lookup.get(d.series).set(d.year, d.dq_rate);
+      }
+      const series = [...seriesSet].sort().filter(s => years.some(yr => lookup.get(s)?.get(yr) != null));
+      if (!series.length) {
+        showMsg(`No annual table data from ${MIN_TABLE_YEAR} onward for selected filters.`);
+        return;
       }
 
       // Compute per-column min/max for heat-map scaling
@@ -1017,19 +1056,6 @@
           `<sup style="font-size:9px;">†</sup> Partial year — ${notes.join(' · ')}</p>`;
       }
       tblWrap.innerHTML = headerHtml + html;
-
-      // Attach heatmap toggle listener (must be after innerHTML is set)
-      const heatBtn = document.getElementById('heatmapToggle');
-      if (heatBtn) {
-        heatBtn.style.color = heatmapEnabled ? 'var(--accent)' : 'var(--muted)';
-        heatBtn.textContent = 'Heat map: ' + (heatmapEnabled ? 'ON' : 'OFF');
-        heatBtn.addEventListener('click', function() {
-          heatmapEnabled = !heatmapEnabled;
-          this.textContent = 'Heat map: ' + (heatmapEnabled ? 'ON' : 'OFF');
-          this.style.color = heatmapEnabled ? 'var(--accent)' : 'var(--muted)';
-          if (_lastTableArgs) renderTable(_lastTableArgs.annualData, _lastTableArgs.yFmt, _lastTableArgs.monthlyData, _lastTableArgs.title);
-        });
-      }
     } catch (err) {
       console.error('renderTable failed', err);
       showMsg('Table failed: ' + String(err), true);
@@ -1239,8 +1265,10 @@
     history.pushState({}, '', _u);
     if (m === 'timeseries') {
       initTsSelection();
+      syncHeatmapToggle();
       render();
     } else {
+      syncHeatmapToggle();
       render();
     }
   }
@@ -1329,6 +1357,7 @@
 
     for (const btn of document.querySelectorAll('#displayGroup button'))
       btn.classList.toggle('active', btn.dataset.display === displayMode);
+    syncHeatmapToggle();
     render();
   });
 
@@ -1369,6 +1398,7 @@
     setMode('timeseries');
   } else {
     document.body.dataset.mode = 'vintage';
+    syncHeatmapToggle();
     loadVintageAndRender();
   }
 
