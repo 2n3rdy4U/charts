@@ -242,6 +242,23 @@ html, body {
   margin-left: auto;
 }
 
+/* ── Nav group label (non-clickable sub-header inside accordion) ── */
+.nav-group-label {
+  padding: 8px 16px 3px 44px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-shell-muted);
+  opacity: 0.7;
+  user-select: none;
+}
+
+/* ── Sub-items under a group (slightly deeper indent) ──────────── */
+.nav-item--sub {
+  padding-left: 56px;
+}
+
 /* ── Section-level link (Newsletter, Podcast) ──────────────────── */
 .nav-section-link {
   text-decoration: none;
