@@ -28,6 +28,13 @@
           "type": "panel",
           "url": "https://2n3rdy4u.github.io/charts/abs/issuance/index.html",
           "badge": null
+        },
+        {
+          "id": "abs-filing-tracker",
+          "label": "Data Update Tracker",
+          "type": "panel",
+          "url": "https://2n3rdy4u.github.io/charts/abs/schedule/ABSEE_Update_Schedule.html",
+          "badge": null
         }
       ]
     },
@@ -43,26 +50,11 @@
     {
       "id": "data-calendar",
       "label": "Data Calendar",
-      "description": "ABS filing schedules and upcoming data release dates across all tracked trusts and agencies.",
+      "description": "Upcoming data release dates across tracked agencies and economic reports.",
       "icon": "calendar",
       "badge": null,
-      "type": "accordion",
-      "items": [
-        {
-          "id": "cal-abs-schedule",
-          "label": "ABS Filing Schedule",
-          "type": "panel",
-          "url": "https://2n3rdy4u.github.io/charts/abs/schedule/ABSEE_Update_Schedule.html",
-          "badge": null
-        },
-        {
-          "id": "cal-calendar-view",
-          "label": "Calendar View",
-          "type": "panel",
-          "url": "https://2n3rdy4u.github.io/charts/abs/schedule/Data_Cal_Calendar.html",
-          "badge": null
-        }
-      ]
+      "type": "panel",
+      "url": "https://2n3rdy4u.github.io/charts/abs/schedule/Data_Cal_Calendar.html"
     },
     {
       "id": "newsletter",

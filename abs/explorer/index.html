@@ -48,26 +48,6 @@
     }
     .btn-group button.active  { background:#dbeafe; color:#1e40af; border-color:#1e40af; }
     .btn-group button:hover:not(.active) { background:#e5e7eb; }
-    .switch {
-      display:inline-flex; align-items:center; gap:8px; cursor:pointer; user-select:none;
-      height:28px;
-    }
-    .switch-input {
-      position:absolute; opacity:0; width:1px; height:1px; pointer-events:none;
-    }
-    .switch-track {
-      width:34px; height:18px; border-radius:999px; background:#d1d5db;
-      border:1px solid #c4c9d1; position:relative; transition:background .15s,border-color .15s;
-    }
-    .switch-knob {
-      position:absolute; top:1px; left:1px; width:14px; height:14px; border-radius:50%;
-      background:#fff; box-shadow:0 1px 2px rgba(0,0,0,.2); transition:left .15s;
-    }
-    .switch-input:checked + .switch-track {
-      background:#dbeafe; border-color:#93c5fd;
-    }
-    .switch-input:checked + .switch-track .switch-knob { left:17px; }
-    .switch-text { font-size:11px; color:var(--muted); min-width:22px; }
     /* ── custom multi-select dropdown ── */
     .multi-sel { position:relative; display:inline-block; }
     .multi-sel-btn {
@@ -99,14 +79,14 @@
     .loading { padding:20px; font-size:13px; color:var(--muted); }
     .err { color:#dc2626; }
     /* ── annual table ── */
-    #tblWrap { flex:0 0 auto; width:100%; min-height:0; overflow:auto; display:none; padding:8px 4px 6px; box-sizing:border-box; }
-    #tblWrap table { border-collapse:collapse; font-size:12px; white-space:nowrap; }
+    #tblWrap { flex:0 0 auto; width:100%; overflow:auto; display:none; padding:8px 4px 16px; box-sizing:border-box; }
+    #tblWrap table { border-collapse:collapse; font-size:12px; white-space:nowrap; width:100%; }
     #tblWrap th {
       position:sticky; top:0; background:#f3f4f6; border:1px solid var(--border);
       padding:5px 10px; font-weight:600; color:var(--muted); z-index:1;
     }
     #tblWrap th.row-hdr { position:sticky; left:0; z-index:2; background:#f3f4f6; }
-    #tblWrap td { border:1px solid var(--border); padding:4px 10px; text-align:right; }
+    #tblWrap td { border:1px solid var(--border); padding:4px 10px; text-align:right; min-width:60px; }
     #tblWrap td.row-hdr {
       position:sticky; left:0; background:#fff; font-weight:500;
       text-align:left; border-right:2px solid var(--border); z-index:1;
@@ -134,7 +114,7 @@
     .tbl-subtitle { font-size:11px; color:var(--muted); padding:0 4px 6px; }
     /* ── source attribution footer ── */
     #source-bar {
-      flex-shrink:0; margin-top:2px; padding:0 4px 6px;
+      flex-shrink:0; padding:2px 0 6px;
       font-size:11px; color:var(--muted);
       line-height:1.4;
     }
@@ -179,8 +159,7 @@
       #export-region { display:block; }
       #vis { overflow:visible; height:auto; min-height:400px; page-break-inside:avoid; margin-bottom:0; }
       #tblWrap { overflow:visible; height:auto; display:block !important; page-break-inside:avoid; padding-bottom:24px; }
-      #source-bar { font-size:11px; padding:2px 4px 8px; }
-      #heatmapCtrl, #heatmapSep { display:none !important; }
+      #source-bar { font-size:11px; padding:2px 0 8px; }
     }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/html-to-image@1/dist/html-to-image.min.js"></script>
@@ -258,15 +237,6 @@
         <button data-display="seasonal">Year Overlay</button>
       </div>
     </div>
-    <div class="bar-sep" id="heatmapSep" style="display:none;"></div>
-    <div class="ctrl" id="heatmapCtrl" style="display:none;">
-      <label class="lbl" for="heatmapToggle">Heat</label>
-      <label class="switch" for="heatmapToggle" title="Toggle heat map coloring">
-        <input id="heatmapToggle" type="checkbox" class="switch-input" checked aria-label="Toggle heat map coloring" />
-        <span class="switch-track" aria-hidden="true"><span class="switch-knob"></span></span>
-        <span id="heatmapStatus" class="switch-text">On</span>
-      </label>
-    </div>
     <div class="bar-sep"></div>
     <div class="ctrl">
       <label class="lbl">Pool</label>
@@ -332,7 +302,7 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-03-31 16:19";
+  const BUILD_ID   = "2026-03-31 20:17";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -357,7 +327,6 @@
   let transform   = 'rate';   // 'rate' | 'yoy-delta' | 'yoy-pct'
   let displayMode = 'chart';  // 'chart' | 'table'
   let heatmapEnabled = true;
-  const MIN_TABLE_YEAR = 2017;
   let _lastTableArgs = null;
 
   // ── Toast notification ───────────────────────────────────────────────
@@ -488,30 +457,6 @@
       if (cb) cb.checked = true;
       updateIssuerBtn();
     }
-  }
-
-  const heatmapCtrl = document.getElementById('heatmapCtrl');
-  const heatmapSep  = document.getElementById('heatmapSep');
-  const heatmapBtn  = document.getElementById('heatmapToggle');
-  const heatmapStatus = document.getElementById('heatmapStatus');
-
-  function syncHeatmapToggle() {
-    const show = mode === 'timeseries' && displayMode === 'table';
-    if (heatmapCtrl) heatmapCtrl.style.display = show ? 'flex' : 'none';
-    if (heatmapSep) heatmapSep.style.display = show ? 'block' : 'none';
-    if (!heatmapBtn) return;
-    heatmapBtn.checked = heatmapEnabled;
-    if (heatmapStatus) heatmapStatus.textContent = heatmapEnabled ? 'On' : 'Off';
-  }
-
-  if (heatmapBtn) {
-    heatmapBtn.addEventListener('change', () => {
-      heatmapEnabled = !!heatmapBtn.checked;
-      syncHeatmapToggle();
-      if (_lastTableArgs && mode === 'timeseries' && displayMode === 'table') {
-        renderTable(_lastTableArgs.annualData, _lastTableArgs.yFmt, _lastTableArgs.monthlyData, _lastTableArgs.title);
-      }
-    });
   }
 
   issuerBtn.addEventListener('click', e => {
@@ -940,142 +885,148 @@
   }
 
   function renderTable(annualData, yFmt, monthlyData, title) {
-    try {
-      _lastTableArgs = {annualData, yFmt, monthlyData, title};
-      const vis     = document.getElementById('vis');
-      const tblWrap = document.getElementById('tblWrap');
-      vis.style.display     = 'none';
-      tblWrap.style.display = 'block';
-      const poolLabel = poolMode === 'seasoned' ? 'Seasoned pools (>6 mo)' : 'All pools';
-      const transformNote = transform === 'yoy-delta'
-        ? 'each row = calendar-year avg of monthly rates; change = year N minus year N−1 (pp)'
-        : transform === 'yoy-pct'
-        ? 'each row = calendar-year avg of monthly rates; change = (year N ÷ year N−1) − 1'
-        : 'annual averages of monthly readings';
-      const subtitle = `${poolLabel} · ${transformNote}`;
-      let headerHtml = `<div class="tbl-title">${title || 'Issuer Comparison'} — Time Series</div>`
-                     + `<div class="tbl-subtitle">${subtitle}</div>`;
+    _lastTableArgs = {annualData, yFmt, monthlyData, title};
+    const vis     = document.getElementById('vis');
+    const tblWrap = document.getElementById('tblWrap');
+    vis.style.display     = 'none';
+    tblWrap.style.display = 'block';
+    const poolLabel = poolMode === 'seasoned' ? 'Seasoned pools (>6 mo)' : 'All pools';
+    const transformNote = transform === 'yoy-delta'
+      ? 'each row = calendar-year avg of monthly rates; change = year N minus year N−1 (pp)'
+      : transform === 'yoy-pct'
+      ? 'each row = calendar-year avg of monthly rates; change = (year N ÷ year N−1) − 1; partial years compare only matched months'
+      : 'annual averages of monthly readings; partial years show available months only';
+    const subtitle = `${poolLabel} · ${transformNote}`;
+    let headerHtml = `<div class="tbl-title">${title || 'Issuer Comparison'} — Time Series</div>`
+                   + `<div class="tbl-subtitle">${subtitle}</div>`;
 
-      const isYoy = transform !== 'rate';
+    // ── Heatmap toggle button ──
+    headerHtml += '<div style="display:flex;align-items:center;justify-content:flex-end;padding:2px 4px 4px;">'
+      + '<button id="heatmapToggle"'
+      + ' style="font-size:11px;padding:3px 8px;border:1px solid var(--border);border-radius:5px;background:#fff;cursor:pointer;transition:color .15s;">'
+      + 'Heat map: ON'
+      + '</button></div>';
 
-      // ── Heatmap legend ──
-      const legendHtml = isYoy
-        ? '<div style="display:flex;align-items:center;gap:8px;padding:2px 4px 8px;font-size:10.5px;color:var(--muted);">'
-          + '<span>Improving</span>'
-          + '<div style="width:140px;height:10px;border-radius:3px;'
-          + 'background:linear-gradient(to right,rgba(0,210,0,0.45),rgba(255,255,255,0.8),rgba(255,80,80,0.45));'
-          + 'border:1px solid var(--border);flex-shrink:0;"></div>'
-          + '<span>Worsening</span></div>'
-        : '<div style="display:flex;align-items:center;gap:8px;padding:2px 4px 8px;font-size:10.5px;color:var(--muted);">'
-          + '<span>Lower DQ</span>'
-          + '<div style="width:140px;height:10px;border-radius:3px;'
-          + 'background:linear-gradient(to right,rgba(255,255,255,0.9),rgba(255,89,89,0.5));'
-          + 'border:1px solid var(--border);flex-shrink:0;"></div>'
-          + '<span>Higher DQ</span></div>';
-      if (heatmapEnabled) headerHtml += legendHtml;
+    // ── Heatmap legend ──
+    const legendHtml = isYoy
+      ? '<div style="display:flex;align-items:center;gap:8px;padding:2px 4px 8px;font-size:10.5px;color:var(--muted);">'
+        + '<span>Improving</span>'
+        + '<div style="width:140px;height:10px;border-radius:3px;'
+        + 'background:linear-gradient(to right,rgba(0,210,0,0.45),rgba(255,255,255,0.8),rgba(255,80,80,0.45));'
+        + 'border:1px solid var(--border);flex-shrink:0;"></div>'
+        + '<span>Worsening</span></div>'
+      : '<div style="display:flex;align-items:center;gap:8px;padding:2px 4px 8px;font-size:10.5px;color:var(--muted);">'
+        + '<span>Lower DQ</span>'
+        + '<div style="width:140px;height:10px;border-radius:3px;'
+        + 'background:linear-gradient(to right,rgba(255,255,255,0.9),rgba(255,89,89,0.5));'
+        + 'border:1px solid var(--border);flex-shrink:0;"></div>'
+        + '<span>Higher DQ</span></div>';
+    headerHtml += legendHtml;
 
-      // Collect unique years (columns) and series (rows)
-      const yearsSet  = new Set(), seriesSet = new Set();
-      for (const d of annualData) { yearsSet.add(d.year); seriesSet.add(d.series); }
-      const years  = [...yearsSet].filter(yr => Number(yr) >= MIN_TABLE_YEAR).sort();
-      if (!years.length) {
-        showMsg(`No annual table data from ${MIN_TABLE_YEAR} onward for selected filters.`);
-        return;
+    // Collect unique years (columns) and series (rows)
+    const yearsSet  = new Set(), seriesSet = new Set();
+    for (const d of annualData) { yearsSet.add(d.year); seriesSet.add(d.series); }
+    const years  = [...yearsSet].sort();
+    const series = [...seriesSet].sort();
+
+    // Build lookup: series → year → value
+    const lookup = new Map();
+    for (const d of annualData) {
+      if (!lookup.has(d.series)) lookup.set(d.series, new Map());
+      lookup.get(d.series).set(d.year, d.dq_rate);
+    }
+
+    // Compute per-column min/max for heat-map scaling
+    const colMin = {}, colMax = {};
+    for (const yr of years) {
+      const vals = series.map(s => lookup.get(s)?.get(yr)).filter(v => v != null);
+      colMin[yr] = Math.min(...vals);
+      colMax[yr] = Math.max(...vals);
+    }
+
+    // Heat-map colour helper
+    const isYoy = transform !== 'rate';
+    function cellBg(val, yr) {
+      if (!heatmapEnabled) return '';
+      if (val == null) return '';
+      const lo = colMin[yr], hi = colMax[yr];
+      if (lo === hi) return '';
+      const t = (val - lo) / (hi - lo); // 0=best, 1=worst
+      if (isYoy) {
+        // Diverging: negative = green, positive = red
+        const sign = val < 0 ? -1 : 1;
+        const abs  = Math.min(Math.abs(val / (hi - lo + 1e-9)), 1);
+        const r = sign > 0 ? Math.round(255) : Math.round(255 * (1 - abs * 0.6));
+        const g = sign < 0 ? Math.round(255) : Math.round(255 * (1 - abs * 0.6));
+        const b = Math.round(255 * (1 - abs * 0.4));
+        return `rgba(${r},${g},${b},0.45)`;
+      } else {
+        // Sequential: low = white, high = red
+        const r = 255, g = Math.round(255 * (1 - t * 0.65)), bv = Math.round(255 * (1 - t * 0.65));
+        return `rgba(${r},${g},${bv},0.5)`;
       }
+    }
 
-      // Build lookup: series → year → value
-      const lookup = new Map();
-      for (const d of annualData) {
-        if (!lookup.has(d.series)) lookup.set(d.series, new Map());
-        lookup.get(d.series).set(d.year, d.dq_rate);
-      }
-      const series = [...seriesSet].sort().filter(s => years.some(yr => lookup.get(s)?.get(yr) != null));
-      if (!series.length) {
-        showMsg(`No annual table data from ${MIN_TABLE_YEAR} onward for selected filters.`);
-        return;
-      }
+    // Format helper
+    const fmtVal = (v) => {
+      if (v == null) return '—';
+      if (yFmt === '+.2%') return (v >= 0 ? '+' : '') + (v * 100).toFixed(2) + ' pp';
+      if (yFmt === '+.1%') return (v >= 0 ? '+' : '') + (v * 100).toFixed(1) + '%';
+      return (v * 100).toFixed(2) + '%';
+    };
 
-      // Compute per-column min/max for heat-map scaling
-      const colMin = {}, colMax = {};
+    // Detect partial years (< 12 distinct months in the source monthly data)
+    const mpy = {};
+    for (const d of (monthlyData || [])) {
+      const yr = d.reporting_date.substring(0, 4);
+      if (!mpy[yr]) mpy[yr] = new Set();
+      mpy[yr].add(d.reporting_date.substring(0, 7)); // "YYYY-MM"
+    }
+    const partialYears = new Set(years.filter(yr => mpy[yr] && mpy[yr].size < 12));
+    const MO = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    function fmtYM(ym) { const [y,m] = ym.split('-'); return MO[+m-1] + ' ' + y; }
+
+    // Build table HTML
+    let html = '<table><thead><tr><th class="row-hdr">Series</th>';
+    for (const yr of years) {
+      const mark = partialYears.has(yr) ? `<sup style="font-size:9px;">†</sup>` : '';
+      html += `<th>${yr}${mark}</th>`;
+    }
+    html += '</tr></thead><tbody>';
+    for (const s of series) {
+      html += `<tr><td class="row-hdr">${s}</td>`;
       for (const yr of years) {
-        const vals = series.map(s => lookup.get(s)?.get(yr)).filter(v => v != null);
-        colMin[yr] = Math.min(...vals);
-        colMax[yr] = Math.max(...vals);
+        const val = lookup.get(s)?.get(yr);
+        const bg  = cellBg(val, yr);
+        html += `<td style="${bg ? 'background:' + bg : ''}">${fmtVal(val)}</td>`;
       }
+      html += '</tr>';
+    }
+    html += '</tbody></table>';
+    if (partialYears.size) {
+      const notes = [...partialYears].sort().map(yr => {
+        const lastMo = fmtYM([...mpy[yr]].sort().pop());
+        const priorYr = String(+yr - 1);
+        return isYoy
+          ? `<b>${yr}</b>: YTD through ${lastMo}; change vs. same period in ${priorYr}`
+          : `<b>${yr}</b>: YTD average through ${lastMo}`;
+      });
+      html += `<p style="font-size:11px;color:var(--muted);margin:6px 4px 0;">` +
+        `<sup style="font-size:9px;">†</sup> Partial year — ${notes.join(' · ')}</p>`;
+    }
+    tblWrap.innerHTML = headerHtml + html;
 
-      // Heat-map colour helper
-      function cellBg(val, yr) {
-        if (!heatmapEnabled) return '';
-        if (val == null) return '';
-        const lo = colMin[yr], hi = colMax[yr];
-        if (lo === hi) return '';
-        const t = (val - lo) / (hi - lo); // 0=best, 1=worst
-        if (isYoy) {
-          // Diverging: negative = green, positive = red
-          const sign = val < 0 ? -1 : 1;
-          const abs  = Math.min(Math.abs(val / (hi - lo + 1e-9)), 1);
-          const r = sign > 0 ? Math.round(255) : Math.round(255 * (1 - abs * 0.6));
-          const g = sign < 0 ? Math.round(255) : Math.round(255 * (1 - abs * 0.6));
-          const b = Math.round(255 * (1 - abs * 0.4));
-          return `rgba(${r},${g},${b},0.45)`;
-        } else {
-          // Sequential: low = white, high = red
-          const r = 255, g = Math.round(255 * (1 - t * 0.65)), bv = Math.round(255 * (1 - t * 0.65));
-          return `rgba(${r},${g},${bv},0.5)`;
-        }
-      }
-
-      // Format helper
-      const fmtVal = (v) => {
-        if (v == null) return '—';
-        if (yFmt === '+.2%') return (v >= 0 ? '+' : '') + (v * 100).toFixed(2) + ' pp';
-        if (yFmt === '+.1%') return (v >= 0 ? '+' : '') + (v * 100).toFixed(1) + '%';
-        return (v * 100).toFixed(2) + '%';
-      };
-
-      // Detect partial years (< 12 distinct months in the source monthly data)
-      const mpy = {};
-      for (const d of (monthlyData || [])) {
-        const yr = d.reporting_date.substring(0, 4);
-        if (!mpy[yr]) mpy[yr] = new Set();
-        mpy[yr].add(d.reporting_date.substring(0, 7)); // "YYYY-MM"
-      }
-      const partialYears = new Set(years.filter(yr => mpy[yr] && mpy[yr].size < 12));
-      const MO = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-      function fmtYM(ym) { const [y,m] = ym.split('-'); return MO[+m-1] + ' ' + y; }
-
-      // Build table HTML
-      let html = '<table><thead><tr><th class="row-hdr">Series</th>';
-      for (const yr of years) {
-        const mark = partialYears.has(yr) ? `<sup style="font-size:9px;">†</sup>` : '';
-        html += `<th>${yr}${mark}</th>`;
-      }
-      html += '</tr></thead><tbody>';
-      for (const s of series) {
-        html += `<tr><td class="row-hdr">${s}</td>`;
-        for (const yr of years) {
-          const val = lookup.get(s)?.get(yr);
-          const bg  = cellBg(val, yr);
-          html += `<td style="${bg ? 'background:' + bg : ''}">${fmtVal(val)}</td>`;
-        }
-        html += '</tr>';
-      }
-      html += '</tbody></table>';
-      if (partialYears.size) {
-        const notes = [...partialYears].sort().map(yr => {
-          const lastMo = fmtYM([...mpy[yr]].sort().pop());
-          const priorYr = String(+yr - 1);
-          return isYoy
-            ? `<b>${yr}</b>: YTD through ${lastMo}; change vs. same period in ${priorYr}`
-            : `<b>${yr}</b>: YTD average through ${lastMo}`;
-        });
-        html += `<p style="font-size:11px;color:var(--muted);margin:6px 4px 0;">` +
-          `<sup style="font-size:9px;">†</sup> Partial year — ${notes.join(' · ')}</p>`;
-      }
-      tblWrap.innerHTML = headerHtml + html;
-    } catch (err) {
-      console.error('renderTable failed', err);
-      showMsg('Table failed: ' + String(err), true);
+    // Attach heatmap toggle listener (must be after innerHTML is set)
+    const heatBtn = document.getElementById('heatmapToggle');
+    if (heatBtn) {
+      heatBtn.style.color = heatmapEnabled ? 'var(--accent)' : 'var(--muted)';
+      heatBtn.textContent = 'Heat map: ' + (heatmapEnabled ? 'ON' : 'OFF');
+      heatBtn.addEventListener('click', function() {
+        heatmapEnabled = !heatmapEnabled;
+        this.textContent = 'Heat map: ' + (heatmapEnabled ? 'ON' : 'OFF');
+        this.style.color = heatmapEnabled ? 'var(--accent)' : 'var(--muted)';
+        if (_lastTableArgs) renderTable(_lastTableArgs.annualData, _lastTableArgs.yFmt, _lastTableArgs.monthlyData, _lastTableArgs.title);
+      });
     }
   }
 
@@ -1282,10 +1233,8 @@
     history.pushState({}, '', _u);
     if (m === 'timeseries') {
       initTsSelection();
-      syncHeatmapToggle();
       render();
     } else {
-      syncHeatmapToggle();
       render();
     }
   }
@@ -1374,7 +1323,6 @@
 
     for (const btn of document.querySelectorAll('#displayGroup button'))
       btn.classList.toggle('active', btn.dataset.display === displayMode);
-    syncHeatmapToggle();
     render();
   });
 
@@ -1415,7 +1363,6 @@
     setMode('timeseries');
   } else {
     document.body.dataset.mode = 'vintage';
-    syncHeatmapToggle();
     loadVintageAndRender();
   }
 
