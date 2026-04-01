@@ -263,6 +263,15 @@
           title="Excludes deal series in their first 6 months, removing new-origination dip effects. Note: this tends to overstate the market DQ rate because newly-issued (low-DQ) loans are excluded from the denominator.">Seasoned (&gt;6 mo)</button>
       </div>
     </div>
+    <div class="bar-sep"></div>
+    <div class="ctrl">
+      <label class="lbl">Vehicle</label>
+      <div class="btn-group" id="vehicleGroup">
+        <button data-vehicle="all" class="active">All</button>
+        <button data-vehicle="new">New</button>
+        <button data-vehicle="used">Used</button>
+      </div>
+    </div>
     <div class="bar-sep" id="hmSep" style="display:none;"></div>
     <div class="ctrl" id="hmCtrl" style="display:none;">
       <label class="lbl">Heat map</label>
@@ -327,13 +336,34 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-04-01 07:47";
+  const BUILD_ID   = "2026-04-01 08:47";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
-  const LAST_UPDATED   = "Data through: February 2026";
-
-  document.getElementById('lastUpdated').textContent = LAST_UPDATED;
+  const _MO_FULL = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  function updateDataThrough(rows) {
+    if (!rows || !rows.length) return;
+    // For the active issuer selection, find the modal (most common) latest month
+    const latestByIssuer = new Map();
+    for (const r of rows) {
+      const code = r.issuer_code || r.series;
+      const d = r.reporting_date;
+      if (!latestByIssuer.has(code) || d > latestByIssuer.get(code)) latestByIssuer.set(code, d);
+    }
+    // Find the most common latest month across issuers (modal)
+    const freq = new Map();
+    for (const d of latestByIssuer.values()) {
+      const m = d.substring(0, 7);
+      freq.set(m, (freq.get(m) || 0) + 1);
+    }
+    let modalMonth = '';
+    let maxFreq = 0;
+    for (const [m, f] of freq) { if (f > maxFreq) { maxFreq = f; modalMonth = m; } }
+    if (!modalMonth) return;
+    const yr = modalMonth.substring(0, 4);
+    const mo = parseInt(modalMonth.substring(5, 7), 10) - 1;
+    document.getElementById('lastUpdated').textContent = 'Most recent data: ' + _MO_FULL[mo] + ' ' + yr;
+  }
 
   // ── State ────────────────────────────────────────────────────────────
   let mode            = 'vintage';
@@ -345,6 +375,7 @@
   let seasonedReady   = false;
   let seasonedPending = null;        // Promise (lazy-loaded)
   let poolMode        = 'all';       // 'all' | 'seasoned'
+  let vehicleType     = 'all';       // 'all' | 'new' | 'used'
   let selectedIssuers = new Set();   // for time series comparison
   let showAllAvg      = false;
   let ficoMin = 300, ficoMax = 900;
@@ -556,6 +587,7 @@
     summaryReady = true;
     const dates = rows.map(r => r.reporting_date);
     populateDates(tsDateFromSel, tsDateToSel, dates);
+    updateDataThrough(rows);
     if (mode === 'timeseries') render();
   }).catch(err => {
     console.warn('Summary CSV failed to load:', err);
@@ -591,7 +623,8 @@
     const filtered = rows.filter(r =>
       r.fico_low >= ficoMin && r.fico_low < ficoMax &&
       (!from || r.reporting_date >= from) &&
-      (!to   || r.reporting_date <= to)
+      (!to   || r.reporting_date <= to) &&
+      (vehicleType === 'all' || (vehicleType === 'new' && +r.new_used === 1) || (vehicleType === 'used' && +r.new_used === 2))
     );
 
     const grouped = new Map();
@@ -640,7 +673,8 @@
       return (
         r.fico_low >= ficoMin && r.fico_low < ficoMax &&
         (!from || m >= from) &&
-        (!to   || m <= to)
+        (!to   || m <= to) &&
+        (vehicleType === 'all' || (vehicleType === 'new' && +r.new_used === 1) || (vehicleType === 'used' && +r.new_used === 2))
       );
     });
 
@@ -1226,6 +1260,7 @@
         dateFromSel, dateToSel,
         vintageRows.map(r => r.reporting_date)
       );
+      updateDataThrough(vintageRows);
       await render();
     } catch (err) {
       showMsg('Failed to load: ' + String(err), true);
@@ -1400,6 +1435,15 @@
 
     for (const btn of document.querySelectorAll('#displayGroup button'))
       btn.classList.toggle('active', btn.dataset.display === displayMode);
+    render();
+  });
+
+  document.getElementById('vehicleGroup').addEventListener('click', e => {
+    const b = e.target.closest('button[data-vehicle]');
+    if (!b) return;
+    vehicleType = b.dataset.vehicle;
+    for (const btn of document.querySelectorAll('#vehicleGroup button'))
+      btn.classList.toggle('active', btn.dataset.vehicle === vehicleType);
     render();
   });
 
