@@ -218,13 +218,6 @@
     <div class="bar-sep"></div>
     <div class="ctrl">
       <label class="lbl">Vehicle</label>
-      <div class="btn-group" id="vehicleGroup">
-        <button data-vehicle="all" class="active">All</button>
-        <button data-vehicle="new">New</button>
-        <button data-vehicle="used">Used</button>
-      </div>
-      <span id="propBadge" style="font-size:11px;color:var(--muted);margin-left:8px;white-space:nowrap;"></span>
-    </div>
   </div>
 
   <!-- ── Row 2b: time series controls ── -->
@@ -273,16 +266,6 @@
           title="Excludes deal series in their first 6 months, removing new-origination dip effects. Note: this tends to overstate the market DQ rate because newly-issued (low-DQ) loans are excluded from the denominator.">Seasoned (&gt;6 mo)</button>
       </div>
     </div>
-    <div class="bar-sep"></div>
-    <div class="ctrl">
-      <label class="lbl">Vehicle</label>
-      <div class="btn-group" id="tsVehicleGroup">
-        <button data-vehicle="all" class="active">All</button>
-        <button data-vehicle="new"  disabled style="opacity:0.4;cursor:not-allowed;">New</button>
-        <button data-vehicle="used" disabled style="opacity:0.4;cursor:not-allowed;">Used</button>
-      </div>
-      <span id="tsPropBadge" style="font-size:11px;color:var(--muted);margin-left:8px;white-space:nowrap;"></span>
-    </div>
     <div class="bar-sep" id="hmSep" style="display:none;"></div>
     <div class="ctrl" id="hmCtrl" style="display:none;">
       <label class="lbl">Heat map</label>
@@ -322,6 +305,16 @@
         </div>
       </div>
     </div>
+    <div class="bar-sep"></div>
+    <div class="ctrl">
+      <label class="lbl">Vehicle</label>
+      <div class="btn-group" id="vehicleGroup">
+        <button data-vehicle="all" class="active">All</button>
+        <button data-vehicle="new">New</button>
+        <button data-vehicle="used">Used</button>
+      </div>
+      <span id="propBadge" style="font-size:11px;color:var(--muted);margin-left:8px;white-space:nowrap;"></span>
+    </div>
     <div style="margin-left:auto;display:flex;align-items:center;">
       <button class="info-btn" id="infoBtn" type="button" title="Methodology">i</button>
     </div>
@@ -347,7 +340,7 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-04-01 09:48";
+  const BUILD_ID   = "2026-04-01 10:45";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -415,10 +408,18 @@
     el.textContent = `New ${nPct}% · Used ${100 - nPct}%`;
   }
 
-  // ── TS vehicle toggle state ──────────────────────────────────────────
-  function updateTsVehicleToggle() {
+  // ── Vehicle toggle state (mode-aware) ───────────────────────────────
+  function updateVehicleToggleState() {
+    const btns = document.querySelectorAll('#vehicleGroup button[data-vehicle="new"], #vehicleGroup button[data-vehicle="used"]');
+    if (mode !== 'timeseries') {
+      // Vintage: always enabled
+      for (const btn of btns) {
+        btn.disabled = false; btn.style.opacity = ''; btn.style.cursor = '';
+      }
+      return;
+    }
+    // Time series: enabled only when exactly one issuer is selected
     const isSingle = selectedIssuers.size === 1 && !showAllAvg;
-    const btns = document.querySelectorAll('#tsVehicleGroup button[data-vehicle="new"], #tsVehicleGroup button[data-vehicle="used"]');
     for (const btn of btns) {
       btn.disabled      = !isSingle;
       btn.style.opacity = isSingle ? '' : '0.4';
@@ -427,15 +428,25 @@
     if (!isSingle) {
       if (vehicleType !== 'all') {
         vehicleType = 'all';
-        for (const btn of document.querySelectorAll('#tsVehicleGroup button, #vehicleGroup button'))
+        for (const btn of document.querySelectorAll('#vehicleGroup button'))
           btn.classList.toggle('active', btn.dataset.vehicle === 'all');
       }
-      const badge = document.getElementById('tsPropBadge');
+      const badge = document.getElementById('propBadge');
       if (badge) badge.textContent = '';
     } else {
       const code = [...selectedIssuers][0];
       if (tsVehicleCode === code && tsVehicleRows.length)
-        updatePropBadge(tsVehicleRows, 'tsPropBadge');
+        updatePropBadge(tsVehicleRows, 'propBadge');
+    }
+  }
+
+  // ── TS "Most recent data" label ──────────────────────────────────────
+  function updateDataThroughForTS() {
+    if (!summaryRows.length) return;
+    if (showAllAvg || selectedIssuers.size === 0) {
+      updateDataThrough(summaryRows);
+    } else {
+      updateDataThrough(summaryRows.filter(r => selectedIssuers.has(r.issuer_code)));
     }
   }
 
@@ -493,7 +504,7 @@
         if (selectAllCb.checked) selectedIssuers.add(cb.value);
         else selectedIssuers.delete(cb.value);
       }
-      updateIssuerBtn(); updateTsVehicleToggle(); render();
+      updateIssuerBtn(); updateVehicleToggleState(); updateDataThroughForTS(); render();
     });
     lbl.appendChild(selectAllCb);
     lbl.appendChild(document.createTextNode(' Show All Issuers'));
@@ -513,7 +524,7 @@
         showToast('Year Overlay supports one issuer or All avg — not both. Deselect the current issuer first.');
         return;
       }
-      showAllAvg = cb.checked; updateIssuerBtn(); updateTsVehicleToggle(); render();
+      showAllAvg = cb.checked; updateIssuerBtn(); updateVehicleToggleState(); updateDataThroughForTS(); render();
     });
     lbl.appendChild(cb);
     lbl.appendChild(document.createTextNode(' All Issuers'));
@@ -537,7 +548,7 @@
       }
       if (cb.checked) selectedIssuers.add(it.code);
       else selectedIssuers.delete(it.code);
-      syncSelectAll(); updateIssuerBtn(); updateTsVehicleToggle(); render();
+      syncSelectAll(); updateIssuerBtn(); updateVehicleToggleState(); updateDataThroughForTS(); render();
     });
     lbl.appendChild(cb);
     lbl.appendChild(document.createTextNode(' ' + issuerLabel[it.code]));
@@ -1343,9 +1354,12 @@
     history.pushState({}, '', _u);
     if (m === 'timeseries') {
       initTsSelection();
-      updateTsVehicleToggle();
+      updateVehicleToggleState();
+      updateDataThroughForTS();
       render();
     } else {
+      updateVehicleToggleState();
+      updatePropBadge(vintageRows, 'propBadge');
       render();
     }
   }
@@ -1501,26 +1515,17 @@
 
     for (const btn of document.querySelectorAll('#displayGroup button'))
       btn.classList.toggle('active', btn.dataset.display === displayMode);
-    updateTsVehicleToggle();
+    updateVehicleToggleState();
     render();
   });
 
-  document.getElementById('vehicleGroup').addEventListener('click', e => {
-    const b = e.target.closest('button[data-vehicle]');
-    if (!b) return;
-    vehicleType = b.dataset.vehicle;
-    for (const btn of document.querySelectorAll('#vehicleGroup button, #tsVehicleGroup button'))
-      btn.classList.toggle('active', btn.dataset.vehicle === vehicleType);
-    render();
-  });
-
-  document.getElementById('tsVehicleGroup').addEventListener('click', async e => {
+  document.getElementById('vehicleGroup').addEventListener('click', async e => {
     const b = e.target.closest('button[data-vehicle]');
     if (!b || b.disabled) return;
     vehicleType = b.dataset.vehicle;
-    for (const btn of document.querySelectorAll('#tsVehicleGroup button, #vehicleGroup button'))
+    for (const btn of document.querySelectorAll('#vehicleGroup button'))
       btn.classList.toggle('active', btn.dataset.vehicle === vehicleType);
-    if (vehicleType !== 'all') {
+    if (mode === 'timeseries' && vehicleType !== 'all') {
       const code = [...selectedIssuers][0];
       if (tsVehicleCode !== code) {
         showMsg('Loading…');
@@ -1532,9 +1537,11 @@
           return;
         }
       }
-      updatePropBadge(tsVehicleRows, 'tsPropBadge');
+      updatePropBadge(tsVehicleRows, 'propBadge');
+    } else if (mode === 'vintage') {
+      updatePropBadge(vintageRows, 'propBadge');
     } else {
-      const badge = document.getElementById('tsPropBadge');
+      const badge = document.getElementById('propBadge');
       if (badge) badge.textContent = '';
     }
     render();
