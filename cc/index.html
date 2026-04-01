@@ -12,8 +12,8 @@
   *,*::before,*::after{box-sizing:border-box}
   body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;
         font-size:13px;background:#f8fafc;margin:0;padding:0}
-  .wrap{max-width:1140px;margin:0 auto;padding:16px 16px 48px}
-  footer{margin-top:24px;font-size:11px;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:10px}
+  .wrap{max-width:1140px;margin:0 auto;padding:16px 16px 32px}
+  footer{margin-top:16px;font-size:11px;color:#999;border-top:1px solid #e2e8f0;padding-top:8px;margin-top:8px}
   /* ── Page header ── */
   .page-hdr{display:flex;align-items:center;gap:12px;padding-bottom:10px;
              border-bottom:1px solid #e2e8f0;margin-bottom:12px}
@@ -68,7 +68,14 @@
   .export-btn{padding:4px 7px;border:1px solid #cbd5e1;border-radius:5px;background:#fff;
                cursor:pointer;color:#475569;display:inline-flex;align-items:center;line-height:1}
   .export-btn:hover{background:#f1f5f9}
-  .meta-date{font-size:11px;color:#64748b;white-space:nowrap}
+  .meta-date{font-size:11px;color:#999;white-space:nowrap}
+  @media print {
+    body { background:#fff; }
+    .wrap { padding-bottom:24px; }
+    .export-btn, #toast { display:none !important; }
+    .chart { page-break-inside:avoid; }
+    footer { margin-top:8px; padding-top:8px; }
+  }
 </style>
 </head>
 <body>
@@ -79,7 +86,7 @@
     <div class="brand">
       <div class="brand-title">Credit Card ABS — Trust Performance</div>
     </div>
-    <span class="meta-date">Updated March 31, 2026</span>
+    <span class="meta-date">Updated: March 31, 2026</span>
     <button class="export-btn" id="export-btn" onclick="exportCcPage()" title="Download as PNG"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></button>
   </div>
 
