@@ -17,7 +17,7 @@
     body { display:flex; flex-direction:column; overflow:hidden; }
     .wrap {
       flex:1; display:flex; flex-direction:column; max-width:1200px; width:100%;
-      margin:0 auto; padding:10px 14px 20px; overflow:auto;
+      margin:0 auto; padding:10px 14px 32px; overflow:auto;
     }
     /* ── header ── */
     .hdr {
@@ -327,11 +327,11 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-03-31 21:10";
+  const BUILD_ID   = "2026-03-31 21:39";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
-  const LAST_UPDATED   = "Mar 31, 2026";
+  const LAST_UPDATED   = "March 31, 2026";
 
   document.getElementById('lastUpdated').textContent = LAST_UPDATED;
 
