@@ -311,7 +311,6 @@
         <button data-vehicle="used">Used</button>
       </div>
     </div>
-    <span id="propBadge" style="align-self:flex-end;font-size:11px;color:var(--muted);margin-bottom:3px;white-space:nowrap;"></span>
     <div style="margin-left:auto;display:flex;align-items:center;">
       <button class="info-btn" id="infoBtn" type="button" title="Methodology">i</button>
     </div>
@@ -337,7 +336,7 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-04-01 11:15";
+  const BUILD_ID   = "2026-04-01 13:08";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -388,11 +387,16 @@
   let tsVehicleCode  = null;   // issuer code whose CSV is cached for TS vehicle filter
   let tsVehicleRows  = [];     // per-issuer rows for TS vehicle filter
 
-  // ── Proportion badge ────────────────────────────────────────────────
-  function updatePropBadge(rows, badgeId) {
-    const el = document.getElementById(badgeId);
-    if (!el) return;
-    if (!rows || !rows.length) { el.textContent = ''; return; }
+  // ── Proportion labels inside New / Used buttons ──────────────────────
+  function updatePropBadge(rows, _unused) {
+    const newBtn  = document.querySelector('#vehicleGroup button[data-vehicle="new"]');
+    const usedBtn = document.querySelector('#vehicleGroup button[data-vehicle="used"]');
+    if (!newBtn || !usedBtn) return;
+    if (!rows || !rows.length) {
+      newBtn.innerHTML  = 'New';
+      usedBtn.innerHTML = 'Used';
+      return;
+    }
     let newL = 0, usedL = 0;
     for (const r of rows) {
       const n = +r.new_used;
@@ -400,9 +404,15 @@
       else if (n === 2) usedL += r.loan_count_current;
     }
     const pool = newL + usedL;
-    if (pool === 0) { el.textContent = ''; return; }
+    if (pool === 0) {
+      newBtn.innerHTML  = 'New';
+      usedBtn.innerHTML = 'Used';
+      return;
+    }
     const nPct = Math.round(newL / pool * 100);
-    el.textContent = `New ${nPct}% · Used ${100 - nPct}%`;
+    const pctStyle = 'font-size:10px;opacity:0.7;margin-left:3px;';
+    newBtn.innerHTML  = `New<span style="${pctStyle}">${nPct}%</span>`;
+    usedBtn.innerHTML = `Used<span style="${pctStyle}">${100 - nPct}%</span>`;
   }
 
   // ── Vehicle toggle state (mode-aware) ───────────────────────────────
