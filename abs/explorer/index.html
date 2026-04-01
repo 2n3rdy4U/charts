@@ -78,8 +78,23 @@
     .vega-embed svg .role-legend-entry rect.background { fill:none !important; }
     .loading { padding:20px; font-size:13px; color:var(--muted); }
     .err { color:#dc2626; }
+    /* ── heatmap toggle switch ── */
+    .hm-switch { display:flex; align-items:center; gap:6px; cursor:pointer; user-select:none; }
+    .hm-switch input { display:none; }
+    .hm-track {
+      width:32px; height:18px; border-radius:9px; background:var(--border);
+      position:relative; transition:background .2s; flex-shrink:0;
+    }
+    .hm-track::after {
+      content:''; position:absolute; top:2px; left:2px;
+      width:14px; height:14px; border-radius:50%;
+      background:#fff; box-shadow:0 1px 3px rgba(0,0,0,.25);
+      transition:transform .2s;
+    }
+    .hm-switch input:checked + .hm-track { background:var(--accent); }
+    .hm-switch input:checked + .hm-track::after { transform:translateX(14px); }
     /* ── annual table ── */
-    #tblWrap { flex:0 0 auto; width:100%; overflow:auto; display:none; padding:8px 4px 16px; box-sizing:border-box; }
+    #tblWrap { flex:0 0 auto; width:100%; overflow:auto; display:none; padding:8px 4px 24px; box-sizing:border-box; }
     #tblWrap table { border-collapse:collapse; font-size:12px; white-space:nowrap; width:100%; }
     #tblWrap th {
       position:sticky; top:0; background:#f3f4f6; border:1px solid var(--border);
@@ -247,6 +262,15 @@
           title="Excludes deal series in their first 6 months, removing new-origination dip effects. Note: this tends to overstate the market DQ rate because newly-issued (low-DQ) loans are excluded from the denominator.">Seasoned (&gt;6 mo)</button>
       </div>
     </div>
+    <div class="bar-sep" id="hmSep" style="display:none;"></div>
+    <div class="ctrl" id="hmCtrl" style="display:none;">
+      <label class="lbl">Heat map</label>
+      <label class="hm-switch">
+        <input type="checkbox" id="heatmapToggle" checked>
+        <span class="hm-track"></span>
+        <span id="hmLabel" style="font-size:12.5px;color:var(--text);">On</span>
+      </label>
+    </div>
   </div>
 
   <!-- ── Row 3: shared filters (DQ Status + Credit Score) ── -->
@@ -302,7 +326,7 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-03-31 20:35";
+  const BUILD_ID   = "2026-03-31 20:51";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -896,38 +920,32 @@
       ? 'each row = calendar-year avg of monthly rates; change = year N minus year N−1 (pp)'
       : transform === 'yoy-pct'
       ? 'each row = calendar-year avg of monthly rates; change = (year N ÷ year N−1) − 1; partial years compare only matched months'
-      : 'annual averages of monthly readings; partial years show available months only';
+      : 'annual averages of monthly readings';
     const subtitle = `${poolLabel} · ${transformNote}`;
     let headerHtml = `<div class="tbl-title">${title || 'Issuer Comparison'} — Time Series</div>`
                    + `<div class="tbl-subtitle">${subtitle}</div>`;
 
-    // ── Heatmap toggle button ──
-    headerHtml += '<div style="display:flex;align-items:center;justify-content:flex-end;padding:2px 4px 4px;">'
-      + '<button id="heatmapToggle"'
-      + ' style="font-size:11px;padding:3px 8px;border:1px solid var(--border);border-radius:5px;background:#fff;cursor:pointer;transition:color .15s;">'
-      + 'Heat map: ON'
-      + '</button></div>';
-
-    // ── Heatmap legend ──
-    const legendHtml = isYoy
-      ? '<div style="display:flex;align-items:center;gap:8px;padding:2px 4px 8px;font-size:10.5px;color:var(--muted);">'
-        + '<span>Improving</span>'
+    // ── Heatmap legend (shown/hidden by toggle; id used by listener below) ──
+    const legendInner = isYoy
+      ? '<span>Improving</span>'
         + '<div style="width:140px;height:10px;border-radius:3px;'
         + 'background:linear-gradient(to right,rgba(0,210,0,0.45),rgba(255,255,255,0.8),rgba(255,80,80,0.45));'
         + 'border:1px solid var(--border);flex-shrink:0;"></div>'
-        + '<span>Worsening</span></div>'
-      : '<div style="display:flex;align-items:center;gap:8px;padding:2px 4px 8px;font-size:10.5px;color:var(--muted);">'
-        + '<span>Lower DQ</span>'
+        + '<span>Worsening</span>'
+      : '<span>Lower DQ</span>'
         + '<div style="width:140px;height:10px;border-radius:3px;'
         + 'background:linear-gradient(to right,rgba(255,255,255,0.9),rgba(255,89,89,0.5));'
         + 'border:1px solid var(--border);flex-shrink:0;"></div>'
-        + '<span>Higher DQ</span></div>';
-    headerHtml += legendHtml;
+        + '<span>Higher DQ</span>';
+    headerHtml += '<div id="heatmapLegend" style="display:'
+      + (heatmapEnabled ? 'flex' : 'none')
+      + ';align-items:center;gap:8px;padding:2px 4px 8px;font-size:10.5px;color:var(--muted);">'
+      + legendInner + '</div>';
 
     // Collect unique years (columns) and series (rows)
     const yearsSet  = new Set(), seriesSet = new Set();
     for (const d of annualData) { yearsSet.add(d.year); seriesSet.add(d.series); }
-    const years  = [...yearsSet].sort();
+    const years  = [...yearsSet].sort().filter(yr => yr !== '2016');
     const series = [...seriesSet].sort();
 
     // Build lookup: series → year → value
@@ -1011,23 +1029,14 @@
           ? `<b>${yr}</b>: YTD through ${lastMo}; change vs. same period in ${priorYr}`
           : `<b>${yr}</b>: YTD average through ${lastMo}`;
       });
-      html += `<p style="font-size:11px;color:var(--muted);margin:6px 4px 0;">` +
+      html += `<p style="font-size:11px;color:var(--muted);margin:8px 4px 12px;">` +
         `<sup style="font-size:9px;">†</sup> Partial year — ${notes.join(' · ')}</p>`;
     }
     tblWrap.innerHTML = headerHtml + html;
 
-    // Attach heatmap toggle listener (must be after innerHTML is set)
-    const heatBtn = document.getElementById('heatmapToggle');
-    if (heatBtn) {
-      heatBtn.style.color = heatmapEnabled ? 'var(--accent)' : 'var(--muted)';
-      heatBtn.textContent = 'Heat map: ' + (heatmapEnabled ? 'ON' : 'OFF');
-      heatBtn.addEventListener('click', function() {
-        heatmapEnabled = !heatmapEnabled;
-        this.textContent = 'Heat map: ' + (heatmapEnabled ? 'ON' : 'OFF');
-        this.style.color = heatmapEnabled ? 'var(--accent)' : 'var(--muted)';
-        if (_lastTableArgs) renderTable(_lastTableArgs.annualData, _lastTableArgs.yFmt, _lastTableArgs.monthlyData, _lastTableArgs.title);
-      });
-    }
+    // Sync legend visibility with current heatmapEnabled state
+    const legend = document.getElementById('heatmapLegend');
+    if (legend) legend.style.display = heatmapEnabled ? 'flex' : 'none';
   }
 
   // ── Render ───────────────────────────────────────────────────────────
@@ -1292,10 +1301,77 @@
     syncTransformTitle();
   }
 
+  // ── Heatmap toggle switch (in filter bar, visible only in Table view) ──
+  (function() {
+    const chk    = document.getElementById('heatmapToggle');
+    const lbl    = document.getElementById('hmLabel');
+    const ctrl   = document.getElementById('hmCtrl');
+    const sep    = document.getElementById('hmSep');
+    if (!chk) return;
+    chk.checked = heatmapEnabled;
+    chk.addEventListener('change', function() {
+      heatmapEnabled = this.checked;
+      if (lbl) lbl.textContent = heatmapEnabled ? 'On' : 'Off';
+      const legend = document.getElementById('heatmapLegend');
+      if (legend) legend.style.display = heatmapEnabled ? 'flex' : 'none';
+      // Re-colour cells without full re-render
+      if (_lastTableArgs) {
+        const tbl = document.querySelector('#tblWrap table');
+        if (tbl) {
+          const rows = tbl.querySelectorAll('tbody tr');
+          const {annualData} = _lastTableArgs;
+          // Rebuild lookup + colMin/colMax inline
+          const lu = new Map();
+          for (const d of annualData) {
+            if (!lu.has(d.series)) lu.set(d.series, new Map());
+            lu.get(d.series).set(d.year, d.dq_rate);
+          }
+          const seriesArr = [...new Set(annualData.map(d => d.series))].sort();
+          const yearsArr  = [...new Set(annualData.map(d => d.year))].sort().filter(y => y !== '2016');
+          const cMin = {}, cMax = {};
+          for (const yr of yearsArr) {
+            const vals = seriesArr.map(s => lu.get(s)?.get(yr)).filter(v => v != null);
+            cMin[yr] = Math.min(...vals); cMax[yr] = Math.max(...vals);
+          }
+          const isYoyLocal = transform !== 'rate';
+          rows.forEach((tr, ri) => {
+            const s = seriesArr[ri];
+            tr.querySelectorAll('td:not(.row-hdr)').forEach((td, ci) => {
+              const yr  = yearsArr[ci];
+              const val = lu.get(s)?.get(yr);
+              if (!heatmapEnabled || val == null) { td.style.background = ''; return; }
+              const lo = cMin[yr], hi = cMax[yr];
+              if (lo === hi) { td.style.background = ''; return; }
+              const t = (val - lo) / (hi - lo);
+              let bg;
+              if (isYoyLocal) {
+                const sign = val < 0 ? -1 : 1;
+                const abs  = Math.min(Math.abs(val / (hi - lo + 1e-9)), 1);
+                const r = sign > 0 ? 255 : Math.round(255*(1-abs*0.6));
+                const g = sign < 0 ? 255 : Math.round(255*(1-abs*0.6));
+                const b = Math.round(255*(1-abs*0.4));
+                bg = `rgba(${r},${g},${b},0.45)`;
+              } else {
+                const g2 = Math.round(255*(1-t*0.65)), bv = Math.round(255*(1-t*0.65));
+                bg = `rgba(255,${g2},${bv},0.5)`;
+              }
+              td.style.background = bg;
+            });
+          });
+        }
+      }
+    });
+  })();
+
   document.getElementById('displayGroup').addEventListener('click', e => {
     const b = e.target.closest('button[data-display]');
     if (!b) return;
     displayMode = b.dataset.display;
+    // Show/hide heat map control in filter bar
+    const ctrl = document.getElementById('hmCtrl');
+    const sep  = document.getElementById('hmSep');
+    if (ctrl) ctrl.style.display = displayMode === 'table' ? '' : 'none';
+    if (sep)  sep.style.display  = displayMode === 'table' ? '' : 'none';
 
     const showAllRow = document.getElementById('showAllRow');
     if (showAllRow) showAllRow.style.display = (displayMode === 'seasonal') ? 'none' : '';
