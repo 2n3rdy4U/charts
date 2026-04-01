@@ -223,6 +223,7 @@
         <button data-vehicle="new">New</button>
         <button data-vehicle="used">Used</button>
       </div>
+      <span id="propBadge" style="font-size:11px;color:var(--muted);margin-left:8px;white-space:nowrap;"></span>
     </div>
   </div>
 
@@ -271,6 +272,16 @@
         <button data-pool="seasoned"
           title="Excludes deal series in their first 6 months, removing new-origination dip effects. Note: this tends to overstate the market DQ rate because newly-issued (low-DQ) loans are excluded from the denominator.">Seasoned (&gt;6 mo)</button>
       </div>
+    </div>
+    <div class="bar-sep"></div>
+    <div class="ctrl">
+      <label class="lbl">Vehicle</label>
+      <div class="btn-group" id="tsVehicleGroup">
+        <button data-vehicle="all" class="active">All</button>
+        <button data-vehicle="new"  disabled style="opacity:0.4;cursor:not-allowed;">New</button>
+        <button data-vehicle="used" disabled style="opacity:0.4;cursor:not-allowed;">Used</button>
+      </div>
+      <span id="tsPropBadge" style="font-size:11px;color:var(--muted);margin-left:8px;white-space:nowrap;"></span>
     </div>
     <div class="bar-sep" id="hmSep" style="display:none;"></div>
     <div class="ctrl" id="hmCtrl" style="display:none;">
@@ -336,7 +347,7 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-04-01 09:15";
+  const BUILD_ID   = "2026-04-01 09:48";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -384,6 +395,49 @@
   let displayMode = 'chart';  // 'chart' | 'table'
   let heatmapEnabled = true;
   let _lastTableArgs = null;
+  let tsVehicleCode  = null;   // issuer code whose CSV is cached for TS vehicle filter
+  let tsVehicleRows  = [];     // per-issuer rows for TS vehicle filter
+
+  // ── Proportion badge ────────────────────────────────────────────────
+  function updatePropBadge(rows, badgeId) {
+    const el = document.getElementById(badgeId);
+    if (!el) return;
+    if (!rows || !rows.length) { el.textContent = ''; return; }
+    let newL = 0, usedL = 0;
+    for (const r of rows) {
+      const n = +r.new_used;
+      if (n === 1) newL  += r.loan_count_current;
+      else if (n === 2) usedL += r.loan_count_current;
+    }
+    const pool = newL + usedL;
+    if (pool === 0) { el.textContent = ''; return; }
+    const nPct = Math.round(newL / pool * 100);
+    el.textContent = `New ${nPct}% · Used ${100 - nPct}%`;
+  }
+
+  // ── TS vehicle toggle state ──────────────────────────────────────────
+  function updateTsVehicleToggle() {
+    const isSingle = selectedIssuers.size === 1 && !showAllAvg;
+    const btns = document.querySelectorAll('#tsVehicleGroup button[data-vehicle="new"], #tsVehicleGroup button[data-vehicle="used"]');
+    for (const btn of btns) {
+      btn.disabled      = !isSingle;
+      btn.style.opacity = isSingle ? '' : '0.4';
+      btn.style.cursor  = isSingle ? '' : 'not-allowed';
+    }
+    if (!isSingle) {
+      if (vehicleType !== 'all') {
+        vehicleType = 'all';
+        for (const btn of document.querySelectorAll('#tsVehicleGroup button, #vehicleGroup button'))
+          btn.classList.toggle('active', btn.dataset.vehicle === 'all');
+      }
+      const badge = document.getElementById('tsPropBadge');
+      if (badge) badge.textContent = '';
+    } else {
+      const code = [...selectedIssuers][0];
+      if (tsVehicleCode === code && tsVehicleRows.length)
+        updatePropBadge(tsVehicleRows, 'tsPropBadge');
+    }
+  }
 
   // ── Toast notification ───────────────────────────────────────────────
   let _toastTimer = null;
@@ -439,7 +493,7 @@
         if (selectAllCb.checked) selectedIssuers.add(cb.value);
         else selectedIssuers.delete(cb.value);
       }
-      updateIssuerBtn(); render();
+      updateIssuerBtn(); updateTsVehicleToggle(); render();
     });
     lbl.appendChild(selectAllCb);
     lbl.appendChild(document.createTextNode(' Show All Issuers'));
@@ -459,7 +513,7 @@
         showToast('Year Overlay supports one issuer or All avg — not both. Deselect the current issuer first.');
         return;
       }
-      showAllAvg = cb.checked; updateIssuerBtn(); render();
+      showAllAvg = cb.checked; updateIssuerBtn(); updateTsVehicleToggle(); render();
     });
     lbl.appendChild(cb);
     lbl.appendChild(document.createTextNode(' All Issuers'));
@@ -483,7 +537,7 @@
       }
       if (cb.checked) selectedIssuers.add(it.code);
       else selectedIssuers.delete(it.code);
-      syncSelectAll(); updateIssuerBtn(); render();
+      syncSelectAll(); updateIssuerBtn(); updateTsVehicleToggle(); render();
     });
     lbl.appendChild(cb);
     lbl.appendChild(document.createTextNode(' ' + issuerLabel[it.code]));
@@ -666,9 +720,18 @@
 
   // Time series mode: aggregate by issuer → one point per (issuer, month)
   function aggregateTimeSeries(rows) {
+    // When vehicle filter is active and exactly one issuer is selected,
+    // swap in the cached per-issuer CSV (which has the new_used column).
+    let activeRows = rows;
+    let singleCode = null;
+    if (vehicleType !== 'all' && selectedIssuers.size === 1 && !showAllAvg && tsVehicleRows.length) {
+      singleCode = [...selectedIssuers][0];
+      activeRows = tsVehicleRows;
+    }
+
     const from = toMonthStart(tsDateFromSel.value || '');
     const to   = toMonthStart(tsDateToSel.value   || '');
-    const filtered = rows.filter(r => {
+    const filtered = activeRows.filter(r => {
       const m = toMonthStart(r.reporting_date);
       return (
         r.fico_low >= ficoMin && r.fico_low < ficoMax &&
@@ -682,11 +745,12 @@
     // same calendar month share the same x-axis position.
     const grouped = new Map();
     for (const r of filtered) {
+      const iCode = singleCode || r.issuer_code;
       const month = toMonthStart(r.reporting_date);
-      const key = `${r.issuer_code}||${month}`;
+      const key = `${iCode}||${month}`;
       if (!grouped.has(key)) {
         grouped.set(key, {
-          issuer_code: r.issuer_code, reporting_date: month,
+          issuer_code: iCode, reporting_date: month,
           cur: 0, d3059: 0, d60: 0,
         });
       }
@@ -1261,6 +1325,7 @@
         vintageRows.map(r => r.reporting_date)
       );
       updateDataThrough(vintageRows);
+      updatePropBadge(vintageRows, 'propBadge');
       await render();
     } catch (err) {
       showMsg('Failed to load: ' + String(err), true);
@@ -1278,6 +1343,7 @@
     history.pushState({}, '', _u);
     if (m === 'timeseries') {
       initTsSelection();
+      updateTsVehicleToggle();
       render();
     } else {
       render();
@@ -1435,6 +1501,7 @@
 
     for (const btn of document.querySelectorAll('#displayGroup button'))
       btn.classList.toggle('active', btn.dataset.display === displayMode);
+    updateTsVehicleToggle();
     render();
   });
 
@@ -1442,8 +1509,34 @@
     const b = e.target.closest('button[data-vehicle]');
     if (!b) return;
     vehicleType = b.dataset.vehicle;
-    for (const btn of document.querySelectorAll('#vehicleGroup button'))
+    for (const btn of document.querySelectorAll('#vehicleGroup button, #tsVehicleGroup button'))
       btn.classList.toggle('active', btn.dataset.vehicle === vehicleType);
+    render();
+  });
+
+  document.getElementById('tsVehicleGroup').addEventListener('click', async e => {
+    const b = e.target.closest('button[data-vehicle]');
+    if (!b || b.disabled) return;
+    vehicleType = b.dataset.vehicle;
+    for (const btn of document.querySelectorAll('#tsVehicleGroup button, #vehicleGroup button'))
+      btn.classList.toggle('active', btn.dataset.vehicle === vehicleType);
+    if (vehicleType !== 'all') {
+      const code = [...selectedIssuers][0];
+      if (tsVehicleCode !== code) {
+        showMsg('Loading…');
+        try {
+          tsVehicleRows = await fetchCSV(`${code}.csv`);
+          tsVehicleCode = code;
+        } catch(err) {
+          showMsg('Failed to load vehicle data: ' + String(err), true);
+          return;
+        }
+      }
+      updatePropBadge(tsVehicleRows, 'tsPropBadge');
+    } else {
+      const badge = document.getElementById('tsPropBadge');
+      if (badge) badge.textContent = '';
+    }
     render();
   });
 
