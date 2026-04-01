@@ -192,7 +192,7 @@
       <div class="brand-title">Auto ABS Data Explorer</div>
       <div class="brand-sub">Auto ABS loan performance · select filters below</div>
     </div>
-    <div class="meta-date">Updated: <span id="lastUpdated"></span></div>
+    <div class="meta-date"><span id="lastUpdated"></span></div>
     <button id="export-btn" onclick="exportExplorer()" title="Download chart as PNG" style="padding:4px 7px;border:1px solid var(--border);border-radius:5px;background:#fff;cursor:pointer;color:var(--muted);margin-left:8px;display:inline-flex;align-items:center;line-height:1;"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></button>
   </div>
   <nav class="mode-tabs" id="modeGroup">
@@ -327,11 +327,11 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-03-31 23:30";
+  const BUILD_ID   = "2026-04-01 07:43";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
-  const LAST_UPDATED   = "March 31, 2026";
+  const LAST_UPDATED   = "Data through: February 1, 2026";
 
   document.getElementById('lastUpdated').textContent = LAST_UPDATED;
 
