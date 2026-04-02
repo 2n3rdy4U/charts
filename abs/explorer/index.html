@@ -325,9 +325,9 @@
     <div class="ctrl">
       <label class="lbl">Date Range</label>
       <div style="display:flex;align-items:center;gap:4px;">
-        <select id="tsDateFrom" style="width:96px;"></select>
+        <select id="tsDateFrom" style="width:72px;"></select>
         <span style="font-size:11px;color:var(--muted);">–</span>
-        <select id="tsDateTo" style="width:96px;"></select>
+        <select id="tsDateTo" style="width:72px;"></select>
       </div>
     </div>
     <div class="bar-sep"></div>
@@ -434,7 +434,7 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-04-02 17:27";
+  const BUILD_ID   = "2026-04-02 19:04";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -725,6 +725,20 @@
   const tsDateFromSel = document.getElementById('tsDateFrom');
   const tsDateToSel   = document.getElementById('tsDateTo');
 
+  function populateYears(sel1, sel2, dates) {
+    const years = Array.from(new Set(dates.filter(Boolean).map(d => d.substring(0, 4)))).sort();
+    for (const sel of [sel1, sel2]) {
+      sel.innerHTML = '';
+      for (const y of years) {
+        const o = document.createElement('option');
+        o.value = y; o.textContent = y;
+        sel.appendChild(o);
+      }
+    }
+    sel1.value = years[0] || '';
+    sel2.value = years[years.length - 1] || '';
+  }
+
   // ── CSV loading ──────────────────────────────────────────────────────
   function csvUrl(filename) {
     return `${DATA_BASE}/${filename}?b=${encodeURIComponent(BUILD_ID)}`;
@@ -763,7 +777,7 @@
     summaryRows  = rows;
     summaryReady = true;
     const dates = rows.map(r => r.reporting_date);
-    populateDates(tsDateFromSel, tsDateToSel, dates);
+    populateYears(tsDateFromSel, tsDateToSel, dates);
     updateDataThrough(rows);
     if (mode === 'timeseries') render();
   }).catch(err => {
@@ -852,14 +866,14 @@
       activeRows = tsVehicleRows;
     }
 
-    const from = toMonthStart(tsDateFromSel.value || '');
-    const to   = toMonthStart(tsDateToSel.value   || '');
+    const fromYear = tsDateFromSel.value ? tsDateFromSel.value.substring(0, 4) : '';
+    const toYear   = tsDateToSel.value   ? tsDateToSel.value.substring(0, 4)   : '';
     const filtered = activeRows.filter(r => {
-      const m = toMonthStart(r.reporting_date);
+      const yr = r.reporting_date.substring(0, 4);
       return (
         r.fico_low >= ficoMin && r.fico_low < ficoMax &&
-        (!from || m >= from) &&
-        (!to   || m <= to) &&
+        (!fromYear || yr >= fromYear) &&
+        (!toYear   || yr <= toYear) &&
         (vehicleType === 'all' || (vehicleType === 'new' && +r.new_used === 1) || (vehicleType === 'used' && +r.new_used === 2))
       );
     });
@@ -1723,8 +1737,9 @@
       },
     };
     const colorNoLeg = {"field":"vintage","type":"ordinal","legend":null};
+    const xTitle = vintageBasis === 'deal' ? 'Months Since Issuance' : 'Months Since Loan Origination';
     const xEnc = {
-      "field":"age","type":"quantitative","title":"Months Since Issuance",
+      "field":"age","type":"quantitative","title":xTitle,
       "axis":{"tickMinStep":6},
     };
     const yEnc = {
