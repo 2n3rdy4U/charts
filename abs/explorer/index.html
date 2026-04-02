@@ -151,7 +151,10 @@
     .dq-view-only, .loss-view-only { display:none; }
     body[data-vintage-view="dq"]   .dq-view-only   { display:contents; }
     body[data-vintage-view="loss"] .loss-view-only  { display:contents; }
-    body[data-vintage-view="loss"] #sharedBar       { display:none; }
+    /* Loss Rate: gray out shared bar — keep visible but non-interactive */
+    #sharedBar.loss-disabled .ctrl,
+    #sharedBar.loss-disabled .bar-sep { opacity:0.35; }
+    #sharedBar.loss-disabled .ctrl    { pointer-events:none; cursor:default; }
     /* ── export region fills remaining height ── */
     #export-region { flex:1; display:flex; flex-direction:column; min-height:0; }
     /* ── mode tab strip ── */
@@ -238,9 +241,6 @@
           <button data-basis="deal" class="active">Deal Issuance</button>
           <button data-basis="orig">Loan Origination</button>
         </div>
-      </div>
-      <div class="ctrl" style="margin-left:auto;">
-        <span style="font-size:11px;color:var(--muted);">FICO 300–900 · All vehicles</span>
       </div>
     </div>
   </div>
@@ -364,7 +364,7 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-04-02 11:00";
+  const BUILD_ID   = "2026-04-02 12:00";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -1515,9 +1515,12 @@
     document.body.dataset.vintageView = v;
     for (const b of document.querySelectorAll('#vintageViewGroup button'))
       b.classList.toggle('active', b.dataset.vview === v);
+    const sharedBar = document.getElementById('sharedBar');
     if (v === 'loss') {
+      sharedBar.classList.add('loss-disabled');
       loadLossAndRender();
     } else {
+      sharedBar.classList.remove('loss-disabled');
       loadVintageAndRender();
     }
   }
