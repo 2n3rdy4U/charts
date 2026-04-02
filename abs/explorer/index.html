@@ -147,13 +147,77 @@
     .vintage-only, .ts-only { display:none; }
     body[data-mode="vintage"]    .vintage-only { display:flex; }
     body[data-mode="timeseries"] .ts-only      { display:flex; }
-    /* ── vintage sub-view visibility (loss-only controls) ── */
-    .loss-view-only { display:none; }
-    body[data-vintage-view="loss"] .loss-view-only  { display:contents; }
-    /* Loss Rate: gray out shared bar — keep visible but non-interactive */
-    #sharedBar.loss-disabled .ctrl,
-    #sharedBar.loss-disabled .bar-sep { opacity:0.35; }
-    #sharedBar.loss-disabled .ctrl    { pointer-events:none; cursor:default; }
+    /* ── coverage tab ── */
+    .coverage-only { display:none; }
+    body[data-mode="coverage"] .coverage-only { display:flex; flex-direction:column; flex:1; min-height:0; }
+    body[data-mode="coverage"] #sharedBar { display:none !important; }
+    body[data-mode="coverage"] #vis { display:none !important; }
+    body[data-mode="coverage"] #tblWrap { display:none !important; }
+    body[data-mode="coverage"] #source-bar { display:block !important; }
+    body[data-mode="coverage"] #export-btn { visibility:visible; }
+    .cov-wrap { padding:8px 0 24px; overflow:auto; }
+    .cov-period { font-size:13px; color:var(--muted); margin-bottom:8px; }
+    .cov-period strong { color:var(--text); }
+    .cov-legend { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:10px; font-size:11.5px; color:var(--muted); align-items:center; }
+    .cov-swatch { display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:4px; vertical-align:middle; }
+    /* ── main issuer table ── */
+    .cov-table { width:100%; border-collapse:collapse; font-size:12.5px; table-layout:fixed; }
+    .cov-table thead th {
+      position:sticky; top:0; background:#f3f4f6; border-bottom:2px solid var(--border);
+      padding:6px 8px; font-size:11px; font-weight:600; color:var(--muted);
+      text-align:left; white-space:nowrap; z-index:1; user-select:none; overflow:hidden;
+    }
+    .cov-table thead th:hover { background:#e9eaec; color:var(--text); }
+    .cov-table thead th.num { text-align:center; }
+    .cov-col-issuer  { width:23%; }
+    .cov-col-num     { width:8%; }
+    .cov-col-date    { width:15%; }
+    .cov-col-status  { width:30%; }
+    .cov-issuer-row { cursor:pointer; user-select:none; }
+    .cov-issuer-row:hover td { filter:brightness(0.97); }
+    .cov-issuer-row td {
+      padding:7px 8px; border-bottom:1px solid var(--border);
+      vertical-align:middle; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      border-left:3px solid transparent;
+    }
+    .cov-issuer-row td:first-child { border-left-width:4px; }
+    .cov-row--good    td:first-child { border-left-color:#10b981; background:#f0fdf4; }
+    .cov-row--pending td:first-child { border-left-color:#3b82f6; background:#eff6ff; }
+    .cov-row--warn    td:first-child { border-left-color:#f59e0b; background:#fffbeb; }
+    .cov-row--bad     td:first-child { border-left-color:#ef4444; background:#fef2f2; }
+    .cov-row--good    .cov-state { color:#059669; font-weight:600; }
+    .cov-row--pending .cov-state { color:#2563eb; font-weight:600; }
+    .cov-row--warn    .cov-state { color:#b45309; font-weight:600; }
+    .cov-row--bad     .cov-state { color:#dc2626; font-weight:600; }
+    .cov-chevron { display:inline-block; transition:transform .15s; font-size:10px; margin-right:5px; opacity:.5; }
+    .cov-issuer-row.open .cov-chevron { transform:rotate(90deg); }
+    .cov-issuer-name { font-weight:600; }
+    .cov-issuer-code { font-weight:400; color:var(--muted); font-size:11px; margin-left:4px; }
+    .cov-num { text-align:center; font-variant-numeric:tabular-nums; }
+    /* ── expanded deal detail ── */
+    .cov-detail-row td {
+      padding:0; border-bottom:1px solid var(--border);
+      background:#fafafa;
+    }
+    .cov-detail-inner { padding:6px 10px 10px 28px; }
+    .cov-detail-inner table { width:100%; border-collapse:collapse; font-size:11px; }
+    .cov-detail-inner th {
+      font-size:10px; color:var(--muted); font-weight:600;
+      padding:4px 8px; border-bottom:1px solid var(--border); text-align:left; white-space:nowrap;
+    }
+    .cov-detail-inner th.num { text-align:center; }
+    .cov-detail-inner td { padding:3px 8px; border-bottom:1px solid #f0f0f0; white-space:nowrap; }
+    .cov-detail-inner tr:last-child td { border-bottom:none; }
+    .cov-detail-inner td.num { text-align:center; }
+    .cov-detail-overdue td { background:#fff1f1; border-left:3px solid #f87171; }
+    .cov-detail-overdue td:first-child { font-weight:600; color:#b91c1c; }
+    .cov-matured-section { margin-top:6px; }
+    .cov-matured-section summary {
+      font-size:10.5px; color:var(--muted); cursor:pointer; list-style:none;
+      padding:2px 0; user-select:none;
+    }
+    .cov-matured-section summary::-webkit-details-marker { display:none; }
+    .badge-matured { display:inline-block; background:#f3f4f6; color:#6b7280; border-radius:4px; padding:1px 5px; font-size:9.5px; font-weight:600; }
     /* ── export region fills remaining height ── */
     #export-region { flex:1; display:flex; flex-direction:column; min-height:0; }
     /* ── mode tab strip ── */
@@ -183,6 +247,8 @@
       #vis { overflow:visible; height:auto; min-height:400px; page-break-inside:avoid; margin-bottom:0; }
       #tblWrap { overflow:visible; height:auto; display:block !important; page-break-inside:avoid; padding-bottom:24px; }
       #source-bar { font-size:11px; padding:2px 0 8px; }
+      body[data-mode="coverage"] #coverageView { overflow:visible !important; height:auto !important; }
+      body[data-mode="coverage"] .cov-wrap { overflow:visible !important; height:auto !important; }
     }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/html-to-image@1/dist/html-to-image.min.js"></script>
@@ -190,7 +256,7 @@
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 </head>
-<body data-mode="vintage" data-vintage-view="dq">
+<body data-mode="vintage">
 <div class="wrap">
 
   <!-- ── Row 1: header (title + mode toggle + last updated) ── -->
@@ -203,11 +269,12 @@
     <button id="export-btn" onclick="exportExplorer()" title="Download chart as PNG" style="padding:4px 7px;border:1px solid var(--border);border-radius:5px;background:#fff;cursor:pointer;color:var(--muted);margin-left:8px;display:inline-flex;align-items:center;line-height:1;"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></button>
   </div>
   <nav class="mode-tabs" id="modeGroup">
-    <button class="mode-tab active" data-mode="vintage">Vintage</button>
+    <button class="mode-tab active" data-mode="vintage" title="X-axis = months since each deal series&#39; first reporting date. Aligns deals of different ages so you can compare how delinquency evolves over a series&#39; life, regardless of when it was issued.">Vintage Curves</button>
     <button class="mode-tab" data-mode="timeseries">Time Series</button>
+    <button class="mode-tab" data-mode="coverage">Coverage</button>
   </nav>
 
-  <!-- ── Row 2a: vintage controls (issuer + sub-toggle + conditional controls) ── -->
+  <!-- ── Row 2a: vintage controls (issuer + date range) ── -->
   <div class="fbar vintage-only" id="vintageBar">
     <div class="ctrl">
       <label class="lbl">Issuer</label>
@@ -215,20 +282,11 @@
     </div>
     <div class="bar-sep"></div>
     <div class="ctrl">
-      <label class="lbl">Analysis</label>
-      <div class="btn-group" id="vintageViewGroup">
-        <button data-vview="dq" class="active">Delinquency <span style="font-size:10px;opacity:0.65;font-weight:400;">· #</span></button>
-        <button data-vview="loss">Loss Rate <span style="font-size:10px;opacity:0.65;font-weight:400;">· $</span></button>
-      </div>
-    </div>
-    <div class="loss-view-only">
-      <div class="bar-sep"></div>
-      <div class="ctrl">
-        <label class="lbl">Vintage Basis</label>
-        <div class="btn-group" id="vintageBasisGroup">
-          <button data-basis="deal" class="active">Deal Issuance</button>
-          <button data-basis="orig">Loan Origination</button>
-        </div>
+      <label class="lbl">Date Range</label>
+      <div style="display:flex;align-items:center;gap:4px;">
+        <select id="dateFrom" style="width:96px;"></select>
+        <span style="font-size:11px;color:var(--muted);">–</span>
+        <select id="dateTo" style="width:96px;"></select>
       </div>
     </div>
   </div>
@@ -246,9 +304,9 @@
     <div class="ctrl">
       <label class="lbl">Date Range</label>
       <div style="display:flex;align-items:center;gap:4px;">
-        <select id="tsDateFrom" style="width:68px;"></select>
+        <select id="tsDateFrom" style="width:96px;"></select>
         <span style="font-size:11px;color:var(--muted);">–</span>
-        <select id="tsDateTo" style="width:68px;"></select>
+        <select id="tsDateTo" style="width:96px;"></select>
       </div>
     </div>
     <div class="bar-sep"></div>
@@ -340,11 +398,14 @@
     </ul>
   </div>
 
-  <!-- ── Chart / Table ── -->
+  <!-- ── Chart / Table / Coverage ── -->
   <div id="export-region">
     <div id="vis"><div class="loading">Loading…</div></div>
     <div id="tblWrap"></div>
-    <div id="source-bar">Source: SEC ABS-EE loan-level filings, EDGAR &middot; Consumer Credit Matters</div>
+    <div id="coverageView" class="coverage-only cov-wrap">
+      <div class="loading">Loading coverage data…</div>
+    </div>
+    <div id="source-bar">Source: SEC ABS-EE filings, EDGAR &middot; Consumer Credit Matters</div>
   </div>
 
 </div>
@@ -352,7 +413,7 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-04-02 14:30";
+  const BUILD_ID   = "2026-04-02 13:58";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -402,9 +463,9 @@
   let _lastTableArgs = null;
   let tsVehicleCode  = null;   // issuer code whose CSV is cached for TS vehicle filter
   let tsVehicleRows  = [];     // per-issuer rows for TS vehicle filter
-  let lossRows       = [];     // loss curve rows for selected issuer + basis
-  let vintageBasis   = 'deal'; // 'deal' | 'orig'
-  let vintageView    = 'dq';   // 'dq' | 'loss'
+  let coverageRows   = [];     // _schedule.csv rows
+  let coverageReady  = false;
+  let coveragePending = null;
 
   // ── Proportion labels inside New / Used buttons ──────────────────────
   function updatePropBadge(rows, _unused) {
@@ -486,7 +547,8 @@
     _toastTimer = setTimeout(() => el.classList.remove('show'), 4000);
   }
 
-  // Build issuer label map: code → label
+  // Build issuer label maps: code → short label, code → "Label (CODE)"
+  const issuerShort = Object.fromEntries(ISSUERS.map(x => [x.code, x.label || x.code]));
   const issuerLabel = Object.fromEntries(ISSUERS.map(x => [x.code, `${x.label || x.code} (${x.code})`]));
 
   // ── Issuer dropdown (vintage) ────────────────────────────────────────
@@ -613,27 +675,31 @@
   document.addEventListener('click', () => { issuerPanel.hidden = true; });
   issuerPanel.addEventListener('click', e => e.stopPropagation());
 
-  // ── Time series date dropdowns ───────────────────────────────────────
+  // ── Date dropdowns (vintage) ─────────────────────────────────────────
+  const dateFromSel = document.getElementById('dateFrom');
+  const dateToSel   = document.getElementById('dateTo');
+
+  function populateDates(sel1, sel2, dates) {
+    const sorted = Array.from(new Set(dates)).filter(Boolean).sort();
+    for (const sel of [sel1, sel2]) {
+      sel.innerHTML = '';
+      for (const d of sorted) {
+        const o = document.createElement('option');
+        o.value = d;
+        try {
+          const dt = new Date(d + 'T00:00:00');
+          o.textContent = dt.toLocaleDateString('en-US', { year:'numeric', month:'short' });
+        } catch (_) { o.textContent = d; }
+        sel.appendChild(o);
+      }
+    }
+    sel1.value = sorted[0] || '';
+    sel2.value = sorted[sorted.length - 1] || '';
+  }
+
+  // Time series date dropdowns (separate so they can show all-issuer dates)
   const tsDateFromSel = document.getElementById('tsDateFrom');
   const tsDateToSel   = document.getElementById('tsDateTo');
-
-  function populateYears(fromSel, toSel, dates) {
-    const years = [...new Set(dates.map(d => d.substring(0, 4)))].filter(Boolean).sort();
-    fromSel.innerHTML = '';
-    for (const y of years) {
-      const o = document.createElement('option');
-      o.value = `${y}-01-01`; o.textContent = y;
-      fromSel.appendChild(o);
-    }
-    toSel.innerHTML = '';
-    for (const y of years) {
-      const o = document.createElement('option');
-      o.value = `${y}-12-31`; o.textContent = y;
-      toSel.appendChild(o);
-    }
-    fromSel.value = `${years[0]}-01-01`;
-    toSel.value   = `${years[years.length - 1]}-12-31`;
-  }
 
   // ── CSV loading ──────────────────────────────────────────────────────
   function csvUrl(filename) {
@@ -673,7 +739,7 @@
     summaryRows  = rows;
     summaryReady = true;
     const dates = rows.map(r => r.reporting_date);
-    populateYears(tsDateFromSel, tsDateToSel, dates);
+    populateDates(tsDateFromSel, tsDateToSel, dates);
     updateDataThrough(rows);
     if (mode === 'timeseries') render();
   }).catch(err => {
@@ -705,8 +771,12 @@
 
   // Vintage mode: aggregate across FICO buckets, return per-series rows
   function aggregateVintage(rows) {
+    const from = dateFromSel.value || '';
+    const to   = dateToSel.value   || '';
     const filtered = rows.filter(r =>
       r.fico_low >= ficoMin && r.fico_low < ficoMax &&
+      (!from || r.reporting_date >= from) &&
+      (!to   || r.reporting_date <= to) &&
       (vehicleType === 'all' || (vehicleType === 'new' && +r.new_used === 1) || (vehicleType === 'used' && +r.new_used === 2))
     );
 
@@ -857,7 +927,7 @@
 
     // Y-axis: label and format depend on DQ filter and (for TS) transform
     let yLabel = {
-      '60+':'60+ DPD (% of loans)', '30-59':'30–59 DPD (% of loans)',
+      '60+':'60+ DPD Rate', '30-59':'30–59 DPD Rate',
       'any-dq':'30+ DPD Rate', 'current':'< 30 DPD (Current) Rate',
     }[dqFilter] || 'Rate';
     let yFmt = '.2%';
@@ -874,9 +944,9 @@
            axis:{ tickCount:{utcyear:1}, format:"%Y", labelAngle:0, labelOverlap:false } };
 
     const subtitle = isVintage
-      ? 'Loan count basis · months since deal issuance · click legend to highlight'
-      : (poolMode === 'seasoned' ? 'Loan count basis · seasoned pools (>6 mo) · click legend to highlight'
-                                 : 'Loan count basis · all pools · click legend to highlight');
+      ? 'Months since deal issuance · click legend to highlight'
+      : (poolMode === 'seasoned' ? 'Seasoned pools (>6 mo) · click legend to highlight'
+                                 : 'All pools · click legend to highlight');
 
     const colorEnc = {
       "field":"series","type":"nominal","title":"Series",
@@ -1062,7 +1132,7 @@
         + '<span>Worsening</span>'
       : '<span>Lower DQ</span>'
         + '<div style="width:140px;height:10px;border-radius:3px;'
-        + 'background:linear-gradient(to right,hsla(120,70%,42%,0.5),hsla(60,70%,42%,0.5),hsla(0,70%,42%,0.5));'
+        + 'background:linear-gradient(to right,rgba(255,255,255,0.9),rgba(255,89,89,0.5));'
         + 'border:1px solid var(--border);flex-shrink:0;"></div>'
         + '<span>Higher DQ</span>';
     headerHtml += '<div id="heatmapLegend" style="display:'
@@ -1107,8 +1177,9 @@
         const b = Math.round(255 * (1 - abs * 0.4));
         return `rgba(${r},${g},${b},0.45)`;
       } else {
-        // Sequential: green (low) → yellow → red (high)
-        return `hsla(${Math.round(120 * (1 - t))},70%,42%,0.5)`;
+        // Sequential: low = white, high = red
+        const r = 255, g = Math.round(255 * (1 - t * 0.65)), bv = Math.round(255 * (1 - t * 0.65));
+        return `rgba(${r},${g},${bv},0.5)`;
       }
     }
 
@@ -1175,10 +1246,6 @@
   }
 
   async function render() {
-    if (mode === 'vintage' && vintageView === 'loss') {
-      await renderLossChart();
-      return;
-    }
     if (mode === 'vintage') {
       if (!vintageRows.length) return;
       const code = issuerSel.value;
@@ -1259,10 +1326,10 @@
     document.getElementById('tblWrap').style.display = 'none';
     document.getElementById('vis').style.display = 'block';
     document.getElementById('vis').innerHTML = '';
-    const yLabel = dqFilter === '60+'    ? '60+ DPD (% of loans)'
-                 : dqFilter === '30-59'  ? '30–59 DPD (% of loans)'
-                 : dqFilter === 'any-dq' ? '30+ DPD (% of loans)'
-                 :                        '< 30 DPD (% of loans)';
+    const yLabel = dqFilter === '60+'    ? '60+ DPD Rate'
+                 : dqFilter === '30-59'  ? '30–59 DPD Rate'
+                 : dqFilter === 'any-dq' ? '30+ DPD Rate'
+                 :                        '< 30 DPD (Current) Rate';
     const poolLabel = poolMode === 'seasoned' ? 'Seasoned pools (>6 mo)' : 'All pools';
     const clrSeasonal = {"field":"year","type":"ordinal","scale":{"scheme":"tableau10"}};
     const clrSeasonalNoLeg = {...clrSeasonal, "legend":null};
@@ -1278,15 +1345,15 @@
       "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
       "autosize": {"type":"fit","contains":"padding"},
       "config": {
-        "axis":  {"labelFontSize":14,"titleFontSize":15,"labelPadding":7,"titlePadding":10},
+        "axis":  {"labelFontSize":13,"titleFontSize":14},
         "title": {"anchor":"middle","fontSize":15,"subtitleFontSize":11},
         "view":  {"continuousHeight":300,"continuousWidth":300},
       },
-      "data":   {"values": data.filter(d => d.year !== '2016')},
+      "data":   {"values": data},
       "width":  "container",
       "height": "container",
       "title":  {"text": `${title} — Year Overlay`,
-                 "subtitle": `Loan count basis · ${poolLabel.toLowerCase()} · each line = one calendar year · click legend to highlight`},
+                 "subtitle": `${poolLabel} · each line = one calendar year · click legend to highlight`},
       "layer": [
         // Layer 1: lines + legend-bind year selection
         {
@@ -1300,7 +1367,7 @@
                       "legend":{"orient":"bottom","direction":"horizontal","columns":8,
                                 "symbolSize":110,"labelLimit":80}},
             "opacity": {"condition":{"param":"Yr","empty":true,"value":1.0},"value":0.2},
-            "size":    {"condition":{"param":"Yr","empty":false,"value":6.0},"value":2.5},
+            "size":    {"condition":{"param":"Yr","empty":false,"value":3.0},"value":1.5},
           },
         },
         // Layer 2: large invisible circles for nearest-point hover detection
@@ -1344,130 +1411,6 @@
     }
   }
 
-  // ── Loss curve spec ──────────────────────────────────────────────────
-  function buildLossSpec(data, title) {
-    const basisLabel = vintageBasis === 'deal' ? 'Deal Issuance' : 'Loan Origination';
-    const clrLoss = {
-      "field":"year_label","type":"ordinal",
-      "scale":{"scheme":"tableau10"},
-      "title":"Vintage",
-      "legend":{
-        "orient":"bottom","direction":"horizontal",
-        "columns":8,"labelLimit":80,"symbolSize":110,"symbolLimit":100,
-      },
-    };
-    const clrLossNoLeg = {"field":"year_label","type":"ordinal","scale":{"scheme":"tableau10"},"legend":null};
-    const xLoss = {
-      "field":"loan_age_months","type":"quantitative",
-      "title":"Months Since " + basisLabel,
-      "axis":{"tickMinStep":6,"labelFontSize":13,"titleFontSize":14,"labelPadding":6,"titlePadding":8},
-    };
-    const yLoss = {
-      "field":"cumulative_loss_rate","type":"quantitative",
-      "title":"Cumulative Loss Rate (% of pool)",
-      "axis":{"format":".2%","labelFontSize":13,"titleFontSize":14,"labelPadding":6,"titlePadding":8},
-    };
-    return {
-      "$schema":"https://vega.github.io/schema/vega-lite/v5.json",
-      "autosize":{"type":"fit","contains":"padding"},
-      "config":{
-        "axis":{"labelFontSize":13,"titleFontSize":14},
-        "title":{"anchor":"middle","fontSize":15,"subtitleFontSize":11},
-        "view":{"continuousHeight":300,"continuousWidth":300},
-        "tooltip":{"theme":"light"},
-      },
-      "data":{"values":data},
-      "width":"container",
-      "height":"container",
-      "title":{
-        "text": title + " — Loss Curves",
-        "subtitle": "Dollar basis · " + basisLabel.toLowerCase() + " vintage · cumulative charge-offs ÷ original pool · click legend to highlight",
-      },
-      "layer":[
-        {
-          "params":[{"name":"Vint","bind":"legend",
-                     "select":{"type":"point","fields":["year_label"],"toggle":true,"clear":false}}],
-          "mark":{"type":"line"},
-          "encoding":{
-            "x":xLoss,"y":yLoss,
-            "color":clrLoss,
-            "opacity":{"condition":{"param":"Vint","empty":true,"value":1.0},"value":0.15},
-            "size":{"condition":{"param":"Vint","empty":false,"value":3.0},"value":1.5},
-          },
-        },
-        {
-          "params":[{"name":"lhvr","select":{"type":"point","nearest":true,"on":"mouseover","clear":"mouseout"}}],
-          "mark":{"type":"circle","opacity":0,"size":900},
-          "encoding":{"x":xLoss,"y":yLoss,"color":clrLossNoLeg},
-        },
-        {
-          "mark":{"type":"point","filled":true,"size":90,"strokeWidth":1.5},
-          "encoding":{
-            "x":xLoss,"y":yLoss,
-            "color":clrLossNoLeg,"stroke":clrLossNoLeg,
-            "opacity":{"condition":{"param":"lhvr","empty":false,"value":1},"value":0},
-            "tooltip":[
-              {"field":"year_label","type":"ordinal","title":"Vintage"},
-              {"field":"loan_age_months","type":"quantitative","title":"Month","format":"d"},
-              {"field":"cumulative_loss_rate","type":"quantitative","title":"Cumul. Loss Rate","format":".3%"},
-              {"field":"orig_pool_amt","type":"quantitative","title":"Orig Pool ($B)","format":",.2f"},
-            ],
-          },
-        },
-        {
-          "transform":[{"filter":{"param":"lhvr","empty":false}}],
-          "mark":{"type":"rule","color":"#94a3b8","strokeWidth":1,"strokeDash":[3,3]},
-          "encoding":{"x":xLoss},
-        },
-      ],
-    };
-  }
-
-  async function renderLossChart() {
-    if (!lossRows.length) { showMsg('No data for this issuer.'); return; }
-    // Convert orig_pool_amt from dollars to billions for tooltip readability
-    const data = lossRows.map(r => ({
-      ...r,
-      year_label: String(r.vintage_year),
-      orig_pool_amt: r.orig_pool_amt / 1e9,
-    }));
-    const code  = issuerSel.value;
-    const title = issuerLabel[code] || code;
-    document.getElementById('tblWrap').style.display = 'none';
-    document.getElementById('vis').style.display = 'block';
-    document.getElementById('vis').innerHTML = '';
-    try {
-      await vegaEmbed('#vis', buildLossSpec(data, title), { actions:false, renderer:'svg' });
-    } catch (err) {
-      showMsg('Chart failed: ' + String(err), true);
-    }
-  }
-
-  // ── Load loss issuer ─────────────────────────────────────────────────
-  async function loadLossAndRender() {
-    const code = issuerSel.value;
-    if (!code) return;
-    showMsg('Loading…');
-    try {
-      const raw = await fetchCSV(`loss/${code}_${vintageBasis}.csv`);
-      lossRows = raw.map(r => ({
-        ...r,
-        vintage_year:         parseInt(r.vintage_year, 10),
-        loan_age_months:      parseInt(r.loan_age_months, 10),
-        period_co_amt:        parseFloat(r.period_co_amt),
-        orig_pool_amt:        parseFloat(r.orig_pool_amt),
-        cumulative_co_amt:    parseFloat(r.cumulative_co_amt),
-        cumulative_loss_rate: parseFloat(r.cumulative_loss_rate),
-      })).filter(r =>
-        !isNaN(r.vintage_year) && !isNaN(r.loan_age_months) &&
-        r.cumulative_loss_rate >= 0 && r.orig_pool_amt > 0
-      );
-      await renderLossChart();
-    } catch (err) {
-      showMsg('Failed to load: ' + String(err), true);
-    }
-  }
-
   // ── Load vintage issuer ──────────────────────────────────────────────
   async function loadVintageAndRender() {
     const code = issuerSel.value;
@@ -1476,6 +1419,10 @@
     try {
       vintageRows = await fetchCSV(`${code}.csv`);
       if (!vintageRows.length) { showMsg('No data for this issuer.'); return; }
+      populateDates(
+        dateFromSel, dateToSel,
+        vintageRows.map(r => r.reporting_date)
+      );
       updateDataThrough(vintageRows);
       updatePropBadge(vintageRows, 'propBadge');
       await render();
@@ -1484,20 +1431,201 @@
     }
   }
 
-  // ── Vintage sub-view switching ───────────────────────────────────────
-  function setVintageView(v) {
-    vintageView = v;
-    document.body.dataset.vintageView = v;
-    for (const b of document.querySelectorAll('#vintageViewGroup button'))
-      b.classList.toggle('active', b.dataset.vview === v);
-    const sharedBar = document.getElementById('sharedBar');
-    if (v === 'loss') {
-      sharedBar.classList.add('loss-disabled');
-      loadLossAndRender();
-    } else {
-      sharedBar.classList.remove('loss-disabled');
-      loadVintageAndRender();
+  // ── Coverage (filing status) ─────────────────────────────────────────
+  function parseCoverageCSV(text) {
+    const lines = text.trim().split('\n');
+    if (lines.length < 2) return [];
+    const header = lines[0].split(',').map(h => h.trim());
+    return lines.slice(1).map(line => {
+      const vals = line.split(',');
+      const r = {};
+      for (let j = 0; j < header.length; j++) r[header[j]] = (vals[j] ?? '').trim();
+      return r;
+    });
+  }
+
+  function renderCoverage() {
+    const el = document.getElementById('coverageView');
+    if (!el) return;
+    if (!coverageReady) { el.innerHTML = '<div class="loading">Loading…</div>'; return; }
+    if (!coverageRows.length) { el.innerHTML = '<div class="loading err">Coverage data unavailable.</div>'; return; }
+
+    // Expected period end = last day of previous month
+    const now = new Date();
+    const periodEnd = new Date(now.getFullYear(), now.getMonth(), 0);
+    const pad = n => String(n).padStart(2, '0');
+    const periodEndStr = `${periodEnd.getFullYear()}-${pad(periodEnd.getMonth()+1)}-${pad(periodEnd.getDate())}`;
+    const periodLabel  = periodEnd.toLocaleDateString('en-US', {month:'long', year:'numeric'});
+    const todayStr     = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
+    const _MO3 = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+    function fmtDate(s) {
+      if (!s || s === 'nan' || s === 'None') return '—';
+      const parts = s.split('-');
+      if (parts.length !== 3) return s;
+      return `${_MO3[+parts[1]-1]} ${+parts[2]}, ${parts[0]}`;
     }
+
+    function isOverdue(row) {
+      const nextDue = row['~Next Likely Update'] || '';
+      const rpt     = row['Last Reporting Period']  || '';
+      if (nextDue && nextDue !== 'nan' && nextDue !== 'None' && nextDue >= todayStr) return false;
+      if (!rpt || rpt === 'nan' || rpt === 'None') return true;
+      return rpt < periodEndStr;
+    }
+
+    function filedBadge(row) {
+      const rpt = row['Last Reporting Period'] || '';
+      if (row['Status'] !== 'Active') return '';
+      const filed = rpt && rpt !== 'nan' && rpt !== 'None' && rpt >= periodEndStr;
+      if (filed) return "<span style='color:#059669;font-weight:700;font-size:13px'>✓</span>";
+      if (isOverdue(row)) return "<span style='color:#dc2626;font-weight:700;font-size:13px'>✗</span>";
+      return "<span title='Not yet due' style='color:#2563eb;font-size:11px'>⧖</span>";
+    }
+
+    // Group rows by issuer
+    const byIssuer = new Map();
+    for (const row of coverageRows) {
+      const code = row['Issuer'] || '';
+      if (!byIssuer.has(code)) byIssuer.set(code, []);
+      byIssuer.get(code).push(row);
+    }
+
+    let html = `<div class="cov-period">Filing status for reporting period ending <strong>${periodLabel}</strong></div>`;
+    html += `<div class="cov-legend">`;
+    html += `<span><span class="cov-swatch" style="background:#d1fae5;border:1px solid #6ee7b7"></span>All active filed</span>`;
+    html += `<span><span class="cov-swatch" style="background:#eff6ff;border:1px solid #93c5fd"></span>Not yet due</span>`;
+    html += `<span><span class="cov-swatch" style="background:#fef3c7;border:1px solid #fcd34d"></span>One or more overdue</span>`;
+    html += `<span><span class="cov-swatch" style="background:#fee2e2;border:1px solid #fca5a5"></span>No active deals</span>`;
+    html += `</div>`;
+
+    const _th = (label, idx, extraCls='') =>
+      `<th class="cov-th${extraCls ? ' '+extraCls : ''}" style="cursor:pointer" onclick="covSort(${idx},this)">${label}</th>`;
+
+    html += `<table class="cov-table">
+      <colgroup>
+        <col class="cov-col-issuer">
+        <col class="cov-col-num">
+        <col class="cov-col-num">
+        <col class="cov-col-num">
+        <col class="cov-col-num">
+        <col class="cov-col-date">
+        <col class="cov-col-status">
+      </colgroup>
+      <thead><tr>
+        ${_th('Issuer', 0)}
+        ${_th('Active', 1, 'num')}
+        ${_th('Filed', 2, 'num')}
+        ${_th('Overdue', 3, 'num')}
+        ${_th('Matured', 4, 'num')}
+        ${_th('Last Filed Date', 5)}
+        ${_th('Status', 6, 'num')}
+      </tr></thead><tbody>`;
+
+    for (const code of [...byIssuer.keys()].sort()) {
+      const rows    = byIssuer.get(code);
+      const label   = issuerShort[code] || code;
+      const active  = rows.filter(r => r['Status'] === 'Active');
+      const matured = rows.filter(r => r['Status'] !== 'Active');
+      const filed   = active.filter(r => {
+        const rpt = r['Last Reporting Period'] || '';
+        return rpt && rpt !== 'nan' && rpt !== 'None' && rpt >= periodEndStr;
+      });
+      const overdue = active.filter(r => isOverdue(r));
+
+      const rowCls = active.length === 0      ? 'cov-row--bad'
+                   : overdue.length > 0        ? 'cov-row--warn'
+                   : filed.length === active.length && active.length > 0 ? 'cov-row--good'
+                   : 'cov-row--pending';
+
+      const stateLabel = active.length === 0           ? 'All matured'
+                       : overdue.length > 0             ? `${overdue.length} overdue`
+                       : filed.length === active.length ? 'All filed'
+                       : 'Not yet due';
+
+      // Most recent last-filed date across all active deals
+      const lastFiledDates = active.map(r => r['Last Updated'] || '').filter(d => d && d !== 'nan' && d !== 'None');
+      const lastFiled = lastFiledDates.length ? lastFiledDates.sort().pop() : '';
+
+      // Modal (most common) next-due date across active deals — avoids stub-period outliers skewing the issuer-level date
+      const nextDueDates = active.map(r => r['~Next Likely Update'] || '').filter(d => d && d !== 'nan' && d !== 'None');
+      const nextDueFreq = new Map();
+      for (const d of nextDueDates) nextDueFreq.set(d, (nextDueFreq.get(d) || 0) + 1);
+      const nextDue = nextDueDates.length
+        ? [...nextDueFreq.entries()].sort((a,b) => b[1]-a[1] || a[0].localeCompare(b[0]))[0][0]
+        : '';
+
+      const rowId = `cov-detail-${code}`;
+
+      html += `<tr class="cov-issuer-row ${rowCls}" onclick="covToggle('${rowId}',this)">
+        <td><span class="cov-chevron">▶</span><span class="cov-issuer-name">${label}</span><span class="cov-issuer-code">${code}</span></td>
+        <td class="cov-num">${active.length || '—'}</td>
+        <td class="cov-num">${active.length ? filed.length : '—'}</td>
+        <td class="cov-num">${active.length ? overdue.length : '—'}</td>
+        <td class="cov-num">${matured.length || '—'}</td>
+        <td>${fmtDate(lastFiled)}</td>
+        <td class="cov-num cov-state">${stateLabel}</td>
+      </tr>`;
+
+      // Detail row (hidden by default)
+      let detail = `<table style="table-layout:fixed;width:100%">
+        <colgroup>
+          <col style="width:22%">
+          <col style="width:26%">
+          <col style="width:26%">
+          <col style="width:26%">
+        </colgroup>
+        <thead><tr>
+          <th>Series</th><th>Last Period</th><th>Last Filed</th><th>~Next Due</th>
+        </tr></thead><tbody>`;
+      for (const r of [...active].sort((a,b) => (a['Series']||'').localeCompare(b['Series']||''))) {
+        const rowOverdue = isOverdue(r);
+        detail += `<tr class="${rowOverdue ? 'cov-detail-overdue' : ''}">
+          <td>${r['Series'] || '—'}</td>
+          <td>${fmtDate(r['Last Reporting Period'])}</td>
+          <td>${fmtDate(r['Last Updated'])}</td>
+          <td>${fmtDate(r['~Next Likely Update'])}</td>
+        </tr>`;
+      }
+      detail += '</tbody></table>';
+
+      if (matured.length) {
+        detail += `<div class="cov-matured-section"><details><summary>▶ Matured deals (${matured.length})</summary>`;
+        detail += `<table style="table-layout:fixed;width:100%"><colgroup><col style="width:25%"><col style="width:37%"><col style="width:38%"></colgroup><thead><tr><th>Series</th><th>Last Period</th><th>Last Filed</th></tr></thead><tbody>`;
+        for (const r of [...matured].sort((a,b) => (b['Last Updated']||'').localeCompare(a['Last Updated']||''))) {
+          detail += `<tr>
+            <td>${r['Series'] || '—'}</td>
+            <td>${fmtDate(r['Last Reporting Period'])}</td>
+            <td>${fmtDate(r['Last Updated'])}</td>
+          </tr>`;
+        }
+        detail += '</tbody></table></details></div>';
+      }
+
+      html += `<tr id="${rowId}" class="cov-detail-row" hidden>
+        <td colspan="8"><div class="cov-detail-inner">${detail}</div></td>
+      </tr>`;
+    }
+
+    html += '</tbody></table>';
+    el.innerHTML = html;
+  }
+
+
+  async function loadCoverageAndRender() {
+    if (coverageReady) { renderCoverage(); return; }
+    if (coveragePending) { await coveragePending; return; }
+    coveragePending = fetch(csvUrl('_schedule.csv'), { cache: 'no-store' })
+      .then(r => r.ok ? r.text() : Promise.reject(new Error('HTTP ' + r.status)))
+      .then(text => {
+        coverageRows  = parseCoverageCSV(text);
+        coverageReady = true;
+        renderCoverage();
+      })
+      .catch(() => {
+        coverageReady = true;
+        renderCoverage();
+      });
   }
 
   // ── Mode switching ───────────────────────────────────────────────────
@@ -1509,19 +1637,17 @@
     const _u = new URL(window.location.href);
     _u.searchParams.set('view', m);
     history.pushState({}, '', _u);
-    if (m === 'timeseries') {
+    if (m === 'coverage') {
+      loadCoverageAndRender();
+    } else if (m === 'timeseries') {
       initTsSelection();
       updateVehicleToggleState();
       updateDataThroughForTS();
       render();
     } else {
       updateVehicleToggleState();
-      if (vintageView === 'loss') {
-        loadLossAndRender();
-      } else {
-        updatePropBadge(vintageRows, 'propBadge');
-        render();
-      }
+      updatePropBadge(vintageRows, 'propBadge');
+      render();
     }
   }
 
@@ -1562,25 +1688,9 @@
     render();
   });
 
-  issuerSel.addEventListener('change', () => {
-    if (vintageView === 'loss') loadLossAndRender();
-    else loadVintageAndRender();
-  });
-
-  document.getElementById('vintageViewGroup').addEventListener('click', e => {
-    const b = e.target.closest('button[data-vview]');
-    if (!b || b.dataset.vview === vintageView) return;
-    setVintageView(b.dataset.vview);
-  });
-
-  document.getElementById('vintageBasisGroup').addEventListener('click', e => {
-    const b = e.target.closest('button[data-basis]');
-    if (!b) return;
-    vintageBasis = b.dataset.basis;
-    for (const btn of document.querySelectorAll('#vintageBasisGroup button'))
-      btn.classList.toggle('active', btn.dataset.basis === vintageBasis);
-    loadLossAndRender();
-  });
+  issuerSel.addEventListener('change', loadVintageAndRender);
+  dateFromSel.addEventListener('change', () => render());
+  dateToSel.addEventListener('change',   () => render());
   tsDateFromSel.addEventListener('change', () => render());
   tsDateToSel.addEventListener('change',   () => render());
 
@@ -1645,7 +1755,8 @@
                 const b = Math.round(255*(1-abs*0.4));
                 bg = `rgba(${r},${g},${b},0.45)`;
               } else {
-                bg = `hsla(${Math.round(120 * (1 - t))},70%,42%,0.5)`;
+                const g2 = Math.round(255*(1-t*0.65)), bv = Math.round(255*(1-t*0.65));
+                bg = `rgba(255,${g2},${bv},0.5)`;
               }
               td.style.background = bg;
             });
@@ -1758,9 +1869,8 @@
   const _initView = new URLSearchParams(window.location.search).get('view');
   if (_initView === 'timeseries') {
     setMode('timeseries');
-  } else if (_initView === 'loss') {
-    setVintageView('loss');
-    loadLossAndRender();
+  } else if (_initView === 'coverage') {
+    setMode('coverage');
   } else {
     document.body.dataset.mode = 'vintage';
     loadVintageAndRender();
@@ -1776,12 +1886,58 @@ function _playShutter() {
   } catch(e) {}
 }
 
+function covToggle(rowId, issuerRow) {
+  var detail = document.getElementById(rowId);
+  if (!detail) return;
+  var isOpen = !detail.hidden;
+  detail.hidden = isOpen;
+  issuerRow.classList.toggle('open', !isOpen);
+}
+
+function covSort(colIdx, th) {
+  var table = th.closest('table');
+  var tbody = table.querySelector('tbody');
+  // Collect issuer+detail row pairs
+  var pairs = [];
+  var rows = Array.from(tbody.querySelectorAll('tr'));
+  for (var i = 0; i < rows.length; i++) {
+    if (rows[i].classList.contains('cov-issuer-row')) {
+      pairs.push({ issuer: rows[i], detail: rows[i+1] || null });
+    }
+  }
+  var asc = th.dataset.sortDir !== 'asc';
+  // Reset all headers
+  table.querySelectorAll('thead th').forEach(function(h) {
+    h.dataset.sortDir = '';
+    h.textContent = h.textContent.replace(/ [▲▼]$/, '');
+  });
+  th.dataset.sortDir = asc ? 'asc' : 'desc';
+  th.textContent = th.textContent.replace(/ [▲▼]$/, '') + (asc ? ' ▲' : ' ▼');
+
+  pairs.sort(function(a, b) {
+    var aC = a.issuer.querySelectorAll('td')[colIdx];
+    var bC = b.issuer.querySelectorAll('td')[colIdx];
+    var aV = aC ? aC.textContent.trim() : '';
+    var bV = bC ? bC.textContent.trim() : '';
+    // Numeric columns (Active, Filed, Overdue, Matured)
+    var aN = parseFloat(aV), bN = parseFloat(bV);
+    if (!isNaN(aN) && !isNaN(bN)) return asc ? aN - bN : bN - aN;
+    return asc ? aV.localeCompare(bV) : bV.localeCompare(aV);
+  });
+  pairs.forEach(function(p) {
+    tbody.appendChild(p.issuer);
+    if (p.detail) tbody.appendChild(p.detail);
+  });
+}
+
 function exportExplorer() {
   _playShutter();
-  var el  = document.getElementById('export-region');
   var md  = document.body.dataset.mode || 'vintage';
   var dt  = new Date().toISOString().slice(0, 10);
   var btn = document.getElementById('export-btn');
+  var el  = md === 'coverage'
+    ? document.getElementById('coverageView')
+    : document.getElementById('export-region');
   btn.style.display = 'none';
   htmlToImage.toPng(el, {pixelRatio:2, backgroundColor:'#ffffff'})
     .then(function(url) {

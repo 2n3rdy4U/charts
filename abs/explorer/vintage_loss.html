@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ABS Auto — Vintage Dollar Loss Curves</title>
+<script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+<style>
+  :root {
+    --text:#111827; --muted:#6b7280; --border:#e5e7eb;
+    --bg:#ffffff; --accent:#1e40af; --btn-bg:#f3f4f6;
+  }
+  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:system-ui,sans-serif; font-size:13px; color:var(--text);
+         background:var(--bg); }
+  .wrap { max-width:1200px; margin:0 auto; padding:12px 16px 32px; }
+  .hdr  { display:flex; align-items:baseline; gap:10px; padding-bottom:8px;
+           border-bottom:2px solid var(--border); margin-bottom:10px; }
+  .hdr-title { font-size:15px; font-weight:700; }
+  .hdr-sub   { font-size:12px; color:var(--muted); }
+  #lastUpdated { font-size:11.5px; color:var(--muted); margin-left:auto; white-space:nowrap; }
+
+  /* Filter bar */
+  .fbar { display:flex; flex-wrap:wrap; align-items:center; gap:10px 18px;
+           padding:8px 0 10px; border-bottom:1px solid var(--border); margin-bottom:12px; }
+  .ctrl { display:flex; flex-direction:column; gap:3px; }
+  .lbl  { font-size:11px; font-weight:600; color:var(--muted); text-transform:uppercase;
+           letter-spacing:.4px; }
+  .bar-sep { width:1px; height:32px; background:var(--border); flex-shrink:0; }
+  select { font-size:12.5px; padding:4px 6px; border:1px solid var(--border);
+           border-radius:4px; background:#fff; color:var(--text); }
+
+  /* Button groups */
+  .btn-group { display:inline-flex; border:1px solid var(--border); border-radius:5px;
+               overflow:hidden; }
+  .btn-group button { font-size:12px; padding:4px 9px; border:none; background:var(--btn-bg);
+                       color:var(--text); cursor:pointer; }
+  .btn-group button + button { border-left:1px solid var(--border); }
+  .btn-group button:hover   { background:#e5e7eb; }
+  .btn-group button.active  { background:#dbeafe; color:var(--accent); font-weight:600; }
+
+  /* FICO range slider */
+  .fico-row { display:flex; align-items:center; gap:8px; font-size:12px; }
+  .fico-row input[type=range] { width:90px; accent-color:var(--accent); }
+  #ficoDisplay { font-size:12px; color:var(--muted); min-width:72px; }
+
+  /* Chart container */
+  #vis { width:100%; height:500px; display:flex; align-items:stretch; }
+  #vis > div { flex:1; min-width:0; }
+  .vega-embed { width:100% !important; height:100% !important; }
+  .vega-embed canvas, .vega-embed svg { width:100% !important; height:100% !important; }
+
+  .loading { padding:20px; font-size:13px; color:var(--muted); }
+  .err { color:#dc2626; }
+
+  #source-bar { font-size:11px; color:var(--muted); margin-top:10px; text-align:right; }
+
+  /* Toast */
+  #toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%) translateY(20px);
+           background:#1e293b; color:#fff; padding:8px 16px; border-radius:6px;
+           font-size:12.5px; opacity:0; transition:opacity .2s,transform .2s;
+           pointer-events:none; z-index:999; }
+  #toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hdr">
+    <span class="hdr-title">ABS Auto — Vintage Dollar Loss Curves</span>
+    <span class="hdr-sub">Cumulative charged-off $ as % of original pool $ · by origination year</span>
+    <span id="lastUpdated"></span>
+  </div>
+
+  <div class="fbar">
+    <!-- Issuer -->
+    <div class="ctrl">
+      <label class="lbl">Issuer</label>
+      <select id="issuerSel"></select>
+    </div>
+
+    <div class="bar-sep"></div>
+
+    <!-- FICO range -->
+    <div class="ctrl">
+      <label class="lbl">FICO Range</label>
+      <div class="fico-row">
+        <input type="range" id="ficoMinSlider" min="300" max="850" step="10" value="300">
+        <input type="range" id="ficoMaxSlider" min="300" max="850" step="10" value="850">
+        <span id="ficoDisplay">300 – 850</span>
+      </div>
+    </div>
+
+    <div class="bar-sep"></div>
+
+    <!-- New / Used -->
+    <div class="ctrl">
+      <label class="lbl">Vehicle</label>
+      <div class="btn-group" id="vehicleGroup">
+        <button data-vehicle="all"  class="active">All</button>
+        <button data-vehicle="new">New</button>
+        <button data-vehicle="used">Used</button>
+      </div>
+    </div>
+
+    <div class="bar-sep"></div>
+
+    <!-- Vintage Basis -->
+    <div class="ctrl">
+      <label class="lbl">Vintage Basis</label>
+      <div class="btn-group" id="basisGroup">
+        <button data-basis="deal" class="active">Deal Issuance</button>
+        <button data-basis="orig">Loan Origination</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="vis"><div class="loading">Loading…</div></div>
+  <div id="source-bar">Source: SEC ABS-EE loan-level filings, EDGAR &middot; Consumer Credit Matters</div>
+
+</div>
+<div id="toast"></div>
+
+<script>
+(function () {
+  const BUILD_ID      = "2026-04-01";
+  const DATA_BASE     = "./loss";
+  const DEFAULT_ISSUER = 'SDART';
+
+  const ISSUERS = [
+    {"code":"AART","label":"Ally"},{"code":"AMCAR","label":"AmeriCredit"},
+    {"code":"BLAST","label":"Bridgecrest"},{"code":"BMWOT","label":"BMW"},
+    {"code":"CAOT","label":"CarMax"},{"code":"CMXS","label":"CarMax Select"},
+    {"code":"COPAR","label":"Capital One Prime"},{"code":"CRART","label":"California Republic"},
+    {"code":"CRVNA","label":"Carvana"},{"code":"DRIVE","label":"DriveTime"},
+    {"code":"EART","label":"Exeter"},{"code":"FCAOT","label":"Ford"},
+    {"code":"FTAT","label":"Fifth Third"},{"code":"GMCAR","label":"GM Financial"},
+    {"code":"HAROT","label":"Honda"},{"code":"HART","label":"Hyundai"},
+    {"code":"MBART","label":"Mercedes-Benz"},{"code":"NAROT","label":"Nissan"},
+    {"code":"SDART","label":"Santander"},{"code":"TAOT","label":"Toyota"},
+    {"code":"USAOT","label":"USAA"},{"code":"VALET","label":"Volkswagen"},
+    {"code":"WOART","label":"World Omni"},{"code":"WOSAT","label":"World Omni Select"}
+  ];
+  const issuerLabel = Object.fromEntries(
+    ISSUERS.map(x => [x.code, `${x.label} (${x.code})`])
+  );
+
+  // ── State ────────────────────────────────────────────────────────────────
+  let allRows      = [];    // full parsed CSV for current issuer+basis
+  let ficoMin      = 300;
+  let ficoMax      = 850;
+  let vehicleType  = 'all'; // 'all' | 'new' | 'used'
+  let vintageBasis = 'deal'; // 'deal' | 'orig'
+
+  // ── CSV loading ──────────────────────────────────────────────────────────
+  function csvUrl(filename) {
+    return `${DATA_BASE}/${filename}?b=${encodeURIComponent(BUILD_ID)}`;
+  }
+
+  function parseCSV(text) {
+    const lines = text.trim().split('\n');
+    if (lines.length < 2) return [];
+    const headers = lines[0].split(',').map(h => h.trim());
+    return lines.slice(1).map(line => {
+      const vals = line.split(',');
+      const obj = {};
+      headers.forEach((h, i) => {
+        const v = (vals[i] || '').trim();
+        obj[h] = (h === 'issuer_code') ? v : parseFloat(v);
+      });
+      return obj;
+    }).filter(r => !isNaN(r.vintage_year));
+  }
+
+  async function fetchCSV(filename) {
+    const resp = await fetch(csvUrl(filename), { cache: 'no-store' });
+    if (!resp.ok) throw new Error(`HTTP ${resp.status} loading ${filename}`);
+    return parseCSV(await resp.text());
+  }
+
+  // ── Filtering ────────────────────────────────────────────────────────────
+  // The CSV contains per-loan-age rows already aggregated at the issuer level.
+  // For FICO / vehicle sub-filters we'd need separate CSVs (future enhancement).
+  // For now the FICO slider and vehicle toggle filter a note into the subtitle
+  // and are wired up for future per-filter CSVs.
+  // The current CSV is pre-computed at FICO 300-850, all vehicles.
+
+  function filteredRows() {
+    // Future: return rows filtered by ficoMin/ficoMax and vehicleType
+    // For now all rows are at the configured defaults; just return all
+    return allRows;
+  }
+
+  // ── Aggregation for chart ────────────────────────────────────────────────
+  function buildChartData(rows) {
+    // rows already have cumulative_loss_rate computed by the Python script.
+    // We just need to reshape for Vega: one object per (orig_year, loan_age_months).
+    return rows.map(r => ({
+      year:               String(r.vintage_year),
+      loan_age_months:    r.loan_age_months,
+      cumulative_loss_rate: r.cumulative_loss_rate,
+      orig_pool_amt:      r.orig_pool_amt,
+      period_co_amt:      r.period_co_amt,
+      cumulative_co_amt:  r.cumulative_co_amt,
+    }));
+  }
+
+  // ── Vega-Lite spec ───────────────────────────────────────────────────────
+  function buildSpec(data, issuerCode) {
+    const label = issuerLabel[issuerCode] || issuerCode;
+    const spec = {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "autosize": {"type":"fit","contains":"padding"},
+      "config": {
+        "axis":  {"labelFontSize":14,"titleFontSize":15,"labelPadding":7,"titlePadding":10},
+        "title": {"anchor":"middle","fontSize":15,"subtitleFontSize":11},
+        "view":  {"continuousHeight":300,"continuousWidth":300},
+        "tooltip": {"theme":"light"},
+      },
+      "data": {"values": data},
+      "width":  "container",
+      "height": 420,
+      "title": {
+        "text": `${label} — Vintage Dollar Loss Curves`,
+        "subtitle": `Cumulative charged-off $ ÷ original pool $ · vintage = ${vintageBasis === 'deal' ? 'deal issuance year' : 'loan origination year'} · click legend to highlight`,
+      },
+      "layer": [
+        // Layer 1: Lines + legend-bind year selection
+        {
+          "params": [{
+            "name": "Yr",
+            "bind": "legend",
+            "select": {"type":"point","fields":["year"],"toggle":true,"clear":false}
+          }],
+          "mark": {"type":"line"},
+          "encoding": {
+            "x": {
+              "field": "loan_age_months",
+              "type": "quantitative",
+              "title": "Months Since Origination",
+              "axis": {"tickMinStep":6}
+            },
+            "y": {
+              "field": "cumulative_loss_rate",
+              "type": "quantitative",
+              "title": "Cumulative Loss Rate",
+              "axis": {"format":".2%"}
+            },
+            "color": {
+              "field": "year",
+              "type": "ordinal",
+              "title": "Orig. Year",
+              "scale": {"scheme":"tableau10"},
+              "legend": {
+                "orient": "bottom",
+                "direction": "horizontal",
+                "columns": 10,
+                "symbolSize": 110,
+                "labelLimit": 80,
+              }
+            },
+            "opacity": {
+              "condition": {"param":"Yr","empty":true,"value":1.0},
+              "value": 0.15
+            },
+            "size": {
+              "condition": {"param":"Yr","empty":false,"value":3.0},
+              "value": 1.5
+            }
+          }
+        },
+        // Layer 2: Large invisible circles for nearest-point hover
+        {
+          "params": [{
+            "name": "hvr",
+            "select": {"type":"point","nearest":true,"on":"mouseover","clear":"mouseout"}
+          }],
+          "mark": {"type":"circle","opacity":0,"size":900},
+          "encoding": {
+            "x": {"field":"loan_age_months","type":"quantitative"},
+            "y": {"field":"cumulative_loss_rate","type":"quantitative"},
+            "color": {"field":"year","type":"ordinal","legend":null}
+          }
+        },
+        // Layer 3: Visible dot + tooltip on hover
+        {
+          "mark": {"type":"point","filled":true,"size":90,"strokeWidth":1.5},
+          "encoding": {
+            "x": {"field":"loan_age_months","type":"quantitative"},
+            "y": {"field":"cumulative_loss_rate","type":"quantitative"},
+            "color": {"field":"year","type":"ordinal","legend":null},
+            "stroke": {"field":"year","type":"ordinal","legend":null},
+            "opacity": {
+              "condition": {"param":"hvr","empty":false,"value":1},
+              "value": 0
+            },
+            "tooltip": [
+              {"field":"year","type":"ordinal","title":"Deal Vintage"},
+              {"field":"loan_age_months","type":"quantitative","title":"Loan Age (months)"},
+              {"field":"cumulative_loss_rate","type":"quantitative","title":"Cumul. Loss Rate","format":".3%"},
+              {"field":"cumulative_co_amt","type":"quantitative","title":"Cumul. Charged Off ($M)","format":",.1f"},
+              {"field":"orig_pool_amt","type":"quantitative","title":"Orig. Pool ($M)","format":",.1f"},
+            ]
+          }
+        },
+        // Layer 4: Vertical crosshair at hovered month
+        {
+          "transform": [{"filter":{"param":"hvr","empty":false}}],
+          "mark": {"type":"rule","color":"#94a3b8","strokeWidth":1,"strokeDash":[3,3]},
+          "encoding": {"x": {"field":"loan_age_months","type":"quantitative"}}
+        }
+      ]
+    };
+    return spec;
+  }
+
+  // ── Render ───────────────────────────────────────────────────────────────
+  function showMsg(text, isErr) {
+    document.getElementById('vis').innerHTML =
+      `<div class="loading${isErr?' err':''}">${text}</div>`;
+  }
+
+  async function render() {
+    const rows = filteredRows();
+    if (!rows.length) { showMsg('No data for current selection.'); return; }
+
+    const data = buildChartData(rows);
+    const issuerCode = document.getElementById('issuerSel').value;
+
+    // Scale chart dollar values to $M for tooltips (already in raw $)
+    for (const d of data) {
+      d.cumulative_co_amt /= 1e6;
+      d.orig_pool_amt     /= 1e6;
+    }
+
+    const vis = document.getElementById('vis');
+    vis.innerHTML = '';
+
+    try {
+      await vegaEmbed('#vis', buildSpec(data, issuerCode), {
+        actions: false,
+        renderer: 'svg'
+      });
+    } catch (err) {
+      console.error('vegaEmbed error:', err);
+      showMsg('Chart failed: ' + String(err), true);
+    }
+  }
+
+  // ── Data loading ─────────────────────────────────────────────────────────
+  async function loadIssuer(code) {
+    showMsg('Loading…');
+    try {
+      allRows = await fetchCSV(`${code}_${vintageBasis}.csv`);
+      const maxAge = allRows.length ? Math.max(...allRows.map(r => r.loan_age_months)) : null;
+      const el = document.getElementById('lastUpdated');
+      if (maxAge !== null) el.textContent = `Max loan age in data: ${maxAge} months`;
+      render();
+    } catch (err) {
+      showMsg(`Failed to load ${code}: ${err.message}`, true);
+    }
+  }
+
+  // ── UI setup ─────────────────────────────────────────────────────────────
+
+  // Issuer dropdown
+  const issuerSel = document.getElementById('issuerSel');
+  for (const it of ISSUERS) {
+    const o = document.createElement('option');
+    o.value = it.code;
+    o.textContent = issuerLabel[it.code];
+    issuerSel.appendChild(o);
+  }
+  issuerSel.value = DEFAULT_ISSUER;
+  issuerSel.addEventListener('change', () => loadIssuer(issuerSel.value));
+
+  // FICO sliders
+  const ficoMinSlider = document.getElementById('ficoMinSlider');
+  const ficoMaxSlider = document.getElementById('ficoMaxSlider');
+  const ficoDisplay   = document.getElementById('ficoDisplay');
+  function syncFicoDisplay() {
+    ficoMin = parseInt(ficoMinSlider.value);
+    ficoMax = parseInt(ficoMaxSlider.value);
+    if (ficoMin > ficoMax) {
+      ficoMin = ficoMax;
+      ficoMinSlider.value = ficoMin;
+    }
+    ficoDisplay.textContent = `${ficoMin} – ${ficoMax}`;
+  }
+  ficoMinSlider.addEventListener('input', () => { syncFicoDisplay(); render(); });
+  ficoMaxSlider.addEventListener('input', () => { syncFicoDisplay(); render(); });
+  syncFicoDisplay();
+
+  // Vehicle toggle
+  document.getElementById('vehicleGroup').addEventListener('click', e => {
+    const b = e.target.closest('button[data-vehicle]');
+    if (!b) return;
+    vehicleType = b.dataset.vehicle;
+    for (const btn of document.querySelectorAll('#vehicleGroup button'))
+      btn.classList.toggle('active', btn.dataset.vehicle === vehicleType);
+    render();
+  });
+
+  // Vintage basis toggle — reloads CSV for new basis
+  document.getElementById('basisGroup').addEventListener('click', e => {
+    const b = e.target.closest('button[data-basis]');
+    if (!b || b.dataset.basis === vintageBasis) return;
+    vintageBasis = b.dataset.basis;
+    for (const btn of document.querySelectorAll('#basisGroup button'))
+      btn.classList.toggle('active', btn.dataset.basis === vintageBasis);
+    loadIssuer(document.getElementById('issuerSel').value);
+  });
+
+  // Toast helper
+  let _toastTimer = null;
+  function showToast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(_toastTimer);
+    _toastTimer = setTimeout(() => el.classList.remove('show'), 4000);
+  }
+
+  // ── Initial load ─────────────────────────────────────────────────────────
+  loadIssuer(DEFAULT_ISSUER);
+
+})();
+</script>
+</body>
+</html>
