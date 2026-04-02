@@ -144,9 +144,11 @@
     }
     #toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
     /* ── mode visibility ── */
-    .vintage-only, .ts-only { display:none; }
+    .vintage-only, .ts-only, .loss-only { display:none; }
     body[data-mode="vintage"]    .vintage-only { display:flex; }
     body[data-mode="timeseries"] .ts-only      { display:flex; }
+    body[data-mode="loss"]       .loss-only    { display:flex; }
+    body[data-mode="loss"]       #sharedBar    { display:none; }
     /* ── export region fills remaining height ── */
     #export-region { flex:1; display:flex; flex-direction:column; min-height:0; }
     /* ── mode tab strip ── */
@@ -198,6 +200,7 @@
   <nav class="mode-tabs" id="modeGroup">
     <button class="mode-tab active" data-mode="vintage" title="X-axis = months since each deal series&#39; first reporting date. Aligns deals of different ages so you can compare how delinquency evolves over a series&#39; life, regardless of when it was issued.">Vintage Curves</button>
     <button class="mode-tab" data-mode="timeseries">Time Series</button>
+    <button class="mode-tab" data-mode="loss" title="Cumulative charged-off dollars as a % of original pool balance, by vintage year. Choose Deal Issuance basis (industry convention) or Loan Origination basis.">Loss Curves</button>
   </nav>
 
   <!-- ── Row 2a: vintage controls (issuer + date range) ── -->
@@ -274,6 +277,25 @@
     </div>
   </div>
 
+  <!-- ── Row 2c: loss curves controls ── -->
+  <div class="fbar loss-only" id="lossBar">
+    <div class="ctrl">
+      <label class="lbl">Issuer</label>
+      <select id="lossIssuerSel"></select>
+    </div>
+    <div class="bar-sep"></div>
+    <div class="ctrl">
+      <label class="lbl">Vintage Basis</label>
+      <div class="btn-group" id="vintageBasisGroup">
+        <button data-basis="deal" class="active">Deal Issuance</button>
+        <button data-basis="orig">Loan Origination</button>
+      </div>
+    </div>
+    <div class="ctrl" style="margin-left:auto;">
+      <span style="font-size:11px;color:var(--muted);">FICO 300–850 · All vehicles</span>
+    </div>
+  </div>
+
   <!-- ── Row 3: shared filters (DQ Status + Credit Score) ── -->
   <div class="fbar" id="sharedBar" style="position:relative;">
     <div class="ctrl">
@@ -336,7 +358,7 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-04-01 13:08";
+  const BUILD_ID   = "2026-04-01 16:00";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -386,6 +408,8 @@
   let _lastTableArgs = null;
   let tsVehicleCode  = null;   // issuer code whose CSV is cached for TS vehicle filter
   let tsVehicleRows  = [];     // per-issuer rows for TS vehicle filter
+  let lossRows       = [];     // loss curve rows for selected issuer + basis
+  let vintageBasis   = 'deal'; // 'deal' | 'orig'
 
   // ── Proportion labels inside New / Used buttons ──────────────────────
   function updatePropBadge(rows, _unused) {
@@ -480,6 +504,15 @@
   const defCode = ISSUERS.some(x => x.code === DEFAULT_ISSUER)
     ? DEFAULT_ISSUER : (ISSUERS[0] ? ISSUERS[0].code : '');
   issuerSel.value = defCode;
+
+  // ── Loss issuer dropdown ─────────────────────────────────────────────
+  const lossIssuerSel = document.getElementById('lossIssuerSel');
+  for (const it of ISSUERS) {
+    const o = document.createElement('option');
+    o.value = it.code; o.textContent = issuerLabel[it.code];
+    lossIssuerSel.appendChild(o);
+  }
+  lossIssuerSel.value = 'SDART';
 
   // ── Issuer multi-select panel (time series) ──────────────────────────
   const issuerBtn   = document.getElementById('issuerBtn');
@@ -1165,6 +1198,10 @@
   }
 
   async function render() {
+    if (mode === 'loss') {
+      await renderLossChart();
+      return;
+    }
     if (mode === 'vintage') {
       if (!vintageRows.length) return;
       const code = issuerSel.value;
@@ -1264,11 +1301,11 @@
       "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
       "autosize": {"type":"fit","contains":"padding"},
       "config": {
-        "axis":  {"labelFontSize":13,"titleFontSize":14},
+        "axis":  {"labelFontSize":14,"titleFontSize":15,"labelPadding":7,"titlePadding":10},
         "title": {"anchor":"middle","fontSize":15,"subtitleFontSize":11},
         "view":  {"continuousHeight":300,"continuousWidth":300},
       },
-      "data":   {"values": data},
+      "data":   {"values": data.filter(d => d.year !== '2016')},
       "width":  "container",
       "height": "container",
       "title":  {"text": `${title} — Year Overlay`,
@@ -1330,6 +1367,130 @@
     }
   }
 
+  // ── Loss curve spec ──────────────────────────────────────────────────
+  function buildLossSpec(data, title) {
+    const basisLabel = vintageBasis === 'deal' ? 'Deal Issuance' : 'Loan Origination';
+    const clrLoss = {
+      "field":"year_label","type":"ordinal",
+      "scale":{"scheme":"tableau10"},
+      "title":"Vintage",
+      "legend":{
+        "orient":"bottom","direction":"horizontal",
+        "columns":8,"labelLimit":80,"symbolSize":110,"symbolLimit":100,
+      },
+    };
+    const clrLossNoLeg = {"field":"year_label","type":"ordinal","scale":{"scheme":"tableau10"},"legend":null};
+    const xLoss = {
+      "field":"loan_age_months","type":"quantitative",
+      "title":"Months Since " + basisLabel,
+      "axis":{"tickMinStep":6,"labelFontSize":13,"titleFontSize":14,"labelPadding":6,"titlePadding":8},
+    };
+    const yLoss = {
+      "field":"cumulative_loss_rate","type":"quantitative",
+      "title":"Cumulative Loss Rate",
+      "axis":{"format":".2%","labelFontSize":13,"titleFontSize":14,"labelPadding":6,"titlePadding":8},
+    };
+    return {
+      "$schema":"https://vega.github.io/schema/vega-lite/v5.json",
+      "autosize":{"type":"fit","contains":"padding"},
+      "config":{
+        "axis":{"labelFontSize":13,"titleFontSize":14},
+        "title":{"anchor":"middle","fontSize":15,"subtitleFontSize":11},
+        "view":{"continuousHeight":300,"continuousWidth":300},
+        "tooltip":{"theme":"light"},
+      },
+      "data":{"values":data},
+      "width":"container",
+      "height":"container",
+      "title":{
+        "text": title + " — Loss Curves",
+        "subtitle": basisLabel + " vintage · cumulative charge-offs ÷ original pool · click legend to highlight",
+      },
+      "layer":[
+        {
+          "params":[{"name":"Vint","bind":"legend",
+                     "select":{"type":"point","fields":["year_label"],"toggle":true,"clear":false}}],
+          "mark":{"type":"line"},
+          "encoding":{
+            "x":xLoss,"y":yLoss,
+            "color":clrLoss,
+            "opacity":{"condition":{"param":"Vint","empty":true,"value":1.0},"value":0.15},
+            "size":{"condition":{"param":"Vint","empty":false,"value":3.0},"value":1.5},
+          },
+        },
+        {
+          "params":[{"name":"lhvr","select":{"type":"point","nearest":true,"on":"mouseover","clear":"mouseout"}}],
+          "mark":{"type":"circle","opacity":0,"size":900},
+          "encoding":{"x":xLoss,"y":yLoss,"color":clrLossNoLeg},
+        },
+        {
+          "mark":{"type":"point","filled":true,"size":90,"strokeWidth":1.5},
+          "encoding":{
+            "x":xLoss,"y":yLoss,
+            "color":clrLossNoLeg,"stroke":clrLossNoLeg,
+            "opacity":{"condition":{"param":"lhvr","empty":false,"value":1},"value":0},
+            "tooltip":[
+              {"field":"year_label","type":"ordinal","title":"Vintage"},
+              {"field":"loan_age_months","type":"quantitative","title":"Month","format":"d"},
+              {"field":"cumulative_loss_rate","type":"quantitative","title":"Cumul. Loss Rate","format":".3%"},
+              {"field":"orig_pool_amt","type":"quantitative","title":"Orig Pool ($B)","format":",.2f"},
+            ],
+          },
+        },
+        {
+          "transform":[{"filter":{"param":"lhvr","empty":false}}],
+          "mark":{"type":"rule","color":"#94a3b8","strokeWidth":1,"strokeDash":[3,3]},
+          "encoding":{"x":xLoss},
+        },
+      ],
+    };
+  }
+
+  async function renderLossChart() {
+    if (!lossRows.length) { showMsg('No data for this issuer.'); return; }
+    // Convert orig_pool_amt from dollars to billions for tooltip readability
+    const data = lossRows.map(r => ({
+      ...r,
+      year_label: String(r.vintage_year),
+      orig_pool_amt: r.orig_pool_amt / 1e9,
+    }));
+    const code  = lossIssuerSel.value;
+    const title = issuerLabel[code] || code;
+    document.getElementById('tblWrap').style.display = 'none';
+    document.getElementById('vis').style.display = 'block';
+    document.getElementById('vis').innerHTML = '';
+    try {
+      await vegaEmbed('#vis', buildLossSpec(data, title), { actions:false, renderer:'svg' });
+    } catch (err) {
+      showMsg('Chart failed: ' + String(err), true);
+    }
+  }
+
+  // ── Load loss issuer ─────────────────────────────────────────────────
+  async function loadLossAndRender() {
+    const code = lossIssuerSel.value;
+    if (!code) return;
+    showMsg('Loading…');
+    try {
+      const raw = await fetchCSV(`loss/${code}_${vintageBasis}.csv`);
+      lossRows = raw.map(r => ({
+        ...r,
+        vintage_year:         parseInt(r.vintage_year, 10),
+        loan_age_months:      parseInt(r.loan_age_months, 10),
+        period_co_amt:        parseFloat(r.period_co_amt),
+        orig_pool_amt:        parseFloat(r.orig_pool_amt),
+        cumulative_co_amt:    parseFloat(r.cumulative_co_amt),
+        cumulative_loss_rate: parseFloat(r.cumulative_loss_rate),
+      })).filter(r =>
+        !isNaN(r.vintage_year) && !isNaN(r.loan_age_months) &&
+        r.cumulative_loss_rate >= 0 && r.orig_pool_amt > 0
+      );
+      await renderLossChart();
+    } catch (err) {
+      showMsg('Failed to load: ' + String(err), true);
+    }
+  }
+
   // ── Load vintage issuer ──────────────────────────────────────────────
   async function loadVintageAndRender() {
     const code = issuerSel.value;
@@ -1359,7 +1520,9 @@
     const _u = new URL(window.location.href);
     _u.searchParams.set('view', m);
     history.pushState({}, '', _u);
-    if (m === 'timeseries') {
+    if (m === 'loss') {
+      loadLossAndRender();
+    } else if (m === 'timeseries') {
       initTsSelection();
       updateVehicleToggleState();
       updateDataThroughForTS();
@@ -1409,6 +1572,16 @@
   });
 
   issuerSel.addEventListener('change', loadVintageAndRender);
+  lossIssuerSel.addEventListener('change', loadLossAndRender);
+
+  document.getElementById('vintageBasisGroup').addEventListener('click', e => {
+    const b = e.target.closest('button[data-basis]');
+    if (!b) return;
+    vintageBasis = b.dataset.basis;
+    for (const btn of document.querySelectorAll('#vintageBasisGroup button'))
+      btn.classList.toggle('active', btn.dataset.basis === vintageBasis);
+    loadLossAndRender();
+  });
   dateFromSel.addEventListener('change', () => render());
   dateToSel.addEventListener('change',   () => render());
   tsDateFromSel.addEventListener('change', () => render());
@@ -1589,6 +1762,8 @@
   const _initView = new URLSearchParams(window.location.search).get('view');
   if (_initView === 'timeseries') {
     setMode('timeseries');
+  } else if (_initView === 'loss') {
+    setMode('loss');
   } else {
     document.body.dataset.mode = 'vintage';
     loadVintageAndRender();
