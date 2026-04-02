@@ -147,9 +147,8 @@
     .vintage-only, .ts-only { display:none; }
     body[data-mode="vintage"]    .vintage-only { display:flex; }
     body[data-mode="timeseries"] .ts-only      { display:flex; }
-    /* ── vintage sub-view visibility (dq vs loss) ── */
-    .dq-view-only, .loss-view-only { display:none; }
-    body[data-vintage-view="dq"]   .dq-view-only   { display:contents; }
+    /* ── vintage sub-view visibility (loss-only controls) ── */
+    .loss-view-only { display:none; }
     body[data-vintage-view="loss"] .loss-view-only  { display:contents; }
     /* Loss Rate: gray out shared bar — keep visible but non-interactive */
     #sharedBar.loss-disabled .ctrl,
@@ -222,17 +221,6 @@
         <button data-vview="loss">Loss Rate <span style="font-size:10px;opacity:0.65;font-weight:400;">· $</span></button>
       </div>
     </div>
-    <div class="dq-view-only">
-      <div class="bar-sep"></div>
-      <div class="ctrl">
-        <label class="lbl">Date Range</label>
-        <div style="display:flex;align-items:center;gap:4px;">
-          <select id="dateFrom" style="width:96px;"></select>
-          <span style="font-size:11px;color:var(--muted);">–</span>
-          <select id="dateTo" style="width:96px;"></select>
-        </div>
-      </div>
-    </div>
     <div class="loss-view-only">
       <div class="bar-sep"></div>
       <div class="ctrl">
@@ -258,9 +246,9 @@
     <div class="ctrl">
       <label class="lbl">Date Range</label>
       <div style="display:flex;align-items:center;gap:4px;">
-        <select id="tsDateFrom" style="width:96px;"></select>
+        <select id="tsDateFrom" style="width:68px;"></select>
         <span style="font-size:11px;color:var(--muted);">–</span>
-        <select id="tsDateTo" style="width:96px;"></select>
+        <select id="tsDateTo" style="width:68px;"></select>
       </div>
     </div>
     <div class="bar-sep"></div>
@@ -364,7 +352,7 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-04-02 12:00";
+  const BUILD_ID   = "2026-04-02 13:00";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -625,31 +613,27 @@
   document.addEventListener('click', () => { issuerPanel.hidden = true; });
   issuerPanel.addEventListener('click', e => e.stopPropagation());
 
-  // ── Date dropdowns (vintage) ─────────────────────────────────────────
-  const dateFromSel = document.getElementById('dateFrom');
-  const dateToSel   = document.getElementById('dateTo');
-
-  function populateDates(sel1, sel2, dates) {
-    const sorted = Array.from(new Set(dates)).filter(Boolean).sort();
-    for (const sel of [sel1, sel2]) {
-      sel.innerHTML = '';
-      for (const d of sorted) {
-        const o = document.createElement('option');
-        o.value = d;
-        try {
-          const dt = new Date(d + 'T00:00:00');
-          o.textContent = dt.toLocaleDateString('en-US', { year:'numeric', month:'short' });
-        } catch (_) { o.textContent = d; }
-        sel.appendChild(o);
-      }
-    }
-    sel1.value = sorted[0] || '';
-    sel2.value = sorted[sorted.length - 1] || '';
-  }
-
-  // Time series date dropdowns (separate so they can show all-issuer dates)
+  // ── Time series date dropdowns ───────────────────────────────────────
   const tsDateFromSel = document.getElementById('tsDateFrom');
   const tsDateToSel   = document.getElementById('tsDateTo');
+
+  function populateYears(fromSel, toSel, dates) {
+    const years = [...new Set(dates.map(d => d.substring(0, 4)))].filter(Boolean).sort();
+    fromSel.innerHTML = '';
+    for (const y of years) {
+      const o = document.createElement('option');
+      o.value = `${y}-01-01`; o.textContent = y;
+      fromSel.appendChild(o);
+    }
+    toSel.innerHTML = '';
+    for (const y of years) {
+      const o = document.createElement('option');
+      o.value = `${y}-12-31`; o.textContent = y;
+      toSel.appendChild(o);
+    }
+    fromSel.value = `${years[0]}-01-01`;
+    toSel.value   = `${years[years.length - 1]}-12-31`;
+  }
 
   // ── CSV loading ──────────────────────────────────────────────────────
   function csvUrl(filename) {
@@ -689,7 +673,7 @@
     summaryRows  = rows;
     summaryReady = true;
     const dates = rows.map(r => r.reporting_date);
-    populateDates(tsDateFromSel, tsDateToSel, dates);
+    populateYears(tsDateFromSel, tsDateToSel, dates);
     updateDataThrough(rows);
     if (mode === 'timeseries') render();
   }).catch(err => {
@@ -721,12 +705,8 @@
 
   // Vintage mode: aggregate across FICO buckets, return per-series rows
   function aggregateVintage(rows) {
-    const from = dateFromSel.value || '';
-    const to   = dateToSel.value   || '';
     const filtered = rows.filter(r =>
       r.fico_low >= ficoMin && r.fico_low < ficoMax &&
-      (!from || r.reporting_date >= from) &&
-      (!to   || r.reporting_date <= to) &&
       (vehicleType === 'all' || (vehicleType === 'new' && +r.new_used === 1) || (vehicleType === 'used' && +r.new_used === 2))
     );
 
@@ -1497,10 +1477,6 @@
     try {
       vintageRows = await fetchCSV(`${code}.csv`);
       if (!vintageRows.length) { showMsg('No data for this issuer.'); return; }
-      populateDates(
-        dateFromSel, dateToSel,
-        vintageRows.map(r => r.reporting_date)
-      );
       updateDataThrough(vintageRows);
       updatePropBadge(vintageRows, 'propBadge');
       await render();
@@ -1606,8 +1582,6 @@
       btn.classList.toggle('active', btn.dataset.basis === vintageBasis);
     loadLossAndRender();
   });
-  dateFromSel.addEventListener('change', () => render());
-  dateToSel.addEventListener('change',   () => render());
   tsDateFromSel.addEventListener('change', () => render());
   tsDateToSel.addEventListener('change',   () => render());
 
