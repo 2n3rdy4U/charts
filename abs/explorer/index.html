@@ -413,7 +413,7 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-04-02 13:58";
+  const BUILD_ID   = "2026-04-02 14:10";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -1557,7 +1557,7 @@
 
       const rowId = `cov-detail-${code}`;
 
-      html += `<tr class="cov-issuer-row ${rowCls}" onclick="covToggle('${rowId}',this)">
+      html += `<tr id="issuer-${code.toLowerCase()}" data-code="${code}" class="cov-issuer-row ${rowCls}" onclick="covToggle('${rowId}',this)">
         <td><span class="cov-chevron">▶</span><span class="cov-issuer-name">${label}</span><span class="cov-issuer-code">${code}</span></td>
         <td class="cov-num">${active.length || '—'}</td>
         <td class="cov-num">${active.length ? filed.length : '—'}</td>
@@ -1609,6 +1609,20 @@
 
     html += '</tbody></table>';
     el.innerHTML = html;
+
+    // Deep-link: if URL has a hash like #issuer-aart, expand and scroll to that issuer
+    const _hash = location.hash.replace('#', '');
+    if (_hash) {
+      const _target = document.getElementById(_hash);
+      if (_target) {
+        const _code = _target.dataset.code;
+        if (_code) {
+          const _detail = document.getElementById('cov-detail-' + _code);
+          if (_detail && _detail.hidden) covToggle('cov-detail-' + _code, _target);
+        }
+        setTimeout(() => _target.scrollIntoView({behavior:'smooth', block:'center'}), 80);
+      }
+    }
   }
 
 
