@@ -237,13 +237,9 @@
       #vis { min-height:320px; height:380px; max-height:440px; }
       #tblWrap { max-height:420px; }
     }
-    /* ── loss curves tab ── */
-    .loss-only { display:none; }
-    body[data-mode="loss"] .loss-only { display:flex; }
-    body[data-mode="loss"] #sharedBar { display:none !important; }
-    body[data-mode="loss"] #tblWrap { display:none !important; }
-    body[data-mode="loss"] #source-bar { display:block !important; }
-    body[data-mode="loss"] #export-btn { visibility:visible; }
+    /* ── loss sub-view within Vintage Curves ── */
+    .loss-view-only { display:none; }
+    body[data-vintage-view="loss"] .loss-view-only { display:contents; }
     @media print {
       html, body { height:auto; overflow:visible; }
       body { display:block; }
@@ -263,7 +259,7 @@
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 </head>
-<body data-mode="vintage">
+<body data-mode="vintage" data-vintage-view="dq">
 <div class="wrap">
 
   <!-- ── Row 1: header (title + mode toggle + last updated) ── -->
@@ -279,7 +275,6 @@
     <button class="mode-tab active" data-mode="vintage" title="X-axis = months since each deal series&#39; first reporting date. Aligns deals of different ages so you can compare how delinquency evolves over a series&#39; life, regardless of when it was issued.">Vintage Curves</button>
     <button class="mode-tab" data-mode="timeseries">Time Series</button>
     <button class="mode-tab" data-mode="coverage">Coverage</button>
-    <button class="mode-tab" data-mode="loss">Loss Curves</button>
   </nav>
 
   <!-- ── Row 2a: vintage controls (issuer + date range) ── -->
@@ -295,6 +290,24 @@
         <select id="dateFrom" style="width:96px;"></select>
         <span style="font-size:11px;color:var(--muted);">–</span>
         <select id="dateTo" style="width:96px;"></select>
+      </div>
+    </div>
+    <div class="bar-sep"></div>
+    <div class="ctrl">
+      <label class="lbl">Analysis</label>
+      <div class="btn-group" id="vintageViewGroup">
+        <button data-vview="dq" class="active">Delinquency <span style="font-size:10px;opacity:0.65;font-weight:400;">· #</span></button>
+        <button data-vview="loss">Loss Rate <span style="font-size:10px;opacity:0.65;font-weight:400;">· $</span></button>
+      </div>
+    </div>
+    <div class="loss-view-only">
+      <div class="bar-sep"></div>
+      <div class="ctrl">
+        <label class="lbl">Vintage Basis</label>
+        <div class="btn-group" id="vintageBasisGroup">
+          <button data-basis="deal" class="active">Deal Issuance</button>
+          <button data-basis="orig">Loan Origination</button>
+        </div>
       </div>
     </div>
   </div>
@@ -353,22 +366,6 @@
         <span class="hm-track"></span>
         <span id="hmLabel" style="font-size:12.5px;color:var(--text);">On</span>
       </label>
-    </div>
-  </div>
-
-  <!-- ── Row 2c: loss curve controls ── -->
-  <div class="fbar loss-only" id="lossBar">
-    <div class="ctrl">
-      <label class="lbl">Issuer</label>
-      <select id="lossIssuerSel"></select>
-    </div>
-    <div class="bar-sep"></div>
-    <div class="ctrl">
-      <label class="lbl">Vintage Basis</label>
-      <div class="btn-group" id="lossBasisGroup">
-        <button data-basis="deal" class="active">Deal Issuance</button>
-        <button data-basis="orig">Loan Origination</button>
-      </div>
     </div>
   </div>
 
@@ -437,7 +434,7 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-04-02 16:58";
+  const BUILD_ID   = "2026-04-02 17:27";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -491,7 +488,8 @@
   let coverageReady  = false;
   let coveragePending = null;
   let lossRows       = [];     // per-issuer loss CSV rows
-  let lossBasis      = 'deal'; // 'deal' | 'orig'
+  let vintageBasis   = 'deal'; // 'deal' | 'orig'
+  let vintageView    = 'dq';   // 'dq' | 'loss'
 
   // ── Proportion labels inside New / Used buttons ──────────────────────
   function updatePropBadge(rows, _unused) {
@@ -1273,6 +1271,7 @@
 
   async function render() {
     if (mode === 'vintage') {
+      if (vintageView === 'loss') { await loadLossAndRender(); return; }
       if (!vintageRows.length) return;
       const code = issuerSel.value;
       const data = aggregateVintage(vintageRows);
@@ -1451,7 +1450,7 @@
       );
       updateDataThrough(vintageRows);
       updatePropBadge(vintageRows, 'propBadge');
-      await render();
+      if (vintageView === 'loss') { await loadLossAndRender(); } else { await render(); }
     } catch (err) {
       showMsg('Failed to load: ' + String(err), true);
     }
@@ -1686,11 +1685,11 @@
   }
 
   async function loadLossAndRender() {
-    const code = document.getElementById('lossIssuerSel').value;
+    const code = issuerSel.value;
     if (!code) return;
     showMsg('Loading…');
     try {
-      const filename = `loss/${code}_${lossBasis}.csv`;
+      const filename = `loss/${code}_${vintageBasis}.csv`;
       const resp = await fetch(csvUrl(filename), { cache: 'no-store' });
       if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
       lossRows = parseLossCSV(await resp.text());
@@ -1706,9 +1705,9 @@
     document.getElementById('vis').style.display = 'block';
     document.getElementById('vis').innerHTML = '';
     if (!lossRows.length) { showMsg('No loss data.'); return; }
-    const code      = document.getElementById('lossIssuerSel').value;
+    const code      = issuerSel.value;
     const title     = issuerLabel[code] || code;
-    const basisNote = lossBasis === 'deal' ? 'by deal issuance vintage' : 'by loan origination vintage';
+    const basisNote = vintageBasis === 'deal' ? 'by deal issuance vintage' : 'by loan origination vintage';
     const subtitle  = `Cumulative net loss rate · ${basisNote} · click legend to highlight`;
     const data = lossRows.map(r => ({
       vintage: String(r.vintage_year),
@@ -1793,8 +1792,6 @@
     history.pushState({}, '', _u);
     if (m === 'coverage') {
       loadCoverageAndRender();
-    } else if (m === 'loss') {
-      loadLossAndRender();
     } else if (m === 'timeseries') {
       initTsSelection();
       updateVehicleToggleState();
@@ -1846,23 +1843,23 @@
 
   issuerSel.addEventListener('change', loadVintageAndRender);
 
-  // ── Loss issuer dropdown ─────────────────────────────────────────────
-  const lossIssuerSel = document.getElementById('lossIssuerSel');
-  for (const it of ISSUERS) {
-    const o = document.createElement('option');
-    o.value = it.code; o.textContent = issuerLabel[it.code];
-    lossIssuerSel.appendChild(o);
-  }
-  const lossDefCode = ISSUERS.some(x => x.code === DEFAULT_ISSUER) ? DEFAULT_ISSUER : (ISSUERS[0] ? ISSUERS[0].code : '');
-  lossIssuerSel.value = lossDefCode;
-  lossIssuerSel.addEventListener('change', loadLossAndRender);
+  // ── Vintage view toggle (Delinquency / Loss Rate) ────────────────────
+  document.getElementById('vintageViewGroup').addEventListener('click', e => {
+    const b = e.target.closest('button[data-vview]');
+    if (!b) return;
+    vintageView = b.dataset.vview;
+    document.body.dataset.vintageView = vintageView;
+    for (const btn of document.querySelectorAll('#vintageViewGroup button'))
+      btn.classList.toggle('active', btn.dataset.vview === vintageView);
+    if (vintageView === 'loss') { loadLossAndRender(); } else { render(); }
+  });
 
-  document.getElementById('lossBasisGroup').addEventListener('click', e => {
+  document.getElementById('vintageBasisGroup').addEventListener('click', e => {
     const b = e.target.closest('button[data-basis]');
     if (!b) return;
-    lossBasis = b.dataset.basis;
-    for (const btn of document.querySelectorAll('#lossBasisGroup button'))
-      btn.classList.toggle('active', btn.dataset.basis === lossBasis);
+    vintageBasis = b.dataset.basis;
+    for (const btn of document.querySelectorAll('#vintageBasisGroup button'))
+      btn.classList.toggle('active', btn.dataset.basis === vintageBasis);
     loadLossAndRender();
   });
   dateFromSel.addEventListener('change', () => render());
@@ -2047,8 +2044,6 @@
     setMode('timeseries');
   } else if (_initView === 'coverage') {
     setMode('coverage');
-  } else if (_initView === 'loss') {
-    setMode('loss');
   } else {
     document.body.dataset.mode = 'vintage';
     loadVintageAndRender();
