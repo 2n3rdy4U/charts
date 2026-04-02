@@ -61,7 +61,7 @@
   }
 
   // ── Init ──────────────────────────────────────────────────────
-  const NAV_CONFIG_VERSION = '20260331-1825';
+  const NAV_CONFIG_VERSION = '20260402-1400';
   const config = await fetch(`nav_config.json?v=${encodeURIComponent(NAV_CONFIG_VERSION)}`, { cache: 'no-store' })
     .then(r => r.json());
 
