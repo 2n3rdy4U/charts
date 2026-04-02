@@ -352,7 +352,7 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-04-02 13:00";
+  const BUILD_ID   = "2026-04-02 14:00";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -1062,7 +1062,7 @@
         + '<span>Worsening</span>'
       : '<span>Lower DQ</span>'
         + '<div style="width:140px;height:10px;border-radius:3px;'
-        + 'background:linear-gradient(to right,rgba(255,255,255,0.9),rgba(255,89,89,0.5));'
+        + 'background:linear-gradient(to right,hsla(120,70%,42%,0.5),hsla(60,70%,42%,0.5),hsla(0,70%,42%,0.5));'
         + 'border:1px solid var(--border);flex-shrink:0;"></div>'
         + '<span>Higher DQ</span>';
     headerHtml += '<div id="heatmapLegend" style="display:'
@@ -1107,9 +1107,8 @@
         const b = Math.round(255 * (1 - abs * 0.4));
         return `rgba(${r},${g},${b},0.45)`;
       } else {
-        // Sequential: low = white, high = red
-        const r = 255, g = Math.round(255 * (1 - t * 0.65)), bv = Math.round(255 * (1 - t * 0.65));
-        return `rgba(${r},${g},${bv},0.5)`;
+        // Sequential: green (low) → yellow → red (high)
+        return `hsla(${Math.round(120 * (1 - t))},70%,42%,0.5)`;
       }
     }
 
@@ -1301,7 +1300,7 @@
                       "legend":{"orient":"bottom","direction":"horizontal","columns":8,
                                 "symbolSize":110,"labelLimit":80}},
             "opacity": {"condition":{"param":"Yr","empty":true,"value":1.0},"value":0.2},
-            "size":    {"condition":{"param":"Yr","empty":false,"value":3.0},"value":1.5},
+            "size":    {"condition":{"param":"Yr","empty":false,"value":4.0},"value":2.0},
           },
         },
         // Layer 2: large invisible circles for nearest-point hover detection
@@ -1646,8 +1645,7 @@
                 const b = Math.round(255*(1-abs*0.4));
                 bg = `rgba(${r},${g},${b},0.45)`;
               } else {
-                const g2 = Math.round(255*(1-t*0.65)), bv = Math.round(255*(1-t*0.65));
-                bg = `rgba(255,${g2},${bv},0.5)`;
+                bg = `hsla(${Math.round(120 * (1 - t))},70%,42%,0.5)`;
               }
               td.style.background = bg;
             });
