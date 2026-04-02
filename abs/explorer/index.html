@@ -215,7 +215,7 @@
     <div class="ctrl">
       <label class="lbl">Analysis</label>
       <div class="btn-group" id="vintageViewGroup">
-        <button data-vview="dq" class="active">Delinquency <span style="font-size:10px;opacity:0.65;font-weight:400;">· accts</span></button>
+        <button data-vview="dq" class="active">Delinquency <span style="font-size:10px;opacity:0.65;font-weight:400;">· #</span></button>
         <button data-vview="loss">Loss Rate <span style="font-size:10px;opacity:0.65;font-weight:400;">· $</span></button>
       </div>
     </div>
@@ -364,7 +364,7 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-04-02 10:30";
+  const BUILD_ID   = "2026-04-02 11:00";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -877,7 +877,7 @@
 
     // Y-axis: label and format depend on DQ filter and (for TS) transform
     let yLabel = {
-      '60+':'60+ DPD Rate', '30-59':'30–59 DPD Rate',
+      '60+':'60+ DPD (% of loans)', '30-59':'30–59 DPD (% of loans)',
       'any-dq':'30+ DPD Rate', 'current':'< 30 DPD (Current) Rate',
     }[dqFilter] || 'Rate';
     let yFmt = '.2%';
@@ -894,9 +894,9 @@
            axis:{ tickCount:{utcyear:1}, format:"%Y", labelAngle:0, labelOverlap:false } };
 
     const subtitle = isVintage
-      ? 'Months since deal issuance · click legend to highlight'
-      : (poolMode === 'seasoned' ? 'Seasoned pools (>6 mo) · click legend to highlight'
-                                 : 'All pools · click legend to highlight');
+      ? 'Loan count basis · months since deal issuance · click legend to highlight'
+      : (poolMode === 'seasoned' ? 'Loan count basis · seasoned pools (>6 mo) · click legend to highlight'
+                                 : 'Loan count basis · all pools · click legend to highlight');
 
     const colorEnc = {
       "field":"series","type":"nominal","title":"Series",
@@ -1280,10 +1280,10 @@
     document.getElementById('tblWrap').style.display = 'none';
     document.getElementById('vis').style.display = 'block';
     document.getElementById('vis').innerHTML = '';
-    const yLabel = dqFilter === '60+'    ? '60+ DPD Rate'
-                 : dqFilter === '30-59'  ? '30–59 DPD Rate'
-                 : dqFilter === 'any-dq' ? '30+ DPD Rate'
-                 :                        '< 30 DPD (Current) Rate';
+    const yLabel = dqFilter === '60+'    ? '60+ DPD (% of loans)'
+                 : dqFilter === '30-59'  ? '30–59 DPD (% of loans)'
+                 : dqFilter === 'any-dq' ? '30+ DPD (% of loans)'
+                 :                        '< 30 DPD (% of loans)';
     const poolLabel = poolMode === 'seasoned' ? 'Seasoned pools (>6 mo)' : 'All pools';
     const clrSeasonal = {"field":"year","type":"ordinal","scale":{"scheme":"tableau10"}};
     const clrSeasonalNoLeg = {...clrSeasonal, "legend":null};
@@ -1307,7 +1307,7 @@
       "width":  "container",
       "height": "container",
       "title":  {"text": `${title} — Year Overlay`,
-                 "subtitle": `${poolLabel} · each line = one calendar year · click legend to highlight`},
+                 "subtitle": `Loan count basis · ${poolLabel.toLowerCase()} · each line = one calendar year · click legend to highlight`},
       "layer": [
         // Layer 1: lines + legend-bind year selection
         {
@@ -1385,7 +1385,7 @@
     };
     const yLoss = {
       "field":"cumulative_loss_rate","type":"quantitative",
-      "title":"Cumulative Loss Rate",
+      "title":"Cumulative Loss Rate (% of pool)",
       "axis":{"format":".2%","labelFontSize":13,"titleFontSize":14,"labelPadding":6,"titlePadding":8},
     };
     return {
@@ -1402,7 +1402,7 @@
       "height":"container",
       "title":{
         "text": title + " — Loss Curves",
-        "subtitle": basisLabel + " vintage · cumulative charge-offs ÷ original pool · click legend to highlight",
+        "subtitle": "Dollar basis · " + basisLabel.toLowerCase() + " vintage · cumulative charge-offs ÷ original pool · click legend to highlight",
       },
       "layer":[
         {
