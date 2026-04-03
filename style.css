@@ -549,104 +549,118 @@ html, body {
 }
 #mobile-modal button:hover { background: rgba(255,255,255,0.22); }
 
-/* ── Responsive: compact top nav on phones (portrait or landscape)
-   Portrait:  width ≤ 768px
-   Landscape: height ≤ 500px (phones are short in landscape; tablets are taller)
-─────────────────────────────────────────────────────────────────── */
+/* ── Phone layout (portrait ≤768px OR landscape height ≤500px) ──── *
+ * Completely replaces the desktop fixed-height app-shell with a     *
+ * normal scrollable document flow. !important used throughout to    *
+ * break out of the desktop architecture cleanly.                    *
+ * ─────────────────────────────────────────────────────────────── */
 @media (max-width: 768px), (orientation: landscape) and (max-height: 500px) {
+
+  /* ── Document root: normal flow, no fixed height ── */
+  html, body {
+    height: auto !important;
+    min-height: 100dvh;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    max-width: 100% !important;
+  }
+
+  /* ── App shell: flex column, grows with content ── */
   #app {
-    grid-template-columns: 1fr;
-    grid-template-rows: var(--header-height) auto 1fr;
-    grid-template-areas:
-      "header"
-      "mobile-nav"
-      "main";
+    display: flex !important;
+    flex-direction: column !important;
+    height: auto !important;
+    min-height: 100dvh;
+    overflow: visible !important;
+    width: 100% !important;
+    max-width: 100% !important;
   }
 
-  /* Show mobile top nav */
-  #mobile-nav {
-    display: flex;
-    grid-area: mobile-nav;
+  /* ── Header: shrink to fit narrow screens ── */
+  #header {
+    flex-shrink: 0;
+    overflow: visible;
+    padding: 0 12px;
+  }
+  #header .brand-name { font-size: 13px; }
+  #header .brand-sub  { font-size: 10px; }
+  #header .header-right .btn-primary {
+    padding: 5px 10px;
+    font-size: 11px;
+    letter-spacing: 0.02em;
   }
 
-  /* Hide drawer nav elements */
+  /* ── Show mobile pill nav, hide desktop nav ── */
+  #mobile-nav   { display: flex; flex-shrink: 0; }
   #rail         { display: none !important; }
   #hamburger    { display: none !important; }
   #nav-backdrop { display: none !important; }
-  #panel-bar    { display: none; }
+  #panel-bar    { display: none !important; }
 
-  /* Let the page grow and scroll freely */
-  html, body {
-    height: auto;
-    min-height: 100%;
-    overflow-x: hidden;
-    max-width: 100vw;
+  /* ── Main: flex child, grows naturally ── */
+  #main {
+    flex: 1;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: visible !important;
+    width: 100% !important;
   }
 
-  #app {
-    height: auto;
-    min-height: 100dvh;
-    overflow-x: hidden;
-    overflow-y: visible;
-    max-width: 100vw;
+  /* ── Panel content: sized to screen minus header+nav (~126px) ── */
+  #panel-content {
+    overflow: visible !important;
+    position: static !important;
+    width: 100% !important;
+    min-height: calc(100dvh - 126px);
   }
 
-  /* Header: shrink brand text so Subscribe fits */
-  #header { overflow: hidden; }
-  #header .brand-name { font-size: 13px; }
-  #header .brand-sub  { font-size: 10px; }
-  #header .header-right .btn-primary { padding: 5px 10px; font-size: 11px; }
-
-  /* Main: let content height drive the page height */
-  #main { overflow: visible; min-height: 0; }
-
-  /* Panel content: fixed height so iframe is usable without inner scroll */
-  #panel-content { overflow: visible; height: 82dvh; }
-
-  /* iframe: static block so outer page scrolls */
+  /* ── iframe: static block, explicit height ── */
   #panel-content iframe {
-    position: static;
-    width: 100%;
-    height: 100%;
+    position: static !important;
     display: block;
+    width: 100% !important;
+    height: calc(100dvh - 126px);
+    border: none;
   }
 
-  /* Welcome screen: scrollable flow, not absolute */
+  /* ── Welcome screen: normal flow, scrollable ── */
   #welcome {
-    position: static;
-    overflow-y: visible;
-    padding: 16px 14px 40px;
+    position: static !important;
+    overflow: visible !important;
+    width: 100% !important;
+    padding: 16px 14px 60px;
     gap: 10px;
     justify-content: flex-start;
     align-items: stretch;
   }
 
-  .welcome-header { gap: 2px; align-items: center; }
-  #welcome .welcome-title { font-size: 18px; }
-  #welcome .welcome-sub   { font-size: 11px; }
+  .welcome-header { gap: 4px; align-items: center; }
+  #welcome .welcome-title { font-size: 20px; }
+  #welcome .welcome-sub   { font-size: 12px; }
 
+  /* ── Tile grid: single column, full width ── */
   .tile-grid {
-    grid-template-columns: 1fr;
+    display: flex !important;
+    flex-direction: column !important;
     gap: 8px;
-    max-width: 100%;
+    width: 100% !important;
+    max-width: 100% !important;
   }
 
-  /* Override explicit column placements for mobile */
   .tile,
   .tile:nth-child(4),
   .tile:nth-child(5) {
-    grid-column: 1;
+    width: 100% !important;
     min-height: 0;
-    padding: 10px 14px 9px;
-    gap: 3px;
+    padding: 12px 14px 10px;
+    gap: 4px;
     border-radius: 9px;
     box-shadow: none;
   }
 
-  /* Compact tile internals on mobile */
-  .tile .tile-icon   { width: 16px; height: 16px; }
-  .tile .tile-label  { font-size: 13px; }
-  .tile .tile-desc   { font-size: 11px; line-height: 1.4; }
-  .tile .tile-footer { margin-top: 2px; }
+  .tile .tile-icon   { width: 18px; height: 18px; }
+  .tile .tile-label  { font-size: 14px; }
+  .tile .tile-desc   { font-size: 12px; line-height: 1.45; }
+  .tile .tile-footer { margin-top: 4px; }
   .tile .tile-action { font-size: 10px; }
 }
