@@ -365,7 +365,8 @@
     panelContent.innerHTML = '';
 
     const iframe = document.createElement('iframe');
-    iframe.src = item.url;
+    const sep = item.url.includes('?') ? '&' : '?';
+    iframe.src = `${item.url}${sep}_cb=${Date.now()}`;
     iframe.title = item.label;
     iframe.addEventListener('load', () => panelLoading.classList.remove('visible'));
     panelContent.appendChild(iframe);
