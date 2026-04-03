@@ -549,8 +549,11 @@ html, body {
 }
 #mobile-modal button:hover { background: rgba(255,255,255,0.22); }
 
-/* ── Responsive: compact top nav on portrait phones ─────────────── */
-@media (max-width: 768px) and (orientation: portrait) {
+/* ── Responsive: compact top nav on phones (portrait or landscape)
+   Portrait:  width ≤ 768px
+   Landscape: height ≤ 500px (phones are short in landscape; tablets are taller)
+─────────────────────────────────────────────────────────────────── */
+@media (max-width: 768px), (orientation: landscape) and (max-height: 500px) {
   #app {
     grid-template-columns: 1fr;
     grid-template-rows: var(--header-height) auto 1fr;
