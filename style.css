@@ -606,20 +606,20 @@ html, body {
     width: 100% !important;
   }
 
-  /* ── Panel content: sized to screen minus header+nav (~126px) ── */
+  /* ── Panel content: tall enough for charts to render fully ── */
   #panel-content {
     overflow: visible !important;
     position: static !important;
     width: 100% !important;
-    min-height: calc(100dvh - 126px);
+    min-height: 800px;
   }
 
-  /* ── iframe: static block, explicit height ── */
+  /* ── iframe: static block, tall fixed height — outer page scrolls ── */
   #panel-content iframe {
     position: static !important;
     display: block;
     width: 100% !important;
-    height: calc(100dvh - 126px);
+    height: 800px;
     border: none;
   }
 
