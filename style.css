@@ -575,29 +575,35 @@ html, body {
   #nav-backdrop { display: none !important; }
   #panel-bar    { display: none; }
 
-  /* Allow full page to scroll on mobile */
+  /* Let the page grow and scroll freely */
+  html, body {
+    height: auto;
+    min-height: 100%;
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
   #app {
     height: auto;
     min-height: 100dvh;
-    overflow: visible;
+    overflow-x: hidden;
+    overflow-y: visible;
+    max-width: 100vw;
   }
 
-  /* Header: don't clip Subscribe button */
-  #header { overflow: visible; }
+  /* Header: shrink brand text so Subscribe fits */
+  #header { overflow: hidden; }
+  #header .brand-name { font-size: 13px; }
+  #header .brand-sub  { font-size: 10px; }
+  #header .header-right .btn-primary { padding: 5px 10px; font-size: 11px; }
 
   /* Main: let content height drive the page height */
-  #main {
-    overflow: visible;
-    min-height: 0;
-  }
+  #main { overflow: visible; min-height: 0; }
 
-  /* Panel content: fixed height so iframe is usable */
-  #panel-content {
-    overflow: visible;
-    height: 85dvh;
-  }
+  /* Panel content: fixed height so iframe is usable without inner scroll */
+  #panel-content { overflow: visible; height: 82dvh; }
 
-  /* iframe: fill the panel-content block */
+  /* iframe: static block so outer page scrolls */
   #panel-content iframe {
     position: static;
     width: 100%;
@@ -605,20 +611,17 @@ html, body {
     display: block;
   }
 
-  /* Welcome screen: scrollable, not absolute */
+  /* Welcome screen: scrollable flow, not absolute */
   #welcome {
     position: static;
-    overflow-y: auto;
+    overflow-y: visible;
     padding: 16px 14px 40px;
     gap: 10px;
     justify-content: flex-start;
     align-items: stretch;
   }
 
-  .welcome-header {
-    gap: 2px;
-    align-items: center;
-  }
+  .welcome-header { gap: 2px; align-items: center; }
   #welcome .welcome-title { font-size: 18px; }
   #welcome .welcome-sub   { font-size: 11px; }
 
