@@ -259,6 +259,81 @@
     tileGrid.appendChild(tile);
   });
 
+  // ── Build mobile top nav (portrait phones) ──────────────────────
+  const mobileNav = document.createElement('nav');
+  mobileNav.id = 'mobile-nav';
+  mobileNav.setAttribute('aria-label', 'Mobile navigation');
+
+  const mobileNavSections = document.createElement('div');
+  mobileNavSections.id = 'mobile-nav-sections';
+
+  const mobileNavItems = document.createElement('div');
+  mobileNavItems.id = 'mobile-nav-items';
+  mobileNavItems.hidden = true;
+
+  let mobileActiveSectionId = null;
+
+  function setMobileSectionActive(id) {
+    mobileActiveSectionId = id;
+    mobileNavSections.querySelectorAll('.mobile-nav-pill').forEach(b => {
+      b.classList.toggle('active', b.dataset.sectionId === id);
+    });
+  }
+
+  function buildMobileSubItems(section) {
+    mobileNavItems.innerHTML = '';
+    if (!section.items || !section.items.length) { mobileNavItems.hidden = true; return; }
+    section.items.forEach(item => {
+      const btn = document.createElement('button');
+      btn.className = 'mobile-nav-sub';
+      btn.dataset.itemId = item.id;
+      btn.textContent = item.label;
+      btn.addEventListener('click', () => {
+        mobileNavItems.querySelectorAll('.mobile-nav-sub').forEach(b =>
+          b.classList.toggle('active', b === btn));
+        loadPanel(item, section.label, btn);
+      });
+      mobileNavItems.appendChild(btn);
+    });
+    mobileNavItems.hidden = false;
+  }
+
+  config.sections.forEach(section => {
+    const isLink = section.type === 'link';
+    const pill = document.createElement(isLink ? 'a' : 'button');
+    pill.className = 'mobile-nav-pill';
+    pill.dataset.sectionId = section.id;
+    pill.textContent = section.label;
+
+    if (isLink) {
+      pill.href = section.url || '#';
+      pill.target = '_blank';
+      pill.rel = 'noopener';
+    } else if (section.type === 'accordion') {
+      pill.addEventListener('click', () => {
+        if (mobileActiveSectionId === section.id && !mobileNavItems.hidden) {
+          mobileNavItems.hidden = true;
+          setMobileSectionActive(null);
+        } else {
+          setMobileSectionActive(section.id);
+          buildMobileSubItems(section);
+        }
+      });
+    } else {
+      pill.addEventListener('click', () => {
+        setMobileSectionActive(section.id);
+        mobileNavItems.hidden = true;
+        loadPanel({ id: section.id, label: section.label, url: section.url },
+                  section.label, pill);
+      });
+    }
+    mobileNavSections.appendChild(pill);
+  });
+
+  mobileNav.appendChild(mobileNavSections);
+  mobileNav.appendChild(mobileNavItems);
+  document.getElementById('app').insertBefore(mobileNav, document.getElementById('main'));
+
   // ── Load panel ───────────────────────────────────────────────
   function loadPanel(item, sectionLabel, el) {
     if (activeItemId === item.id) return;

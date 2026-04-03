@@ -473,6 +473,58 @@ html, body {
   opacity: 1;
 }
 
+/* ── Mobile top nav (portrait only, built by app.js) ────────────── */
+#mobile-nav {
+  display: none; /* shown only in portrait media query */
+  flex-direction: column;
+  background: var(--color-shell);
+  border-bottom: 1px solid var(--color-shell-border);
+  flex-shrink: 0;
+}
+#mobile-nav-sections,
+#mobile-nav-items {
+  display: flex;
+  overflow-x: auto;
+  padding: 5px 10px;
+  gap: 6px;
+  scrollbar-width: none;
+}
+#mobile-nav-sections::-webkit-scrollbar,
+#mobile-nav-items::-webkit-scrollbar { display: none; }
+#mobile-nav-items {
+  border-top: 1px solid var(--color-shell-border);
+  padding-top: 5px;
+  padding-bottom: 6px;
+}
+#mobile-nav-items[hidden] { display: none !important; }
+.mobile-nav-pill,
+.mobile-nav-sub {
+  flex-shrink: 0;
+  border: 1px solid var(--color-shell-border);
+  background: transparent;
+  color: var(--color-shell-muted);
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 11px;
+  border-radius: 20px;
+  cursor: pointer;
+  white-space: nowrap;
+  text-decoration: none;
+  line-height: 1.4;
+}
+.mobile-nav-pill:hover:not(.active),
+.mobile-nav-sub:hover:not(.active) {
+  background: var(--color-shell-hover);
+  color: var(--color-shell-text);
+}
+.mobile-nav-pill.active,
+.mobile-nav-sub.active {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #fff;
+}
+
 /* ── Mobile modal overlay ────────────────────────────────────────── */
 #mobile-modal-backdrop {
   position: fixed; inset: 0; z-index: 999998;
@@ -497,66 +549,28 @@ html, body {
 }
 #mobile-modal button:hover { background: rgba(255,255,255,0.22); }
 
-/* ── Responsive: slide-out drawer on narrow screens (portrait only) ── */
+/* ── Responsive: compact top nav on portrait phones ─────────────── */
 @media (max-width: 768px) and (orientation: portrait) {
   #app {
-    grid-template-columns: 0 1fr;
+    grid-template-columns: 1fr;
+    grid-template-rows: var(--header-height) auto 1fr;
     grid-template-areas:
-      "header header"
-      "main   main";
+      "header"
+      "mobile-nav"
+      "main";
   }
 
-  /* Rail becomes a fixed slide-in drawer */
-  #rail {
-    position: fixed;
-    top: 0;
-    left: -260px;
-    width: 260px;
-    height: 100dvh;
-    z-index: 200;
-    padding-top: 16px;
-    border-right: none;
-    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.4);
-    transition: left 220ms ease;
-    overflow-y: auto;
-  }
-
-  #rail.open {
-    left: 0;
-  }
-
-  /* Hamburger button */
-  #hamburger {
+  /* Show mobile top nav */
+  #mobile-nav {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 5px;
-    width: 36px;
-    height: 36px;
-    padding: 6px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    flex-shrink: 0;
-    border-radius: var(--radius);
-    transition: background var(--transition);
+    grid-area: mobile-nav;
   }
 
-  #hamburger:hover { background: var(--color-shell-hover); }
-
-  #hamburger span {
-    display: block;
-    height: 2px;
-    width: 100%;
-    background: var(--color-shell-text);
-    border-radius: 2px;
-    transition: transform 220ms ease, opacity 220ms ease;
-  }
-
-  /* Animate to X when open */
-  #hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-  #hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-  #hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  /* Hide drawer nav elements */
+  #rail         { display: none !important; }
+  #hamburger    { display: none !important; }
+  #nav-backdrop { display: none !important; }
+  #panel-bar    { display: none; }
 
   /* Welcome screen */
   #welcome {
