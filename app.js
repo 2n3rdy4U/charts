@@ -28,9 +28,9 @@
       <line x1="8" y1="23" x2="16" y2="23" stroke-linecap="round" stroke-width="1.8"/>`,
     // Sub-item icons used inside accordion sections
     'car': `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
-      d="M5 17h14M3 17V12l2-5h14l2 5v5M5 17v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-2M15 17v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-2"/>
-      <circle cx="7.5" cy="14.5" r="1" stroke-width="1.8"/>
-      <circle cx="16.5" cy="14.5" r="1" stroke-width="1.8"/>`,
+      d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L16 11l-2.7-3.6a1 1 0 0 0-.8-.4H5.24a2 2 0 0 0-1.8 1.1l-.8 1.63A6 6 0 0 0 2 12.42V16h2"/>
+      <circle cx="9" cy="16" r="2" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"/>
+      <circle cx="17" cy="16" r="2" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"/>`,
     'credit-card': `<rect x="2" y="6" width="20" height="13" rx="2" stroke-width="1.8"
       stroke-linecap="round" stroke-linejoin="round"/>
       <line x1="2" y1="10.5" x2="22" y2="10.5" stroke-width="1.8" stroke-linecap="round"/>
@@ -78,7 +78,7 @@
   }
 
   // ── Init ──────────────────────────────────────────────────────
-  const NAV_CONFIG_VERSION = '20260406-1700';
+  const NAV_CONFIG_VERSION = '20260406-1800';
   const config = await fetch(`nav_config.json?v=${encodeURIComponent(NAV_CONFIG_VERSION)}`, { cache: 'no-store' })
     .then(r => r.json());
 
