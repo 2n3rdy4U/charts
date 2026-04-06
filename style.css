@@ -203,14 +203,22 @@ html, body {
 .nav-item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 7px 16px 7px 44px;
+  gap: 9px;
+  padding: 7px 16px 7px 38px;
   cursor: pointer;
   color: var(--color-shell-muted);
   font-size: 13px;
   transition: background var(--transition), color var(--transition);
   text-decoration: none;
   position: relative;
+}
+
+.nav-item-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  color: var(--color-accent-nav);
+  opacity: 0.85;
 }
 
 .nav-item:hover {

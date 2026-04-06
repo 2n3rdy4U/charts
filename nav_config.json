@@ -11,6 +11,7 @@
         {
           "id": "abs-auto",
           "label": "Auto",
+          "icon": "car",
           "type": "panel",
           "url": "https://2n3rdy4u.github.io/charts/abs/explorer/index.html",
           "badge": null
@@ -18,6 +19,7 @@
         {
           "id": "abs-credit-card",
           "label": "Credit Card",
+          "icon": "credit-card",
           "type": "panel",
           "url": "https://2n3rdy4u.github.io/charts/cc/index.html",
           "badge": null
@@ -25,6 +27,7 @@
         {
           "id": "abs-issuance",
           "label": "Issuance",
+          "icon": "stack",
           "type": "panel",
           "url": "https://2n3rdy4u.github.io/charts/abs/issuance/index.html",
           "badge": null

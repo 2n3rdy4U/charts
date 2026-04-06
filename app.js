@@ -26,6 +26,17 @@
       d="M19 10a7 7 0 0 1-14 0"/>
       <line x1="12" y1="19" x2="12" y2="23" stroke-linecap="round" stroke-width="1.8"/>
       <line x1="8" y1="23" x2="16" y2="23" stroke-linecap="round" stroke-width="1.8"/>`,
+    // Sub-item icons used inside accordion sections
+    'car': `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+      d="M5 17h14M3 17V12l2-5h14l2 5v5M5 17v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-2M15 17v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-2"/>
+      <circle cx="7.5" cy="14.5" r="1" stroke-width="1.8"/>
+      <circle cx="16.5" cy="14.5" r="1" stroke-width="1.8"/>`,
+    'credit-card': `<rect x="2" y="6" width="20" height="13" rx="2" stroke-width="1.8"
+      stroke-linecap="round" stroke-linejoin="round"/>
+      <line x1="2" y1="10.5" x2="22" y2="10.5" stroke-width="1.8" stroke-linecap="round"/>
+      <line x1="6" y1="15" x2="10" y2="15" stroke-width="1.8" stroke-linecap="round"/>`,
+    'stack': `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+      d="M12 3 2 8l10 5 10-5-10-5zM2 13l10 5 10-5M2 18l10 5 10-5"/>`,
   };
 
   function iconSVG(name) {
@@ -38,6 +49,12 @@
     const path = icons[name] || icons['document'];
     return `<svg class="tile-icon" viewBox="0 0 24 24" fill="none"
       stroke="currentColor" xmlns="http://www.w3.org/2000/svg">${path}</svg>`;
+  }
+
+  function itemIconSVG(name) {
+    if (!name || !icons[name]) return '';
+    return `<svg class="nav-item-icon" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" xmlns="http://www.w3.org/2000/svg">${icons[name]}</svg>`;
   }
 
   function chevronSVG() {
@@ -61,7 +78,7 @@
   }
 
   // ── Init ──────────────────────────────────────────────────────
-  const NAV_CONFIG_VERSION = '20260402-1400';
+  const NAV_CONFIG_VERSION = '20260406-1700';
   const config = await fetch(`nav_config.json?v=${encodeURIComponent(NAV_CONFIG_VERSION)}`, { cache: 'no-store' })
     .then(r => r.json());
 
@@ -169,6 +186,7 @@
       el.className = 'nav-item';
       el.dataset.id = item.id;
       el.innerHTML = `
+        ${itemIconSVG(item.icon)}
         <span>${item.label}</span>
         ${item.badge ? badgeHTML(item.badge) : ''}
       `;
