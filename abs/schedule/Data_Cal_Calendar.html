@@ -1,7 +1,11 @@
 <!doctype html>
 <html lang="en"><head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Data Calendar">
+<meta name="theme-color" content="#ffffff">
 <title>Consumer Credit Matters &bull; Data Calendar</title>
 <style>
 :root {
@@ -13,6 +17,7 @@
 html, body {
   margin:0; padding:0; background:var(--bg); color:var(--text);
   font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) 0 env(safe-area-inset-left);
 }
 body { display:flex; flex-direction:column; min-height:100vh; }
 .wrap {
@@ -46,7 +51,7 @@ label.lbl { font-size:11px; color:var(--muted); font-weight:500; white-space:now
   display:inline-flex; align-items:center; gap:5px;
 }
 .btn-group button.active { background:#dbeafe; color:#1e40af; }
-.btn-group button:hover:not(.active) { background:#e5e7eb; }
+.btn-group button:hover:not(.active), .btn-group button:active:not(.active) { background:#e5e7eb; }
 .cat-dot {
   display:inline-block; width:8px; height:8px; border-radius:50%; flex-shrink:0;
 }
@@ -132,7 +137,7 @@ label.lbl { font-size:11px; color:var(--muted); font-weight:500; white-space:now
   color:var(--muted); transition:color .12s, background .12s;
 }
 .chart-icon svg { width:15px; height:15px; }
-.chart-icon:hover { color:var(--accent); background:#eef2ff; }
+.chart-icon:hover, .chart-icon:active { color:var(--accent); background:#eef2ff; }
 
 /* ── accordion detail panel (matches Coverage page) ── */
 .detail-row td {
@@ -174,9 +179,11 @@ label.lbl { font-size:11px; color:var(--muted); font-weight:500; white-space:now
   font-size:11px; color:var(--muted); line-height:1.4;
 }
 
+/* ── focus-visible ── */
+button:focus-visible, select:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
 /* ── responsive ── */
 @media (max-width:640px) {
-  .wrap { padding:8px; }
+  .wrap { padding:8px 8px calc(8px + env(safe-area-inset-bottom)); }
   .col-time { display:none; }
   .cal-table th.th-time { display:none; }
   .col-date { width:58px; }
@@ -186,6 +193,22 @@ label.lbl { font-size:11px; color:var(--muted); font-weight:500; white-space:now
   .bar-sep { display:none; }
   .detail-panel { padding:6px 8px; }
   .detail-tbl { font-size:11px; }
+  /* touch targets */
+  .btn-group button { min-height:44px; padding:10px 14px; font-size:13px; }
+  .ctrl-search { min-height:44px; padding:10px 12px; font-size:14px; }
+  .chart-icon { width:44px; height:44px; }
+  /* touch feedback */
+  .btn-group button:active, .ctrl-search:active { transform:scale(0.97); transition:transform 0.08s; }
+}
+/* ── landscape (phones) ── */
+@media (max-height:500px) and (orientation:landscape) {
+  .hdr { padding-bottom:4px; gap:6px; }
+  .brand-sub { display:none; }
+  .fbar { padding:4px 0; gap:4px 8px; }
+  label.lbl { display:none; }
+  .ev-row td { padding:5px 6px; }
+  .btn-group button { min-height:36px; padding:6px 10px; }
+  .ctrl-search { min-height:36px; padding:6px 10px; }
 }
 </style>
 </head><body>
