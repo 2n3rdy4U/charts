@@ -2,7 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+<meta name="apple-mobile-web-app-title" content="CC ABS"/>
+<meta name="theme-color" content="#f8fafc"/>
 <title>Credit Card ABS Performance</title>
 <script src="https://cdn.jsdelivr.net/npm/html-to-image@1/dist/html-to-image.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
@@ -11,9 +15,18 @@
 <style>
   *,*::before,*::after{box-sizing:border-box}
   body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;
-        font-size:13px;background:#f8fafc;margin:0;padding:0}
+        font-size:13px;background:#f8fafc;margin:0;padding:0;
+        padding:env(safe-area-inset-top) env(safe-area-inset-right) 0 env(safe-area-inset-left)}
   .wrap{max-width:1140px;margin:0 auto;padding:16px 16px 32px}
   footer{margin-top:16px;font-size:11px;color:#999;border-top:1px solid #e2e8f0;padding-top:8px;margin-top:8px}
+  /* ── dark tooltip (Chart.js-style) ── */
+  .vg-tooltip{background:rgba(31,41,55,.92) !important;color:#fff !important;
+    border:none !important;border-radius:8px !important;
+    box-shadow:0 4px 14px rgba(0,0,0,.25) !important;
+    font-size:12.5px !important;padding:8px 12px !important;line-height:1.5 !important}
+  .vg-tooltip td.key{color:rgba(255,255,255,.7) !important;font-weight:400 !important}
+  .vg-tooltip td.value{color:#fff !important;font-weight:600 !important}
+  .vg-tooltip td{border:none !important;padding:2px 8px 2px 0 !important}
   /* ── Page header ── */
   .page-hdr{display:flex;align-items:center;gap:12px;padding-bottom:10px;
              border-bottom:1px solid #e2e8f0;margin-bottom:12px}
@@ -67,8 +80,30 @@
   /* ── Export button (camera) ── */
   .export-btn{padding:4px 7px;border:1px solid #cbd5e1;border-radius:5px;background:#fff;
                cursor:pointer;color:#475569;display:inline-flex;align-items:center;line-height:1}
-  .export-btn:hover{background:#f1f5f9}
+  .export-btn:hover,.export-btn:active{background:#f1f5f9}
   .meta-date{font-size:11px;color:#999;white-space:nowrap}
+  /* ── focus-visible ── */
+  button:focus-visible,select:focus-visible{outline:2px solid #1e40af;outline-offset:2px}
+  /* ── mobile portrait ── */
+  @media (max-width:640px) {
+    .wrap{padding:10px 8px 24px}
+    .page-hdr{gap:8px}
+    .brand-title{font-size:15px}
+    /* touch targets */
+    .metric-sel-btn{min-height:44px;padding:10px 12px;font-size:14px}
+    .rng-btn{min-height:44px;padding:10px 12px}
+    input[type=date]{min-height:44px;padding:10px 8px}
+    .export-btn{min-height:44px;min-width:44px;padding:10px}
+    /* touch feedback */
+    .metric-sel-btn:active,.rng-btn:active,.export-btn:active{transform:scale(0.97);transition:transform 0.08s}
+  }
+  /* ── landscape (phones) ── */
+  @media (max-height:500px) and (orientation:landscape) {
+    .page-hdr{padding-bottom:4px;margin-bottom:6px}
+    .brand-sub{display:none}
+    .ctrl-bar{padding:6px 10px;margin-bottom:8px}
+    .chart-section{padding:8px;margin-bottom:8px}
+  }
   @media print {
     body { background:#fff; }
     .wrap { padding-bottom:24px; }
@@ -335,12 +370,12 @@ function makeSpec(field, title, fmtAx, fmtTip) {
       view:    {stroke:null},
       background: "transparent",
       axis:    {labelFontSize:11, titleFontSize:11, titlePadding:8},
-      tooltip: {theme:"light"}
+      tooltip: {}
     }
   };
 }
 
-const OPTS = {renderer:"svg", actions:false};
+const OPTS = {renderer:"svg", actions:false, tooltip:{theme:"custom"}};
 const METRICS = [
   {id:'pr',  sel:'#chart-pr',  field:'payment_rate',       title:'Monthly Payment Rate (%)',       fmtAx:'.1f', fmtTip:'.2f'},
   {id:'xs',  sel:'#chart-xs',  field:'excess_spread',      title:'Excess Spread (%)',              fmtAx:'.1f', fmtTip:'.2f'},
