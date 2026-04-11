@@ -485,8 +485,8 @@
 
   <!-- ── Chart / Table / Coverage ── -->
   <div id="export-region">
-    <div id="viewHeader" class="view-header" style="margin:10px 0 4px 0;">
-      <div id="viewTitle" class="view-title" style="font-size:15px;font-weight:600;color:var(--text);"></div>
+    <div id="viewHeader" class="view-header" style="margin:10px 0 6px 0;text-align:center;">
+      <div id="viewTitle" class="view-title" style="font-size:16px;font-weight:600;color:var(--text);"></div>
       <div id="viewSubtitle" class="view-sub" style="font-size:11.5px;color:var(--muted);margin-top:2px;"></div>
     </div>
     <div id="vis"><div class="loading">Loading…</div></div>
@@ -502,7 +502,7 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-04-11 07:48";
+  const BUILD_ID   = "2026-04-11 08:06";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -1221,30 +1221,25 @@
     tblWrap.style.display = 'block';
     const poolLabel = poolMode === 'seasoned' ? 'Seasoned pools (>6 mo)' : 'All pools';
     const transformNote = transform === 'yoy-delta'
-      ? 'each row = calendar-year avg of monthly rates; change = year N minus year N−1 (pp)'
+      ? 'each row = calendar-year avg of monthly rates; change = year N minus year N−1 (pp); annual averages of monthly readings'
       : transform === 'yoy-pct'
-      ? 'each row = calendar-year avg of monthly rates; change = (year N ÷ year N−1) − 1; partial years compare only matched months'
+      ? 'each row = calendar-year avg of monthly rates; change = (year N ÷ year N−1) − 1; partial years compare only matched months; annual averages of monthly readings'
       : 'annual averages of monthly readings';
-    const subtitle = `${poolLabel} · ${transformNote}`;
-    let headerHtml = `<div class="tbl-title">${title || 'Issuer Comparison'} — Time Series</div>`
-                   + `<div class="tbl-subtitle">${subtitle}</div>`;
+    const footnoteText = `${poolLabel}; ${transformNote}`;
+    let headerHtml = '';
 
     // ── Heatmap legend (shown/hidden by toggle; id used by listener below) ──
     const legendInner = isYoy
       ? '<span>Improving</span>'
-        + '<div style="width:140px;height:10px;border-radius:3px;'
+        + '<div style="width:120px;height:9px;border-radius:3px;'
         + 'background:linear-gradient(to right,rgba(0,210,0,0.45),rgba(255,255,255,0.8),rgba(255,80,80,0.45));'
         + 'border:1px solid var(--border);flex-shrink:0;"></div>'
         + '<span>Worsening</span>'
       : '<span>Lower DQ</span>'
-        + '<div style="width:140px;height:10px;border-radius:3px;'
+        + '<div style="width:120px;height:9px;border-radius:3px;'
         + 'background:linear-gradient(to right,rgba(255,255,255,0.9),rgba(255,89,89,0.5));'
         + 'border:1px solid var(--border);flex-shrink:0;"></div>'
         + '<span>Higher DQ</span>';
-    headerHtml += '<div id="heatmapLegend" style="display:'
-      + (heatmapEnabled ? 'flex' : 'none')
-      + ';align-items:center;gap:8px;padding:2px 4px 8px;font-size:10.5px;color:var(--muted);">'
-      + legendInner + '</div>';
 
     // Collect unique years (columns) and series (rows)
     const yearsSet  = new Set(), seriesSet = new Set();
@@ -1325,6 +1320,16 @@
       html += '</tr>';
     }
     html += '</tbody></table>';
+
+    // Footnote row: explanatory text on the left, heatmap legend on the right
+    html += '<div class="tbl-footnote" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:10px 4px 4px;font-size:11px;color:var(--muted);">'
+      + `<div style="flex:1 1 auto;min-width:0;">${footnoteText}</div>`
+      + '<div id="heatmapLegend" style="display:'
+      + (heatmapEnabled ? 'flex' : 'none')
+      + ';align-items:center;gap:6px;font-size:10.5px;color:var(--muted);flex:0 0 auto;">'
+      + legendInner + '</div>'
+      + '</div>';
+
     if (partialYears.size) {
       const notes = [...partialYears].sort().map(yr => {
         const lastMo = fmtYM([...mpy[yr]].sort().pop());
@@ -1333,7 +1338,7 @@
           ? `<b>${yr}</b>: YTD through ${lastMo}; change vs. same period in ${priorYr}`
           : `<b>${yr}</b>: YTD average through ${lastMo}`;
       });
-      html += `<p style="font-size:11px;color:var(--muted);margin:8px 4px 12px;">` +
+      html += `<p style="font-size:11px;color:var(--muted);margin:4px 4px 12px;">` +
         `<sup style="font-size:9px;">†</sup> Partial year — ${notes.join(' · ')}</p>`;
     }
     tblWrap.innerHTML = headerHtml + html;
@@ -1370,6 +1375,8 @@
         const dqLabel = {'60+':'60+ DPD','30-59':'30–59 DPD','any-dq':'30+ DPD','current':'Current'}[dqFilter] || dqFilter;
         title = `Auto ABS Vintage DQ ${dqLabel}`;
       }
+    } else if (displayMode === 'table') {
+      title = 'Auto ABS Issuer Comparison';
     } else {
       const dqLabel = {'60+':'60+ DPD','30-59':'30–59 DPD','any-dq':'30+ DPD','current':'Current'}[dqFilter] || dqFilter;
       let metric = `DQ ${dqLabel}`;
