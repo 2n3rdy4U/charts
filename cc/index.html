@@ -20,13 +20,19 @@
   .wrap{max-width:1140px;margin:0 auto;padding:16px 16px 32px}
   footer{margin-top:16px;font-size:11px;color:#999;border-top:1px solid #e2e8f0;padding-top:8px;margin-top:8px}
   /* ── dark tooltip (Chart.js-style) ── */
-  .vg-tooltip{background:rgba(31,41,55,.92) !important;color:#fff !important;
-    border:none !important;border-radius:8px !important;
-    box-shadow:0 4px 14px rgba(0,0,0,.25) !important;
-    font-size:12.5px !important;padding:8px 12px !important;line-height:1.5 !important}
-  .vg-tooltip td.key{color:rgba(255,255,255,.7) !important;font-weight:400 !important}
-  .vg-tooltip td.value{color:#fff !important;font-weight:600 !important}
-  .vg-tooltip td{border:none !important;padding:2px 8px 2px 0 !important}
+  /* ── dark tooltip — works with disableDefaultStyle:true ── */
+  #vg-tooltip-element{visibility:hidden;position:fixed;z-index:1000;pointer-events:none;
+    background:rgba(31,41,55,.92);color:#fff;border:none;border-radius:8px;
+    box-shadow:0 4px 14px rgba(0,0,0,.25);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;
+    font-size:12.5px;padding:8px 12px;line-height:1.5;
+    max-width:320px;word-wrap:break-word}
+  #vg-tooltip-element.visible{visibility:visible}
+  #vg-tooltip-element h2{margin:0 0 4px;padding:0;font-size:12.5px;font-weight:600;color:#fff}
+  #vg-tooltip-element table{border-spacing:0}
+  #vg-tooltip-element td{border:none;padding:2px 8px 2px 0}
+  #vg-tooltip-element td.key{color:rgba(255,255,255,.7);font-weight:400;text-align:right}
+  #vg-tooltip-element td.value{color:#fff;font-weight:600}
   /* ── Page header ── */
   .page-hdr{display:flex;align-items:center;gap:12px;padding-bottom:10px;
              border-bottom:1px solid #e2e8f0;margin-bottom:12px}
@@ -375,7 +381,7 @@ function makeSpec(field, title, fmtAx, fmtTip) {
   };
 }
 
-const OPTS = {renderer:"svg", actions:false, tooltip:{theme:"custom"}};
+const OPTS = {renderer:"svg", actions:false, tooltip:{disableDefaultStyle:true}};
 const METRICS = [
   {id:'pr',  sel:'#chart-pr',  field:'payment_rate',       title:'Monthly Payment Rate (%)',       fmtAx:'.1f', fmtTip:'.2f'},
   {id:'xs',  sel:'#chart-xs',  field:'excess_spread',      title:'Excess Spread (%)',              fmtAx:'.1f', fmtTip:'.2f'},
