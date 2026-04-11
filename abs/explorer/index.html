@@ -79,17 +79,22 @@
     #vis { flex:1; width:100%; min-height:0; overflow:visible; margin-bottom:4px; }
     .vega-embed { width:100% !important; height:100% !important; }
     .vega-embed > div { height:100% !important; }
-    /* ── dark tooltip (Chart.js-style) ── */
-    #vg-tooltip-element, .vg-tooltip {
-      background:rgba(31,41,55,.92) !important; color:#fff !important;
-      border:none !important; border-radius:8px !important;
-      box-shadow:0 4px 14px rgba(0,0,0,.25) !important;
-      font-size:12.5px !important; padding:8px 12px !important;
-      line-height:1.5 !important;
+    /* ── dark tooltip (Chart.js-style) — works with disableDefaultStyle:true ── */
+    #vg-tooltip-element {
+      visibility:hidden; position:fixed; z-index:1000; pointer-events:none;
+      background:rgba(31,41,55,.92); color:#fff;
+      border:none; border-radius:8px;
+      box-shadow:0 4px 14px rgba(0,0,0,.25);
+      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
+      font-size:12.5px; padding:8px 12px; line-height:1.5;
+      max-width:320px; word-wrap:break-word;
     }
-    #vg-tooltip-element td.key, .vg-tooltip td.key { color:rgba(255,255,255,.7) !important; font-weight:400 !important; }
-    #vg-tooltip-element td.value, .vg-tooltip td.value { color:#fff !important; font-weight:600 !important; }
-    #vg-tooltip-element td, .vg-tooltip td { border:none !important; padding:2px 8px 2px 0 !important; }
+    #vg-tooltip-element.visible { visibility:visible; }
+    #vg-tooltip-element h2 { margin:0 0 4px; padding:0; font-size:12.5px; font-weight:600; color:#fff; }
+    #vg-tooltip-element table { border-spacing:0; }
+    #vg-tooltip-element td { border:none; padding:2px 8px 2px 0; }
+    #vg-tooltip-element td.key { color:rgba(255,255,255,.7); font-weight:400; text-align:right; }
+    #vg-tooltip-element td.value { color:#fff; font-weight:600; }
     /* suppress Vega-Lite's selection-highlight background rect on legend entries */
     .vega-embed svg .role-legend-entry rect.background { fill:none !important; }
     .loading { padding:20px; font-size:13px; color:var(--muted); }
@@ -502,7 +507,7 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-04-11 08:43";
+  const BUILD_ID   = "2026-04-11 09:18";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
