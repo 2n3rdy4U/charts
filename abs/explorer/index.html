@@ -502,7 +502,7 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-04-11 08:06";
+  const BUILD_ID   = "2026-04-11 08:43";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -1084,7 +1084,7 @@
       "data":   {"values": data},
       "width":  "container",
       "height": "container",
-      "title":  {"text": `${title} — ${chartType}`, "subtitle": subtitle},
+      // Title rendered by #viewHeader above the chart (see updateViewHeader)
       "layer": [
         {
           // Layer 1: lines + legend-bind selection
@@ -1366,26 +1366,8 @@
     if (mode === 'coverage') { hdr.style.display = 'none'; return; }
     hdr.style.display = '';
 
-    // Title: reflects the primary metric being shown
-    let title = '';
-    if (mode === 'vintage') {
-      if (vintageView === 'loss') {
-        title = 'Auto ABS Cumulative Loss Rate';
-      } else {
-        const dqLabel = {'60+':'60+ DPD','30-59':'30–59 DPD','any-dq':'30+ DPD','current':'Current'}[dqFilter] || dqFilter;
-        title = `Auto ABS Vintage DQ ${dqLabel}`;
-      }
-    } else if (displayMode === 'table') {
-      title = 'Auto ABS Issuer Comparison';
-    } else {
-      const dqLabel = {'60+':'60+ DPD','30-59':'30–59 DPD','any-dq':'30+ DPD','current':'Current'}[dqFilter] || dqFilter;
-      let metric = `DQ ${dqLabel}`;
-      if (transform === 'yoy-delta') metric += ' · YOY Δ (pp)';
-      else if (transform === 'yoy-pct') metric += ' · YOY %';
-      title = `Auto ABS ${metric}`;
-    }
-
-    // Subtitle: credit score · vehicle · (pool, for time series)
+    // Subtitle parts: DQ (for time series / vintage DQ), credit score, vehicle
+    const dqLabel = {'60+':'60+ DPD','30-59':'30–59 DPD','any-dq':'30+ DPD','current':'Current'}[dqFilter] || dqFilter;
     const scoreSel = document.getElementById('scoreSel');
     const scoreVal = scoreSel ? scoreSel.value : 'all';
     let scoreTxt;
@@ -1393,14 +1375,36 @@
     else if (scoreVal === 'subprime') scoreTxt = 'Subprime (<660)';
     else if (scoreVal === 'prime') scoreTxt = 'Prime (≥660)';
     else scoreTxt = `FICO ${ficoMin}–${ficoMax}`;
-
     const vehTxt = vehicleType === 'all' ? 'New & Used'
                  : vehicleType === 'new' ? 'New' : 'Used';
 
-    const parts = [scoreTxt, vehTxt];
-    if (mode === 'timeseries' && poolMode === 'seasoned') parts.push('Seasoned (>6mo)');
-    subEl.textContent = parts.join(' · ');
+    // Title + subtitle
+    let title = '';
+    let subParts = [];
+    if (mode === 'vintage') {
+      const code = (typeof issuerSel !== 'undefined' && issuerSel.value) ? issuerSel.value : '';
+      const issuerTxt = code ? (issuerLabel[code] || code) : '';
+      if (vintageView === 'loss') {
+        title = issuerTxt ? `${issuerTxt} Vintage Loss Curves` : 'Auto ABS Cumulative Loss Rate';
+        subParts = [scoreTxt, vehTxt];
+      } else {
+        title = issuerTxt ? `${issuerTxt} Vintage` : 'Auto ABS Vintage';
+        subParts = [dqLabel, scoreTxt, vehTxt];
+      }
+    } else if (displayMode === 'table') {
+      title = 'Auto ABS Issuer Comparison';
+      subParts = [scoreTxt, vehTxt];
+    } else {
+      let metric = `DQ ${dqLabel}`;
+      if (transform === 'yoy-delta') metric += ' · YOY Δ (pp)';
+      else if (transform === 'yoy-pct') metric += ' · YOY %';
+      title = `Auto ABS ${metric}`;
+      subParts = [scoreTxt, vehTxt];
+      if (poolMode === 'seasoned') subParts.push('Seasoned (>6mo)');
+    }
+
     titleEl.textContent = title;
+    subEl.textContent = subParts.join(' · ');
   }
 
   async function render() {
@@ -1512,8 +1516,7 @@
       "data":   {"values": data},
       "width":  "container",
       "height": "container",
-      "title":  {"text": `${title} — Year Overlay`,
-                 "subtitle": `${poolLabel} · each line = one calendar year · click legend to highlight`},
+      // Title rendered by #viewHeader above the chart (see updateViewHeader)
       "layer": [
         // Layer 1: lines + legend-bind year selection
         {
@@ -1879,7 +1882,7 @@
       },
       "data":{"values":data},
       "width":"container","height":"container",
-      "title":{"text":`${title} — Loss Curves`,"subtitle":subtitle},
+      // Title rendered by #viewHeader above the chart (see updateViewHeader)
       "layer":[
         {
           "params":[{"name":"Vint","bind":"legend",
