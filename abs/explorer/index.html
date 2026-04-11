@@ -2,7 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="ABS Explorer" />
+  <meta name="theme-color" content="#ffffff" />
   <title>Auto ABS Data Explorer</title>
   <style>
     :root {
@@ -14,7 +18,8 @@
       margin:0; padding:0; background:var(--bg); color:var(--text); height:100%;
       font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
     }
-    body { display:flex; flex-direction:column; overflow:hidden; }
+    body { display:flex; flex-direction:column; overflow:hidden;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) 0 env(safe-area-inset-left); }
     .wrap {
       flex:1; display:flex; flex-direction:column; max-width:1200px; width:100%;
       margin:0 auto; padding:10px 14px 32px; overflow:auto;
@@ -47,7 +52,7 @@
       cursor:pointer; color:var(--text); transition:background 0.12s;
     }
     .btn-group button.active  { background:#dbeafe; color:#1e40af; border-color:#1e40af; }
-    .btn-group button:hover:not(.active) { background:#e5e7eb; }
+    .btn-group button:hover:not(.active), .btn-group button:active:not(.active) { background:#e5e7eb; }
     /* ── custom multi-select dropdown ── */
     .multi-sel { position:relative; display:inline-block; }
     .multi-sel-btn {
@@ -56,7 +61,7 @@
       white-space:nowrap; max-width:320px; overflow:hidden; text-overflow:ellipsis;
       text-align:left; min-width:160px;
     }
-    .multi-sel-btn:hover { background:var(--btn-bg); }
+    .multi-sel-btn:hover, .multi-sel-btn:active { background:var(--btn-bg); }
     .multi-sel-panel {
       position:absolute; top:calc(100% + 4px); left:0; z-index:200;
       background:#fff; border:1px solid var(--border); border-radius:8px;
@@ -67,13 +72,24 @@
       display:flex; align-items:center; gap:7px; padding:4px 12px;
       font-size:12.5px; cursor:pointer; user-select:none; color:var(--text);
     }
-    .multi-sel-panel label:hover { background:var(--btn-bg); }
+    .multi-sel-panel label:hover, .multi-sel-panel label:active { background:var(--btn-bg); }
     .multi-sel-panel input[type=checkbox] { cursor:pointer; accent-color:var(--accent); }
     .multi-sel-sep { height:1px; background:var(--border); margin:4px 8px; }
     /* ── chart ── */
     #vis { flex:1; width:100%; min-height:0; overflow:visible; margin-bottom:4px; }
     .vega-embed { width:100% !important; height:100% !important; }
     .vega-embed > div { height:100% !important; }
+    /* ── dark tooltip (Chart.js-style) ── */
+    #vg-tooltip-element, .vg-tooltip {
+      background:rgba(31,41,55,.92) !important; color:#fff !important;
+      border:none !important; border-radius:8px !important;
+      box-shadow:0 4px 14px rgba(0,0,0,.25) !important;
+      font-size:12.5px !important; padding:8px 12px !important;
+      line-height:1.5 !important;
+    }
+    #vg-tooltip-element td.key, .vg-tooltip td.key { color:rgba(255,255,255,.7) !important; font-weight:400 !important; }
+    #vg-tooltip-element td.value, .vg-tooltip td.value { color:#fff !important; font-weight:600 !important; }
+    #vg-tooltip-element td, .vg-tooltip td { border:none !important; padding:2px 8px 2px 0 !important; }
     /* suppress Vega-Lite's selection-highlight background rect on legend entries */
     .vega-embed svg .role-legend-entry rect.background { fill:none !important; }
     .loading { padding:20px; font-size:13px; color:var(--muted); }
@@ -114,7 +130,7 @@
                 font-weight:600; color:var(--muted); border-radius:50%;
                 width:26px; height:26px; display:inline-flex; align-items:center;
                 justify-content:center; line-height:1; flex-shrink:0; transition:background .15s,color .15s; }
-    .info-btn:hover { background:#d0d5dd; color:var(--text); }
+    .info-btn:hover, .info-btn:active { background:#d0d5dd; color:var(--text); }
     .info-popover { position:absolute; z-index:200; background:#fff; border:1px solid var(--border);
                     border-radius:6px; box-shadow:0 4px 16px rgba(0,0,0,.12);
                     padding:12px 14px; width:340px; font-size:12px; line-height:1.55;
@@ -136,7 +152,7 @@
     }
     /* ── toast notification ── */
     #toast {
-      position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(20px);
+      position:fixed; bottom:calc(24px + env(safe-area-inset-bottom)); left:50%; transform:translateX(-50%) translateY(20px);
       background:#1f2937; color:#fff; font-size:12.5px; padding:9px 16px;
       border-radius:8px; box-shadow:0 4px 14px rgba(0,0,0,.25);
       opacity:0; pointer-events:none; transition:opacity .2s, transform .2s;
@@ -174,7 +190,7 @@
     .cov-col-date    { width:15%; }
     .cov-col-status  { width:30%; }
     .cov-issuer-row { cursor:pointer; user-select:none; }
-    .cov-issuer-row:hover td { filter:brightness(0.97); }
+    .cov-issuer-row:hover td, .cov-issuer-row:active td { filter:brightness(0.97); }
     .cov-issuer-row td {
       padding:7px 8px; border-bottom:1px solid var(--border);
       vertical-align:middle; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
@@ -228,14 +244,62 @@
       transition:color .15s,border-color .15s; white-space:nowrap;
     }
     .mode-tab.active { color:var(--accent); border-bottom-color:var(--accent); font-weight:600; }
-    .mode-tab:hover:not(.active) { color:var(--text); background:#f9fafb; }
+    .mode-tab:hover:not(.active), .mode-tab:active:not(.active) { color:var(--text); background:#f9fafb; }
+    /* ── focus-visible for keyboard / accessibility ── */
+    button:focus-visible, select:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+    /* ── mobile portrait ── */
     @media (max-width:640px) {
       html, body { height:auto; overflow:auto; }
       body { overflow-y:auto; }
-      .wrap { overflow:visible; padding:8px; height:auto; min-height:0; }
+      .wrap { overflow:visible; padding:8px 8px calc(8px + env(safe-area-inset-bottom)); height:auto; min-height:0; }
       .bar-sep { display:none; }
       #vis { min-height:320px; height:380px; max-height:440px; }
-      #tblWrap { max-height:420px; }
+      #tblWrap { max-height:420px; -webkit-overflow-scrolling:touch; }
+      /* ── touch targets (44px Apple HIG minimum) ── */
+      select, .multi-sel-btn { min-height:44px; padding:10px 12px; font-size:14px; }
+      .btn-group button { min-height:44px; padding:10px 14px; font-size:13px; }
+      .info-btn { width:44px; height:44px; font-size:16px; }
+      #export-btn { min-height:44px; min-width:44px; padding:10px; }
+      .mode-tab { min-height:44px; padding:12px 16px; font-size:14px; }
+      .hm-switch { min-height:44px; }
+      .hm-track { width:40px; height:24px; border-radius:12px; }
+      .hm-track::after { width:18px; height:18px; top:3px; left:3px; }
+      .hm-switch input:checked + .hm-track::after { transform:translateX(16px); }
+      /* ── touch feedback ── */
+      .btn-group button:active, .mode-tab:active, .multi-sel-btn:active, select:active {
+        transform:scale(0.97); transition:transform 0.08s;
+      }
+      /* ── font scaling ── */
+      .brand-title { font-size:16px; }
+      .meta-date { font-size:12px; }
+      /* ── coverage table mobile ── */
+      .cov-table { table-layout:auto; }
+      .cov-issuer-row td { white-space:normal; word-break:break-word; }
+      .cov-col-issuer { width:35%; }
+      .cov-col-status { width:25%; }
+      .multi-sel-panel { max-width:calc(100vw - 24px); }
+    }
+    /* ── tablet ── */
+    @media (min-width:641px) and (max-width:1024px) {
+      .wrap { max-width:100%; padding:10px 16px 32px; }
+      .fbar { gap:6px 10px; }
+      select, .multi-sel-btn { font-size:13px; padding:6px 10px; }
+      .btn-group button { padding:6px 12px; }
+      .info-popover { width:300px; }
+    }
+    /* ── landscape (phones — viewport height < 500px) ── */
+    @media (max-height:500px) and (orientation:landscape) {
+      .hdr { padding-bottom:4px; gap:6px; }
+      .brand-sub { display:none; }
+      .fbar { padding:4px 0; gap:4px 10px; }
+      label.lbl { display:none; }
+      .mode-tab { padding:6px 12px; font-size:12px; min-height:36px; }
+      .wrap { padding:4px 8px calc(4px + env(safe-area-inset-bottom)); }
+      #vis { min-height:200px; height:240px; }
+      #tblWrap { max-height:220px; }
+      select, .multi-sel-btn { min-height:36px; padding:6px 10px; }
+      .btn-group button { min-height:36px; padding:6px 10px; }
+      #source-bar { padding:4px 0 2px; font-size:10px; }
     }
     /* ── loss sub-view within Vintage Curves ── */
     .loss-view-only { display:none; }
@@ -421,6 +485,10 @@
 
   <!-- ── Chart / Table / Coverage ── -->
   <div id="export-region">
+    <div id="viewHeader" class="view-header" style="margin:10px 0 4px 0;">
+      <div id="viewTitle" class="view-title" style="font-size:15px;font-weight:600;color:var(--text);"></div>
+      <div id="viewSubtitle" class="view-sub" style="font-size:11.5px;color:var(--muted);margin-top:2px;"></div>
+    </div>
     <div id="vis"><div class="loading">Loading…</div></div>
     <div id="tblWrap"></div>
     <div id="coverageView" class="coverage-only cov-wrap">
@@ -434,7 +502,7 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-04-08 12:31";
+  const BUILD_ID   = "2026-04-11 07:48";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -1011,7 +1079,7 @@
         "axis":  {"labelFontSize":13,"titleFontSize":14},
         "title": {"anchor":"middle","fontSize":15,"subtitleFontSize":11},
         "view":  {"continuousHeight":300,"continuousWidth":300},
-        "tooltip": {"theme":"light"},
+        "tooltip": {},
       },
       "data":   {"values": data},
       "width":  "container",
@@ -1283,7 +1351,53 @@
     document.getElementById('vis').style.display = 'block';
   }
 
+  // ── View title + subtitle reflecting current UX selections ──────────
+  function updateViewHeader() {
+    const hdr = document.getElementById('viewHeader');
+    const titleEl = document.getElementById('viewTitle');
+    const subEl = document.getElementById('viewSubtitle');
+    if (!hdr || !titleEl || !subEl) return;
+
+    if (mode === 'coverage') { hdr.style.display = 'none'; return; }
+    hdr.style.display = '';
+
+    // Title: reflects the primary metric being shown
+    let title = '';
+    if (mode === 'vintage') {
+      if (vintageView === 'loss') {
+        title = 'Auto ABS Cumulative Loss Rate';
+      } else {
+        const dqLabel = {'60+':'60+ DPD','30-59':'30–59 DPD','any-dq':'30+ DPD','current':'Current'}[dqFilter] || dqFilter;
+        title = `Auto ABS Vintage DQ ${dqLabel}`;
+      }
+    } else {
+      const dqLabel = {'60+':'60+ DPD','30-59':'30–59 DPD','any-dq':'30+ DPD','current':'Current'}[dqFilter] || dqFilter;
+      let metric = `DQ ${dqLabel}`;
+      if (transform === 'yoy-delta') metric += ' · YOY Δ (pp)';
+      else if (transform === 'yoy-pct') metric += ' · YOY %';
+      title = `Auto ABS ${metric}`;
+    }
+
+    // Subtitle: credit score · vehicle · (pool, for time series)
+    const scoreSel = document.getElementById('scoreSel');
+    const scoreVal = scoreSel ? scoreSel.value : 'all';
+    let scoreTxt;
+    if (scoreVal === 'all') scoreTxt = 'All Credit Scores';
+    else if (scoreVal === 'subprime') scoreTxt = 'Subprime (<660)';
+    else if (scoreVal === 'prime') scoreTxt = 'Prime (≥660)';
+    else scoreTxt = `FICO ${ficoMin}–${ficoMax}`;
+
+    const vehTxt = vehicleType === 'all' ? 'New & Used'
+                 : vehicleType === 'new' ? 'New' : 'Used';
+
+    const parts = [scoreTxt, vehTxt];
+    if (mode === 'timeseries' && poolMode === 'seasoned') parts.push('Seasoned (>6mo)');
+    subEl.textContent = parts.join(' · ');
+    titleEl.textContent = title;
+  }
+
   async function render() {
+    updateViewHeader();
     if (mode === 'vintage') {
       if (vintageView === 'loss') { await loadLossAndRender(); return; }
       if (!vintageRows.length) return;
@@ -1332,7 +1446,7 @@
     document.getElementById('vis').style.display = 'block';
     document.getElementById('vis').innerHTML = '';
     try {
-      await vegaEmbed('#vis', buildSpec(data, title), { actions:false, renderer:'svg' });
+      await vegaEmbed('#vis', buildSpec(data, title), { actions:false, renderer:'svg', tooltip:{disableDefaultStyle:true} });
     } catch (err) {
       showMsg('Chart failed: ' + String(err), true);
     }
@@ -1444,7 +1558,7 @@
       ],
     };
     try {
-      await vegaEmbed('#vis', spec, { actions:false, renderer:'svg' });
+      await vegaEmbed('#vis', spec, { actions:false, renderer:'svg', tooltip:{disableDefaultStyle:true} });
     } catch (err) {
       showMsg('Chart failed: ' + String(err), true);
     }
@@ -1699,6 +1813,7 @@
   }
 
   async function loadLossAndRender() {
+    updateViewHeader();
     const code = issuerSel.value;
     if (!code) return;
     showMsg('Loading…');
@@ -1753,7 +1868,7 @@
         "axis":{"labelFontSize":13,"titleFontSize":14},
         "title":{"anchor":"middle","fontSize":15,"subtitleFontSize":11},
         "view":{"continuousHeight":300,"continuousWidth":300},
-        "tooltip":{"theme":"light"},
+        "tooltip":{},
       },
       "data":{"values":data},
       "width":"container","height":"container",
@@ -1793,7 +1908,7 @@
         },
       ],
     };
-    vegaEmbed('#vis', spec, { actions:false, renderer:'svg' }).catch(err => showMsg('Chart failed: ' + String(err), true));
+    vegaEmbed('#vis', spec, { actions:false, renderer:'svg', tooltip:{disableDefaultStyle:true} }).catch(err => showMsg('Chart failed: ' + String(err), true));
   }
 
   // ── Mode switching ───────────────────────────────────────────────────
@@ -1806,6 +1921,7 @@
     _u.searchParams.set('view', m);
     history.pushState({}, '', _u);
     if (m === 'coverage') {
+      updateViewHeader();
       loadCoverageAndRender();
     } else if (m === 'timeseries') {
       initTsSelection();
