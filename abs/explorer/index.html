@@ -309,6 +309,7 @@
     /* ── loss sub-view within Vintage Curves ── */
     .loss-view-only { display:none; }
     body[data-vintage-view="loss"] .loss-view-only { display:contents; }
+    body[data-vintage-view="loss"] .dq-view-only { display:none !important; }
     @media print {
       html, body { height:auto; overflow:visible; }
       body { display:block; }
@@ -440,16 +441,18 @@
 
   <!-- ── Row 3: shared filters (DQ Status + Credit Score) ── -->
   <div class="fbar" id="sharedBar" style="position:relative;">
-    <div class="ctrl">
-      <label class="lbl" title="Delinquency rate = loans in the selected past-due bucket ÷ total active loans (balance &gt; $10, FICO 300&#8211;900). &#10;&#10;60+ DPD: seriously delinquent. &#10;30&#8211;59 DPD: early-stage delinquency. &#10;30+ DPD: combined 30–59 and 60+.&#10;Current: loans with no reported delinquency." style="cursor:help;">DQ Status</label>
-      <select id="dqSel">
-        <option value="60+">60+ DPD</option>
-        <option value="30-59">30–59 DPD</option>
-        <option value="any-dq">30+ DPD</option>
-        <option value="current">&lt; 30 DPD (Current)</option>
-      </select>
+    <div class="dq-view-only" style="display:contents;">
+      <div class="ctrl">
+        <label class="lbl" title="Delinquency rate = loans in the selected past-due bucket ÷ total active loans (balance &gt; $10, FICO 300&#8211;900). &#10;&#10;60+ DPD: seriously delinquent. &#10;30&#8211;59 DPD: early-stage delinquency. &#10;30+ DPD: combined 30–59 and 60+.&#10;Current: loans with no reported delinquency." style="cursor:help;">DQ Status</label>
+        <select id="dqSel">
+          <option value="60+">60+ DPD</option>
+          <option value="30-59">30–59 DPD</option>
+          <option value="any-dq">30+ DPD</option>
+          <option value="current">&lt; 30 DPD (Current)</option>
+        </select>
+      </div>
+      <div class="bar-sep"></div>
     </div>
-    <div class="bar-sep"></div>
     <div class="ctrl">
       <label class="lbl">Credit Score</label>
       <div style="display:flex;align-items:center;gap:6px;">
@@ -507,7 +510,7 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-04-13 08:51";
+  const BUILD_ID   = "2026-04-13 10:15";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "DriveTime"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -1415,7 +1418,10 @@
   async function render() {
     updateViewHeader();
     if (mode === 'vintage') {
-      if (vintageView === 'loss') { await loadLossAndRender(); return; }
+      if (vintageView === 'loss') {
+        if (lossRows.length) { renderLossChart(); } else { await loadLossAndRender(); }
+        return;
+      }
       if (!vintageRows.length) return;
       const code = issuerSel.value;
       const data = aggregateVintage(vintageRows);
@@ -1821,7 +1827,11 @@
       const r = {};
       for (let j = 0; j < header.length; j++) r[header[j]] = (vals[j] ?? '').trim();
       r.vintage_year    = parseInt(r.vintage_year,    10);
+      r.fico_low        = parseInt(r.fico_low,        10) || 0;
+      r.new_used        = parseInt(r.new_used,        10) || 0;
       r.loan_age_months = parseInt(r.loan_age_months, 10);
+      r.period_co_amt   = parseFloat(r.period_co_amt)  || 0;
+      r.orig_pool_amt   = parseFloat(r.orig_pool_amt)  || 0;
       r.cumulative_loss_rate = parseFloat(r.cumulative_loss_rate) || 0;
       return r;
     }).filter(r => r && r.vintage_year && !isNaN(r.loan_age_months));
@@ -1852,12 +1862,51 @@
     const code      = issuerSel.value;
     const title     = issuerLabel[code] || code;
     const basisNote = vintageBasis === 'deal' ? 'by deal issuance vintage' : 'by loan origination vintage';
-    const subtitle  = `Cumulative net loss rate · ${basisNote} · click legend to highlight`;
-    const data = lossRows.map(r => ({
-      vintage: String(r.vintage_year),
-      age:     r.loan_age_months,
-      rate:    r.cumulative_loss_rate,
-    }));
+
+    // ── Filter by FICO range and vehicle type, then re-aggregate ──
+    const filtered = lossRows.filter(r =>
+      r.fico_low >= ficoMin && r.fico_low < ficoMax &&
+      (vehicleType === 'all' || (vehicleType === 'new' && r.new_used === 1) || (vehicleType === 'used' && r.new_used === 2))
+    );
+    if (!filtered.length) { showMsg('No loss data for selected filters.'); return; }
+
+    // Compute pool denominator per vintage: sum orig_pool_amt across matching
+    // FICO/vehicle buckets (use only one age-month per bucket to avoid double-count)
+    const poolByVintage = new Map();
+    const seenPool = new Set();
+    for (const r of filtered) {
+      const bk = `${r.vintage_year}|${r.fico_low}|${r.new_used}`;
+      if (seenPool.has(bk)) continue;
+      seenPool.add(bk);
+      poolByVintage.set(r.vintage_year, (poolByVintage.get(r.vintage_year) || 0) + r.orig_pool_amt);
+    }
+
+    // Sum period charge-off amounts across FICO/vehicle buckets per (vintage, age)
+    const coAgg = new Map();
+    for (const r of filtered) {
+      const key = `${r.vintage_year}|${r.loan_age_months}`;
+      coAgg.set(key, (coAgg.get(key) || 0) + r.period_co_amt);
+    }
+
+    // Build vintage groups, compute cumulative loss rate
+    const byVintage = new Map();
+    for (const [key, co] of coAgg) {
+      const [vyStr, ageStr] = key.split('|');
+      const vy = parseInt(vyStr, 10), age = parseInt(ageStr, 10);
+      if (!byVintage.has(vy)) byVintage.set(vy, []);
+      byVintage.get(vy).push({ age, co });
+    }
+    const data = [];
+    for (const [vy, points] of byVintage) {
+      points.sort((a, b) => a.age - b.age);
+      let cumCo = 0;
+      const poolAmt = poolByVintage.get(vy) || 0;
+      for (const p of points) {
+        cumCo += p.co;
+        const rate = poolAmt > 0 ? cumCo / poolAmt : 0;
+        data.push({ vintage: String(vy), age: p.age, rate });
+      }
+    }
     const colorEnc = {
       "field":"vintage","type":"ordinal","title":"Vintage",
       "scale":{"scheme":"tableau10"},
