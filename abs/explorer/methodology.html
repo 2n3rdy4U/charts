@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Methodology & Data Quality | Auto ABS Data Explorer</title>
+<style>
+  :root {
+    --text:#111827; --muted:#6b7280; --border:#e5e7eb; --bg:#fafafa;
+    --accent:#1e40af; --code-bg:#f3f4f6;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: Georgia, "Times New Roman", serif;
+    margin:0; background:var(--bg); color:var(--text); line-height:1.55;
+  }
+  header {
+    background:#fff; border-bottom:1px solid var(--border);
+    padding:18px 32px; display:flex; align-items:baseline; gap:16px;
+  }
+  header h1 { margin:0; font-size:22px; color:var(--accent); }
+  header .sub { color:var(--muted); font-size:13px; }
+  .back { margin-left:auto; font-size:13px; }
+  .back a { color:var(--accent); text-decoration:none; }
+  .back a:hover { text-decoration:underline; }
+  main {
+    max-width: 880px; margin: 0 auto; padding: 32px 36px 80px;
+    background:#fff; border-left:1px solid var(--border); border-right:1px solid var(--border);
+  }
+  h2 { color:var(--accent); font-size:19px; margin:32px 0 8px; border-bottom:1px solid var(--border); padding-bottom:6px; }
+  h3 { font-size:15px; margin:20px 0 6px; color:var(--text); font-family:-apple-system,BlinkMacSystemFont,sans-serif; font-weight:600;}
+  p, li { font-size:14.5px; color:#1f2937; }
+  ul { padding-left:22px; }
+  li { margin-bottom:4px; }
+  code { background:var(--code-bg); padding:1px 5px; border-radius:3px; font-size:13px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color:#374151; }
+  table { border-collapse:collapse; width:100%; font-size:13px; font-family:-apple-system,sans-serif; margin:12px 0; }
+  th, td { padding:6px 10px; border-bottom:1px solid var(--border); text-align:left; }
+  th { background:#f9fafb; font-weight:600; }
+  td.num { text-align:right; font-variant-numeric:tabular-nums; }
+  .callout { background:#fffbeb; border-left:3px solid #d97706; padding:12px 16px; margin:12px 0; font-size:13.5px; border-radius:0 6px 6px 0; }
+  .callout strong { color:#92400e; }
+  .meta { font-size:12px; color:var(--muted); font-family:-apple-system,sans-serif; margin-top:32px; padding-top:12px; border-top:1px solid var(--border); }
+</style>
+</head>
+<body>
+<header>
+  <h1>Methodology &amp; Data Quality</h1>
+  <span class="sub">Auto ABS Data Explorer</span>
+  <span class="back"><a href="index.html">&larr; Back to Explorer</a></span>
+</header>
+<main>
+
+<p style="font-size:15px;">
+This page documents the data sources, definitions, and quality considerations behind every chart and table in the Auto ABS Data Explorer. It is written for practitioners who need to evaluate whether the numbers meet their standard of care before citing them.
+</p>
+
+<h2>1. Data Source</h2>
+<p>
+All content is derived from <strong>SEC ABS-EE loan-level filings</strong> submitted to EDGAR under Regulation AB II (Rule 17g-7). These are regulatory disclosures that auto-loan securitization trusts are legally required to file on a defined schedule &mdash; typically monthly &mdash; containing approximately 100 fields per loan per reporting period.
+</p>
+<ul>
+  <li><strong>Issuers covered:</strong> 24 active auto-loan securitizers (Ally, Ameri&shy;Credit, Bridgecrest, BMW, CarMax, Capital One Prime, California Republic, Carvana, DriveTime, Exeter, Fifth Third, Ford, GM Financial, Honda, Hyundai, Mercedes&#8209;Benz, Nissan, Santander, Toyota, USAA, Volkswagen, World Omni, and CarMax&nbsp;Select, World&nbsp;Omni&nbsp;Select).</li>
+  <li><strong>Time coverage:</strong> Varies by issuer. Earliest data ~2010; most recent data is typically within a few weeks of the most recent filing deadline.</li>
+  <li><strong>Update cadence:</strong> The pipeline runs automatically on weekdays at 6:00 AM and 6:00 PM ET. New filings are fetched, parsed, and merged; aggregated CSVs and the dashboard HTML are regenerated. Typical data latency is &lt;24 hours after SEC filing.</li>
+</ul>
+
+<h2>2. Credit Score Methodology</h2>
+<div class="callout">
+<strong>Approved disclosure.</strong> Analysis uses the consumer credit bureau score reported in SEC ABS-EE filings, filtered to the 300&ndash;900 range. Seven of twenty-four issuers explicitly identify this as a FICO score; the remaining seventeen report a generic &ldquo;bureau score&rdquo; label. Industry practice strongly favors FICO Auto Score for auto lending decisions, but we cannot independently verify the score model for all issuers. Loans without a reported score (~0&ndash;15% by issuer) are excluded from the analysis.
+</div>
+<p>
+Commercial / dealer bureau scores (<code>obligorCreditScoreType LIKE '%commercial%'</code>) are excluded because they use a different scoring scale than consumer scores and would contaminate the low-score bands of prime issuers.
+</p>
+
+<h2>3. Metric Definitions</h2>
+
+<h3>Delinquency (Vintage Curves + Time Series)</h3>
+<ul>
+  <li><strong>60+ DPD rate:</strong> Loans with <code>currentDelinquencyStatus &gt;= 60</code> AND balance &gt; $10, divided by total active loans (balance &gt; $10).</li>
+  <li><strong>30&ndash;59 DPD rate:</strong> Loans with 30 &le; <code>currentDelinquencyStatus</code> &le; 59 AND balance &gt; $10, over same denominator.</li>
+  <li><strong>30+ DPD rate:</strong> Combined 30&ndash;59 and 60+.</li>
+  <li><strong>Current rate:</strong> Loans with <code>dpd &lt; 30</code> (or null) AND balance &gt; $10, over total.</li>
+</ul>
+<p>DPD values capped at 999 in the data pipeline; some issuers use sentinel values (e.g., SDART uses 2577, DRIVE uses 1699) for already-charged-off loans; these are excluded from the DPD bucket counts.</p>
+
+<h3>Losses (Cumulative Net Loss by Vintage)</h3>
+<ul>
+  <li><strong>Charge-off:</strong> <code>zeroBalanceCode = '4'</code> per SEC ABS-EE enum.</li>
+  <li><strong>Recovery:</strong> <code>recoveredAmount</code> field, summed per loan (reporting convention varies by issuer).</li>
+  <li><strong>Cumulative Net Loss Rate:</strong> Cumulative (charge&#8209;offs &minus; recoveries) &divide; original pool balance, tracked by vintage cohort.</li>
+  <li><strong>Vintage basis:</strong> Selectable &mdash; either <em>Deal Issuance</em> (months since first reporting period of the deal) or <em>Loan Origination</em> (months since the loan&rsquo;s <code>originationDate</code>).</li>
+</ul>
+
+<h3>Repossessions (1st-Time Repo Rate)</h3>
+<p>
+<strong>1st-time repossession</strong> = the first reporting period in which a loan&rsquo;s <code>repossessedIndicator</code> transitions to <code>TRUE</code>. Each loan is counted at most once, at its first-ever repo period. This matches the methodology used by WCP Consulting in their published 1st-Time Repo reports.
+</p>
+<ul>
+  <li><strong>Numerator:</strong> Count of loans whose first-ever repo period is the current reporting period, within the selected (issuer &times; credit-score band &times; new/used) filter.</li>
+  <li><strong>Denominator:</strong> Count of all loans active in the current reporting period in the same filter bucket.</li>
+  <li><strong>Why 1st-time only:</strong> The raw <code>repossessedIndicator</code> can flip from TRUE back to FALSE (borrower redemption) and then to TRUE again. Counting every transition would double-count these edge cases; industry convention (and WCP methodology) uses 1st-time only.</li>
+</ul>
+
+<h3>Credit Score vs Default (Kaplan-Meier Survival Analysis)</h3>
+<ul>
+  <li><strong>Event:</strong> Loan charge-off (<code>zeroBalanceCode = '4'</code>).</li>
+  <li><strong>Censoring:</strong> Loans that paid off (<code>zeroBalanceCode = '1'</code>) or remain active are treated as right-censored at their most recent observation.</li>
+  <li><strong>Duration:</strong> Months between <code>originationDate</code> and event (or censor) date.</li>
+  <li><strong>Output:</strong> Kaplan-Meier cumulative default probability as a function of months-on-book, per credit score band.</li>
+</ul>
+
+<h2>4. External Validation</h2>
+<p>
+Our 1st-time repossession counts match WCP Consulting&rsquo;s published November 2024 figures within 0.3&ndash;0.5% for consumer-focused issuers. This is the strongest external corroboration available for this data, since WCP and this platform both use the same SEC ABS-EE source with independent implementations.
+</p>
+<table>
+  <thead><tr><th>Issuer Group (Nov 2024, Below Prime)</th><th class="num">Explorer</th><th class="num">WCP</th><th class="num">&Delta;</th></tr></thead>
+  <tbody>
+    <tr><td>SDART + DRIVE (Santander)</td><td class="num">6,343</td><td class="num">6,363</td><td class="num">&minus;0.3%</td></tr>
+    <tr><td>GMCAR + AMCAR (GM Financial)</td><td class="num">1,373</td><td class="num">1,379</td><td class="num">&minus;0.4%</td></tr>
+    <tr><td>BLAST (Bridgecrest)</td><td class="num">858</td><td class="num">858</td><td class="num">0.0%</td></tr>
+    <tr><td>CAOT + CMXS (CarMax)</td><td class="num">617</td><td class="num">620</td><td class="num">&minus;0.5%</td></tr>
+    <tr><td>CRVNA (Carvana)</td><td class="num">386</td><td class="num">387</td><td class="num">&minus;0.3%</td></tr>
+    <tr><td>EART (Exeter)</td><td class="num">87</td><td class="num">87</td><td class="num">0.0%</td></tr>
+  </tbody>
+</table>
+<p style="margin-top:12px;font-size:13.5px;color:#374151;">
+<strong>Note on issuers with commercial-auto exposure:</strong> For issuers that securitize both consumer and commercial auto loans (Ford, Ally), our counts are modestly (3&ndash;10%) lower than WCP&rsquo;s because we exclude commercial-bureau-scored loans from our &ldquo;Below Prime&rdquo; bucket. Commercial bureau scores use a different scale than consumer FICO (typically 0&ndash;100), and including them would mix fleet and small-business loans with subprime consumer loans. For a consumer credit analysis, the stricter exclusion is more defensible. The SQL filter is: <code>LOWER(obligorCreditScoreType) NOT LIKE '%commercial%'</code>.
+</p>
+<p style="margin-top:8px;font-size:13.5px;color:#374151;">
+<strong>Score-boundary note:</strong> WCP&rsquo;s &ldquo;Below Prime&rdquo; is scores 300&ndash;660 inclusive; ours is 300&ndash;659 due to 10-point score bucketing. This causes a &sim;1&ndash;4% undercount for small-volume issuers whose 1st-time repos happen to have score exactly 660.
+</p>
+
+<h2>5. Known Limitations</h2>
+<ul>
+  <li><strong>Repo indicator reporting lag:</strong> Some issuers (notably Exeter during 2023&ndash;2024) updated <code>repossessedIndicator</code> with delay, producing apparent anomalies in monthly rates. The cumulative count is still correct; monthly timing may be shifted.</li>
+  <li><strong>Score model ambiguity:</strong> As noted above, 17 of 24 issuers use a generic &ldquo;bureau&rdquo; label instead of explicitly naming FICO. A Vantage&shy;Score 640 may not be risk-equivalent to a FICO 640.</li>
+  <li><strong>Non-FICO fields not reported:</strong> SEC ABS-EE does not require disclosure of down payment amount, borrower income (only payment-to-income), employment status, housing, or dealer identity. These variables affect default risk but cannot be analyzed from this dataset.</li>
+  <li><strong>Vehicle valuation varies by issuer:</strong> <code>vehicleValueAmount</code> may reflect wholesale, retail, dealer purchase price, or another basis depending on the issuer&rsquo;s servicing system. Cross-issuer LTV comparisons should be treated as directional, not precise.</li>
+  <li><strong>Commercial purpose loans:</strong> Some consumer-bureau-scored loans may have commercial use (e.g., sole proprietors financing work vehicles). The loan tape does not distinguish these, but visible evidence of distortion is minimal.</li>
+</ul>
+
+<h2>6. Update Schedule &amp; Audit Trail</h2>
+<ul>
+  <li><strong>Daily pipeline:</strong> Monday&ndash;Friday at 6:00 AM and 6:00 PM ET.</li>
+  <li><strong>Weekend behavior:</strong> Pipeline does not run; data is stable Saturday&ndash;Sunday.</li>
+  <li><strong>Build identifier:</strong> Each generated HTML includes a build timestamp in the page header (<code>BUILD_ID</code>).</li>
+</ul>
+
+<p class="meta">
+This methodology page is regenerated with every pipeline run and is always in sync with the data currently served on the Explorer.
+</p>
+
+</main>
+</body>
+</html>
