@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Credit Summary — Bridgecrest BLAST 2026-2</title>
+<style>
+:root { --fg:#1a202c; --muted:#4a5568; --bg:#fff; --grid:#e2e8f0; --head:#f7fafc;
+        --accent:#2b6cb0; --fav:#2f855a; --unf:#c53030;
+        --chip-fwp:#3182ce; --chip-424b5:#805ad5; --chip-absee:#2f855a;
+        --chip-derived:#718096; --chip-notext:#c53030; --chip-sec:#4a5568; }
+* { box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+       color: var(--fg); background: var(--bg); margin: 0 auto; padding: 24px;
+       max-width: 1200px; line-height: 1.45; font-size: 14px; }
+h1 { font-size: 20px; margin: 0 0 4px 0; letter-spacing: -0.01em; }
+h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em;
+     color: var(--muted); margin: 22px 0 4px 0; font-weight: 600; }
+h2 .sub { text-transform: none; letter-spacing: 0; font-weight: 400; color: var(--muted); }
+.header-strip { border-bottom: 2px solid var(--fg); padding-bottom: 12px; margin-bottom: 12px; position: relative; }
+#print-btn {
+    position: absolute; top: 0; right: 0;
+    padding: 6px 8px; border: 1px solid var(--grid);
+    border-radius: 4px; background: var(--bg); cursor: pointer;
+    color: var(--muted); display: inline-flex; align-items: center;
+    line-height: 1;
+}
+#print-btn:hover { color: var(--accent); border-color: var(--accent); }
+@media print { #print-btn { display: none !important; } }
+.header-strip .meta { color: var(--muted); font-size: 13px; margin: 2px 0; }
+.header-strip .meta.accessions { font-size: 11px; }
+.header-strip .meta code { background: var(--head); padding: 1px 4px; border-radius: 2px;
+                            font-size: 10px; }
+.header-strip .links { margin-top: 8px; font-size: 12px; }
+.header-strip .links a { color: var(--accent); text-decoration: none; }
+.header-strip .links a:hover { text-decoration: underline; }
+.badge { display: inline-block; padding: 1px 6px; border-radius: 3px;
+         background: #edf2f7; color: var(--muted); font-size: 11px;
+         letter-spacing: 0.05em; text-transform: uppercase; margin-left: 4px; }
+.badge.tier-prime      { background:#c6f6d5; color:#22543d; }
+.badge.tier-near-prime { background:#feebc8; color:#744210; }
+.badge.tier-subprime   { background:#fed7d7; color:#742a2a; }
+.status { font-size: 11px; color: var(--muted); margin-left: 6px; }
+
+.purpose { color: var(--muted); font-size: 12px; margin: 0 0 6px 0; font-style: italic; }
+.section { margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--grid); }
+.section:first-of-type { border-top: none; padding-top: 0; margin-top: 16px; }
+
+table.grid { border-collapse: collapse; width: 100%; font-size: 13px; }
+table.grid th, table.grid td { padding: 5px 8px; border-bottom: 1px solid var(--grid);
+                                text-align: left; vertical-align: top; }
+table.grid thead th { background: var(--head); font-weight: 600;
+                      font-size: 11px; color: var(--muted); text-transform: uppercase;
+                      letter-spacing: 0.04em; }
+table.grid td.num, table.grid th.num { text-align: right; font-variant-numeric: tabular-nums; }
+table.grid tbody tr:last-child td, table.grid tbody tr:last-child th { border-bottom: none; }
+table.kv { border-collapse: collapse; width: 100%; font-size: 13px; }
+table.kv th { text-align: left; font-weight: 500; color: var(--muted);
+              padding: 4px 12px 4px 0; width: 200px; }
+table.kv td { padding: 4px 0; font-variant-numeric: tabular-nums; }
+
+.rel-pos td.subj { font-weight: 600; }
+
+table.grid.comparison { table-layout: fixed; }
+table.grid.comparison th, table.grid.comparison td {
+    padding: 5px 6px; font-size: 12px; vertical-align: top;
+    text-align: center;
+    overflow-wrap: break-word;
+}
+table.grid.comparison tbody th { text-align: left; color: var(--muted); font-weight: 500; }
+table.grid.comparison thead th {
+    text-transform: none; font-size: 11px; letter-spacing: 0;
+    padding: 4px 6px; text-align: center; font-weight: 600;
+}
+table.grid.comparison thead th.col-subject { background: #fffbea; color: var(--fg); font-weight: 700; }
+table.grid.comparison td.col-subject { background: #fffbea; }
+table.grid.comparison td { font-variant-numeric: tabular-nums; }
+table.grid.comparison tr.section-hdr th {
+    background: var(--head); color: var(--muted);
+    text-transform: uppercase; font-size: 10px; letter-spacing: 0.08em;
+    text-align: left;
+    padding-top: 8px; padding-bottom: 3px;
+    border-top: 1px solid var(--grid);
+}
+table.grid.comparison .val-primary { display: inline-block; font-variant-numeric: tabular-nums; }
+table.grid.comparison .delta-compact {
+    display: inline-block; margin-left: 4px; padding: 0 3px;
+    font-size: 10px; font-weight: 600; border-radius: 2px; cursor: help;
+    vertical-align: middle;
+    font-variant-numeric: tabular-nums;
+}
+table.grid.comparison td.col-subject .delta-compact { background: rgba(0,0,0,0.04); }
+table.grid.comparison .unit { color: var(--muted); font-size: 10px; margin-left: 2px; }
+table.grid.comparison .geo-stack {
+    display: inline-block; line-height: 1.25; font-size: 11px;
+    color: var(--muted); text-align: center;
+}
+table.grid.comparison td.col-subject .geo-stack { color: var(--fg); }
+
+/* Source-of-record row-label coloring for comparison tables */
+.src-fwp     { color: var(--chip-fwp); }
+.src-424b5   { color: var(--chip-424b5); }
+.src-absee   { color: var(--chip-absee); }
+.src-derived { color: var(--chip-derived); }
+.src-notext  { color: var(--chip-notext); }
+.lg-swatch { font-weight: 600; margin-right: 6px; }
+
+/* Capital Structure footnote markers */
+sup.fn {
+    font-size: 9px; margin-left: 2px; font-weight: 700;
+    vertical-align: super; line-height: 0;
+}
+sup.fn-a { color: var(--chip-fwp); }
+sup.fn-b { color: var(--chip-derived); }
+sup.fn-c { color: var(--chip-derived); }
+sup.fn-d { color: var(--chip-424b5); }
+p.fn-legend {
+    font-size: 11px; color: var(--muted);
+    margin: 6px 0 2px 0; line-height: 1.5;
+}
+@media (prefers-color-scheme: dark) {
+  table.grid.comparison thead th.col-subject,
+  table.grid.comparison td.col-subject { background: #2d3039; }
+}
+.rel-pos .range { color: var(--muted); font-weight: 400; font-size: 12px; }
+.rel-pos .sub { font-weight: 400; text-transform: none; letter-spacing: 0;
+                color: var(--muted); font-size: 11px; }
+
+.mark { font-weight: 700; margin-left: 3px; }
+.mark.fav { color: var(--fav); }
+.mark.unf { color: var(--unf); }
+
+.rank { display: inline-block; margin-left: 6px; padding: 1px 6px;
+        background: var(--head); color: var(--muted); border-radius: 3px;
+        font-size: 10px; font-weight: 500; font-variant-numeric: tabular-nums;
+        letter-spacing: 0.02em; }
+.delta-fav { margin-left: 4px; font-size: 11px; color: var(--fav); font-weight: 500; }
+.delta-unf { margin-left: 4px; font-size: 11px; color: var(--unf); font-weight: 500; }
+.delta-neutral { margin-left: 4px; font-size: 11px; color: var(--muted); font-weight: 500; }
+
+.criteria { font-size: 12px; color: var(--muted); margin: 0 0 4px 0; }
+.legend { font-size: 11px; color: var(--muted); margin: 6px 0 4px 0; }
+
+.peer-list { font-size: 12px; margin-top: 4px; color: var(--muted); }
+.peer-list summary { cursor: pointer; color: var(--accent); user-select: none; }
+.peer-list ul { margin: 4px 0 0 0; padding-left: 20px; }
+.peer-list li { padding: 1px 0; }
+.peer-name { color: var(--fg); }
+.peer-meta { color: var(--muted); font-size: 11px; }
+
+.caveat { font-size: 12px; color: var(--muted); margin: 0 0 8px 0;
+          padding: 6px 10px; background: var(--head); border-left: 3px solid var(--chip-derived);
+          border-radius: 2px; }
+.chart-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 8px 0; }
+.chart-cell { background: var(--bg); border: 1px solid var(--grid); border-radius: 3px;
+              padding: 4px; }
+.chart { display: block; width: 100%; height: auto; max-width: 100%; }
+.track-record .subject-row { background: #fffbea; }
+.track-record .bench-row { background: var(--head); font-size: 12px; color: var(--muted); }
+.track-record .bench-row .sub { font-weight: 400; }
+.ticker-note { font-size: 12px; color: var(--muted); margin: 6px 0 0 0; }
+.ticker-note code { background: var(--head); padding: 1px 4px; border-radius: 2px; }
+.ticker-note a { color: var(--accent); text-decoration: none; }
+.ticker-note a:hover { text-decoration: underline; }
+
+.chip { display: inline-block; padding: 0 5px; border-radius: 2px;
+        font-size: 9px; font-weight: 600; letter-spacing: 0.05em;
+        text-transform: uppercase; vertical-align: middle;
+        color: #fff; margin-left: 2px; cursor: help; }
+.chip-fwp       { background: var(--chip-fwp); }
+.chip-424b5     { background: var(--chip-424b5); }
+.chip-absee     { background: var(--chip-absee); }
+.chip-derived        { background: var(--chip-derived); }
+.chip-derived-approx { background: var(--chip-derived); outline: 1px dashed #fff;
+                       outline-offset: -2px; }
+.chip-notext         { background: var(--chip-notext); }
+.chip-sec            { background: var(--chip-sec); }
+
+footer { margin-top: 28px; padding-top: 14px; border-top: 1px solid var(--grid);
+         color: var(--muted); font-size: 11px; }
+footer strong { color: var(--fg); }
+footer dl.methodology { margin: 8px 0 0 0; padding: 0; }
+footer dl.methodology dt { color: var(--fg); font-weight: 600; margin-top: 8px;
+                           font-size: 11px; letter-spacing: 0.02em; }
+footer dl.methodology dd { margin: 2px 0 0 0; padding: 0 0 0 0; line-height: 1.5; }
+footer dl.methodology code { background: var(--head); padding: 1px 3px; border-radius: 2px;
+                             color: var(--fg); font-size: 10px; }
+footer .gen { margin-top: 12px; }
+footer a { color: var(--accent); text-decoration: none; }
+footer a:hover { text-decoration: underline; }
+
+p.empty, p.peer-empty { color: var(--muted); font-style: italic; font-size: 13px; }
+
+@media (prefers-color-scheme: dark) {
+  :root { --fg:#e2e8f0; --muted:#a0aec0; --bg:#1a202c; --grid:#2d3748;
+          --head:#2d3748; --accent:#63b3ed; --fav:#68d391; --unf:#fc8181; }
+  .track-record .subject-row { background: #2d3039; }
+  .badge { background: #2d3748; }
+  .badge.tier-prime      { background:#22543d; color:#c6f6d5; }
+  .badge.tier-near-prime { background:#744210; color:#feebc8; }
+  .badge.tier-subprime   { background:#742a2a; color:#fed7d7; }
+  .header-strip .meta code, .ticker-note code, footer ul.provenance code { background:#2d3748; }
+  .chart-cell { background:#1a202c; border-color:#2d3748; }
+}
+@media print {
+  body { padding: 10px; font-size: 11px; max-width: 100%; }
+  h2 { margin: 10px 0 4px 0; }
+  .section { margin-top: 8px; page-break-inside: avoid; }
+  .chart-pair { page-break-inside: avoid; }
+  .peer-list[open] summary { color: var(--muted); }
+}
+</style>
+</head><body>
+<div class="header-strip">
+  <button id="print-btn" onclick="window.print()" title="Print this credit summary"
+    aria-label="Print this credit summary">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+      <circle cx="12" cy="13" r="4"/>
+    </svg>
+  </button>
+  <h1>Bridgecrest BLAST 2026-2
+    <span class="badge">Auto Loan</span>
+    <span class="badge tier-subprime">subprime</span>
+    <span class="status">FINAL · CLOSED —</span>
+  </h1>
+  <div class="meta"><strong>Sponsor:</strong> Bridgecrest Acceptance Corporation &nbsp;·&nbsp;
+    <strong>Total notes:</strong> $642.1MM
+  </div>
+  <div class="meta"><strong>Servicer:</strong> Bridgecrest Acceptance Corporation &nbsp;·&nbsp;
+    <strong>Trustee:</strong> Clayton Fixed Income Services LLC
+  </div>
+</div>
+
+<div class="section">
+  <h2>Capital Structure</h2>
+  <p class="purpose">Bond-side risk distribution — how principal splits across tranches and how each is supported.</p>
+  <table class="grid cap-structure"><thead><tr><th>Class</th><th class="num">Size ($MM)<sup class="fn fn-a">a</sup></th><th class="num">% Pool<sup class="fn fn-b">b</sup></th><th class="num">Sub %<sup class="fn fn-b">b</sup></th><th class="num">Coupon / Spread<sup class="fn fn-a">a</sup></th><th class="num">WAL<sup class="fn fn-a">a</sup></th><th>Legal Final<sup class="fn fn-c">c</sup></th><th>S&P<sup class="fn fn-a">a</sup></th><th>DBRS<sup class="fn fn-a">a</sup></th></tr></thead><tbody><tr><td>Class A-1</td><td class="num">82.0</td><td class="num">12.4%</td><td class="num">84.9%</td><td class="num">+30 bps</td><td class="num">0.09</td><td>04-15-2027</td><td>A-1+</td><td>R-1(H)</td></tr><tr><td>Class A-2</td><td class="num">123.3</td><td class="num">18.7%</td><td class="num">66.2%</td><td class="num">+59 bps</td><td class="num">0.46</td><td>09-15-2028</td><td>AAA</td><td>AAA</td></tr><tr><td>Class A-3</td><td class="num">123.3</td><td class="num">18.7%</td><td class="num">47.5%</td><td class="num">+61 bps</td><td class="num">1.20</td><td>01-15-2030</td><td>AAA</td><td>AAA</td></tr><tr><td>Class B</td><td class="num">66.1</td><td class="num">10.0%</td><td class="num">37.5%</td><td class="num">+85 bps</td><td class="num">1.83</td><td>02-15-2032</td><td>AA</td><td>AA</td></tr><tr><td>Class C</td><td class="num">85.5</td><td class="num">13.0%</td><td class="num">24.5%</td><td class="num">+115 bps</td><td class="num">2.38</td><td>02-15-2032</td><td>A</td><td>A</td></tr><tr><td>Class D</td><td class="num">100.3</td><td class="num">15.2%</td><td class="num">9.3%</td><td class="num">+145 bps</td><td class="num">3.17</td><td>02-15-2032</td><td>BBB</td><td>BBB</td></tr><tr><td>Class E</td><td class="num">61.5</td><td class="num">9.3%</td><td class="num">0.0%</td><td class="num">+345 bps</td><td class="num">3.71</td><td>05-15-2033</td><td>BB</td><td>BB</td></tr></tbody></table>
+</div>
+
+<div class="section">
+  <h2>Issuer Track Record</h2>
+  <p class="purpose">Subject deal alongside the sponsor's 5 most-recent prior deals — collateral and structural attributes side by side.</p>
+  <p class="criteria">Issuer history: Bridgecrest Acceptance Corporation (normalized). Up to 5 most-recent prior deals.</p><table class="grid comparison"><colgroup><col style="width:22%"><col style="width:13.00%"><col style="width:13.00%"><col style="width:13.00%"><col style="width:13.00%"><col style="width:13.00%"><col style="width:13.00%"></colgroup><thead><tr><th></th><th class="col-subject">BLAST 2026-2</th><th>BLAST 2026-1</th><th>BLAST 2025-4</th><th>BLAST 2025-3</th><th>BLAST 2025-2</th><th>BLAST 2025-1</th></tr></thead><tbody><tr class="section-hdr"><th colspan="7">Collateral (pool at cut-off)</th></tr><tr class=""><th class="src-424b5">Closing date</th><td class="num col-subject"><span class="val-primary">—</span></td><td class="num">01-28-2026</td><td class="num">10-22-2025</td><td class="num">07-29-2025</td><td class="num">05-23-2025</td><td class="num">01-29-2025</td></tr><tr class=""><th class="src-424b5">Pool balance</th><td class="num col-subject"><span class="val-primary">$659.9MM</span></td><td class="num">$760.0MM</td><td class="num">$600.0MM</td><td class="num">$550.0MM</td><td class="num">$850.0MM</td><td class="num">$725.0MM</td></tr><tr class=""><th class="src-424b5">WA Credit Score</th><td class="num col-subject"><span class="val-primary">572</span><span class="delta-fav delta-compact" title="+17 vs peer median (n=5)">+17</span></td><td class="num">576</td><td class="num">576</td><td class="num">552</td><td class="num">555</td><td class="num">553</td></tr><tr class=""><th class="src-424b5">WA APR</th><td class="num col-subject"><span class="val-primary">21.44%</span><span class="delta-fav delta-compact" title="−0.60pp vs peer median (n=5)">−0.60pp</span></td><td class="num">21.76%</td><td class="num">22.02%</td><td class="num">22.04%</td><td class="num">22.15%</td><td class="num">22.49%</td></tr><tr class=""><th class="src-424b5">WA original term<span class="unit"> mo</span></th><td class="num col-subject"><span class="val-primary">67.0</span><span class="delta-neutral delta-compact" title="0.0 vs peer median (n=5)">0.0</span></td><td class="num">67.0 mo</td><td class="num">67.0 mo</td><td class="num">67.0 mo</td><td class="num">67.0 mo</td><td class="num">65.0 mo</td></tr><tr class=""><th class="src-424b5">% new vehicles</th><td class="num col-subject"><span class="val-primary">26.0%</span></td><td class="num">41.0%</td><td class="num">33.0%</td><td class="num">25.0%</td><td class="num">23.0%</td><td class="num">—</td></tr><tr class=""><th class="src-424b5">Reserve %</th><td class="num col-subject"><span class="val-primary">1.50%</span></td><td class="num">1.50%</td><td class="num">1.50%</td><td class="num">1.50%</td><td class="num">1.50%</td><td class="num">1.50%</td></tr><tr class=""><th class="src-424b5">Geo top-3</th><td class="num col-subject"><span class="geo-stack">TX 13.7%<br/>FL 11.0%<br/>GA 8.4%</span></td><td class="num"><span class="geo-stack">TX 13.4%<br/>FL 11.0%<br/>GA 8.6%</span></td><td class="num"><span class="geo-stack">TX 13.1%<br/>FL 11.0%<br/>GA 9.1%</span></td><td class="num"><span class="geo-stack">TX 13.0%<br/>FL 11.8%<br/>GA 8.8%</span></td><td class="num"><span class="geo-stack">TX 12.8%<br/>FL 12.6%<br/>GA 8.4%</span></td><td class="num"><span class="geo-stack">TX 13.1%<br/>FL 12.6%<br/>GA 8.6%</span></td></tr><tr class="section-hdr"><th colspan="7">Structure (at issuance)</th></tr><tr class=""><th class="src-fwp">AAA spread</th><td class="num col-subject"><span class="val-primary">+59 bps</span><span class="delta-unf delta-compact" title="+8bps vs peer median (n=4)">+8bps</span></td><td class="num">+50 bps</td><td class="num">—</td><td class="num">+51 bps</td><td class="num">+65 bps</td><td class="num">+46 bps</td></tr><tr class=""><th class="src-derived">AAA % of pool</th><td class="num col-subject"><span class="val-primary">37.4%</span><span class="delta-fav delta-compact" title="+3.2pp vs peer median (n=4)">+3.2pp</span></td><td class="num">34.5%</td><td class="num">—</td><td class="num">33.9%</td><td class="num">29.7%</td><td class="num">35.7%</td></tr><tr class=""><th class="src-derived">Subordination below AAA</th><td class="num col-subject"><span class="val-primary">47.5%</span><span class="delta-unf delta-compact" title="−1.9pp vs peer median (n=4)">−1.9pp</span></td><td class="num">41.1%</td><td class="num">—</td><td class="num">53.3%</td><td class="num">45.4%</td><td class="num">58.1%</td></tr><tr class=""><th class="src-derived">Overcollateralization</th><td class="num col-subject"><span class="val-primary">2.70%</span></td><td class="num">15.00%</td><td class="num">—</td><td class="num">15.00%</td><td class="num">15.10%</td><td class="num">14.00%</td></tr><tr class=""><th class="src-fwp">Tranches</th><td class="num col-subject"><span class="val-primary">7</span></td><td class="num">7</td><td class="num">6</td><td class="num">7</td><td class="num">7</td><td class="num">7</td></tr></tbody></table>
+</div>
+
+<div class="section">
+  <h2>Peer Set</h2>
+  <p class="purpose">Subject deal alongside representative peer deals — one most-recent deal per peer issuer in the subject's cohort.</p>
+  <p class="criteria">Peer cohort: same FICO tier. Most-recent deal per peer ticker (max 5).</p><table class="grid comparison"><colgroup><col style="width:22%"><col style="width:15.60%"><col style="width:15.60%"><col style="width:15.60%"><col style="width:15.60%"><col style="width:15.60%"></colgroup><thead><tr><th></th><th class="col-subject">BLAST 2026-2</th><th>CMXS 2026-A</th><th>DRIVE 2026-1</th><th>EART 2026-1</th><th>AMCAR 2024-1</th></tr></thead><tbody><tr class="section-hdr"><th colspan="6">Collateral (pool at cut-off)</th></tr><tr class=""><th class="src-424b5">Closing date</th><td class="num col-subject"><span class="val-primary">—</span></td><td class="num">02-25-2026</td><td class="num">02-25-2026</td><td class="num">01-28-2026</td><td class="num">05-29-2024</td></tr><tr class=""><th class="src-424b5">Pool balance</th><td class="num col-subject"><span class="val-primary">$659.9MM</span></td><td class="num">$729.6MM</td><td class="num">$1,936.2MM</td><td class="num">$1,123.3MM</td><td class="num">$1,675.9MM</td></tr><tr class=""><th class="src-424b5">WA Credit Score</th><td class="num col-subject"><span class="val-primary">572</span><span class="delta-unf delta-compact" title="−30 vs peer median (n=4)">−30</span></td><td class="num">612</td><td class="num">605</td><td class="num">598</td><td class="num">588</td></tr><tr class=""><th class="src-424b5">WA APR</th><td class="num col-subject"><span class="val-primary">21.44%</span><span class="delta-unf delta-compact" title="+4.18pp vs peer median (n=4)">+4.18pp</span></td><td class="num">16.49%</td><td class="num">18.04%</td><td class="num">18.71%</td><td class="num">13.55%</td></tr><tr class=""><th class="src-424b5">WA original term<span class="unit"> mo</span></th><td class="num col-subject"><span class="val-primary">67.0</span><span class="delta-fav delta-compact" title="−4.4 vs peer median (n=4)">−4.4</span></td><td class="num">70.1 mo</td><td class="num">71.8 mo</td><td class="num">76.0 mo</td><td class="num">71.0 mo</td></tr><tr class=""><th class="src-424b5">% new vehicles</th><td class="num col-subject"><span class="val-primary">26.0%</span></td><td class="num">0.0%</td><td class="num">26.7%</td><td class="num">—</td><td class="num">56.9%</td></tr><tr class=""><th class="src-424b5">Reserve %</th><td class="num col-subject"><span class="val-primary">1.50%</span></td><td class="num">2.50%</td><td class="num">1.00%</td><td class="num">1.00%</td><td class="num">0.79%</td></tr><tr class=""><th class="src-424b5">Geo top-3</th><td class="num col-subject"><span class="geo-stack">TX 13.7%<br/>FL 11.0%<br/>GA 8.4%</span></td><td class="num"><span class="geo-stack">CA 15.0%<br/>TX 13.2%<br/>FL 8.6%</span></td><td class="num"><span class="geo-stack">TX 15.6%<br/>FL 13.2%<br/>CA 9.3%</span></td><td class="num"><span class="geo-stack">TX 22.2%<br/>CA 10.9%<br/>FL 7.9%</span></td><td class="num"><span class="geo-stack">TX 16.2%<br/>FL 7.4%<br/>OH 7.1%</span></td></tr><tr class="section-hdr"><th colspan="6">Structure (at issuance)</th></tr><tr class=""><th class="src-fwp">AAA spread</th><td class="num col-subject"><span class="val-primary">+59 bps</span><span class="delta-unf delta-compact" title="+3bps vs peer median (n=4)">+3bps</span></td><td class="num">+58 bps</td><td class="num">+53 bps</td><td class="num">+49 bps</td><td class="num">+60 bps</td></tr><tr class=""><th class="src-derived">AAA % of pool</th><td class="num col-subject"><span class="val-primary">37.4%</span><span class="delta-unf delta-compact" title="−18.3pp vs peer median (n=4)">−18.3pp</span></td><td class="num">56.7%</td><td class="num">62.5%</td><td class="num">52.2%</td><td class="num">54.8%</td></tr><tr class=""><th class="src-derived">Subordination below AAA</th><td class="num col-subject"><span class="val-primary">47.5%</span><span class="delta-fav delta-compact" title="+17.1pp vs peer median (n=4)">+17.1pp</span></td><td class="num">24.3%</td><td class="num">33.9%</td><td class="num">47.8%</td><td class="num">26.9%</td></tr><tr class=""><th class="src-derived">Overcollateralization</th><td class="num col-subject"><span class="val-primary">2.70%</span></td><td class="num">—</td><td class="num">2.20%</td><td class="num">2.18%</td><td class="num">5.75%</td></tr><tr class=""><th class="src-fwp">Tranches</th><td class="num col-subject"><span class="val-primary">7</span></td><td class="num">8</td><td class="num">7</td><td class="num">8</td><td class="num">8</td></tr></tbody></table>
+</div>
+
+<div class="section">
+  <h2>Historical Performance Context</h2>
+  <p class="purpose">Anchor expectations in empirical base rates from the sponsor's prior series and FICO-tier peer set.</p>
+  
+<p class="caveat">
+  Left: per-series CNL at matched seasoning. IQR band uses a fixed cohort of all peer
+  series with ≥18 months of data (89 series across 5 issuers).
+  Right: portfolio-level 60+ DQ rate aggregated across all active deals per issuer
+  (calendar time, last 3 years). <span class="chip chip-absee">ABS-EE</span>
+</p>
+
+<div class="chart-pair">
+  <div class="chart-cell"><svg class="chart" width="440" height="240" viewBox="0 0 440 240" role="img" aria-label="CNL by seasoning — BLAST vs. subprime peers"><text x="46" y="18" font-size="10" font-weight="600" fill="#1a202c">CNL by seasoning — BLAST vs. subprime peers</text><rect x="46" y="26" width="378" height="143" fill="none" stroke="#cbd5e0" stroke-width="0.5"/><line x1="46" y1="133.2" x2="424" y2="133.2" stroke="#cbd5e0" stroke-width="0.4" stroke-dasharray="2,2"/><text x="42" y="136.2" text-anchor="end" font-size="9" fill="#a0aec0">6.6%</text><line x1="46" y1="97.5" x2="424" y2="97.5" stroke="#cbd5e0" stroke-width="0.4" stroke-dasharray="2,2"/><text x="42" y="100.5" text-anchor="end" font-size="9" fill="#a0aec0">13.1%</text><line x1="46" y1="61.8" x2="424" y2="61.8" stroke="#cbd5e0" stroke-width="0.4" stroke-dasharray="2,2"/><text x="42" y="64.8" text-anchor="end" font-size="9" fill="#a0aec0">19.7%</text><line x1="46" y1="26.0" x2="424" y2="26.0" stroke="#cbd5e0" stroke-width="0.4" stroke-dasharray="2,2"/><text x="42" y="29.0" text-anchor="end" font-size="9" fill="#a0aec0">26.2%</text><text x="46.0" y="180" text-anchor="middle" font-size="9" fill="#a0aec0">M0</text><text x="140.5" y="180" text-anchor="middle" font-size="9" fill="#a0aec0">M12</text><text x="235.0" y="180" text-anchor="middle" font-size="9" fill="#a0aec0">M24</text><text x="329.5" y="180" text-anchor="middle" font-size="9" fill="#a0aec0">M36</text><text x="424.0" y="180" text-anchor="middle" font-size="9" fill="#a0aec0">M48</text><text x="235.0" y="236" text-anchor="middle" font-size="9" fill="#a0aec0">Seasoning (months from cut-off)</text><text x="10" y="97.5" text-anchor="middle" font-size="9" fill="#a0aec0" transform="rotate(-90 10 97.5)">CNL</text><path d="M53.9,169.0 L61.8,168.8 L69.6,168.2 L77.5,166.1 L85.4,162.7 L93.2,157.7 L101.1,151.1 L109.0,145.5 L116.9,139.7 L124.8,133.5 L132.6,127.9 L140.5,123.2 L148.4,117.3 L156.2,111.7 L164.1,106.1 L172.0,100.5 L179.9,95.4 L187.8,90.5 L195.6,85.8 L203.5,81.8 L211.4,77.5 L219.2,73.9 L227.1,71.3 L235.0,69.1 L242.9,66.7 L250.8,63.9 L258.6,61.3 L266.5,58.7 L274.4,56.8 L282.2,55.1 L290.1,53.3 L298.0,51.6 L305.9,49.6 L313.8,48.1 L321.6,46.3 L329.5,44.7 L329.5,126.2 L321.6,127.3 L313.8,128.1 L305.9,129.3 L298.0,130.4 L290.1,131.6 L282.2,132.5 L274.4,133.7 L266.5,134.6 L258.6,135.8 L250.8,137.0 L242.9,138.2 L235.0,139.4 L227.1,140.4 L219.2,141.5 L211.4,142.5 L203.5,143.8 L195.6,145.2 L187.8,146.5 L179.9,148.1 L172.0,149.6 L164.1,150.8 L156.2,152.6 L148.4,153.7 L140.5,155.0 L132.6,156.3 L124.8,158.1 L116.9,160.1 L109.0,161.8 L101.1,163.6 L93.2,165.2 L85.4,166.6 L77.5,167.9 L69.6,168.7 L61.8,168.9 L53.9,169.0 Z" fill="#3182ce" fill-opacity="0.10" stroke="none"/><polyline points="53.9,169.0 61.8,168.9 69.6,168.4 77.5,167.0 85.4,164.7 93.2,161.9 101.1,158.7 109.0,155.6 116.9,152.5 124.8,149.3 132.6,146.1 140.5,142.6 148.4,139.5 156.2,136.1 164.1,132.9 172.0,129.7 179.9,126.2 187.8,123.0 195.6,120.1 203.5,117.4 211.4,114.9 219.2,111.7 227.1,109.3 235.0,106.5 242.9,103.9 250.8,101.6 258.6,99.2 266.5,96.7 274.4,94.0 282.2,91.9 290.1,89.9 298.0,87.9 305.9,85.8 313.8,83.8 321.6,81.8 329.5,79.9" fill="none" stroke="#3182ce" stroke-width="1.3" stroke-dasharray="4,3" opacity="0.85"/><polyline points="53.9,168.5 61.8,167.5" fill="none" stroke="#1a365d" stroke-width="1.5" opacity="0.92"/><polyline points="53.9,168.6 61.8,167.7 69.6,165.1 77.5,159.7 85.4,154.5" fill="none" stroke="#2b6cb0" stroke-width="1.5" opacity="0.92"/><polyline points="53.9,168.6 61.8,167.2 69.6,164.4 77.5,158.8 85.4,152.4 93.2,146.3 101.1,139.3 109.0,134.4" fill="none" stroke="#3182ce" stroke-width="1.5" opacity="0.92"/><polyline points="53.9,168.7 61.8,167.8 69.6,165.3 77.5,160.3 85.4,154.9 93.2,148.6 101.1,142.4 109.0,136.2 116.9,130.2 124.8,125.5" fill="none" stroke="#63b3ed" stroke-width="1.5" opacity="0.92"/><line x1="46.0" y1="189" x2="62.0" y2="189" stroke="#1a365d" stroke-width="1.8"/><text x="66.0" y="192" font-size="9" fill="#1a202c">BLAST 2026-1</text><line x1="235.0" y1="189" x2="251.0" y2="189" stroke="#2b6cb0" stroke-width="1.8"/><text x="255.0" y="192" font-size="9" fill="#1a202c">BLAST 2025-4</text><line x1="46.0" y1="202" x2="62.0" y2="202" stroke="#3182ce" stroke-width="1.8"/><text x="66.0" y="205" font-size="9" fill="#1a202c">BLAST 2025-3</text><line x1="235.0" y1="202" x2="251.0" y2="202" stroke="#63b3ed" stroke-width="1.8"/><text x="255.0" y="205" font-size="9" fill="#1a202c">BLAST 2025-2</text><line x1="46.0" y1="215" x2="62.0" y2="215" stroke="#3182ce" stroke-width="1.3" stroke-dasharray="4,3"/><text x="66.0" y="218" font-size="9" fill="#1a202c">subprime peers median</text><rect x="235.0" y="212" width="16" height="6" fill="#3182ce" fill-opacity="0.10"/><text x="255.0" y="218" font-size="9" fill="#1a202c">Peer IQR (fixed cohort, n=60)</text></svg></div>
+  <div class="chart-cell"><svg class="chart" width="440" height="240" viewBox="0 0 440 240" role="img" aria-label="Portfolio 60+ DQ — BLAST vs. peers (calendar time)"><text x="46" y="18" font-size="10" font-weight="600" fill="#1a202c">Portfolio 60+ DQ — BLAST vs. peers (calendar time)</text><rect x="46" y="26" width="378" height="143" fill="none" stroke="#cbd5e0" stroke-width="0.5"/><line x1="46" y1="133.2" x2="424" y2="133.2" stroke="#cbd5e0" stroke-width="0.4" stroke-dasharray="2,2"/><text x="42" y="136.2" text-anchor="end" font-size="9" fill="#a0aec0">2.86%</text><line x1="46" y1="97.5" x2="424" y2="97.5" stroke="#cbd5e0" stroke-width="0.4" stroke-dasharray="2,2"/><text x="42" y="100.5" text-anchor="end" font-size="9" fill="#a0aec0">5.73%</text><line x1="46" y1="61.7" x2="424" y2="61.7" stroke="#cbd5e0" stroke-width="0.4" stroke-dasharray="2,2"/><text x="42" y="64.7" text-anchor="end" font-size="9" fill="#a0aec0">8.59%</text><line x1="46" y1="26.0" x2="424" y2="26.0" stroke="#cbd5e0" stroke-width="0.4" stroke-dasharray="2,2"/><text x="42" y="29.0" text-anchor="end" font-size="9" fill="#a0aec0">11.46%</text><text x="46.0" y="180" text-anchor="middle" font-size="9" fill="#a0aec0">2023-04</text><text x="132.4" y="180" text-anchor="middle" font-size="9" fill="#a0aec0">2023-12</text><text x="229.6" y="180" text-anchor="middle" font-size="9" fill="#a0aec0">2024-09</text><text x="326.8" y="180" text-anchor="middle" font-size="9" fill="#a0aec0">2025-06</text><text x="424.0" y="180" text-anchor="middle" font-size="9" fill="#a0aec0">2026-03</text><text x="235.0" y="236" text-anchor="middle" font-size="9" fill="#a0aec0">Calendar date</text><text x="10" y="97.5" text-anchor="middle" font-size="9" fill="#a0aec0" transform="rotate(-90 10 97.5)">60+ DQ rate</text><polyline points="46.0,147.5 56.8,147.2 67.6,146.9 78.4,147.9 89.2,146.0 100.0,145.7 110.8,142.7 121.6,140.2 132.4,139.2 143.2,140.2 154.0,143.5 164.8,145.9 175.6,148.2 186.4,147.8 197.2,144.1 208.0,140.7 218.8,138.3 229.6,135.8 240.4,136.5 251.2,134.3 262.0,129.9 272.8,131.2 283.6,135.1 294.4,138.7 305.2,135.7 316.0,136.9 326.8,132.1 337.6,131.5 348.4,128.3 359.2,125.0 370.0,126.7 380.8,120.4 391.6,117.0 402.4,121.7 413.2,125.0" fill="none" stroke="#718096" stroke-width="1.2" opacity="0.75"/><polyline points="186.4,169.0 197.2,167.8 208.0,153.4 218.8,138.6 229.6,134.9 240.4,131.4 251.2,126.9 262.0,125.7 272.8,123.7 283.6,154.0 294.4,153.3 305.2,136.7 316.0,127.4 326.8,120.5 337.6,119.6 348.4,139.3 359.2,138.7 370.0,133.8 380.8,125.7 391.6,120.6 402.4,134.0 413.2,138.7 424.0,135.6" fill="none" stroke="#a0aec0" stroke-width="1.2" opacity="0.75"/><polyline points="46.0,137.9 56.8,136.4 67.6,133.6 78.4,130.6 89.2,129.6 100.0,128.5 110.8,125.4 121.6,123.3 132.4,121.4 143.2,120.6 154.0,125.3 164.8,126.1 175.6,125.0 186.4,125.9 197.2,120.8 208.0,122.7 218.8,125.5 229.6,124.8 240.4,125.1 251.2,127.9 262.0,125.6 272.8,126.0 283.6,133.4 294.4,133.8 305.2,129.9 316.0,134.1 326.8,132.2 337.6,131.5 348.4,136.0 359.2,137.3 370.0,141.6 380.8,139.0 391.6,137.0 402.4,137.5 413.2,141.3 424.0,141.3" fill="none" stroke="#cbd5e0" stroke-width="1.2" opacity="0.75"/><polyline points="46.0,89.8 56.8,84.4 67.6,74.3 78.4,64.0 89.2,62.9 100.0,64.5 110.8,59.3 121.6,54.1 132.4,44.7 143.2,88.7 154.0,97.4 164.8,97.9 175.6,87.0 186.4,83.1 197.2,72.7 208.0,65.8 218.8,106.2 229.6,101.8 240.4,94.5 251.2,84.4 262.0,75.0 272.8,72.0 283.6,74.0 294.4,76.2 305.2,91.9 316.0,90.9 326.8,78.2 337.6,69.7 348.4,90.8 359.2,83.4 370.0,83.0 380.8,67.4 391.6,56.6 402.4,55.9 413.2,62.4 424.0,68.9" fill="none" stroke="#e2e8f0" stroke-width="1.2" opacity="0.75"/><polyline points="100.0,169.0 110.8,168.4 121.6,158.1 132.4,156.1 143.2,141.6 154.0,132.6 164.8,138.8 175.6,122.8 186.4,114.1 197.2,121.7 208.0,111.4 218.8,109.2 229.6,110.2 240.4,106.1 251.2,100.8 262.0,99.6 272.8,99.2 283.6,100.9 294.4,90.1 305.2,97.3 316.0,95.7 326.8,90.8 337.6,88.0 348.4,81.7 359.2,79.6 370.0,78.5 380.8,69.7 391.6,72.2 402.4,78.3 413.2,87.9 424.0,91.3" fill="none" stroke="#c53030" stroke-width="2.0" opacity="0.95"/><line x1="46.0" y1="189" x2="62.0" y2="189" stroke="#c53030" stroke-width="2.0"/><text x="66.0" y="192" font-size="9" fill="#1a202c">BLAST</text><line x1="235.0" y1="189" x2="251.0" y2="189" stroke="#718096" stroke-width="1.2"/><text x="255.0" y="192" font-size="9" fill="#1a202c">AMCAR</text><line x1="46.0" y1="202" x2="62.0" y2="202" stroke="#a0aec0" stroke-width="1.2"/><text x="66.0" y="205" font-size="9" fill="#1a202c">CMXS</text><line x1="235.0" y1="202" x2="251.0" y2="202" stroke="#cbd5e0" stroke-width="1.2"/><text x="255.0" y="205" font-size="9" fill="#1a202c">CRVNA</text><line x1="46.0" y1="215" x2="62.0" y2="215" stroke="#e2e8f0" stroke-width="1.2"/><text x="66.0" y="218" font-size="9" fill="#1a202c">DRIVE</text></svg></div>
+</div>
+
+<p class="ticker-note">
+  Bridgecrest Acceptance Corporation — ticker <code>BLAST</code>.
+  Peer tier: <strong>subprime</strong>.
+  <br/><a href="https://blackanalytics.com/abs/explorer/?ticker=BLAST&view=loss" target="_blank">Open in Explorer ↗</a> for
+  FICO sub-band and new/used stratification.
+</p>
+
+</div>
+
+<footer>
+  <strong>Methodology &amp; data lineage</strong>
+  <dl class="methodology">
+    <dt>Sources</dt>
+    <dd>
+      <span class="src-fwp">FWP</span> = Free Writing Prospectus pricing table (class name, principal,
+      coupon/spread, rating, benchmark).
+      <span class="src-424b5">424B5</span> = prospectus supplement (pool composition, credit enhancement,
+      cut-off date, legal final).
+      <span class="src-absee">ABS-EE</span> = monthly 10-D loan-level reports (per-series CNL, DQ).
+    </dd>
+    <dt>Capital-Structure footnotes</dt>
+    <dd>
+      <sup class="fn fn-a">a</sup> FWP pricing table &nbsp;·&nbsp;
+      <sup class="fn fn-b">b</sup> Derived (principal &divide; initial pool balance from 424B5;
+      reverts to principal &divide; total notes when pool balance isn't extracted) &nbsp;·&nbsp;
+      <sup class="fn fn-c">c</sup> 424B5 prospectus
+    </dd>
+    <dt>Comparison-table conventions</dt>
+    <dd>
+      Row-label color indicates source of record (same key as above). Subject-column cells are
+      annotated with a compact signed delta vs. peer median — green when the subject sits on the
+      favorable side of its peer set, red when unfavorable; hover for context.
+      <br/>AAA spreads reflect market conditions at each deal's pricing date; multi-bp differences
+      between deals priced months apart may reflect rate-environment drift rather than credit
+      fundamentals.
+    </dd>
+    <dt>Peer cohort</dt>
+    <dd>
+      Subject&rsquo;s <em>sponsor-type</em> (captive / bank / IFC / online) <strong>and</strong>
+      <em>FICO tier</em> (prime &ge;720, near-prime 640&ndash;719, subprime &lt;640), with a fallback
+      chain when the strict cohort is too thin. &ldquo;Representative&rdquo; peer set = one most-recent
+      deal per peer ticker, capped at five columns.
+    </dd>
+    <dt>Historical performance</dt>
+    <dd>
+      CNL = cumulative charge-off&nbsp;$ &divide; original pool&nbsp;$, computed per-series from
+      ABS-EE loan-level reports via <code>generate_series_loss_data.py</code>.
+    </dd>
+  </dl>
+  <p class="gen">Generated 2026-04-20 13:04 &nbsp;·&nbsp;
+    <a href="https://blackanalytics.com/abs/explorer/" target="_blank">Interactive explorer</a> &nbsp;·&nbsp;
+    <a href="https://blackanalytics.com/abs/prospectus/" target="_blank">Issuance index</a>
+  </p>
+</footer>
+</body></html>

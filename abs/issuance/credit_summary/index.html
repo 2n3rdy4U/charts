@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Credit Summary Reports — 2026 Auto-Loan</title>
+<style>
+:root { --fg:#1a202c; --muted:#4a5568; --bg:#fff; --grid:#e2e8f0; --head:#f7fafc;
+        --accent:#2b6cb0; --fav:#2f855a; --unf:#c53030;
+        --chip-fwp:#3182ce; --chip-424b5:#805ad5; --chip-absee:#2f855a;
+        --chip-derived:#718096; --chip-notext:#c53030; --chip-sec:#4a5568; }
+* { box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+       color: var(--fg); background: var(--bg); margin: 0 auto; padding: 24px;
+       max-width: 1200px; line-height: 1.45; font-size: 14px; }
+h1 { font-size: 20px; margin: 0 0 4px 0; letter-spacing: -0.01em; }
+h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em;
+     color: var(--muted); margin: 22px 0 4px 0; font-weight: 600; }
+h2 .sub { text-transform: none; letter-spacing: 0; font-weight: 400; color: var(--muted); }
+.header-strip { border-bottom: 2px solid var(--fg); padding-bottom: 12px; margin-bottom: 12px; position: relative; }
+#print-btn {
+    position: absolute; top: 0; right: 0;
+    padding: 6px 8px; border: 1px solid var(--grid);
+    border-radius: 4px; background: var(--bg); cursor: pointer;
+    color: var(--muted); display: inline-flex; align-items: center;
+    line-height: 1;
+}
+#print-btn:hover { color: var(--accent); border-color: var(--accent); }
+@media print { #print-btn { display: none !important; } }
+.header-strip .meta { color: var(--muted); font-size: 13px; margin: 2px 0; }
+.header-strip .meta.accessions { font-size: 11px; }
+.header-strip .meta code { background: var(--head); padding: 1px 4px; border-radius: 2px;
+                            font-size: 10px; }
+.header-strip .links { margin-top: 8px; font-size: 12px; }
+.header-strip .links a { color: var(--accent); text-decoration: none; }
+.header-strip .links a:hover { text-decoration: underline; }
+.badge { display: inline-block; padding: 1px 6px; border-radius: 3px;
+         background: #edf2f7; color: var(--muted); font-size: 11px;
+         letter-spacing: 0.05em; text-transform: uppercase; margin-left: 4px; }
+.badge.tier-prime      { background:#c6f6d5; color:#22543d; }
+.badge.tier-near-prime { background:#feebc8; color:#744210; }
+.badge.tier-subprime   { background:#fed7d7; color:#742a2a; }
+.status { font-size: 11px; color: var(--muted); margin-left: 6px; }
+
+.purpose { color: var(--muted); font-size: 12px; margin: 0 0 6px 0; font-style: italic; }
+.section { margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--grid); }
+.section:first-of-type { border-top: none; padding-top: 0; margin-top: 16px; }
+
+table.grid { border-collapse: collapse; width: 100%; font-size: 13px; }
+table.grid th, table.grid td { padding: 5px 8px; border-bottom: 1px solid var(--grid);
+                                text-align: left; vertical-align: top; }
+table.grid thead th { background: var(--head); font-weight: 600;
+                      font-size: 11px; color: var(--muted); text-transform: uppercase;
+                      letter-spacing: 0.04em; }
+table.grid td.num, table.grid th.num { text-align: right; font-variant-numeric: tabular-nums; }
+table.grid tbody tr:last-child td, table.grid tbody tr:last-child th { border-bottom: none; }
+table.kv { border-collapse: collapse; width: 100%; font-size: 13px; }
+table.kv th { text-align: left; font-weight: 500; color: var(--muted);
+              padding: 4px 12px 4px 0; width: 200px; }
+table.kv td { padding: 4px 0; font-variant-numeric: tabular-nums; }
+
+.rel-pos td.subj { font-weight: 600; }
+
+table.grid.comparison { table-layout: fixed; }
+table.grid.comparison th, table.grid.comparison td {
+    padding: 5px 6px; font-size: 12px; vertical-align: top;
+    text-align: center;
+    overflow-wrap: break-word;
+}
+table.grid.comparison tbody th { text-align: left; color: var(--muted); font-weight: 500; }
+table.grid.comparison thead th {
+    text-transform: none; font-size: 11px; letter-spacing: 0;
+    padding: 4px 6px; text-align: center; font-weight: 600;
+}
+table.grid.comparison thead th.col-subject { background: #fffbea; color: var(--fg); font-weight: 700; }
+table.grid.comparison td.col-subject { background: #fffbea; }
+table.grid.comparison td { font-variant-numeric: tabular-nums; }
+table.grid.comparison tr.section-hdr th {
+    background: var(--head); color: var(--muted);
+    text-transform: uppercase; font-size: 10px; letter-spacing: 0.08em;
+    text-align: left;
+    padding-top: 8px; padding-bottom: 3px;
+    border-top: 1px solid var(--grid);
+}
+table.grid.comparison .val-primary { display: inline-block; font-variant-numeric: tabular-nums; }
+table.grid.comparison .delta-compact {
+    display: inline-block; margin-left: 4px; padding: 0 3px;
+    font-size: 10px; font-weight: 600; border-radius: 2px; cursor: help;
+    vertical-align: middle;
+    font-variant-numeric: tabular-nums;
+}
+table.grid.comparison td.col-subject .delta-compact { background: rgba(0,0,0,0.04); }
+table.grid.comparison .unit { color: var(--muted); font-size: 10px; margin-left: 2px; }
+table.grid.comparison .geo-stack {
+    display: inline-block; line-height: 1.25; font-size: 11px;
+    color: var(--muted); text-align: center;
+}
+table.grid.comparison td.col-subject .geo-stack { color: var(--fg); }
+
+/* Source-of-record row-label coloring for comparison tables */
+.src-fwp     { color: var(--chip-fwp); }
+.src-424b5   { color: var(--chip-424b5); }
+.src-absee   { color: var(--chip-absee); }
+.src-derived { color: var(--chip-derived); }
+.src-notext  { color: var(--chip-notext); }
+.lg-swatch { font-weight: 600; margin-right: 6px; }
+
+/* Capital Structure footnote markers */
+sup.fn {
+    font-size: 9px; margin-left: 2px; font-weight: 700;
+    vertical-align: super; line-height: 0;
+}
+sup.fn-a { color: var(--chip-fwp); }
+sup.fn-b { color: var(--chip-derived); }
+sup.fn-c { color: var(--chip-derived); }
+sup.fn-d { color: var(--chip-424b5); }
+p.fn-legend {
+    font-size: 11px; color: var(--muted);
+    margin: 6px 0 2px 0; line-height: 1.5;
+}
+@media (prefers-color-scheme: dark) {
+  table.grid.comparison thead th.col-subject,
+  table.grid.comparison td.col-subject { background: #2d3039; }
+}
+.rel-pos .range { color: var(--muted); font-weight: 400; font-size: 12px; }
+.rel-pos .sub { font-weight: 400; text-transform: none; letter-spacing: 0;
+                color: var(--muted); font-size: 11px; }
+
+.mark { font-weight: 700; margin-left: 3px; }
+.mark.fav { color: var(--fav); }
+.mark.unf { color: var(--unf); }
+
+.rank { display: inline-block; margin-left: 6px; padding: 1px 6px;
+        background: var(--head); color: var(--muted); border-radius: 3px;
+        font-size: 10px; font-weight: 500; font-variant-numeric: tabular-nums;
+        letter-spacing: 0.02em; }
+.delta-fav { margin-left: 4px; font-size: 11px; color: var(--fav); font-weight: 500; }
+.delta-unf { margin-left: 4px; font-size: 11px; color: var(--unf); font-weight: 500; }
+.delta-neutral { margin-left: 4px; font-size: 11px; color: var(--muted); font-weight: 500; }
+
+.criteria { font-size: 12px; color: var(--muted); margin: 0 0 4px 0; }
+.legend { font-size: 11px; color: var(--muted); margin: 6px 0 4px 0; }
+
+.peer-list { font-size: 12px; margin-top: 4px; color: var(--muted); }
+.peer-list summary { cursor: pointer; color: var(--accent); user-select: none; }
+.peer-list ul { margin: 4px 0 0 0; padding-left: 20px; }
+.peer-list li { padding: 1px 0; }
+.peer-name { color: var(--fg); }
+.peer-meta { color: var(--muted); font-size: 11px; }
+
+.caveat { font-size: 12px; color: var(--muted); margin: 0 0 8px 0;
+          padding: 6px 10px; background: var(--head); border-left: 3px solid var(--chip-derived);
+          border-radius: 2px; }
+.chart-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 8px 0; }
+.chart-cell { background: var(--bg); border: 1px solid var(--grid); border-radius: 3px;
+              padding: 4px; }
+.chart { display: block; width: 100%; height: auto; max-width: 100%; }
+.track-record .subject-row { background: #fffbea; }
+.track-record .bench-row { background: var(--head); font-size: 12px; color: var(--muted); }
+.track-record .bench-row .sub { font-weight: 400; }
+.ticker-note { font-size: 12px; color: var(--muted); margin: 6px 0 0 0; }
+.ticker-note code { background: var(--head); padding: 1px 4px; border-radius: 2px; }
+.ticker-note a { color: var(--accent); text-decoration: none; }
+.ticker-note a:hover { text-decoration: underline; }
+
+.chip { display: inline-block; padding: 0 5px; border-radius: 2px;
+        font-size: 9px; font-weight: 600; letter-spacing: 0.05em;
+        text-transform: uppercase; vertical-align: middle;
+        color: #fff; margin-left: 2px; cursor: help; }
+.chip-fwp       { background: var(--chip-fwp); }
+.chip-424b5     { background: var(--chip-424b5); }
+.chip-absee     { background: var(--chip-absee); }
+.chip-derived        { background: var(--chip-derived); }
+.chip-derived-approx { background: var(--chip-derived); outline: 1px dashed #fff;
+                       outline-offset: -2px; }
+.chip-notext         { background: var(--chip-notext); }
+.chip-sec            { background: var(--chip-sec); }
+
+footer { margin-top: 28px; padding-top: 14px; border-top: 1px solid var(--grid);
+         color: var(--muted); font-size: 11px; }
+footer strong { color: var(--fg); }
+footer dl.methodology { margin: 8px 0 0 0; padding: 0; }
+footer dl.methodology dt { color: var(--fg); font-weight: 600; margin-top: 8px;
+                           font-size: 11px; letter-spacing: 0.02em; }
+footer dl.methodology dd { margin: 2px 0 0 0; padding: 0 0 0 0; line-height: 1.5; }
+footer dl.methodology code { background: var(--head); padding: 1px 3px; border-radius: 2px;
+                             color: var(--fg); font-size: 10px; }
+footer .gen { margin-top: 12px; }
+footer a { color: var(--accent); text-decoration: none; }
+footer a:hover { text-decoration: underline; }
+
+p.empty, p.peer-empty { color: var(--muted); font-style: italic; font-size: 13px; }
+
+@media (prefers-color-scheme: dark) {
+  :root { --fg:#e2e8f0; --muted:#a0aec0; --bg:#1a202c; --grid:#2d3748;
+          --head:#2d3748; --accent:#63b3ed; --fav:#68d391; --unf:#fc8181; }
+  .track-record .subject-row { background: #2d3039; }
+  .badge { background: #2d3748; }
+  .badge.tier-prime      { background:#22543d; color:#c6f6d5; }
+  .badge.tier-near-prime { background:#744210; color:#feebc8; }
+  .badge.tier-subprime   { background:#742a2a; color:#fed7d7; }
+  .header-strip .meta code, .ticker-note code, footer ul.provenance code { background:#2d3748; }
+  .chart-cell { background:#1a202c; border-color:#2d3748; }
+}
+@media print {
+  body { padding: 10px; font-size: 11px; max-width: 100%; }
+  h2 { margin: 10px 0 4px 0; }
+  .section { margin-top: 8px; page-break-inside: avoid; }
+  .chart-pair { page-break-inside: avoid; }
+  .peer-list[open] summary { color: var(--muted); }
+}
+</style>
+</head><body>
+<h1>Credit Summary Reports — 2026 Auto-Loan ABS</h1>
+<p class="ticker-note">18 deals closing in 2026. Per-deal credit writeups with
+relative positioning against a FICO-tier-matched peer cohort (prime / near-prime / subprime)
+and historical performance context from ABS-EE.</p>
+<table class="grid">
+<thead><tr><th>Deal</th><th>Sponsor</th><th>Ticker</th><th>Tier</th>
+<th class="num">Size</th><th>Closing</th>
+<th class="num">WA Credit Score</th><th class="num">WA APR</th></tr></thead>
+<tbody><tr><td><a href="gm-financial-consumer-automobile-receivables-trust-2026-1.html">GM Financial Consumer Automobile Receivables Trust 2026-1</a></td><td>AmeriCredit Financial</td><td>GMCAR</td><td><span class="badge tier-prime">prime</span></td><td class="num">$1,230.9MM</td><td>2026-01-14</td><td class="num">779</td><td class="num">5.97%</td></tr><tr><td><a href="toyota-prime-auto-loan-trust-2026-a.html">Toyota Prime Auto Loan Trust 2026-A</a></td><td>Toyota Motor Credit Corporation</td><td>TAOT</td><td><span class="badge tier-prime">prime</span></td><td class="num">$1,759.9MM</td><td>2026-01-21</td><td class="num">771</td><td class="num">5.68%</td></tr><tr><td><a href="bridgecrest-blast-2026-1.html">Bridgecrest BLAST 2026-1</a></td><td>Bridgecrest Acceptance Corporation</td><td>BLAST</td><td><span class="badge tier-subprime">subprime</span></td><td class="num">$646.0MM</td><td>2026-01-28</td><td class="num">576</td><td class="num">21.76%</td></tr><tr><td><a href="exeter-automobile-receivables-trust-2026-1.html">Exeter Automobile Receivables Trust 2026-1</a></td><td>Exeter Finance LLC</td><td>EART</td><td><span class="badge tier-subprime">subprime</span></td><td class="num">$1,098.0MM</td><td>2026-01-28</td><td class="num">598</td><td class="num">18.71%</td></tr><tr><td><a href="carmax-auto-owner-trust-2026-1.html">CarMax Auto Owner Trust 2026-1</a></td><td>CarMax Business Services, LLC</td><td>CAOT</td><td><span class="badge tier-prime">prime</span></td><td class="num">$1,300.0MM</td><td>2026-01-28</td><td class="num">760</td><td class="num">8.73%</td></tr><tr><td><a href="hyundai-auto-receivables-trust-2026-a.html">Hyundai Auto Receivables Trust 2026-A</a></td><td>Hyundai Capital America</td><td>HART</td><td><span class="badge tier-prime">prime</span></td><td class="num">$2,199.7MM</td><td>2026-02-18</td><td class="num">775</td><td class="num">5.38%</td></tr><tr><td><a href="world-omni-auto-receivables-trust-2026-a.html">World Omni Auto Receivables Trust 2026-A</a></td><td>World Omni Financial Corp</td><td>WOART</td><td><span class="badge tier-prime">prime</span></td><td class="num">$1,236.9MM</td><td>2026-02-18</td><td class="num">758</td><td class="num">5.87%</td></tr><tr><td><a href="bn-honda-auto-receivables-2026-1-owner-trust-harot-2026-1.html">Honda Auto Receivables 2026-1 Owner Trust (HAROT)</a></td><td>American Honda Finance Corporation</td><td>HAROT</td><td><span class="badge tier-prime">prime</span></td><td class="num">$2,300.0MM</td><td>2026-02-18</td><td class="num">770</td><td class="num">5.00%</td></tr><tr><td><a href="carmax-auto-owner-trust-2026-a.html">CarMax Auto Owner Trust 2026-A</a></td><td>CarMax Business Services, LLC</td><td>CMXS</td><td><span class="badge tier-subprime">subprime</span></td><td class="num">$750.0MM</td><td>2026-02-25</td><td class="num">612</td><td class="num">16.49%</td></tr><tr><td><a href="santander-subprime-auto-loan-trust-2026-1.html">Santander Subprime Auto Loan Trust 2026-1</a></td><td>Santander Bank, N.A</td><td>DRIVE</td><td><span class="badge tier-subprime">subprime</span></td><td class="num">$1,585.1MM</td><td>2026-02-25</td><td class="num">605</td><td class="num">18.04%</td></tr><tr><td><a href="ally-auto-receivables-trust-2026-1.html">Ally Auto Receivables Trust 2026-1</a></td><td>Ally Bank</td><td>AART</td><td><span class="badge tier-prime">prime</span></td><td class="num">$758.3MM</td><td>2026-03-10</td><td class="num">734</td><td class="num">6.93%</td></tr><tr><td><a href="carvana-prime-auto-loan-trust-2026-p1.html">Carvana Prime Auto Loan Trust 2026-P1</a></td><td>Carvana, LLC</td><td>CRVNA</td><td><span class="badge tier-near-prime">near-prime</span></td><td class="num">$1,071.5MM</td><td>2026-03-17</td><td class="num">713</td><td class="num">10.67%</td></tr><tr><td><a href="ford-credit-auto-owner-trust-2026-a.html">Ford Credit Auto Owner Trust 2026-A</a></td><td>Ford Motor Credit Company LLC</td><td>FCAOT</td><td><span class="badge tier-prime">prime</span></td><td class="num">$1,489.0MM</td><td>2026-03-24</td><td class="num">754</td><td class="num">4.84%</td></tr><tr><td><a href="gm-financial-consumer-automobile-receivables-trust-2026-2.html">GM Financial Consumer Automobile Receivables Trust 2026-2</a></td><td>AmeriCredit Financial</td><td>GMCAR</td><td><span class="badge tier-prime">prime</span></td><td class="num">$1,335.0MM</td><td>2026-04-15</td><td class="num">777</td><td class="num">6.11%</td></tr><tr><td><a href="gm-financial-auto-owner-trust-2026-2.html">GM Financial Auto Owner Trust 2026-2</a></td><td>AmeriCredit Financial</td><td>GMCAR</td><td><span class="badge tier-prime">prime</span></td><td class="num">$1,269.8MM</td><td>2026-04-15</td><td class="num">777</td><td class="num">6.11%</td></tr><tr><td><a href="toyota-auto-receivables-2026-b-owner-trust.html">Toyota Auto Receivables 2026-B Owner Trust</a></td><td>Toyota Motor Credit Corporation</td><td>TAOT</td><td><span class="badge tier-prime">prime</span></td><td class="num">$1,759.7MM</td><td>2026-04-21</td><td class="num">770</td><td class="num">5.57%</td></tr><tr><td><a href="bridgecrest-blast-2026-2.html">Bridgecrest BLAST 2026-2</a></td><td>Bridgecrest Acceptance Corporation</td><td>BLAST</td><td><span class="badge tier-subprime">subprime</span></td><td class="num">$642.1MM</td><td>—</td><td class="num">572</td><td class="num">21.44%</td></tr><tr><td><a href="carmax-auto-owner-trust-2026-2.html">CarMax Auto Owner Trust 2026-2</a></td><td>CarMax Business Services, LLC</td><td>CAOT</td><td><span class="badge tier-prime">prime</span></td><td class="num">$1,007.5MM</td><td>2026-04-29</td><td class="num">764</td><td class="num">8.65%</td></tr></tbody>
+</table>
+<footer><p class="gen">Generated 2026-04-20 13:04.</p></footer>
+</body></html>
