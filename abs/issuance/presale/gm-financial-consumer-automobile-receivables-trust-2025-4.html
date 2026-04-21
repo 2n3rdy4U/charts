@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Presale Report — GM Financial Consumer Automobile Receivables Trust 2025-4</title>
+<style>
+:root { --fg:#1a202c; --muted:#4a5568; --bg:#fff; --grid:#e2e8f0; --head:#f7fafc;
+        --accent:#2b6cb0; --fav:#2f855a; --unf:#c53030;
+        --chip-fwp:#3182ce; --chip-424b5:#805ad5; --chip-absee:#2f855a;
+        --chip-derived:#718096; --chip-notext:#c53030; --chip-sec:#4a5568; }
+* { box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+       color: var(--fg); background: var(--bg); margin: 0 auto; padding: 24px;
+       max-width: 1200px; line-height: 1.45; font-size: 14px; }
+h1 { font-size: 20px; margin: 0 0 4px 0; letter-spacing: -0.01em; }
+h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em;
+     color: var(--muted); margin: 22px 0 4px 0; font-weight: 600; }
+h2 .sub { text-transform: none; letter-spacing: 0; font-weight: 400; color: var(--muted); }
+.header-strip { border-bottom: 2px solid var(--fg); padding-bottom: 12px; margin-bottom: 12px; position: relative; }
+.header-strip .eyebrow {
+    font-size: 11px; color: var(--muted); text-transform: uppercase;
+    letter-spacing: 0.08em; margin: 0 0 6px 0; font-weight: 500;
+}
+.header-strip .eyebrow strong { color: var(--fg); font-weight: 600; letter-spacing: 0; }
+.header-strip .rating-chips { margin: 6px 0 4px 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.header-strip .rchip {
+    display: inline-flex; align-items: center; overflow: hidden;
+    border: 1px solid var(--grid); border-radius: 4px; font-size: 11px;
+    line-height: 1; font-variant-numeric: tabular-nums;
+}
+.header-strip .rchip-a {
+    background: var(--head); color: var(--muted); padding: 3px 6px;
+    font-weight: 500; letter-spacing: 0.02em;
+}
+.header-strip .rchip-v {
+    padding: 3px 7px; font-weight: 700; color: var(--fg);
+    background: var(--bg);
+}
+.header-strip .about-blurb {
+    margin: 8px 0 0 0; font-size: 11.5px; line-height: 1.5;
+    color: var(--muted); font-style: normal;
+}
+.header-strip .about-blurb strong { color: var(--fg); font-weight: 600; }
+.header-strip .about-blurb em { color: var(--muted); font-style: italic; font-size: 11px; }
+.header-strip .about-blurb a { color: var(--accent); text-decoration: none; }
+.header-strip .about-blurb a:hover { text-decoration: underline; }
+#print-btn {
+    position: absolute; top: 0; right: 0;
+    padding: 6px 8px; border: 1px solid var(--grid);
+    border-radius: 4px; background: var(--bg); cursor: pointer;
+    color: var(--muted); display: inline-flex; align-items: center;
+    line-height: 1;
+}
+#print-btn:hover { color: var(--accent); border-color: var(--accent); }
+@media print { #print-btn { display: none !important; } }
+.header-strip .meta { color: var(--muted); font-size: 13px; margin: 2px 0; }
+.header-strip .meta.accessions { font-size: 11px; }
+.header-strip .meta code { background: var(--head); padding: 1px 4px; border-radius: 2px;
+                            font-size: 10px; }
+.header-strip .links { margin-top: 8px; font-size: 12px; }
+.header-strip .links a { color: var(--accent); text-decoration: none; }
+.header-strip .links a:hover { text-decoration: underline; }
+.badge { display: inline-block; padding: 1px 6px; border-radius: 3px;
+         background: #edf2f7; color: var(--muted); font-size: 11px;
+         letter-spacing: 0.05em; text-transform: uppercase; margin-left: 4px; }
+.badge.tier-prime      { background:#c6f6d5; color:#22543d; }
+.badge.tier-near-prime { background:#feebc8; color:#744210; }
+.badge.tier-subprime   { background:#fed7d7; color:#742a2a; }
+.status { font-size: 11px; color: var(--muted); margin-left: 6px; }
+
+.purpose { color: var(--muted); font-size: 12px; margin: 0 0 6px 0; font-style: italic; }
+.section { margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--grid); }
+.section:first-of-type { border-top: none; padding-top: 0; margin-top: 16px; }
+
+table.grid { border-collapse: collapse; width: 100%; font-size: 13px; }
+table.grid th, table.grid td { padding: 5px 8px; border-bottom: 1px solid var(--grid);
+                                text-align: left; vertical-align: top; }
+table.grid thead th { background: var(--head); font-weight: 600;
+                      font-size: 11px; color: var(--muted); text-transform: uppercase;
+                      letter-spacing: 0.04em; }
+table.grid td.num, table.grid th.num { text-align: right; font-variant-numeric: tabular-nums; }
+table.grid tbody tr:last-child td, table.grid tbody tr:last-child th { border-bottom: none; }
+table.kv { border-collapse: collapse; width: 100%; font-size: 13px; }
+table.kv th { text-align: left; font-weight: 500; color: var(--muted);
+              padding: 4px 12px 4px 0; width: 200px; }
+table.kv td { padding: 4px 0; font-variant-numeric: tabular-nums; }
+
+.rel-pos td.subj { font-weight: 600; }
+
+table.grid.comparison { table-layout: fixed; }
+table.grid.comparison th, table.grid.comparison td {
+    padding: 5px 6px; font-size: 12px; vertical-align: top;
+    text-align: center;
+    overflow-wrap: break-word;
+}
+table.grid.comparison tbody th { text-align: left; color: var(--muted); font-weight: 500; }
+table.grid.comparison thead th {
+    text-transform: none; font-size: 11px; letter-spacing: 0;
+    padding: 4px 6px; text-align: center; font-weight: 600;
+}
+table.grid.comparison thead th.col-subject { background: #fffbea; color: var(--fg); font-weight: 700; }
+table.grid.comparison td.col-subject { background: #fffbea; }
+table.grid.comparison td { font-variant-numeric: tabular-nums; }
+table.grid.comparison tr.section-hdr th {
+    background: var(--head); color: var(--muted);
+    text-transform: uppercase; font-size: 10px; letter-spacing: 0.08em;
+    text-align: left;
+    padding-top: 8px; padding-bottom: 3px;
+    border-top: 1px solid var(--grid);
+}
+table.grid.comparison .val-primary { display: inline-block; font-variant-numeric: tabular-nums; }
+table.grid.comparison .delta-compact {
+    display: inline-block; margin-left: 4px; padding: 0 3px;
+    font-size: 10px; font-weight: 600; border-radius: 2px; cursor: help;
+    vertical-align: middle;
+    font-variant-numeric: tabular-nums;
+}
+table.grid.comparison td.col-subject .delta-compact { background: rgba(0,0,0,0.04); }
+table.grid.comparison .unit { color: var(--muted); font-size: 10px; margin-left: 2px; }
+table.grid.comparison .geo-stack {
+    display: inline-block; line-height: 1.25; font-size: 11px;
+    color: var(--muted); text-align: center;
+}
+table.grid.comparison td.col-subject .geo-stack { color: var(--fg); }
+
+/* Source-of-record row-label coloring for comparison tables */
+.src-fwp     { color: var(--chip-fwp); }
+.src-424b5   { color: var(--chip-424b5); }
+.src-absee   { color: var(--chip-absee); }
+.src-derived { color: var(--chip-derived); }
+.src-notext  { color: var(--chip-notext); }
+.lg-swatch { font-weight: 600; margin-right: 6px; }
+
+/* Capital Structure footnote markers */
+sup.fn {
+    font-size: 9px; margin-left: 2px; font-weight: 700;
+    vertical-align: super; line-height: 0;
+}
+sup.fn-a { color: var(--chip-fwp); }
+sup.fn-b { color: var(--chip-derived); }
+sup.fn-c { color: var(--chip-derived); }
+sup.fn-d { color: var(--chip-424b5); }
+p.fn-legend {
+    font-size: 11px; color: var(--muted);
+    margin: 6px 0 2px 0; line-height: 1.5;
+}
+@media (prefers-color-scheme: dark) {
+  table.grid.comparison thead th.col-subject,
+  table.grid.comparison td.col-subject { background: #2d3039; }
+}
+.rel-pos .range { color: var(--muted); font-weight: 400; font-size: 12px; }
+.rel-pos .sub { font-weight: 400; text-transform: none; letter-spacing: 0;
+                color: var(--muted); font-size: 11px; }
+
+.mark { font-weight: 700; margin-left: 3px; }
+.mark.fav { color: var(--fav); }
+.mark.unf { color: var(--unf); }
+
+.rank { display: inline-block; margin-left: 6px; padding: 1px 6px;
+        background: var(--head); color: var(--muted); border-radius: 3px;
+        font-size: 10px; font-weight: 500; font-variant-numeric: tabular-nums;
+        letter-spacing: 0.02em; }
+.delta-fav { margin-left: 4px; font-size: 11px; color: var(--fav); font-weight: 500; }
+.delta-unf { margin-left: 4px; font-size: 11px; color: var(--unf); font-weight: 500; }
+.delta-neutral { margin-left: 4px; font-size: 11px; color: var(--muted); font-weight: 500; }
+
+.criteria { font-size: 12px; color: var(--muted); margin: 0 0 4px 0; }
+.legend { font-size: 11px; color: var(--muted); margin: 6px 0 4px 0; }
+
+.peer-list { font-size: 12px; margin-top: 4px; color: var(--muted); }
+.peer-list summary { cursor: pointer; color: var(--accent); user-select: none; }
+.peer-list ul { margin: 4px 0 0 0; padding-left: 20px; }
+.peer-list li { padding: 1px 0; }
+.peer-name { color: var(--fg); }
+.peer-meta { color: var(--muted); font-size: 11px; }
+
+.caveat { font-size: 12px; color: var(--muted); margin: 0 0 8px 0;
+          padding: 6px 10px; background: var(--head); border-left: 3px solid var(--chip-derived);
+          border-radius: 2px; }
+.chart-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 8px 0; }
+.chart-cell { background: var(--bg); border: 1px solid var(--grid); border-radius: 3px;
+              padding: 4px; }
+.chart { display: block; width: 100%; height: auto; max-width: 100%; }
+.track-record .subject-row { background: #fffbea; }
+.track-record .bench-row { background: var(--head); font-size: 12px; color: var(--muted); }
+.track-record .bench-row .sub { font-weight: 400; }
+.ticker-note { font-size: 12px; color: var(--muted); margin: 6px 0 0 0; }
+.ticker-note code { background: var(--head); padding: 1px 4px; border-radius: 2px; }
+.ticker-note a { color: var(--accent); text-decoration: none; }
+.ticker-note a:hover { text-decoration: underline; }
+
+.chip { display: inline-block; padding: 0 5px; border-radius: 2px;
+        font-size: 9px; font-weight: 600; letter-spacing: 0.05em;
+        text-transform: uppercase; vertical-align: middle;
+        color: #fff; margin-left: 2px; cursor: help; }
+.chip-fwp       { background: var(--chip-fwp); }
+.chip-424b5     { background: var(--chip-424b5); }
+.chip-absee     { background: var(--chip-absee); }
+.chip-derived        { background: var(--chip-derived); }
+.chip-derived-approx { background: var(--chip-derived); outline: 1px dashed #fff;
+                       outline-offset: -2px; }
+.chip-notext         { background: var(--chip-notext); }
+.chip-sec            { background: var(--chip-sec); }
+
+footer { margin-top: 28px; padding-top: 14px; border-top: 1px solid var(--grid);
+         color: var(--muted); font-size: 11px; }
+footer strong { color: var(--fg); }
+footer dl.methodology { margin: 8px 0 0 0; padding: 0; }
+footer dl.methodology dt { color: var(--fg); font-weight: 600; margin-top: 8px;
+                           font-size: 11px; letter-spacing: 0.02em; }
+footer dl.methodology dd { margin: 2px 0 0 0; padding: 0 0 0 0; line-height: 1.5; }
+footer dl.methodology code { background: var(--head); padding: 1px 3px; border-radius: 2px;
+                             color: var(--fg); font-size: 10px; }
+footer .gen { margin-top: 12px; }
+footer a { color: var(--accent); text-decoration: none; }
+footer a:hover { text-decoration: underline; }
+
+p.empty, p.peer-empty { color: var(--muted); font-style: italic; font-size: 13px; }
+
+@media (prefers-color-scheme: dark) {
+  :root { --fg:#e2e8f0; --muted:#a0aec0; --bg:#1a202c; --grid:#2d3748;
+          --head:#2d3748; --accent:#63b3ed; --fav:#68d391; --unf:#fc8181; }
+  .track-record .subject-row { background: #2d3039; }
+  .badge { background: #2d3748; }
+  .badge.tier-prime      { background:#22543d; color:#c6f6d5; }
+  .badge.tier-near-prime { background:#744210; color:#feebc8; }
+  .badge.tier-subprime   { background:#742a2a; color:#fed7d7; }
+  .header-strip .meta code, .ticker-note code, footer ul.provenance code { background:#2d3748; }
+  .chart-cell { background:#1a202c; border-color:#2d3748; }
+}
+@media print {
+  body { padding: 10px; font-size: 11px; max-width: 100%; }
+  h2 { margin: 10px 0 4px 0; }
+  .section { margin-top: 8px; page-break-inside: avoid; }
+  .chart-pair { page-break-inside: avoid; }
+  .peer-list[open] summary { color: var(--muted); }
+}
+</style>
+</head><body>
+<div class="header-strip">
+  <button id="print-btn" onclick="window.print()" title="Print this credit summary"
+    aria-label="Print this credit summary">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+      <circle cx="12" cy="13" r="4"/>
+    </svg>
+  </button>
+  <div class="eyebrow">Presale Report &nbsp;·&nbsp; Data as of <strong>2025-11-05</strong></div>
+  <h1>GM Financial Consumer Automobile Receivables Trust 2025-4
+    <span class="badge">Auto Loan</span>
+    <span class="badge tier-prime">prime</span>
+    <span class="status">FINAL · CLOSED 2025-11-05</span>
+  </h1>
+  <div class="rating-chips"><span class="rchip"><span class="rchip-a">Moody&#x27;s</span><span class="rchip-v">Aaa</span></span> <span class="rchip"><span class="rchip-a">S&amp;P</span><span class="rchip-v">Aaa</span></span></div>
+  <div class="meta"><strong>Sponsor:</strong> AmeriCredit Financial &nbsp;·&nbsp;
+    <strong>Total notes:</strong> $951.1MM
+  </div>
+  <div class="meta"><strong>Servicer:</strong> GM Financial &nbsp;·&nbsp;
+    <strong>Trustee:</strong> Wilmington Trust
+  </div>
+  <p class="about-blurb">
+    Presale Reports are compiled by <strong>Black Analytics</strong> from SEC EDGAR filings
+    (424B5, FWP) and ABS-EE loan-level data. Published the same day a deal&rsquo;s first
+    filing reaches EDGAR; pool, structural, and peer context reflects what was known
+    at the subject&rsquo;s issuance. For ongoing deal performance after closing, see the
+    <a href="https://blackanalytics.com/abs/explorer/" target="_blank" rel="noopener">Auto ABS Explorer</a>.
+    <em>Informational only &mdash; not a credit rating.</em>
+  </p>
+</div>
+
+<div class="section">
+  <h2>Capital Structure</h2>
+  <p class="purpose">Bond-side risk distribution — how principal splits across tranches and how each is supported.</p>
+  <table class="grid cap-structure"><thead><tr><th>Class</th><th class="num">Size ($MM)<sup class="fn fn-a">a</sup></th><th class="num">% Pool<sup class="fn fn-b">b</sup></th><th class="num">Sub %<sup class="fn fn-b">b</sup></th><th class="num">Coupon / Spread<sup class="fn fn-a">a</sup></th><th class="num">WAL<sup class="fn fn-a">a</sup></th><th>Legal Final<sup class="fn fn-c">c</sup></th><th>S&P<sup class="fn fn-a">a</sup></th><th>Moody's<sup class="fn fn-a">a</sup></th></tr></thead><tbody><tr><td>Class A-1</td><td class="num">152.0</td><td class="num">16.9%</td><td class="num">83.1%</td><td class="num">3.99% fxd</td><td class="num">0.19</td><td>11-16-2026</td><td>P-1</td><td>P-1</td></tr><tr><td>Class A-2-A</td><td class="num">229.2</td><td class="num">25.5%</td><td class="num">57.7%</td><td class="num">3.88% fxd</td><td class="num">1.04</td><td>12-18-2028</td><td>Aaa</td><td>Aaa</td></tr><tr><td>Class A-2-B</td><td class="num">100.0</td><td class="num">11.1%</td><td class="num">46.6%</td><td class="num">+32 bps SOFR</td><td class="num">1.04</td><td>12-18-2028</td><td>Aaa</td><td>Aaa</td></tr><tr><td>Class A-3</td><td class="num">329.1</td><td class="num">36.6%</td><td class="num">10.0%</td><td class="num">3.84% fxd</td><td class="num">2.57</td><td>02-18-2031</td><td>Aaa</td><td>Aaa</td></tr><tr><td>Class A-4</td><td class="num">61.1</td><td class="num">6.8%</td><td class="num">3.2%</td><td class="num">3.93% fxd</td><td class="num">3.83</td><td>04-16-2032</td><td>Aaa</td><td>Aaa</td></tr><tr><td>Class B</td><td class="num">14.8</td><td class="num">1.7%</td><td class="num">1.5%</td><td class="num">4.16% fxd</td><td class="num">3.86</td><td>04-16-2032</td><td>Aa2</td><td>Aa2</td></tr><tr><td>Class C</td><td class="num">13.9</td><td class="num">1.5%</td><td class="num">0.0%</td><td class="num">4.36% fxd</td><td class="num">3.86</td><td>05-16-2033</td><td>A2</td><td>A2</td></tr></tbody></table>
+</div>
+
+<div class="section">
+  <h2>Issuer Track Record</h2>
+  <p class="purpose">Subject deal alongside the sponsor's 5 most-recent prior deals — collateral and structural attributes side by side.</p>
+  <p class="criteria">Issuer history: AmeriCredit Financial (normalized). Up to 5 most-recent prior deals.</p><table class="grid comparison"><colgroup><col style="width:22%"><col style="width:13.00%"><col style="width:13.00%"><col style="width:13.00%"><col style="width:13.00%"><col style="width:13.00%"><col style="width:13.00%"></colgroup><thead><tr><th></th><th class="col-subject">GMCAR 2025-4</th><th>GMCAR 2025-3</th><th>GMCAR 2025-2</th><th>GMCAR 2025-1</th><th>GMCAR 2024-4</th><th>GMCAR 2024-3</th></tr></thead><tbody><tr class="section-hdr"><th colspan="7">Collateral (pool at cut-off)</th></tr><tr class=""><th class="src-424b5">Closing date</th><td class="num col-subject"><span class="val-primary">11-05-2025</span></td><td class="num">07-16-2025</td><td class="num">05-14-2025</td><td class="num">01-15-2025</td><td class="num">10-16-2024</td><td class="num">07-10-2024</td></tr><tr class=""><th class="src-424b5">Pool balance</th><td class="num col-subject"><span class="val-primary">$951.1MM</span></td><td class="num">$974.1MM</td><td class="num">$984.2MM</td><td class="num">$1,644.9MM</td><td class="num">$1,346.6MM</td><td class="num">$1,420.3MM</td></tr><tr class=""><th class="src-424b5">WA Credit Score</th><td class="num col-subject"><span class="val-primary">781</span><span class="delta-unf delta-compact" title="−1 vs peer median (n=5)">−1</span></td><td class="num">783</td><td class="num">782</td><td class="num">781</td><td class="num">782</td><td class="num">783</td></tr><tr class=""><th class="src-424b5">WA APR</th><td class="num col-subject"><span class="val-primary">5.86%</span><span class="delta-unf delta-compact" title="+0.04pp vs peer median (n=5)">+0.04pp</span></td><td class="num">5.70%</td><td class="num">5.82%</td><td class="num">6.08%</td><td class="num">5.83%</td><td class="num">5.69%</td></tr><tr class=""><th class="src-424b5">WA original term<span class="unit"> mo</span></th><td class="num col-subject"><span class="val-primary">13.0</span><span class="delta-fav delta-compact" title="−56.0 vs peer median (n=5)">−56.0</span></td><td class="num">69.0 mo</td><td class="num">69.0 mo</td><td class="num">13.0 mo</td><td class="num">69.0 mo</td><td class="num">69.0 mo</td></tr><tr class=""><th class="src-424b5">% new vehicles</th><td class="num col-subject"><span class="val-primary">87.9%</span></td><td class="num">87.9%</td><td class="num">87.9%</td><td class="num">87.9%</td><td class="num">87.7%</td><td class="num">87.7%</td></tr><tr class=""><th class="src-424b5">Reserve %</th><td class="num col-subject"><span class="val-primary">0.25%</span></td><td class="num">0.25%</td><td class="num">0.24%</td><td class="num">0.24%</td><td class="num">0.24%</td><td class="num">0.24%</td></tr><tr class=""><th class="src-424b5">Geo top-3</th><td class="num col-subject"><span class="geo-stack">TX 14.1%<br/>FL 7.1%<br/>CA 7.0%</span></td><td class="num"><span class="geo-stack">TX 13.7%<br/>FL 7.4%<br/>CA 6.4%</span></td><td class="num"><span class="geo-stack">TX 12.2%<br/>FL 7.7%<br/>NY 6.2%</span></td><td class="num"><span class="geo-stack">TX 13.9%<br/>FL 7.0%<br/>MI 5.6%</span></td><td class="num"><span class="geo-stack">TX 15.3%<br/>FL 7.2%<br/>MI 5.3%</span></td><td class="num"><span class="geo-stack">TX 14.5%<br/>FL 7.5%<br/>MI 5.2%</span></td></tr><tr class="section-hdr"><th colspan="7">Structure (at issuance)</th></tr><tr class=""><th class="src-fwp">AAA spread</th><td class="num col-subject"><span class="val-primary">+32 bps</span><span class="delta-fav delta-compact" title="−4bps vs peer median (n=5)">−4bps</span></td><td class="num">+30 bps</td><td class="num">+45 bps</td><td class="num">+33 bps</td><td class="num">+40 bps</td><td class="num">+36 bps</td></tr><tr class=""><th class="src-derived">AAA % of pool</th><td class="num col-subject"><span class="val-primary">79.9%</span><span class="delta-fav delta-compact" title="+6.5pp vs peer median (n=5)">+6.5pp</span></td><td class="num">77.7%</td><td class="num">77.3%</td><td class="num">73.4%</td><td class="num">72.8%</td><td class="num">71.4%</td></tr><tr class=""><th class="src-derived">Subordination below AAA</th><td class="num col-subject"><span class="val-primary">3.2%</span><span class="delta-fav delta-compact" title="+0.2pp vs peer median (n=5)">+0.2pp</span></td><td class="num">3.1%</td><td class="num">3.2%</td><td class="num">1.5%</td><td class="num">1.6%</td><td class="num">3.0%</td></tr><tr class=""><th class="src-derived">Overcollateralization</th><td class="num col-subject"><span class="val-primary">5.35%</span></td><td class="num">6.15%</td><td class="num">5.53%</td><td class="num">7.25%</td><td class="num">7.16%</td><td class="num">7.03%</td></tr><tr class=""><th class="src-424b5">Yield Supplement OC</th><td class="num col-subject"><span class="val-primary">2.68%</span></td><td class="num">3.50%</td><td class="num">2.86%</td><td class="num">3.13%</td><td class="num">3.04%</td><td class="num">4.40%</td></tr><tr class=""><th class="src-fwp">Tranches</th><td class="num col-subject"><span class="val-primary">7</span></td><td class="num">7</td><td class="num">7</td><td class="num">6</td><td class="num">6</td><td class="num">7</td></tr></tbody></table>
+</div>
+
+<div class="section">
+  <h2>Peer Set</h2>
+  <p class="purpose">Subject deal alongside representative peer deals — one most-recent deal per peer issuer in the subject's cohort.</p>
+  <p class="criteria">Peer cohort: same sponsor-type + same FICO tier. Most-recent deal per peer ticker (max 5).</p><table class="grid comparison"><colgroup><col style="width:22%"><col style="width:13.00%"><col style="width:13.00%"><col style="width:13.00%"><col style="width:13.00%"><col style="width:13.00%"><col style="width:13.00%"></colgroup><thead><tr><th></th><th class="col-subject">GMCAR 2025-4</th><th>TAOT 2025-D</th><th>WOART 2025-D</th><th>FCAOT 2025-B</th><th>HART 2025-C</th><th>HAROT 2025-3</th></tr></thead><tbody><tr class="section-hdr"><th colspan="7">Collateral (pool at cut-off)</th></tr><tr class=""><th class="src-424b5">Closing date</th><td class="num col-subject"><span class="val-primary">11-05-2025</span></td><td class="num">10-23-2025</td><td class="num">10-15-2025</td><td class="num">09-26-2025</td><td class="num">09-17-2025</td><td class="num">08-12-2025</td></tr><tr class=""><th class="src-424b5">Pool balance</th><td class="num col-subject"><span class="val-primary">$951.1MM</span></td><td class="num">$1,998.8MM</td><td class="num">$1,318.4MM</td><td class="num">$1,645.7MM</td><td class="num">$2,148.3MM</td><td class="num">$2,483.1MM</td></tr><tr class=""><th class="src-424b5">WA Credit Score</th><td class="num col-subject"><span class="val-primary">781</span><span class="delta-fav delta-compact" title="+12 vs peer median (n=5)">+12</span></td><td class="num">771</td><td class="num">757</td><td class="num">752</td><td class="num">772</td><td class="num">769</td></tr><tr class=""><th class="src-424b5">WA APR</th><td class="num col-subject"><span class="val-primary">5.86%</span><span class="delta-unf delta-compact" title="+0.25pp vs peer median (n=5)">+0.25pp</span></td><td class="num">5.71%</td><td class="num">6.15%</td><td class="num">5.21%</td><td class="num">5.61%</td><td class="num">4.97%</td></tr><tr class=""><th class="src-424b5">WA original term<span class="unit"> mo</span></th><td class="num col-subject"><span class="val-primary">13.0</span><span class="delta-fav delta-compact" title="−53.0 vs peer median (n=5)">−53.0</span></td><td class="num">65.8 mo</td><td class="num">68.6 mo</td><td class="num">66.0 mo</td><td class="num">67.9 mo</td><td class="num">61.9 mo</td></tr><tr class=""><th class="src-424b5">% new vehicles</th><td class="num col-subject"><span class="val-primary">87.9%</span></td><td class="num">88.0%</td><td class="num">97.6%</td><td class="num">93.5%</td><td class="num">99.5%</td><td class="num">86.0%</td></tr><tr class=""><th class="src-424b5">Reserve %</th><td class="num col-subject"><span class="val-primary">0.25%</span></td><td class="num">0.25%</td><td class="num">0.17%</td><td class="num">0.24%</td><td class="num">0.25%</td><td class="num">0.25%</td></tr><tr class=""><th class="src-424b5">Geo top-3</th><td class="num col-subject"><span class="geo-stack">TX 14.1%<br/>FL 7.1%<br/>CA 7.0%</span></td><td class="num"><span class="geo-stack">CA 22.9%<br/>TX 15.8%<br/>IL 3.9%</span></td><td class="num"><span class="geo-stack">FL 47.4%<br/>GA 18.7%<br/>NC 15.7%</span></td><td class="num"><span class="geo-stack">TX 16.5%<br/>CA 8.7%<br/>FL 8.2%</span></td><td class="num"><span class="geo-stack">TX 13.0%<br/>FL 9.8%<br/>CA 8.2%</span></td><td class="num"><span class="geo-stack">CA 16.3%<br/>TX 9.8%<br/>PA 7.6%</span></td></tr><tr class="section-hdr"><th colspan="7">Structure (at issuance)</th></tr><tr class=""><th class="src-fwp">AAA spread</th><td class="num col-subject"><span class="val-primary">+32 bps</span><span class="delta-neutral delta-compact" title="0bps vs peer median (n=5)">0bps</span></td><td class="num">+32 bps</td><td class="num">+31 bps</td><td class="num">+30 bps</td><td class="num">+35 bps</td><td class="num">+35 bps</td></tr><tr class=""><th class="src-derived">AAA % of pool</th><td class="num col-subject"><span class="val-primary">79.9%</span><span class="delta-fav delta-compact" title="+5.1pp vs peer median (n=5)">+5.1pp</span></td><td class="num">77.3%</td><td class="num">78.3%</td><td class="num">74.8%</td><td class="num">68.9%</td><td class="num">74.4%</td></tr><tr class=""><th class="src-derived">Subordination below AAA</th><td class="num col-subject"><span class="val-primary">3.2%</span><span class="delta-fav delta-compact" title="+0.7pp vs peer median (n=5)">+0.7pp</span></td><td class="num">2.5%</td><td class="num">0.0%</td><td class="num">5.0%</td><td class="num">4.6%</td><td class="num">0.0%</td></tr><tr class=""><th class="src-derived">Overcollateralization</th><td class="num col-subject"><span class="val-primary">5.35%</span></td><td class="num">4.94%</td><td class="num">—</td><td class="num">4.06%</td><td class="num">7.47%</td><td class="num">2.50%</td></tr><tr class=""><th class="src-424b5">Yield Supplement OC</th><td class="num col-subject"><span class="val-primary">2.68%</span></td><td class="num">4.94%</td><td class="num">—</td><td class="num">4.06%</td><td class="num">5.09%</td><td class="num">4.77%</td></tr><tr class=""><th class="src-fwp">Tranches</th><td class="num col-subject"><span class="val-primary">7</span></td><td class="num">6</td><td class="num">5</td><td class="num">7</td><td class="num">7</td><td class="num">5</td></tr></tbody></table>
+</div>
+
+<div class="section">
+  <h2>Historical Performance Context</h2>
+  <p class="purpose">Anchor expectations in empirical base rates from the sponsor's prior series and FICO-tier peer set.</p>
+  
+<p class="caveat">
+  Left: per-series CNL at matched seasoning. IQR band uses a fixed cohort of all peer
+  series with ≥18 months of data (195 series across 9 issuers).
+  Right: portfolio-level 60+ DQ rate aggregated across all active deals per issuer
+  (calendar time, last 3 years). <span class="chip chip-absee">ABS-EE</span>
+</p>
+
+<div class="chart-pair">
+  <div class="chart-cell"><svg class="chart" width="440" height="240" viewBox="0 0 440 240" role="img" aria-label="CNL by seasoning — GMCAR vs. prime peers"><text x="46" y="18" font-size="10" font-weight="600" fill="#1a202c">CNL by seasoning — GMCAR vs. prime peers</text><rect x="46" y="26" width="378" height="143" fill="none" stroke="#cbd5e0" stroke-width="0.5"/><line x1="46" y1="133.2" x2="424" y2="133.2" stroke="#cbd5e0" stroke-width="0.4" stroke-dasharray="2,2"/><text x="42" y="136.2" text-anchor="end" font-size="9" fill="#a0aec0">0.4%</text><line x1="46" y1="97.5" x2="424" y2="97.5" stroke="#cbd5e0" stroke-width="0.4" stroke-dasharray="2,2"/><text x="42" y="100.5" text-anchor="end" font-size="9" fill="#a0aec0">0.9%</text><line x1="46" y1="61.8" x2="424" y2="61.8" stroke="#cbd5e0" stroke-width="0.4" stroke-dasharray="2,2"/><text x="42" y="64.8" text-anchor="end" font-size="9" fill="#a0aec0">1.3%</text><line x1="46" y1="26.0" x2="424" y2="26.0" stroke="#cbd5e0" stroke-width="0.4" stroke-dasharray="2,2"/><text x="42" y="29.0" text-anchor="end" font-size="9" fill="#a0aec0">1.8%</text><text x="46.0" y="180" text-anchor="middle" font-size="9" fill="#a0aec0">M0</text><text x="140.5" y="180" text-anchor="middle" font-size="9" fill="#a0aec0">M12</text><text x="235.0" y="180" text-anchor="middle" font-size="9" fill="#a0aec0">M24</text><text x="329.5" y="180" text-anchor="middle" font-size="9" fill="#a0aec0">M36</text><text x="424.0" y="180" text-anchor="middle" font-size="9" fill="#a0aec0">M48</text><text x="235.0" y="236" text-anchor="middle" font-size="9" fill="#a0aec0">Seasoning (months from cut-off)</text><text x="10" y="97.5" text-anchor="middle" font-size="9" fill="#a0aec0" transform="rotate(-90 10 97.5)">CNL</text><path d="M46.0,167.5 L53.9,167.5 L61.8,167.5 L69.6,165.5 L77.5,162.0 L85.4,158.1 L93.2,153.5 L101.1,149.1 L109.0,144.4 L116.9,139.8 L124.8,135.4 L132.6,130.5 L140.5,125.1 L148.4,120.4 L156.2,116.4 L164.1,112.4 L172.0,106.8 L179.9,102.9 L187.8,98.5 L195.6,94.3 L203.5,90.5 L211.4,85.4 L219.2,80.8 L227.1,77.3 L235.0,75.3 L242.9,73.4 L250.8,70.4 L258.6,66.6 L266.5,64.1 L274.4,60.7 L282.2,58.6 L290.1,56.4 L298.0,51.7 L305.9,47.8 L313.8,45.4 L321.6,45.2 L329.5,44.7 L329.5,140.3 L321.6,140.3 L313.8,141.1 L305.9,140.6 L298.0,141.6 L290.1,142.4 L282.2,142.8 L274.4,143.5 L266.5,144.0 L258.6,144.2 L250.8,144.9 L242.9,146.1 L235.0,146.9 L227.1,147.3 L219.2,147.9 L211.4,148.1 L203.5,149.3 L195.6,149.5 L187.8,149.9 L179.9,152.6 L172.0,153.6 L164.1,155.4 L156.2,155.9 L148.4,156.8 L140.5,158.6 L132.6,159.5 L124.8,160.7 L116.9,161.4 L109.0,163.0 L101.1,164.2 L93.2,165.4 L85.4,166.6 L77.5,167.7 L69.6,168.5 L61.8,168.8 L53.9,168.9 L46.0,168.5 Z" fill="#3182ce" fill-opacity="0.10" stroke="none"/><polyline points="46.0,167.9 53.9,168.8 61.8,168.6 69.6,168.1 77.5,166.4 85.4,164.5 93.2,162.3 101.1,160.3 109.0,157.9 116.9,155.9 124.8,154.3 132.6,151.6 140.5,149.4 148.4,146.4 156.2,144.8 164.1,143.6 172.0,141.4 179.9,139.5 187.8,137.4 195.6,135.6 203.5,134.0 211.4,132.4 219.2,130.8 227.1,129.9 235.0,128.3 242.9,126.8 250.8,125.5 258.6,124.0 266.5,122.8 274.4,121.6 282.2,120.2 290.1,119.4 298.0,117.5 305.9,116.2 313.8,115.6 321.6,114.1 329.5,113.2" fill="none" stroke="#3182ce" stroke-width="1.3" stroke-dasharray="4,3" opacity="0.85"/><polyline points="61.8,167.9 69.6,164.7" fill="none" stroke="#1a365d" stroke-width="1.5" opacity="0.92"/><polyline points="61.8,168.7 69.6,168.2 77.5,164.5 85.4,159.4 93.2,155.7 101.1,150.3 109.0,146.2 116.9,139.2" fill="none" stroke="#2b6cb0" stroke-width="1.5" opacity="0.92"/><polyline points="61.8,168.6 69.6,167.9 77.5,166.3 85.4,164.1 93.2,162.0 101.1,160.4 109.0,155.2 116.9,152.7 124.8,147.7 132.6,143.4 140.5,139.3" fill="none" stroke="#3182ce" stroke-width="1.5" opacity="0.92"/><polyline points="61.8,168.5 69.6,167.0 77.5,165.2 85.4,159.8 93.2,156.7 101.1,153.2 109.0,148.8 116.9,144.0 124.8,139.0 132.6,135.8 140.5,131.6 148.4,125.4 156.2,120.4 164.1,114.7" fill="none" stroke="#63b3ed" stroke-width="1.5" opacity="0.92"/><line x1="46.0" y1="189" x2="62.0" y2="189" stroke="#1a365d" stroke-width="1.8"/><text x="66.0" y="192" font-size="9" fill="#1a202c">GMCAR 2026-1</text><line x1="235.0" y1="189" x2="251.0" y2="189" stroke="#2b6cb0" stroke-width="1.8"/><text x="255.0" y="192" font-size="9" fill="#1a202c">GMCAR 2025-3</text><line x1="46.0" y1="202" x2="62.0" y2="202" stroke="#3182ce" stroke-width="1.8"/><text x="66.0" y="205" font-size="9" fill="#1a202c">GMCAR 2025-2</text><line x1="235.0" y1="202" x2="251.0" y2="202" stroke="#63b3ed" stroke-width="1.8"/><text x="255.0" y="205" font-size="9" fill="#1a202c">GMCAR 2025-1</text><line x1="46.0" y1="215" x2="62.0" y2="215" stroke="#3182ce" stroke-width="1.3" stroke-dasharray="4,3"/><text x="66.0" y="218" font-size="9" fill="#1a202c">prime peers median</text><rect x="235.0" y="212" width="16" height="6" fill="#3182ce" fill-opacity="0.10"/><text x="255.0" y="218" font-size="9" fill="#1a202c">Peer IQR (fixed cohort, n=124)</text></svg></div>
+  <div class="chart-cell"><svg class="chart" width="440" height="240" viewBox="0 0 440 240" role="img" aria-label="Portfolio 60+ DQ — GMCAR vs. peers (calendar time)"><text x="46" y="18" font-size="10" font-weight="600" fill="#1a202c">Portfolio 60+ DQ — GMCAR vs. peers (calendar time)</text><rect x="46" y="26" width="378" height="143" fill="none" stroke="#cbd5e0" stroke-width="0.5"/><line x1="46" y1="133.2" x2="424" y2="133.2" stroke="#cbd5e0" stroke-width="0.4" stroke-dasharray="2,2"/><text x="42" y="136.2" text-anchor="end" font-size="9" fill="#a0aec0">0.12%</text><line x1="46" y1="97.5" x2="424" y2="97.5" stroke="#cbd5e0" stroke-width="0.4" stroke-dasharray="2,2"/><text x="42" y="100.5" text-anchor="end" font-size="9" fill="#a0aec0">0.24%</text><line x1="46" y1="61.8" x2="424" y2="61.8" stroke="#cbd5e0" stroke-width="0.4" stroke-dasharray="2,2"/><text x="42" y="64.8" text-anchor="end" font-size="9" fill="#a0aec0">0.36%</text><line x1="46" y1="26.0" x2="424" y2="26.0" stroke="#cbd5e0" stroke-width="0.4" stroke-dasharray="2,2"/><text x="42" y="29.0" text-anchor="end" font-size="9" fill="#a0aec0">0.48%</text><text x="46.0" y="180" text-anchor="middle" font-size="9" fill="#a0aec0">2022-11</text><text x="132.4" y="180" text-anchor="middle" font-size="9" fill="#a0aec0">2023-07</text><text x="229.6" y="180" text-anchor="middle" font-size="9" fill="#a0aec0">2024-04</text><text x="326.8" y="180" text-anchor="middle" font-size="9" fill="#a0aec0">2025-01</text><text x="424.0" y="180" text-anchor="middle" font-size="9" fill="#a0aec0">2025-10</text><text x="235.0" y="236" text-anchor="middle" font-size="9" fill="#a0aec0">Calendar date</text><text x="10" y="97.5" text-anchor="middle" font-size="9" fill="#a0aec0" transform="rotate(-90 10 97.5)">60+ DQ rate</text><polyline points="46.0,120.6 56.8,113.2 67.6,110.6 78.4,115.7 89.2,120.3 100.0,112.1 110.8,131.3 121.6,109.1 132.4,129.5 143.2,121.8 154.0,120.4 164.8,119.6 175.6,108.9 186.4,103.1 197.2,97.3 208.0,104.6 218.8,96.7 229.6,128.4 240.4,91.3 251.2,115.9 262.0,112.2 272.8,100.6 283.6,97.2 294.4,97.9 305.2,91.7 316.0,108.7 326.8,75.0 337.6,107.4 348.4,107.9 359.2,99.7 370.0,96.3 380.8,86.4 391.6,89.7 402.4,80.3 413.2,79.2 424.0,74.0" fill="none" stroke="#319795" stroke-width="1.2" opacity="0.75"/><polyline points="46.0,123.6 56.8,122.2 67.6,115.1 78.4,132.2 89.2,135.2 100.0,128.9 110.8,127.6 121.6,130.8 132.4,121.8 143.2,115.8 154.0,119.5 164.8,123.8 175.6,113.2 186.4,106.9 197.2,99.5 208.0,120.5 218.8,123.2 229.6,117.9 240.4,123.2 251.2,120.6 262.0,113.9 272.8,120.8 283.6,111.7 294.4,114.9 305.2,109.1 316.0,108.7 326.8,103.7 337.6,119.2 348.4,126.2 359.2,117.1 370.0,118.7 380.8,104.2 391.6,102.2 402.4,116.1 413.2,114.0 424.0,116.2" fill="none" stroke="#dd6b20" stroke-width="1.2" opacity="0.75"/><polyline points="46.0,116.5 56.8,116.4 67.6,119.4 78.4,124.6 89.2,132.6 100.0,127.4 110.8,122.0 121.6,117.7 132.4,119.5 143.2,114.5 154.0,117.8 164.8,108.1 175.6,108.3 186.4,113.2 197.2,102.3 208.0,119.4 218.8,128.9 229.6,118.8 240.4,120.5 251.2,121.4 262.0,105.0 272.8,113.9 283.6,102.7 294.4,104.7 305.2,97.5 316.0,103.2 326.8,93.6 337.6,105.3 348.4,123.5 359.2,112.3 370.0,113.1 380.8,111.5 391.6,99.3 402.4,102.2 413.2,108.0 424.0,97.4" fill="none" stroke="#805ad5" stroke-width="1.2" opacity="0.75"/><polyline points="46.0,67.8 56.8,54.5 67.6,51.8 78.4,80.6 89.2,92.4 100.0,79.3 110.8,94.0 121.6,92.3 132.4,85.0 143.2,74.6 154.0,83.8 164.8,82.3 175.6,70.3 186.4,58.6 197.2,69.3 208.0,83.2 218.8,89.5 229.6,78.8 240.4,76.6 251.2,68.5 262.0,64.3 272.8,76.9 283.6,79.3 294.4,69.2 305.2,51.9 316.0,44.7 326.8,77.1 337.6,93.8 348.4,99.5 359.2,97.9 370.0,94.2 380.8,75.6 391.6,80.0 402.4,76.0 413.2,80.9 424.0,77.4" fill="none" stroke="#b7791f" stroke-width="1.2" opacity="0.75"/><polyline points="46.0,121.7 56.8,122.8 67.6,117.6 78.4,121.9 89.2,129.1 100.0,122.1 110.8,124.8 121.6,125.3 132.4,120.3 143.2,120.0 154.0,116.6 164.8,115.3 175.6,113.8 186.4,111.0 197.2,115.2 208.0,120.9 218.8,121.6 229.6,113.5 240.4,118.4 251.2,117.2 262.0,108.5 272.8,106.7 283.6,102.3 294.4,104.2 305.2,107.5 316.0,96.4 326.8,90.6 337.6,99.8 348.4,108.9 359.2,102.2 370.0,112.1 380.8,102.3 391.6,98.2 402.4,92.0 413.2,91.5 424.0,87.9" fill="none" stroke="#c53030" stroke-width="2.0" opacity="0.95"/><line x1="46.0" y1="189" x2="62.0" y2="189" stroke="#c53030" stroke-width="2.0"/><text x="66.0" y="192" font-size="9" fill="#1a202c">GMCAR</text><line x1="235.0" y1="189" x2="251.0" y2="189" stroke="#319795" stroke-width="1.2"/><text x="255.0" y="192" font-size="9" fill="#1a202c">BMWOT</text><line x1="46.0" y1="202" x2="62.0" y2="202" stroke="#dd6b20" stroke-width="1.2"/><text x="66.0" y="205" font-size="9" fill="#1a202c">FCAOT</text><line x1="235.0" y1="202" x2="251.0" y2="202" stroke="#805ad5" stroke-width="1.2"/><text x="255.0" y="205" font-size="9" fill="#1a202c">HAROT</text><line x1="46.0" y1="215" x2="62.0" y2="215" stroke="#b7791f" stroke-width="1.2"/><text x="66.0" y="218" font-size="9" fill="#1a202c">HART</text></svg></div>
+</div>
+
+<p class="ticker-note">
+  AmeriCredit Financial — ticker <code>GMCAR</code>.
+  Peer tier: <strong>prime</strong>.
+  <br/><a href="https://blackanalytics.com/abs/explorer/?ticker=GMCAR&view=loss" target="_blank">Open in Explorer ↗</a> for
+  FICO sub-band and new/used stratification.
+</p>
+
+</div>
+
+<footer>
+  <strong>Methodology &amp; data lineage</strong>
+  <dl class="methodology">
+    <dt>Sources</dt>
+    <dd>
+      <span class="src-fwp">FWP</span> = Free Writing Prospectus pricing table (class name, principal,
+      coupon/spread, rating, benchmark).
+      <span class="src-424b5">424B5</span> = prospectus supplement (pool composition, credit enhancement,
+      cut-off date, legal final).
+      <span class="src-absee">ABS-EE</span> = monthly 10-D loan-level reports (per-series CNL, DQ).
+    </dd>
+    <dt>Capital-Structure footnotes</dt>
+    <dd>
+      <sup class="fn fn-a">a</sup> FWP pricing table &nbsp;·&nbsp;
+      <sup class="fn fn-b">b</sup> Derived (principal &divide; initial pool balance from 424B5;
+      reverts to principal &divide; total notes when pool balance isn't extracted) &nbsp;·&nbsp;
+      <sup class="fn fn-c">c</sup> 424B5 prospectus
+    </dd>
+    <dt>Comparison-table conventions</dt>
+    <dd>
+      Row-label color indicates source of record (same key as above). Subject-column cells are
+      annotated with a compact signed delta vs. peer median — green when the subject sits on the
+      favorable side of its peer set, red when unfavorable; hover for context.
+      <br/>AAA spreads reflect market conditions at each deal's pricing date; multi-bp differences
+      between deals priced months apart may reflect rate-environment drift rather than credit
+      fundamentals.
+    </dd>
+    <dt>Peer cohort</dt>
+    <dd>
+      Subject&rsquo;s <em>sponsor-type</em> (captive / bank / IFC / online) <strong>and</strong>
+      <em>FICO tier</em> (prime &ge;720, near-prime 640&ndash;719, subprime &lt;640), with a fallback
+      chain when the strict cohort is too thin. &ldquo;Representative&rdquo; peer set = one most-recent
+      deal per peer ticker, capped at five columns.
+    </dd>
+    <dt>Historical performance</dt>
+    <dd>
+      CNL = cumulative charge-off&nbsp;$ &divide; original pool&nbsp;$, computed per-series from
+      ABS-EE loan-level reports via <code>generate_series_loss_data.py</code>.
+    </dd>
+  </dl>
+  <p class="gen">Generated 2026-04-21 19:42 &nbsp;·&nbsp;
+    <a href="https://blackanalytics.com/abs/explorer/" target="_blank">Interactive explorer</a> &nbsp;·&nbsp;
+    <a href="https://blackanalytics.com/abs/prospectus/" target="_blank">Issuance index</a>
+  </p>
+</footer>
+</body></html>
