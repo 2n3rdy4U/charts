@@ -620,7 +620,7 @@
 
 <script>
 (function () {
-  const BUILD_ID   = "2026-04-22 09:21";
+  const BUILD_ID   = "2026-04-22 14:00";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "Santander (DRIVE)"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander (SDART)"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -997,16 +997,34 @@
 
   // ── Aggregation helpers ──────────────────────────────────────────────
 
-  // Vintage mode: aggregate across FICO buckets, return per-series rows
+  // Vintage mode: aggregate across FICO buckets, return per-series rows.
+  //
+  // Date range is treated as SERIES-INCLUSION (by issuance / first-reporting
+  // date), not as row-level trimming. A user selecting "last 5 years" wants
+  // the full vintage curves of any series issued in the last 5 years — each
+  // starting at month 0 — not a calendar-time slice of arbitrary series.
   function aggregateVintage(rows) {
     const from = dateFromSel.value || '';
     const to   = dateToSel.value   || '';
-    const filtered = rows.filter(r =>
-      r.fico_low >= ficoMin && r.fico_low < ficoMax &&
-      (!from || r.reporting_date >= from) &&
-      (!to   || r.reporting_date <= to) &&
-      (vehicleType === 'all' || (vehicleType === 'new' && +r.new_used === 1) || (vehicleType === 'used' && +r.new_used === 2))
-    );
+
+    // Compute each series' first reporting_date (proxy for issuance date).
+    // First-report is typically within 30-45 days of closing; exact issuance
+    // would require the prospectus DB, which is unnecessary precision here.
+    const firstBySeriesByDate = new Map();
+    for (const r of rows) {
+      const prev = firstBySeriesByDate.get(r.series);
+      if (!prev || r.reporting_date < prev) {
+        firstBySeriesByDate.set(r.series, r.reporting_date);
+      }
+    }
+
+    const filtered = rows.filter(r => {
+      const seriesFirst = firstBySeriesByDate.get(r.series);
+      return r.fico_low >= ficoMin && r.fico_low < ficoMax &&
+        (!from || seriesFirst >= from) &&
+        (!to   || seriesFirst <= to) &&
+        (vehicleType === 'all' || (vehicleType === 'new' && +r.new_used === 1) || (vehicleType === 'used' && +r.new_used === 2));
+    });
 
     const grouped = new Map();
     for (const r of filtered) {
@@ -1769,10 +1787,20 @@
     const title     = issuerLabel[code] || code;
     const basisNote = vintageBasis === 'deal' ? 'by deal issuance vintage' : 'by loan origination vintage';
 
-    // ── Filter by FICO range and vehicle type, then re-aggregate ──
+    // Vintage-year inclusion from the date range. Date-range filter picks
+    // which VINTAGE YEARS to include (their full CNL curves render from M0),
+    // not a calendar-time cut of the underlying reporting periods.
+    const fromVal = dateFromSel.value || '';
+    const toVal   = dateToSel.value   || '';
+    const fromYear = fromVal ? parseInt(fromVal.substring(0, 4), 10) : null;
+    const toYear   = toVal   ? parseInt(toVal.substring(0, 4),   10) : null;
+
+    // ── Filter by FICO range, vehicle type, and vintage-year inclusion ──
     const filtered = lossRows.filter(r =>
       r.fico_low >= ficoMin && r.fico_low < ficoMax &&
-      (vehicleType === 'all' || (vehicleType === 'new' && r.new_used === 1) || (vehicleType === 'used' && r.new_used === 2))
+      (vehicleType === 'all' || (vehicleType === 'new' && r.new_used === 1) || (vehicleType === 'used' && r.new_used === 2)) &&
+      (fromYear === null || r.vintage_year >= fromYear) &&
+      (toYear   === null || r.vintage_year <= toYear)
     );
     if (!filtered.length) { showMsg('No loss data for selected filters.'); return; }
 
@@ -2011,8 +2039,17 @@
       btn.classList.toggle('active', btn.dataset.basis === vintageBasis);
     loadLossAndRender();
   });
-  dateFromSel.addEventListener('change', () => render());
-  dateToSel.addEventListener('change',   () => render());
+  // Vintage date range affects both Delinquency/Vintage and Losses tabs.
+  // Re-render the right chart based on currentTab/vintageView.
+  const _onVintageRangeChange = () => {
+    if (currentTab === 'losses') {
+      if (lossRows.length) renderLossChart(); else loadLossAndRender();
+    } else {
+      render();
+    }
+  };
+  dateFromSel.addEventListener('change', _onVintageRangeChange);
+  dateToSel.addEventListener('change',   _onVintageRangeChange);
   tsDateFromSel.addEventListener('change', () => render());
   tsDateToSel.addEventListener('change',   () => render());
 
@@ -2054,7 +2091,7 @@
       (onChange || render)();
     });
   }
-  _wireRangeSelect('vintageRangeSel', dateFromSel, dateToSel);
+  _wireRangeSelect('vintageRangeSel', dateFromSel, dateToSel, _onVintageRangeChange);
   _wireRangeSelect('tsRangeSel', tsDateFromSel, tsDateToSel);
 
   const transformSel = document.getElementById('transformSel');
