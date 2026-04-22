@@ -93,12 +93,12 @@ Commercial / dealer bureau scores (<code>obligorCreditScoreType LIKE '%commercia
 
 <h3>Repossessions (1st-Time Repo Rate)</h3>
 <p>
-<strong>1st-time repossession</strong> = the first reporting period in which a loan&rsquo;s <code>repossessedIndicator</code> transitions to <code>TRUE</code>. Each loan is counted at most once, at its first-ever repo period. This matches the methodology used by WCP Consulting in their published 1st-Time Repo reports.
+<strong>1st-time repossession</strong> = the first reporting period in which a loan&rsquo;s <code>repossessedIndicator</code> transitions to <code>TRUE</code>. Each loan is counted at most once, at its first-ever repo period.
 </p>
 <ul>
   <li><strong>Numerator:</strong> Count of loans whose first-ever repo period is the current reporting period, within the selected (issuer &times; credit-score band &times; new/used) filter.</li>
   <li><strong>Denominator:</strong> Count of all loans active in the current reporting period in the same filter bucket.</li>
-  <li><strong>Why 1st-time only:</strong> The raw <code>repossessedIndicator</code> can flip from TRUE back to FALSE (borrower redemption) and then to TRUE again. Counting every transition would double-count these edge cases; industry convention (and WCP methodology) uses 1st-time only.</li>
+  <li><strong>Why 1st-time only:</strong> The raw <code>repossessedIndicator</code> can flip from TRUE back to FALSE (borrower redemption) and then to TRUE again. Counting every transition would double-count these edge cases; industry convention uses 1st-time only.</li>
 </ul>
 
 <h3>Credit Score vs Default (Kaplan-Meier Survival Analysis)</h3>
@@ -109,26 +109,12 @@ Commercial / dealer bureau scores (<code>obligorCreditScoreType LIKE '%commercia
   <li><strong>Output:</strong> Kaplan-Meier cumulative default probability as a function of months-on-book, per credit score band.</li>
 </ul>
 
-<h2>4. External Validation</h2>
-<p>
-Our 1st-time repossession counts match WCP Consulting&rsquo;s published November 2024 figures within 0.3&ndash;0.5% for consumer-focused issuers. This is the strongest external corroboration available for this data, since WCP and this platform both use the same SEC ABS-EE source with independent implementations.
-</p>
-<table>
-  <thead><tr><th>Issuer Group (Nov 2024, Below Prime)</th><th class="num">Explorer</th><th class="num">WCP</th><th class="num">&Delta;</th></tr></thead>
-  <tbody>
-    <tr><td>SDART + DRIVE (Santander)</td><td class="num">6,343</td><td class="num">6,363</td><td class="num">&minus;0.3%</td></tr>
-    <tr><td>GMCAR + AMCAR (GM Financial)</td><td class="num">1,373</td><td class="num">1,379</td><td class="num">&minus;0.4%</td></tr>
-    <tr><td>BLAST (Bridgecrest)</td><td class="num">858</td><td class="num">858</td><td class="num">0.0%</td></tr>
-    <tr><td>CAOT + CMXS (CarMax)</td><td class="num">617</td><td class="num">620</td><td class="num">&minus;0.5%</td></tr>
-    <tr><td>CRVNA (Carvana)</td><td class="num">386</td><td class="num">387</td><td class="num">&minus;0.3%</td></tr>
-    <tr><td>EART (Exeter)</td><td class="num">87</td><td class="num">87</td><td class="num">0.0%</td></tr>
-  </tbody>
-</table>
-<p style="margin-top:12px;font-size:13.5px;color:#374151;">
-<strong>Note on issuers with commercial-auto exposure:</strong> For issuers that securitize both consumer and commercial auto loans (Ford, Ally), our counts are modestly (3&ndash;10%) lower than WCP&rsquo;s because we exclude commercial-bureau-scored loans from our &ldquo;Below Prime&rdquo; bucket. Commercial bureau scores use a different scale than consumer FICO (typically 0&ndash;100), and including them would mix fleet and small-business loans with subprime consumer loans. For a consumer credit analysis, the stricter exclusion is more defensible. The SQL filter is: <code>LOWER(obligorCreditScoreType) NOT LIKE '%commercial%'</code>.
+<h2>4. Scope &amp; Boundary Notes</h2>
+<p style="font-size:13.5px;color:#374151;">
+<strong>Note on issuers with commercial-auto exposure:</strong> For issuers that securitize both consumer and commercial auto loans (Ford, Ally), we exclude commercial-bureau-scored loans from our &ldquo;Below Prime&rdquo; bucket. Commercial bureau scores use a different scale than consumer FICO (typically 0&ndash;100), and including them would mix fleet and small-business loans with subprime consumer loans. For a consumer credit analysis, the stricter exclusion is more defensible. The SQL filter is: <code>LOWER(obligorCreditScoreType) NOT LIKE '%commercial%'</code>.
 </p>
 <p style="margin-top:8px;font-size:13.5px;color:#374151;">
-<strong>Score-boundary note:</strong> WCP&rsquo;s &ldquo;Below Prime&rdquo; is scores 300&ndash;660 inclusive; ours is 300&ndash;659 due to 10-point score bucketing. This causes a &sim;1&ndash;4% undercount for small-volume issuers whose 1st-time repos happen to have score exactly 660.
+<strong>Score-boundary note:</strong> Our &ldquo;Below Prime&rdquo; bucket is scores 300&ndash;659 inclusive, reflecting 10-point score bucketing. Definitions that treat 660 as below prime will show slightly higher counts; the difference is typically small (&sim;1&ndash;4% for small-volume issuers where a repo happens to land on exactly 660).
 </p>
 
 <h2>5. Known Limitations</h2>
