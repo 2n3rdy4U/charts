@@ -79,6 +79,26 @@
     #vis { flex:1; width:100%; min-height:0; overflow:visible; margin-bottom:4px; }
     .vega-embed { width:100% !important; height:100% !important; }
     .vega-embed > div { height:100% !important; }
+    /* Chart fade-in: opacity + 6 px lift, 500 ms ease-out. Applied to every
+       chart container on the page. The vegaEmbed wrapper in the script block
+       toggles .chart-visible on each render, so re-renders (filter changes,
+       issuer swaps, etc.) re-animate like the FRED dashboard. */
+    #vis, #repoChart, .fico-chart {
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 500ms ease-out, transform 500ms ease-out;
+    }
+    #vis.chart-visible,
+    #repoChart.chart-visible,
+    .fico-chart.chart-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #vis, #repoChart, .fico-chart {
+        opacity: 1; transform: none; transition: none;
+      }
+    }
     /* ── dark tooltip (Chart.js-style) — works with disableDefaultStyle:true ── */
     #vg-tooltip-element {
       visibility:hidden; position:fixed; z-index:1000; pointer-events:none;
@@ -619,8 +639,26 @@
 <div id="toast"></div>
 
 <script>
+// Fade-in wrapper for vegaEmbed. Each chart container starts at opacity:0
+// (see CSS rule for #vis / #repoChart / .fico-chart). Before each vegaEmbed
+// call we strip .chart-visible on the target so the transition resets; after
+// the promise resolves we re-add it and the 500 ms fade plays. This gives
+// every chart render (filter change, issuer swap, tab switch) the same
+// entrance behaviour as the FRED dashboard.
 (function () {
-  const BUILD_ID   = "2026-04-24 02:28";
+  const _orig = window.vegaEmbed;
+  if (!_orig) return;
+  window.vegaEmbed = function (target, spec, opts) {
+    const el = typeof target === 'string' ? document.querySelector(target) : target;
+    if (el && el.classList) el.classList.remove('chart-visible');
+    return _orig(target, spec, opts).then(function (result) {
+      if (el && el.classList) el.classList.add('chart-visible');
+      return result;
+    });
+  };
+})();
+(function () {
+  const BUILD_ID   = "2026-04-24 11:01";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "Santander (DRIVE)"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander (SDART)"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
