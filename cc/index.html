@@ -8,31 +8,21 @@
 <meta name="apple-mobile-web-app-title" content="CC ABS"/>
 <meta name="theme-color" content="#f8fafc"/>
 <title>Credit Card ABS Performance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
 <script src="https://cdn.jsdelivr.net/npm/html-to-image@1/dist/html-to-image.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
 <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
 <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 <style>
-  *,*::before,*::after{box-sizing:border-box}
-  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;
-        font-size:13px;background:#f8fafc;margin:0;padding:0;
+  /* Universal reset, base typography, and Vega-Lite tooltip styles
+     come from shared style.css. */
+  body{font-size:13px;background:#f8fafc;margin:0;padding:0;
         padding:env(safe-area-inset-top) env(safe-area-inset-right) 0 env(safe-area-inset-left)}
   .wrap{max-width:1140px;margin:0 auto;padding:16px 16px 32px}
   footer{margin-top:16px;font-size:11px;color:#999;border-top:1px solid #e2e8f0;padding-top:8px;margin-top:8px}
-  /* ── dark tooltip (Chart.js-style) ── */
-  /* ── dark tooltip — works with disableDefaultStyle:true ── */
-  #vg-tooltip-element{visibility:hidden;position:fixed;z-index:1000;pointer-events:none;
-    background:rgba(31,41,55,.92);color:#fff;border:none;border-radius:8px;
-    box-shadow:0 4px 14px rgba(0,0,0,.25);
-    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;
-    font-size:12.5px;padding:8px 12px;line-height:1.5;
-    max-width:320px;word-wrap:break-word}
-  #vg-tooltip-element.visible{visibility:visible}
-  #vg-tooltip-element h2{margin:0 0 4px;padding:0;font-size:12.5px;font-weight:600;color:#fff}
-  #vg-tooltip-element table{border-spacing:0}
-  #vg-tooltip-element td{border:none;padding:2px 8px 2px 0}
-  #vg-tooltip-element td.key{color:rgba(255,255,255,.7);font-weight:400;text-align:right}
-  #vg-tooltip-element td.value{color:#fff;font-weight:600}
   /* ── Page header ── */
   .page-hdr{display:flex;align-items:center;gap:12px;padding-bottom:10px;
              border-bottom:1px solid #e2e8f0;margin-bottom:12px}
@@ -96,8 +86,7 @@
                cursor:pointer;color:#475569;display:inline-flex;align-items:center;line-height:1}
   .export-btn:hover,.export-btn:active{background:#f1f5f9}
   .meta-date{font-size:11px;color:#999;white-space:nowrap}
-  /* ── focus-visible ── */
-  button:focus-visible,select:focus-visible{outline:2px solid #1e40af;outline-offset:2px}
+  /* ── focus-visible inherited from shared style.css ── */
   /* ── mobile portrait ── */
   @media (max-width:640px) {
     .wrap{padding:10px 8px 24px}
@@ -113,6 +102,9 @@
   }
   /* ── landscape (phones) ── */
   @media (max-height:500px) and (orientation:landscape) {
+    /* Suppress iPhone safe-area-inset side padding so content reaches
+       the screen edge — same pattern as Issuance / Auto / Macro / Calendar. */
+    html, body { padding-left:0 !important; padding-right:0 !important; }
     .page-hdr{padding-bottom:4px;margin-bottom:6px}
     .brand-sub{display:none}
     .ctrl-bar{padding:6px 10px;margin-bottom:8px}
