@@ -26,14 +26,14 @@
            padding: env(safe-area-inset-top) env(safe-area-inset-right) 0 env(safe-area-inset-left); }
 
     /* ── Header ── */
-    #header {
+    #fred-header {
       padding: 12px 18px 8px;
       border-bottom: 1px solid #e0e0e0;
       display: flex;
       align-items: center;
       gap: 10px;
     }
-    #header h1 { font-size: 18px; font-weight: normal; flex: 1; margin: 0; }
+    #fred-header h1 { font-size: 18px; font-weight: normal; flex: 1; margin: 0; }
     #updated { font-size: 11px; color: #999; white-space: nowrap; }
     #recession-btn {
       padding: 4px 11px;
@@ -78,7 +78,7 @@
     .cat-tab.active { color: #2563eb; border-bottom-color: #2563eb; font-weight: bold; }
 
     /* ── Main layout ── */
-    #main {
+    #fred-main {
       display: flex;
       height: calc(100vh - 90px);
       min-height: 440px;
@@ -677,10 +677,10 @@
     /* ── mobile portrait ── */
     @media (max-width: 640px) {
       #series-panel { display: none !important; }
-      #main { flex-direction: column; }
+      #fred-main { flex-direction: column; }
       #content-panel { padding: 8px; }
-      #header { padding: 8px 8px 6px; gap: 6px; }
-      #header h1 { font-size: 16px; }
+      #fred-header { padding: 8px 8px 6px; gap: 6px; }
+      #fred-header h1 { font-size: 16px; }
       /* touch targets */
       .cat-tab { min-height: 44px; padding: 10px 14px; font-size: 14px; }
       #recession-btn, .preset-btn, .bar-btn, .view-btn { min-height: 44px; padding: 10px 14px; }
@@ -700,8 +700,8 @@
       /* Suppress iPhone safe-area-inset side padding so content reaches
          the screen edge — same pattern as Issuance and Auto explorer. */
       html, body { padding-left: 0 !important; padding-right: 0 !important; }
-      #header { padding: 4px 8px 2px; }
-      #header h1 { font-size: 14px; }
+      #fred-header { padding: 4px 8px 2px; }
+      #fred-header h1 { font-size: 14px; }
       #updated { font-size: 10px; }
       #category-tabs { gap: 0; }
       .cat-tab { padding: 4px 10px; font-size: 11px; min-height: 32px; }
@@ -786,19 +786,19 @@
       /* Release the fixed-height layout so source/footnote/next-release
          elements (rendered below the chart inside #vis-container) aren't
          clipped by overflow:hidden. The page scrolls naturally instead. */
-      #main           { height: auto !important; overflow: visible !important; min-height: 0; }
+      #fred-main           { height: auto !important; overflow: visible !important; min-height: 0; }
       #chart-panel    { overflow: visible !important; }
       #vis-container  { overflow: visible !important; }
       #vis            { min-height: 320px; }
     }
     @media print {
       html, body { height: auto; overflow: visible; }
-      #main { height: auto; overflow: visible; }
+      #fred-main { height: auto; overflow: visible; }
       #series-panel { display: none; }
       #content-panel { overflow: visible; height: auto; padding-bottom: 32px; }
       #vis-container { overflow: visible; }
       #vis { overflow: visible; height: auto; min-height: 400px; page-break-inside: avoid; }
-      #header { padding-bottom: 8px; }
+      #fred-header { padding-bottom: 8px; }
       #category-tabs, #chip-strip, #table-footer { display: none !important; }
       .export-btn, #toast { display: none !important; }
       #chart-source { border-top: 1px solid #e8e8e8; padding-top: 8px; margin-top: 6px; }
@@ -807,7 +807,7 @@
 </head>
 <body>
 <div id="fred-app">
-  <div id="header">
+  <div id="fred-header">
     <button id="fred-hamburger" type="button" aria-label="Open series menu" aria-expanded="false" aria-controls="series-panel">
       <span class="fred-hamburger-icon" aria-hidden="true">
         <span></span><span></span><span></span>
@@ -828,7 +828,7 @@
     <button id="clear-chips-btn">Clear all</button>
   </div>
 
-  <div id="main">
+  <div id="fred-main">
     <div id="series-panel">
       <div class="search-row">
         <input type="text" id="series-search" placeholder="Search series…" autocomplete="off">
