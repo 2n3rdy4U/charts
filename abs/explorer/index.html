@@ -657,7 +657,7 @@
   };
 })();
 (function () {
-  const BUILD_ID   = "prod-20260502-1337";
+  const BUILD_ID   = "prod-20260502-1344";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "Santander (DRIVE)"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander (SDART)"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -1943,7 +1943,15 @@
         },
       ],
     };
-    vegaEmbed('#vis', spec, { actions:false, renderer:'svg', tooltip:{disableDefaultStyle:true} }).catch(err => showMsg('Chart failed: ' + String(err), true));
+    // Defer vegaEmbed by one animation frame so the container has its
+    // final size in the layout before Vega measures it. Without this,
+    // initial loads in landscape (where #vis flex chain settles a frame
+    // late) measured 0-height and rendered an invisible chart until
+    // rotation forced a re-measure.
+    requestAnimationFrame(() => {
+      vegaEmbed('#vis', spec, { actions:false, renderer:'svg', tooltip:{disableDefaultStyle:true} })
+        .catch(err => showMsg('Chart failed: ' + String(err), true));
+    });
   }
 
   // ── Tab switching ────────────────────────────────────────────────────
@@ -2326,6 +2334,17 @@
     // Default: Delinquency / Vintage
     setTab('delinquency', 'vintage');
   }
+
+  // Re-run the current tab's renderer on orientation change so Vega-Lite
+  // charts pick up fresh container dimensions. Vega-Lite reads container
+  // size at render time and does not auto-redraw on viewport rotation,
+  // which left the loss chart blank when the page first loaded in
+  // landscape (initial render measured a not-yet-laid-out container).
+  let _orientationT = null;
+  window.addEventListener('orientationchange', () => {
+    if (_orientationT) clearTimeout(_orientationT);
+    _orientationT = setTimeout(() => setTab(currentTab, currentSub), 200);
+  });
 
   // Expose IIFE-scoped variables needed by outer-scope repo rendering functions
   window._exp = {
