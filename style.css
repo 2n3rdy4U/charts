@@ -748,6 +748,7 @@ button.btn {
 }
 .btn:hover,
 .btn:active { background: var(--color-accent-hover-bg); }
+.btn.active,
 .btn.is-active,
 .btn[aria-pressed="true"] {
   background: var(--color-accent-active-bg);
@@ -786,6 +787,7 @@ button.btn {
   line-height: 1.6;
   user-select: none;
 }
+.pill.active,
 .pill.is-active,
 .pill[aria-pressed="true"] {
   background: var(--color-surface);
@@ -814,7 +816,9 @@ button.btn {
 }
 .multi-sel-btn:hover,
 .multi-sel-btn:active { border-color: var(--color-border-strong); }
+.multi-sel-btn .dd-arrow { font-size: 9px; color: var(--color-muted); margin-left: 4px; }
 .multi-sel-panel {
+  display: none;
   position: absolute;
   top: calc(100% + 4px);
   left: 0;
@@ -828,6 +832,8 @@ button.btn {
   max-height: 280px;
   overflow-y: auto;
 }
+.multi-sel-panel.open,
+.multi-sel-panel.is-open { display: block; }
 .multi-sel-panel label {
   display: flex;
   align-items: center;
