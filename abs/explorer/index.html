@@ -66,8 +66,15 @@
     .vega-embed { width:100% !important; height:100% !important; }
     .vega-embed > div { height:100% !important; }
     /* Let vertical scroll pass through chart areas on touch devices —
-       prevents the chart from "catching" the gesture before deciding. */
+       prevents the chart from catching the gesture before deciding.
+       Applied at every level (container, vega-embed wrapper, and the
+       actual SVG/canvas Vega renders into) since iOS Safari does not
+       reliably propagate touch-action down to SVG children. */
     #vis, #repoChart, .fico-chart, .vega-embed { touch-action: pan-y; }
+    #vis svg, #vis canvas,
+    #repoChart svg, #repoChart canvas,
+    .fico-chart svg, .fico-chart canvas,
+    .vega-embed svg, .vega-embed canvas { touch-action: pan-y; }
     /* Chart fade-in: opacity + 6 px lift, 500 ms ease-out. Applied to every
        chart container on the page. The vegaEmbed wrapper in the script block
        toggles .chart-visible on each render, so re-renders (filter changes,
@@ -341,6 +348,11 @@
       .mode-tab { padding:6px 12px; font-size:12px; min-height:36px; }
       .wrap { padding:4px 8px calc(4px + env(safe-area-inset-bottom)); }
       #vis { min-height:200px; height:240px; }
+      /* Match repoChart and fico-chart heights to #vis on landscape so
+         the chart doesnt fill the entire viewport — leaves room above
+         and below to start a scroll gesture outside the chart. */
+      #repoChart { min-height: 240px !important; height: 240px; }
+      .fico-chart { min-height: 240px !important; height: 240px; }
       #tblWrap { max-height:220px; }
       select, .multi-sel-btn { min-height:36px; padding:6px 10px; }
       .btn-group button { min-height:36px; padding:6px 10px; }
@@ -645,7 +657,7 @@
   };
 })();
 (function () {
-  const BUILD_ID   = "prod-20260502-1330";
+  const BUILD_ID   = "prod-20260502-1337";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "Santander (DRIVE)"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander (SDART)"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
