@@ -761,7 +761,10 @@
       display: block;
       opacity: 1;
     }
-    @media (max-width: 1000px) {
+    /* Drawer mode applies only on touch devices (pointer: coarse) at narrow
+       widths. A desktop browser window narrower than 1000px (e.g. a half-
+       screen split) is pointer: fine and keeps the original sidebar layout. */
+    @media (max-width: 1000px) and (pointer: coarse) {
       #fred-hamburger { display: inline-flex; }
       #series-panel {
         display: block !important;
