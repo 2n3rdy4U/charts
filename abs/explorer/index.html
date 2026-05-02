@@ -272,6 +272,16 @@
         overflow-y: visible !important;
         height: auto !important;
       }
+      /* Release .wrap from being its own scroll container — the existing
+         ≤640px rule does this for portrait phones, but landscape phones
+         (~932px wide) miss it and end up with .wrap overflow:auto on
+         essentially zero height, blocking vertical scroll over charts. */
+      .wrap {
+        overflow: visible !important;
+        flex: none;
+        height: auto;
+        min-height: 0;
+      }
       .mode-tabs {
         position: sticky;
         top: 0;
@@ -635,7 +645,7 @@
   };
 })();
 (function () {
-  const BUILD_ID   = "prod-20260502-1324";
+  const BUILD_ID   = "prod-20260502-1330";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "Santander (DRIVE)"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander (SDART)"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
