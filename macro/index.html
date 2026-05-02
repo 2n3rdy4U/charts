@@ -292,7 +292,11 @@
       opacity: 0;
       transform: translateY(6px);
       transition: opacity 500ms ease-out, transform 500ms ease-out;
+      /* Let vertical scroll pass through on touch — prevents chart from
+         "catching" the gesture before the browser decides direction. */
+      touch-action: pan-y;
     }
+    #vis .vega-embed, #vis canvas { touch-action: pan-y; }
     #vis.chart-visible { opacity: 1; transform: translateY(0); }
     @media (prefers-reduced-motion: reduce) {
       #vis { opacity: 1; transform: none; transition: none; }
