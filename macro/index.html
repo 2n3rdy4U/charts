@@ -8,14 +8,21 @@
   <meta name="apple-mobile-web-app-title" content="Econ Dashboard">
   <meta name="theme-color" content="#ffffff">
   <title>Economic Data Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
   <script src="https://cdn.jsdelivr.net/npm/html-to-image@1/dist/html-to-image.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; }
-    body { font-family: Georgia, serif; background: #fff; color: #2c3e50; font-size: 14px;
+    /* Universal reset + base typography come from shared style.css.
+       Setting background on html (not just body) prevents the shared
+       --color-shell navy from peeking through under iPhone safe-area
+       gutters or when body height shrinks below viewport. */
+    html, body { height: 100%; background: #fff; color: #2c3e50; }
+    body { font-size: 14px;
            padding: env(safe-area-inset-top) env(safe-area-inset-right) 0 env(safe-area-inset-left); }
 
     /* ── Header ── */
@@ -33,7 +40,7 @@
       border: 1px solid #ddd;
       border-radius: 4px;
       background: #fff;
-      font-family: Georgia, serif;
+      font-family: var(--font);
       font-size: 12px;
       color: #444;
       cursor: pointer;
@@ -61,7 +68,7 @@
       margin-bottom: -2px;
       background: none;
       cursor: pointer;
-      font-family: Georgia, serif;
+      font-family: var(--font);
       font-size: 13px;
       color: #666;
       white-space: nowrap;
@@ -98,7 +105,7 @@
       border: 1px solid #ddd;
       border-radius: 4px;
       background: #fff;
-      font-family: Georgia, serif;
+      font-family: var(--font);
       color: #444;
       outline: none;
       transition: border-color 0.1s;
@@ -165,7 +172,7 @@
       gap: 4px;
     }
     .ctrl-label {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: var(--font);
       font-size: 10px;
       font-weight: 600;
       letter-spacing: 0.06em;
@@ -180,7 +187,7 @@
       border-radius: 4px;
       background: #fff;
       cursor: pointer;
-      font-family: Georgia, serif;
+      font-family: var(--font);
       font-size: 12px;
       color: #444;
       transition: background 0.1s;
@@ -193,7 +200,7 @@
       border-radius: 4px;
       background: #fff;
       cursor: pointer;
-      font-family: Georgia, serif;
+      font-family: var(--font);
       font-size: 12px;
       color: #444;
       text-align: center;
@@ -221,7 +228,7 @@
       border-radius: 4px;
       background: #fff;
       cursor: pointer;
-      font-family: Georgia, serif;
+      font-family: var(--font);
       font-size: 12px;
       color: #444;
       transition: background 0.1s;
@@ -230,7 +237,7 @@
     .bar-btn.active { background: #dbeafe; color: #1e40af; border-color: #1e40af; }
 
     select {
-      font-family: Georgia, serif;
+      font-family: var(--font);
       font-size: 12px;
       padding: 4px 8px;
       border: 1px solid #ddd;
@@ -241,7 +248,7 @@
     }
     #custom-date-group { display: none; align-items: center; gap: 5px; }
     #custom-date-group input[type="date"] {
-      font-family: Georgia, serif;
+      font-family: var(--font);
       font-size: 12px;
       padding: 4px 8px;
       border: 1px solid #ddd;
@@ -291,22 +298,7 @@
       #vis { opacity: 1; transform: none; transition: none; }
     }
     #vis .vega-embed { width: 100% !important; }
-    /* ── dark tooltip (Chart.js-style) — works with disableDefaultStyle:true ── */
-    #vg-tooltip-element {
-      visibility:hidden; position:fixed; z-index:1000; pointer-events:none;
-      background:rgba(31,41,55,.92); color:#fff;
-      border:none; border-radius:8px;
-      box-shadow:0 4px 14px rgba(0,0,0,.25);
-      font-family:Georgia, serif;
-      font-size:12.5px; padding:8px 12px; line-height:1.5;
-      max-width:320px; word-wrap:break-word;
-    }
-    #vg-tooltip-element.visible { visibility:visible; }
-    #vg-tooltip-element h2 { margin:0 0 4px; padding:0; font-size:12.5px; font-weight:600; color:#fff; }
-    #vg-tooltip-element table { border-spacing:0; }
-    #vg-tooltip-element td { border:none; padding:2px 8px 2px 0; }
-    #vg-tooltip-element td.key { color:rgba(255,255,255,.7); font-weight:400; text-align:right; }
-    #vg-tooltip-element td.value { color:#fff; font-weight:600; }
+    /* ── Vega-Lite tooltip styles inherited from shared style.css ── */
 
     /* ── Source footnote (inside vis-container, sits right below chart) ── */
     #chart-source {
@@ -406,7 +398,7 @@
       color: #2563eb;
       font-size: 12px;
       cursor: pointer;
-      font-family: Georgia, serif;
+      font-family: var(--font);
       padding: 4px 0;
     }
 
@@ -445,7 +437,7 @@
       border-radius: 4px;
       background: #fff;
       cursor: pointer;
-      font-family: Georgia, serif;
+      font-family: var(--font);
       font-size: 12px;
       color: #444;
       transition: background 0.1s;
@@ -463,7 +455,7 @@
     .cpi-tbl {
       border-collapse: collapse;
       font-size: 12.5px;
-      font-family: Georgia, serif;
+      font-family: var(--font);
       width: 100%;
     }
     .cpi-tbl thead th {
@@ -529,7 +521,7 @@
       font-size: 14px;
       padding: 0 1px;
       line-height: 1;
-      font-family: Georgia, serif;
+      font-family: var(--font);
     }
     .chip-remove:hover { color: #2563eb; }
     #clear-chips-btn {
@@ -539,7 +531,7 @@
       cursor: pointer;
       color: #aaa;
       font-size: 11px;
-      font-family: Georgia, serif;
+      font-family: var(--font);
       text-decoration: underline;
       padding: 0;
     }
@@ -556,7 +548,7 @@
       font-size: 10px;
       padding: 0 4px;
       line-height: 1.6;
-      font-family: Georgia, serif;
+      font-family: var(--font);
     }
     .chip-axis-btn.active { background: #dbeafe; color: #1e40af; border-color: #1e40af; }
 
@@ -571,7 +563,7 @@
       font-size: 10px;
       padding: 0 4px;
       line-height: 1.6;
-      font-family: Georgia, serif;
+      font-family: var(--font);
     }
     .chip-mark-btn.active { background: #dbeafe; color: #1e40af; border-color: #1e40af; }
     .chip-plus-btn {
@@ -583,7 +575,7 @@
       font-size: 12px;
       padding: 0 5px;
       line-height: 1.6;
-      font-family: Georgia, serif;
+      font-family: var(--font);
       margin-left: 2px;
     }
     .chip-plus-btn:hover { color: #2563eb; border-color: #2563eb; }
@@ -596,7 +588,7 @@
       color: #1e40af;
       margin-left: 3px;
       cursor: pointer;
-      font-family: Georgia, serif;
+      font-family: var(--font);
     }
 
     /* ── Secondary layer chip ── */
@@ -613,7 +605,7 @@
       white-space: nowrap;
     }
     .secondary-chip-select {
-      font-family: Georgia, serif;
+      font-family: var(--font);
       font-size: 11px;
       padding: 1px 4px;
       border: 1px solid #cce4f7;
@@ -638,7 +630,7 @@
       border-left: 4px solid #f59e0b;
       padding: 12px 14px;
       border-radius: 8px;
-      font-family: Georgia, serif;
+      font-family: var(--font);
       font-size: 14px;
       line-height: 1.45;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
@@ -677,8 +669,7 @@
       font-family: inherit;
     }
     #toast #toast-close:hover { color: #78350f; }
-    /* ── focus-visible ── */
-    button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid #1e40af; outline-offset: 2px; }
+    /* ── focus-visible inherited from shared style.css ── */
     /* ── mobile portrait ── */
     @media (max-width: 640px) {
       #series-panel { display: none !important; }
@@ -702,6 +693,9 @@
     }
     /* ── landscape (phones) ── */
     @media (max-height: 500px) and (orientation: landscape) {
+      /* Suppress iPhone safe-area-inset side padding so content reaches
+         the screen edge — same pattern as Issuance and Auto explorer. */
+      html, body { padding-left: 0 !important; padding-right: 0 !important; }
       #header { padding: 4px 8px 2px; }
       #header h1 { font-size: 14px; }
       #updated { font-size: 10px; }
@@ -709,6 +703,86 @@
       .cat-tab { padding: 4px 10px; font-size: 11px; min-height: 32px; }
       #chip-strip { padding: 2px 8px; gap: 3px; }
       #series-panel { display: none !important; }
+    }
+    /* ── Mobile drawer for the series panel (max-width: 1000px) ─────
+          Replaces the prior `display:none !important` hide-on-mobile.
+          Wraps the panel in a slide-in drawer triggered by the hamburger
+          button in the header. Backdrop dims the chart panel underneath
+          and click-to-close. */
+    #fred-hamburger {
+      display: none;
+      background: #1e40af;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      height: 36px;
+      padding: 0 12px;
+      cursor: pointer;
+      flex-shrink: 0;
+      align-items: center;
+      gap: 7px;
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      transition: background 0.12s;
+    }
+    #fred-hamburger:hover { background: #2568e8; }
+    #fred-hamburger:active { background: #1e3a8a; }
+    .fred-hamburger-icon {
+      display: inline-flex;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 16px;
+      height: 12px;
+    }
+    .fred-hamburger-icon span {
+      display: block;
+      width: 100%;
+      height: 2px;
+      background: #fff;
+      border-radius: 1px;
+    }
+    .fred-hamburger-label { white-space: nowrap; }
+    #fred-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      z-index: 90;
+      opacity: 0;
+      transition: opacity 220ms ease;
+    }
+    #fred-backdrop.visible {
+      display: block;
+      opacity: 1;
+    }
+    @media (max-width: 1000px) {
+      #fred-hamburger { display: inline-flex; }
+      #series-panel {
+        display: block !important;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: min(280px, 80vw);
+        background: #fff;
+        border-right: 1px solid #e0e0e0;
+        z-index: 100;
+        transform: translateX(-100%);
+        transition: transform 240ms ease;
+        overflow-y: auto;
+        padding: 16px 12px 24px;
+        box-shadow: 2px 0 16px rgba(0, 0, 0, 0.15);
+      }
+      #series-panel.open { transform: translateX(0); }
+      /* Release the fixed-height layout so source/footnote/next-release
+         elements (rendered below the chart inside #vis-container) aren't
+         clipped by overflow:hidden. The page scrolls naturally instead. */
+      #main           { height: auto !important; overflow: visible !important; min-height: 0; }
+      #chart-panel    { overflow: visible !important; }
+      #vis-container  { overflow: visible !important; }
+      #vis            { min-height: 320px; }
     }
     @media print {
       html, body { height: auto; overflow: visible; }
@@ -727,10 +801,17 @@
 <body>
 <div id="app">
   <div id="header">
+    <button id="fred-hamburger" type="button" aria-label="Open series menu" aria-expanded="false" aria-controls="series-panel">
+      <span class="fred-hamburger-icon" aria-hidden="true">
+        <span></span><span></span><span></span>
+      </span>
+      <span class="fred-hamburger-label">Series</span>
+    </button>
     <h1>Economic Data Dashboard</h1>
-    <span id="updated">Updated: May 1, 2026</span>
+    <span id="updated">Updated: May 2, 2026</span>
     <button class="export-btn" id="btn-export-png" onclick="exportFredChart()" title="Download chart as PNG"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></button>
   </div>
+  <div id="fred-backdrop" aria-hidden="true"></div>
 
   <div id="category-tabs"></div>
 
@@ -1853,7 +1934,7 @@ function buildSpec(datasets) {
     field: "series", type: "nominal",
     scale: colorScale,
     legend: showLegend
-      ? { title: null, orient: "top", labelFont: "Georgia, serif", labelFontSize: 12,
+      ? { title: null, orient: "top", labelFont: "Inter, system-ui, -apple-system, sans-serif", labelFontSize: 12,
           symbolStrokeWidth: 3, symbolSize: 200 }
       : null
   });
@@ -1969,7 +2050,7 @@ function buildSpec(datasets) {
     scale: _xScale,
     axis: { format: _xFmt, labelColor: "#666", labelFontSize: 12,
             grid: false, domain: false, labelOverlap: true, tickCount: _xTicks,
-            titleColor: "#aaa", titleFontSize: 11, titleFont: "Georgia, serif",
+            titleColor: "#aaa", titleFontSize: 11, titleFont: "Inter, system-ui, -apple-system, sans-serif",
             titlePadding: 14 }
   };
 
@@ -1977,7 +2058,7 @@ function buildSpec(datasets) {
     const fmt = isRight ? rightFormat : leftFormat;
     return {
       field: "value", type: "quantitative",
-      axis: { title: label, titleFontSize: 13, titleColor: "#555", titleFont: "Georgia, serif",
+      axis: { title: label, titleFontSize: 13, titleColor: "#555", titleFont: "Inter, system-ui, -apple-system, sans-serif",
               titleAngle: -90, titleAlign: "center", titlePadding: isRight ? 18 : 8,
               labelColor: "#666", labelFontSize: 12, format: fmt,
               ...(isRight ? { orient: "right" } : {}) }
@@ -2311,8 +2392,8 @@ function buildSpec(datasets) {
     autosize: { type: "fit-x", contains: "padding" },
     padding: { left: leftFormat === "~s" ? 20 : 10, right: hasDual ? 65 : 20, top: 8, bottom: 10 },
     config: {
-      axis:   { labelFont: "Georgia, serif", titleFont: "Georgia, serif" },
-      legend: { labelFont: "Georgia, serif", titleFont: "Georgia, serif" }
+      axis:   { labelFont: "Inter, system-ui, -apple-system, sans-serif", titleFont: "Inter, system-ui, -apple-system, sans-serif" },
+      legend: { labelFont: "Inter, system-ui, -apple-system, sans-serif", titleFont: "Inter, system-ui, -apple-system, sans-serif" }
     },
     layer: layers
   };
@@ -2894,6 +2975,35 @@ function renderChips() {
 // ─────────────────────────────────────────────────────────────────────────────
 document.addEventListener("DOMContentLoaded", init);
 
+// Mobile series-panel drawer (≤1000px). No-op on desktop where panel is
+// always visible. Click hamburger to open, click backdrop / press Escape
+// to close. Body scroll is locked while drawer is open.
+document.addEventListener("DOMContentLoaded", function () {
+  var hamburger = document.getElementById("fred-hamburger");
+  var panel     = document.getElementById("series-panel");
+  var backdrop  = document.getElementById("fred-backdrop");
+  if (!hamburger || !panel || !backdrop) return;
+  function openDrawer() {
+    panel.classList.add("open");
+    backdrop.classList.add("visible");
+    document.body.style.overflow = "hidden";
+    hamburger.setAttribute("aria-expanded", "true");
+  }
+  function closeDrawer() {
+    panel.classList.remove("open");
+    backdrop.classList.remove("visible");
+    document.body.style.overflow = "";
+    hamburger.setAttribute("aria-expanded", "false");
+  }
+  hamburger.addEventListener("click", function () {
+    panel.classList.contains("open") ? closeDrawer() : openDrawer();
+  });
+  backdrop.addEventListener("click", closeDrawer);
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && panel.classList.contains("open")) closeDrawer();
+  });
+});
+
 // ─────────────────────────────────────────────────────────────────────────────
 // PNG export
 // ─────────────────────────────────────────────────────────────────────────────
@@ -2910,7 +3020,7 @@ function _exportPng(el, filename) {
   const btn = document.getElementById("btn-export-png");
   if (btn) btn.style.display = "none";
   const stamp = document.createElement("div");
-  stamp.style.cssText = "padding:5px 16px 4px;font-size:10px;color:#999;font-family:Georgia,serif;text-align:right;border-top:1px solid #e5e7eb;margin-top:6px;";
+  stamp.style.cssText = "padding:5px 16px 4px;font-size:10px;color:#999;font-family:Inter, system-ui, sans-serif;text-align:right;border-top:1px solid #e5e7eb;margin-top:6px;";
   stamp.textContent = "Consumer Credit Matters · consumercreditmatters.com";
   el.appendChild(stamp);
   htmlToImage.toPng(el, { pixelRatio: 2, backgroundColor: "#ffffff" })
