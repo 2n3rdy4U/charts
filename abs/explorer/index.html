@@ -294,11 +294,14 @@
         height: auto;
         min-height: 0;
       }
+      /* Drop sticky tabs on narrow viewports — the parent shell sizes the
+         iframe to content height (iframe-resizer pattern), so sticky
+         anchors to the iframe viewport (the full content) and never
+         engages relative to the user's actual scroll. Tabs scroll
+         naturally with the page. */
       .mode-tabs {
-        position: sticky;
-        top: 0;
+        position: static;
         background: var(--bg);
-        z-index: 100;
       }
     }
     /* ── mobile portrait ── */
@@ -643,6 +646,25 @@
 <div id="toast"></div>
 
 <script>
+// ── iframe-resizer content side ───────────────────────────────────
+// Post our content height to the parent shell so it can grow the iframe
+// to match — eliminates the nested-scroll context that causes iOS
+// scroll-stick. ResizeObserver triggers on any layout change (chart
+// re-render, filter change, tab switch, table show/hide); window.parent
+// no-ops when loaded standalone.
+(function() {
+  function postHeight() {
+    var h = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
+    try { window.parent.postMessage({type:'cm-iframe-height', height:h}, '*'); } catch (e) {}
+  }
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(postHeight).observe(document.body);
+  }
+  window.addEventListener('resize', postHeight);
+  postHeight();
+  setTimeout(postHeight, 300);
+  setTimeout(postHeight, 1500);
+})();
 // Fade-in wrapper for vegaEmbed. Each chart container starts at opacity:0
 // (see CSS rule for #vis / #repoChart / .fico-chart). Before each vegaEmbed
 // call we strip .chart-visible on the target so the transition resets; after
@@ -662,7 +684,7 @@
   };
 })();
 (function () {
-  const BUILD_ID   = "2026-05-04 06:58";
+  const BUILD_ID   = "2026-05-04 07:47";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "Santander (DRIVE)"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander (SDART)"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
