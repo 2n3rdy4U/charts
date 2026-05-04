@@ -406,4 +406,25 @@
     panelContent.appendChild(iframe);
   }
 
+  // ── iframe-resizer host ──────────────────────────────────────
+  // On mobile (≤900 wide) the iframe is fixed at 800px tall by CSS, so
+  // long content (Issuance, Explorer) scrolls inside the iframe — which
+  // creates a nested-scroll context that iOS Safari handles badly (sticky
+  // headers stall, scroll handoff stutters). Listen for iframe content to
+  // post its height and grow the iframe to match — eliminates the nested
+  // scroll entirely so only the parent shell scrolls.
+  //
+  // Accepts any postMessage with shape { type:..., height:<number> } from
+  // our charts host. Each iframe-loaded page sends its scrollHeight via a
+  // ResizeObserver on body, so layout changes (filter, sort, page) update
+  // live.
+  window.addEventListener('message', function(e) {
+    if (e.origin !== 'https://2n3rdy4u.github.io') return;
+    if (!e.data || typeof e.data.height !== 'number') return;
+    if (e.data.height < 200 || e.data.height > 20000) return;  // sanity bounds
+    document.querySelectorAll('#panel-content iframe').forEach(function(f) {
+      f.style.height = e.data.height + 'px';
+    });
+  });
+
 })();
