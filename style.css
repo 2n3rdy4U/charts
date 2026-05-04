@@ -32,6 +32,53 @@
   --font:              'Inter', system-ui, -apple-system, sans-serif;
   --radius:            8px;
   --transition:        180ms ease;
+
+  /* ── Site-wide design system tokens (added 2026-05-01) ──────────
+     Consumed by content pages (SEC explorer, FRED dashboard,
+     Prospectus issuance) when they <link> this stylesheet.
+     Shell tokens above are unchanged. ────────────────────────── */
+
+  /* Accent — content pages on light backgrounds */
+  --color-accent-strong:     #1e40af;
+  --color-accent-active-bg:  #dbeafe;
+  --color-accent-hover-bg:   #f5f5f5;
+  --color-accent-hover-bg-2: #e2e8f0;
+  --color-row-hover:         #f0f7ff;
+
+  /* Surfaces */
+  --color-surface-alt:       #f8fafc;
+  --color-surface-table-hdr: #f1f5f9;
+
+  /* Borders (additional roles) */
+  --color-border-soft:       #f0f0f0;
+  --color-border-strong:     #94a3b8;
+
+  /* Type scale */
+  --type-xs:   11px;
+  --type-sm:   12px;
+  --type-base: 13px;
+  --type-md:   14px;
+  --type-lg:   16px;
+  --type-xl:   18px;
+
+  /* Radii (existing --radius is the lg = 8px) */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+
+  /* Spacing scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+
+  /* Shadows */
+  --shadow-popover: 0 4px 14px rgba(0,0,0,0.12);
+  --shadow-tooltip: 0 4px 14px rgba(0,0,0,0.25);
+
+  /* Touch target minimums (Apple HIG = 44px) */
+  --touch-target:    44px;
+  --touch-target-sm: 36px;
 }
 
 html, body {
@@ -551,7 +598,6 @@ html, body {
   transition: transform 0.15s ease;
 }
 .mobile-nav-pill.active .pill-chevron {
-  /* Flip the chevron when the section's sub-row is open. */
   transform: rotate(180deg);
   opacity: 0.85;
 }
@@ -695,4 +741,349 @@ html, body {
   .tile .tile-desc   { font-size: 12px; line-height: 1.45; }
   .tile .tile-footer { margin-top: 4px; }
   .tile .tile-action { font-size: 10px; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+ * Site-wide content components (added 2026-05-01)
+ * ───────────────────────────────────────────────────────────────────
+ * Used by content pages loaded inside the shell's iframe.
+ * Page-specific layouts stay inlined per generator; these are the
+ * cross-page patterns: buttons, pills, dropdowns, tooltips, tables,
+ * focus & touch behavior.
+ * ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Buttons ──────────────────────────────────────────────────────── */
+.btn,
+button.btn {
+  font-family: var(--font);
+  font-size: var(--type-sm);
+  font-weight: 500;
+  padding: 4px 11px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+  white-space: nowrap;
+  user-select: none;
+  line-height: 1.6;
+  transition: background 0.1s, border-color 0.1s, color 0.1s;
+}
+.btn:hover,
+.btn:active { background: var(--color-accent-hover-bg); }
+.btn.active,
+.btn.is-active,
+.btn[aria-pressed="true"] {
+  background: var(--color-accent-active-bg);
+  color: var(--color-accent-strong);
+  border-color: var(--color-accent-strong);
+  font-weight: 600;
+}
+.btn--icon {
+  padding: 4px 7px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+/* ── Pill group (segmented control) ──────────────────────────────── */
+.pill-group {
+  display: inline-flex;
+  gap: 1px;
+  background: #e5e7eb;
+  border: 1px solid var(--color-border);
+  border-radius: 5px;
+  padding: 2px;
+}
+.pill {
+  background: none;
+  border: none;
+  border-radius: 3px;
+  padding: 2px 9px;
+  font-family: var(--font);
+  font-size: var(--type-xs);
+  font-weight: 500;
+  color: var(--color-muted);
+  cursor: pointer;
+  white-space: nowrap;
+  line-height: 1.6;
+  user-select: none;
+}
+.pill.active,
+.pill.is-active,
+.pill[aria-pressed="true"] {
+  background: var(--color-surface);
+  color: var(--color-accent-strong);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.10);
+  font-weight: 600;
+}
+
+/* ── Multi-select dropdown ───────────────────────────────────────── */
+.multi-sel { position: relative; display: inline-block; }
+.multi-sel-btn {
+  font-family: var(--font);
+  font-size: var(--type-sm);
+  padding: 4px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  cursor: pointer;
+  color: var(--color-text);
+  white-space: nowrap;
+  max-width: 320px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+  min-width: 160px;
+}
+.multi-sel-btn:hover,
+.multi-sel-btn:active { border-color: var(--color-border-strong); }
+.multi-sel-btn .dd-arrow { font-size: 9px; color: var(--color-muted); margin-left: 4px; }
+.multi-sel-panel {
+  display: none;
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 200;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-popover);
+  padding: 5px 0;
+  min-width: 200px;
+  max-height: 280px;
+  overflow-y: auto;
+}
+.multi-sel-panel.open,
+.multi-sel-panel.is-open { display: block; }
+.multi-sel-panel label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 12px;
+  font-size: var(--type-sm);
+  cursor: pointer;
+  user-select: none;
+  color: var(--color-text);
+}
+.multi-sel-panel label:hover,
+.multi-sel-panel label:active { background: var(--color-accent-hover-bg); }
+.multi-sel-panel input[type=checkbox] { cursor: pointer; accent-color: var(--color-accent-strong); }
+.multi-sel-sep { height: 1px; background: var(--color-border); margin: 4px 8px; }
+
+/* ── Info button + popover ───────────────────────────────────────── */
+.info-btn {
+  background: var(--color-border);
+  border: none;
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: var(--type-base);
+  font-weight: 600;
+  color: var(--color-muted);
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: background 0.15s, color 0.15s;
+}
+.info-btn:hover,
+.info-btn:active { background: #d0d5dd; color: var(--color-text); }
+.info-popover {
+  position: absolute;
+  z-index: 200;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-popover);
+  padding: 12px 14px;
+  width: 340px;
+  font-family: var(--font);
+  font-size: var(--type-sm);
+  line-height: 1.55;
+  color: var(--color-text);
+}
+.info-popover h4 { margin: 0 0 7px; font-size: var(--type-sm); font-weight: 600; }
+.info-popover ul { margin: 0; padding-left: 16px; }
+.info-popover li { margin-bottom: 5px; }
+.info-popover li:last-child { margin-bottom: 0; }
+.info-popover b { font-weight: 600; }
+
+/* ── Vega-Lite tooltip (id selector — Vega-Lite default element) ─── */
+#vg-tooltip-element {
+  visibility: hidden;
+  position: fixed;
+  z-index: 1000;
+  pointer-events: none;
+  background: rgba(31,41,55,0.92);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-tooltip);
+  font-family: var(--font);
+  font-size: 12.5px;
+  padding: 8px 12px;
+  line-height: 1.5;
+  max-width: 320px;
+  word-wrap: break-word;
+}
+#vg-tooltip-element.visible { visibility: visible; }
+#vg-tooltip-element h2 { margin: 0 0 4px; padding: 0; font-size: 12.5px; font-weight: 600; color: #fff; }
+#vg-tooltip-element table { border-spacing: 0; }
+#vg-tooltip-element td { border: none; padding: 2px 8px 2px 0; }
+#vg-tooltip-element td.key { color: rgba(255,255,255,0.7); font-weight: 400; text-align: right; }
+#vg-tooltip-element td.value { color: #fff; font-weight: 600; }
+.vega-embed svg .role-legend-entry rect.background { fill: none !important; }
+
+/* ── Toast (overlay notification) ────────────────────────────────── */
+.toast {
+  position: fixed;
+  bottom: calc(24px + env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: #1f2937;
+  color: #fff;
+  font-family: var(--font);
+  font-size: 12.5px;
+  padding: 9px 16px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-tooltip);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s;
+  z-index: 9999;
+  max-width: 320px;
+  text-align: center;
+  line-height: 1.4;
+}
+.toast.is-visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+.toast--warn {
+  background: #fef3c7;
+  color: #78350f;
+  border: 1px solid #fcd34d;
+  border-left: 4px solid #f59e0b;
+  text-align: left;
+}
+
+/* ── Data table (base) ───────────────────────────────────────────── */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font);
+  font-size: var(--type-sm);
+}
+.data-table thead th {
+  position: sticky;
+  top: 0;
+  background: var(--color-surface-table-hdr);
+  border-bottom: 2px solid var(--color-border);
+  padding: 6px 8px;
+  font-size: var(--type-xs);
+  font-weight: 600;
+  color: var(--color-muted);
+  text-align: left;
+  white-space: nowrap;
+  z-index: 1;
+  user-select: none;
+}
+.data-table thead th.num { text-align: center; }
+.data-table tbody td {
+  padding: 5px 8px;
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: middle;
+}
+.data-table tbody td.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.data-table tbody tr:hover > td { background: var(--color-row-hover); }
+
+/* ── Source attribution footer ───────────────────────────────────── */
+.source-bar {
+  font-family: var(--font);
+  font-size: var(--type-xs);
+  color: var(--color-muted);
+  line-height: 1.4;
+  padding: 8px 0 6px;
+  margin-top: 6px;
+  border-top: 1px solid var(--color-border);
+}
+
+/* ── Chart entry animation (shared keyframes) ────────────────────── */
+@keyframes chartEnter {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.chart-enter {
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 500ms ease-out, transform 500ms ease-out;
+}
+.chart-enter.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .chart-enter,
+  .chart-enter.is-visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    animation: none;
+  }
+}
+
+/* ── Focus-visible (keyboard / accessibility) ────────────────────── */
+.btn:focus-visible,
+.pill:focus-visible,
+.multi-sel-btn:focus-visible,
+.info-btn:focus-visible {
+  outline: 2px solid var(--color-accent-strong);
+  outline-offset: 2px;
+}
+
+/* ── Touch widths: feedback + 44px Apple HIG targets ─────────────── */
+@media (max-width: 640px) {
+  .btn,
+  .pill,
+  .multi-sel-btn {
+    min-height: var(--touch-target);
+    padding: 10px 14px;
+    font-size: var(--type-md);
+  }
+  .pill { min-height: var(--touch-target-sm); }
+  .info-btn {
+    width: var(--touch-target);
+    height: var(--touch-target);
+    font-size: var(--type-lg);
+  }
+  .multi-sel-panel { max-width: calc(100vw - 24px); }
+  .multi-sel-panel label { padding: 10px 14px; font-size: var(--type-md); }
+
+  .btn:active,
+  .pill:active,
+  .multi-sel-btn:active,
+  .info-btn:active {
+    transform: scale(0.97);
+    transition: transform 0.08s;
+  }
+}
+
+/* ── Landscape phones: compact mode ──────────────────────────────── */
+@media (max-height: 500px) and (orientation: landscape) {
+  .btn,
+  .pill,
+  .multi-sel-btn {
+    min-height: var(--touch-target-sm);
+    padding: 6px 10px;
+    font-size: var(--type-sm);
+  }
 }
