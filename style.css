@@ -603,30 +603,6 @@ html, body {
 }
 .mobile-nav-pill.active .nav-item-link-icon { opacity: 0.85; }
 
-/* ── Mobile modal overlay ────────────────────────────────────────── */
-#mobile-modal-backdrop {
-  position: fixed; inset: 0; z-index: 999998;
-  background: rgba(0,0,0,0.55);
-  display: flex; align-items: center; justify-content: center;
-  padding: 24px;
-}
-#mobile-modal {
-  background: #152240; color: #e8edf8;
-  font-family: system-ui, sans-serif; font-size: 14px; line-height: 1.55;
-  border-radius: 12px; padding: 24px 20px 20px;
-  max-width: 340px; width: 100%;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.45);
-  display: flex; flex-direction: column; gap: 14px;
-}
-#mobile-modal p { margin: 0; }
-#mobile-modal button {
-  align-self: flex-end;
-  background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.3);
-  color: #e8edf8; border-radius: 6px; padding: 6px 20px;
-  cursor: pointer; font-size: 13px; font-weight: 600;
-}
-#mobile-modal button:hover { background: rgba(255,255,255,0.22); }
-
 /* ── Phone layout (portrait ≤768px OR landscape height ≤500px) ──── *
  * Completely replaces the desktop fixed-height app-shell with a     *
  * normal scrollable document flow. !important used throughout to    *
