@@ -535,6 +535,27 @@ html, body {
   border-color: var(--color-accent);
   color: #fff;
 }
+/* Pill content layout — label + small affordance icon (chevron for
+   accordion sections, external-link for link sections). */
+.mobile-nav-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.mobile-nav-pill .pill-chevron,
+.mobile-nav-pill .nav-item-link-icon {
+  width: 11px;
+  height: 11px;
+  opacity: 0.55;
+  flex-shrink: 0;
+  transition: transform 0.15s ease;
+}
+.mobile-nav-pill.active .pill-chevron {
+  /* Flip the chevron when the section's sub-row is open. */
+  transform: rotate(180deg);
+  opacity: 0.85;
+}
+.mobile-nav-pill.active .nav-item-link-icon { opacity: 0.85; }
 
 /* ── Mobile modal overlay ────────────────────────────────────────── */
 #mobile-modal-backdrop {

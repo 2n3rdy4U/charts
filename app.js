@@ -64,6 +64,16 @@
     </svg>`;
   }
 
+  // Down-pointing chevron used on the mobile pill nav to signal "this
+  // section has sub-items that expand inline below". Rotates 180° via
+  // CSS when the section is active so the open/closed state is obvious.
+  function chevronDownSVG() {
+    return `<svg class="pill-chevron" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+      <polyline stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" points="6,9 12,15 18,9"/>
+    </svg>`;
+  }
+
   function externalIconSVG() {
     return `<svg class="nav-item-link-icon" viewBox="0 0 24 24" fill="none"
       stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -321,7 +331,13 @@
     const pill = document.createElement(isLink ? 'a' : 'button');
     pill.className = 'mobile-nav-pill';
     pill.dataset.sectionId = section.id;
-    pill.textContent = section.label;
+    // Accordion pills get a down-chevron to signal expandable sub-items;
+    // external-link pills get an external-link glyph so the user knows
+    // the tap will open a new tab (not navigate the current view).
+    var pillIcon = '';
+    if (section.type === 'accordion') pillIcon = chevronDownSVG();
+    else if (isLink) pillIcon = externalIconSVG();
+    pill.innerHTML = '<span class="pill-label">' + section.label + '</span>' + pillIcon;
 
     if (isLink) {
       pill.href = section.url || '#';
