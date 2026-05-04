@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 
   <!-- ── Primary SEO ─────────────────────────────────────── -->
   <title>Consumer Credit Matters — Data Platform</title>
@@ -103,6 +103,24 @@
   </div>
 
   <script src="app.js"></script>
+  <script>
+    // Mobile warning modal — phones only (portrait < 768px, or landscape height < 500px)
+    (function() {
+      var isPhone = window.innerWidth < 768 ||
+        (window.matchMedia('(orientation: landscape)').matches && window.innerHeight < 500);
+      if (!isPhone) return;
+      var backdrop = document.createElement('div');
+      backdrop.id = 'mobile-modal-backdrop';
+      var modal = document.createElement('div');
+      modal.id = 'mobile-modal';
+      modal.innerHTML =
+        '<p>⚠️ <strong>Designed for desktop.</strong> Some features may not display correctly on mobile. ' +
+        'For the best experience, visit on a desktop browser.</p>' +
+        '<button onclick="document.getElementById(\'mobile-modal-backdrop\').remove()">OK</button>';
+      backdrop.appendChild(modal);
+      document.body.appendChild(backdrop);
+    })();
+  </script>
   <script>
     // Show separator in breadcrumb only when a panel is active
     const sep   = document.getElementById('panel-sep');
