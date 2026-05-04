@@ -303,6 +303,15 @@
         position: static;
         background: var(--bg);
       }
+      /* Cap chart container heights at narrow widths. With iframe-resizer
+         the iframe matches content height — if #vis stays at flex:1 with
+         no ceiling, Vega's height:100% expands unbounded, which triggers
+         a ResizeObserver feedback loop that elongates the chart and
+         distorts it. Fixed height also matches the portrait phone pattern
+         below; this rule extends it to landscape phones (700–900px). */
+      #vis { flex: none !important; height: 380px; min-height: 320px; max-height: 440px; }
+      #repoChart { flex: none !important; height: 320px; min-height: 280px; max-height: 380px; }
+      .fico-chart { flex: none !important; height: 360px; min-height: 300px; max-height: 420px; }
     }
     /* ── mobile portrait ── */
     @media (max-width:640px) {
@@ -684,7 +693,7 @@
   };
 })();
 (function () {
-  const BUILD_ID   = "2026-05-04 07:47";
+  const BUILD_ID   = "2026-05-04 08:40";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "Santander (DRIVE)"}, {"code": "EART", "label": "Exeter"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander (SDART)"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
