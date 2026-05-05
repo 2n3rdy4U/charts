@@ -361,6 +361,16 @@
         } else {
           setMobileSectionActive(section.id);
           buildMobileSubItems(section);
+          // Auto-load the first sub-item if no panel from this section is
+          // currently active. So tapping ABS from the welcome screen lands
+          // directly on the Auto Explorer instead of requiring a second tap.
+          // If the user is already inside an item in this section (e.g.
+          // Issuance), preserve that state and just toggle the sub-row.
+          var inSection = section.items.some(function(it) { return it.id === activeItemId; });
+          if (!inSection) {
+            var firstBtn = mobileNavItems.querySelector('.mobile-nav-sub');
+            if (firstBtn) loadPanel(section.items[0], section.label, firstBtn);
+          }
         }
       });
     } else {
