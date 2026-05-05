@@ -759,12 +759,29 @@ button.btn {
   border-color: var(--color-accent-strong);
   font-weight: 600;
 }
+/* Icon-only buttons (camera/export/columns gear etc.). Minimal chrome —
+   no permanent border, transparent background, soft tinted hover state.
+   Convention used by Linear, Tableau, Stripe, Vercel, Notion, etc. for
+   tertiary icon actions. Removes the off-center "outlined-square" look
+   the previous border treatment created. */
 .btn--icon {
-  padding: 4px 7px;
+  padding: 6px 8px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 5px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--color-muted);
+  min-height: 36px;
+  min-width: 36px;
+}
+.btn--icon:hover,
+.btn--icon:active,
+.btn--icon.is-active {
+  background: var(--color-accent-hover-bg);
+  color: var(--color-text);
+  border-color: transparent;
 }
 
 /* ── Pill group (segmented control) ──────────────────────────────── */
