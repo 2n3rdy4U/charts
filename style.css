@@ -154,8 +154,12 @@ html, body {
 
 #header .header-right a:hover { color: var(--color-shell-text); }
 
+/* SUBSCRIBE CTA — emerald green to distinguish from the blue
+   selected-nav-pill state (both used the same accent blue before, which
+   read as the same UI affordance). Green is the convention for
+   subscribe/sign-up CTAs across SaaS (Substack, MailChimp, etc.). */
 #header .header-right .btn-primary {
-  background: var(--color-accent);
+  background: #10b981;
   color: #fff;
   padding: 6px 14px;
   border-radius: var(--radius);
@@ -166,7 +170,7 @@ html, body {
 }
 
 #header .header-right .btn-primary:hover {
-  background: #2568e8;
+  background: #059669;
   color: #fff;
 }
 
