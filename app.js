@@ -311,14 +311,21 @@
   function buildMobileSubItems(section) {
     mobileNavItems.innerHTML = '';
     if (!section.items || !section.items.length) { mobileNavItems.hidden = true; return; }
-    section.items.forEach(item => {
+    // Determine which sub-item to highlight: the one matching the currently
+    // loaded panel if it lives in this section, otherwise the first item
+    // (so e.g. Auto reads as the default selection when ABS Data is opened).
+    var matchedActive = section.items.some(function(it) { return it.id === activeItemId; });
+    section.items.forEach(function(item, idx) {
       const btn = document.createElement('button');
       btn.className = 'mobile-nav-sub';
       btn.dataset.itemId = item.id;
       btn.textContent = item.label;
-      btn.addEventListener('click', () => {
-        mobileNavItems.querySelectorAll('.mobile-nav-sub').forEach(b =>
-          b.classList.toggle('active', b === btn));
+      var isActive = matchedActive ? (item.id === activeItemId) : (idx === 0);
+      if (isActive) btn.classList.add('active');
+      btn.addEventListener('click', function() {
+        mobileNavItems.querySelectorAll('.mobile-nav-sub').forEach(function(b) {
+          b.classList.toggle('active', b === btn);
+        });
         loadPanel(item, section.label, btn);
       });
       mobileNavItems.appendChild(btn);
