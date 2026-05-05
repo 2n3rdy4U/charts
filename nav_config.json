@@ -3,6 +3,7 @@
     {
       "id": "abs-data",
       "label": "ABS Data",
+      "short_label": "ABS",
       "description": "Loan-level performance, delinquency trends, and new issuance data across auto and credit card ABS trusts.",
       "icon": "chart-bar",
       "badge": null,
@@ -37,6 +38,7 @@
     {
       "id": "macro-data",
       "label": "Macro Data",
+      "short_label": "Macro",
       "description": "Key economic indicators from FRED — employment, inflation, consumer spending, and credit conditions.",
       "icon": "globe",
       "badge": null,
@@ -46,6 +48,7 @@
     {
       "id": "data-calendar",
       "label": "Data Calendar",
+      "short_label": "Calendar",
       "description": "Upcoming macro data releases and ABS filing dates across all tracked trusts.",
       "icon": "calendar",
       "badge": null,

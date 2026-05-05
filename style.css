@@ -427,12 +427,12 @@ html, body {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: 12px;
-  padding: 32px 28px 24px;
-  min-height: 200px;
+  padding: 24px 24px 20px;
+  min-height: 0;
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
   box-shadow: 0 1px 4px rgba(0,0,0,0.06);
   transition: border-color var(--transition), background var(--transition),
               transform var(--transition), box-shadow var(--transition);
@@ -465,23 +465,17 @@ html, body {
 .tile-desc {
   font-size: 13px;
   color: var(--color-muted);
-  line-height: 1.65;
-  flex: 1;
+  line-height: 1.55;
 }
 
-.tile-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 8px;
-}
-
-.tile-action {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--color-accent);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+/* External-link icon next to the tile label (Newsletter / Podcast) — small,
+   muted, signals "opens in new tab" without needing a verb in the footer. */
+.tile-label .nav-item-link-icon {
+  width: 11px;
+  height: 11px;
+  color: var(--color-muted);
+  vertical-align: 1px;
+  margin-left: 4px;
 }
 
 .tile-ext-icon {
@@ -606,6 +600,14 @@ html, body {
   opacity: 0.85;
 }
 .mobile-nav-pill.active .nav-item-link-icon { opacity: 0.85; }
+/* Pill-label two-form swap: full (default, landscape + desktop) vs short
+   (portrait phones ≤640px). Falls back to full label when section.short_label
+   isn't defined in nav_config.json. */
+.pill-label-short { display: none; }
+@media (max-width: 640px) {
+  .pill-label-full  { display: none; }
+  .pill-label-short { display: inline; }
+}
 
 /* ── Phone layout (portrait ≤768px OR landscape height ≤500px) ──── *
  * Completely replaces the desktop fixed-height app-shell with a     *
@@ -719,8 +721,6 @@ html, body {
   .tile .tile-icon   { width: 18px; height: 18px; }
   .tile .tile-label  { font-size: 14px; }
   .tile .tile-desc   { font-size: 12px; line-height: 1.45; }
-  .tile .tile-footer { margin-top: 4px; }
-  .tile .tile-action { font-size: 10px; }
 }
 
 /* ═══════════════════════════════════════════════════════════════════

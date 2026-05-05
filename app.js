@@ -238,23 +238,19 @@
       tile.href   = section.url || '#';
       tile.target = '_blank';
       tile.rel    = 'noopener';
+      // External-link tiles keep the small ↗ icon next to the title — it's
+      // the only signal that the tile opens a new tab (no chrome elsewhere
+      // on the tile says "external"). The "Open" verb was redundant.
       tile.innerHTML = `
         ${tileSVG(section.icon)}
-        <div class="tile-label">${section.label}</div>
-        <div class="tile-desc">${section.description || ''}</div>
-        <div class="tile-footer">
-          <span class="tile-action">Open</span>
-          ${externalIconSVG()}
-        </div>`;
+        <div class="tile-label">${section.label} ${externalIconSVG()}</div>
+        <div class="tile-desc">${section.description || ''}</div>`;
     } else if (section.type === 'panel') {
       // Direct panel section — load URL immediately on tile click
       tile.innerHTML = `
         ${tileSVG(section.icon)}
         <div class="tile-label">${section.label}</div>
-        <div class="tile-desc">${section.description || ''}</div>
-        <div class="tile-footer">
-          <span class="tile-action">Explore</span>
-        </div>`;
+        <div class="tile-desc">${section.description || ''}</div>`;
       tile.addEventListener('click', () => {
         const navHeader = rail.querySelector(`[role="button"]`);
         loadPanel({ id: section.id, label: section.label, url: section.url },
@@ -266,10 +262,7 @@
       tile.innerHTML = `
         ${tileSVG(section.icon)}
         <div class="tile-label">${section.label}</div>
-        <div class="tile-desc">${section.description || ''}</div>
-        <div class="tile-footer">
-          <span class="tile-action">Explore</span>
-        </div>`;
+        <div class="tile-desc">${section.description || ''}</div>`;
       tile.addEventListener('click', () => {
         // Open the accordion section in the nav
         const navHeaders = rail.querySelectorAll('.nav-section-header');
@@ -344,7 +337,17 @@
     var pillIcon = '';
     if (section.type === 'accordion') pillIcon = chevronDownSVG();
     else if (isLink) pillIcon = externalIconSVG();
-    pill.innerHTML = '<span class="pill-label">' + section.label + '</span>' + pillIcon;
+    // Two-form label so portrait phones (≤640px) can show shorter strings
+    // (ABS Data → ABS, Macro Data → Macro, Data Calendar → Calendar) while
+    // landscape + desktop keep the full label. Short label falls back to
+    // full label if the section doesn't define short_label in nav_config.
+    var fullLabel = section.label;
+    var shortLabel = section.short_label || section.label;
+    pill.innerHTML =
+      '<span class="pill-label">' +
+        '<span class="pill-label-full">' + fullLabel + '</span>' +
+        '<span class="pill-label-short">' + shortLabel + '</span>' +
+      '</span>' + pillIcon;
 
     if (isLink) {
       pill.href = section.url || '#';
