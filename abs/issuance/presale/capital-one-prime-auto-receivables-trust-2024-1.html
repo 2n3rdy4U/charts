@@ -116,6 +116,14 @@ table.grid.cap-structure { table-layout: fixed; }
 table.grid.cap-structure th, table.grid.cap-structure td {
     overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
+/* Extra gutter between WAL (right-aligned numeric) and Legal Final
+   (left-aligned date). With the default 8px left/right padding, the
+   right-edge WAL value visually touches the left-edge Legal Final date
+   at the column boundary — adding 12px to each side opens a clearer gap. */
+table.grid.cap-structure th:nth-child(6),
+table.grid.cap-structure td:nth-child(6) { padding-right: 20px; }
+table.grid.cap-structure th:nth-child(7),
+table.grid.cap-structure td:nth-child(7) { padding-left: 20px; }
 table.grid.comparison { table-layout: fixed; }
 table.grid.comparison th, table.grid.comparison td {
     padding: 5px 6px; font-size: 12px; vertical-align: top;
@@ -331,6 +339,6 @@ p.empty, p.peer-empty { color: var(--muted); font-style: italic; font-size: 13px
     class principals and the initial pool balance. Peer cohorts are sliced to the
     subject&rsquo;s closing date so the snapshot reflects what was knowable at issuance.
   </p>
-  <p class="gen">Generated 2026-05-06 13:45</p>
+  <p class="gen">Generated 2026-05-06 13:56</p>
 </footer>
 </body></html>
