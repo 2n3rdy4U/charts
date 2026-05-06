@@ -138,19 +138,6 @@ table.grid.comparison td.col-subject .geo-stack { color: var(--fg); }
 .src-notext  { color: var(--chip-notext); }
 .lg-swatch { font-weight: 600; margin-right: 6px; }
 
-/* Capital Structure footnote markers */
-sup.fn {
-    font-size: 9px; margin-left: 2px; font-weight: 700;
-    vertical-align: super; line-height: 0;
-}
-sup.fn-a { color: var(--chip-fwp); }
-sup.fn-b { color: var(--chip-derived); }
-sup.fn-c { color: var(--chip-derived); }
-sup.fn-d { color: var(--chip-424b5); }
-p.fn-legend {
-    font-size: 11px; color: var(--muted);
-    margin: 6px 0 2px 0; line-height: 1.5;
-}
 @media (prefers-color-scheme: dark) {
   table.grid.comparison thead th.col-subject,
   table.grid.comparison td.col-subject { background: #2d3039; }
@@ -212,12 +199,7 @@ p.fn-legend {
 footer { margin-top: 28px; padding-top: 14px; border-top: 1px solid var(--grid);
          color: var(--muted); font-size: 11px; }
 footer strong { color: var(--fg); }
-footer dl.methodology { margin: 8px 0 0 0; padding: 0; }
-footer dl.methodology dt { color: var(--fg); font-weight: 600; margin-top: 8px;
-                           font-size: 11px; letter-spacing: 0.02em; }
-footer dl.methodology dd { margin: 2px 0 0 0; padding: 0 0 0 0; line-height: 1.5; }
-footer dl.methodology code { background: var(--head); padding: 1px 3px; border-radius: 2px;
-                             color: var(--fg); font-size: 10px; }
+footer p.methodology-prose { margin: 6px 0 0 0; line-height: 1.55; }
 footer .gen { margin-top: 12px; }
 footer a { color: var(--accent); text-decoration: none; }
 footer a:hover { text-decoration: underline; }
@@ -279,8 +261,7 @@ p.empty, p.peer-empty { color: var(--muted); font-style: italic; font-size: 13px
 
 <div class="section">
   <h2>Capital Structure</h2>
-  <p class="purpose">Bond-side risk distribution — how principal splits across tranches and how each is supported.</p>
-  <table class="grid cap-structure"><thead><tr><th>Class</th><th class="num">Size ($MM)<sup class="fn fn-a">a</sup></th><th class="num">% Pool<sup class="fn fn-b">b</sup></th><th class="num">Sub %<sup class="fn fn-b">b</sup></th><th class="num">Coupon / Spread<sup class="fn fn-a">a</sup></th><th class="num">WAL<sup class="fn fn-a">a</sup></th><th>Legal Final<sup class="fn fn-c">c</sup></th><th>S&P<sup class="fn fn-a">a</sup></th><th>Moody's<sup class="fn fn-a">a</sup></th><th>KBRA<sup class="fn fn-a">a</sup></th></tr></thead><tbody><tr><td>Class A-1</td><td class="num">345.0</td><td class="num">19.7%</td><td class="num">80.3%</td><td class="num">5.52% fxd</td><td class="num">0.17</td><td>2025-01-15</td><td>A-1+</td><td>P-1</td><td>—</td></tr><tr><td>Class A-2a</td><td class="num">157.5</td><td class="num">9.0%</td><td class="num">71.3%</td><td class="num">5.13% fxd</td><td class="num">0.97</td><td>2026-12-15</td><td>AAA</td><td>Aaa</td><td>AAA</td></tr><tr><td>Class A-2b</td><td class="num">472.5</td><td class="num">27.0%</td><td class="num">44.3%</td><td class="num">+35 bps SOFR</td><td class="num">0.97</td><td>2026-12-15</td><td>AAA</td><td>Aaa</td><td>AAA</td></tr><tr><td>Class A-3</td><td class="num">630.0</td><td class="num">36.0%</td><td class="num">8.3%</td><td class="num">4.83% fxd</td><td class="num">2.40</td><td>2028-10-16</td><td>AAA</td><td>Aaa</td><td>AAA</td></tr><tr><td>Class A-4</td><td class="num">101.2</td><td class="num">5.8%</td><td class="num">2.5%</td><td class="num">4.77% fxd</td><td class="num">3.73</td><td>2029-04-16</td><td>AAA</td><td>Aaa</td><td>AAA</td></tr><tr><td>Class B</td><td class="num">43.8</td><td class="num">2.5%</td><td class="num">0.0%</td><td class="num">—</td><td class="num">—</td><td>2030-08-15</td><td>—</td><td>—</td><td>—</td></tr></tbody></table>
+  <table class="grid cap-structure"><thead><tr><th>Class</th><th class="num">Size ($MM)</th><th class="num">% of Pool</th><th class="num">Sub %</th><th class="num">Coupon / Spread</th><th class="num">WAL</th><th>Legal Final</th><th>S&P</th><th>Moody's</th><th>KBRA</th></tr></thead><tbody><tr><td>Class A-1</td><td class="num">345.0</td><td class="num">19.7%</td><td class="num">80.3%</td><td class="num">5.52% fxd</td><td class="num">0.17</td><td>2025-01-15</td><td>A-1+</td><td>P-1</td><td>—</td></tr><tr><td>Class A-2a</td><td class="num">157.5</td><td class="num">9.0%</td><td class="num">71.3%</td><td class="num">5.13% fxd</td><td class="num">0.97</td><td>2026-12-15</td><td>AAA</td><td>Aaa</td><td>AAA</td></tr><tr><td>Class A-2b</td><td class="num">472.5</td><td class="num">27.0%</td><td class="num">44.3%</td><td class="num">+35 bps SOFR</td><td class="num">0.97</td><td>2026-12-15</td><td>AAA</td><td>Aaa</td><td>AAA</td></tr><tr><td>Class A-3</td><td class="num">630.0</td><td class="num">36.0%</td><td class="num">8.3%</td><td class="num">4.83% fxd</td><td class="num">2.40</td><td>2028-10-16</td><td>AAA</td><td>Aaa</td><td>AAA</td></tr><tr><td>Class A-4</td><td class="num">101.2</td><td class="num">5.8%</td><td class="num">2.5%</td><td class="num">4.77% fxd</td><td class="num">3.73</td><td>2029-04-16</td><td>AAA</td><td>Aaa</td><td>AAA</td></tr><tr><td>Class B</td><td class="num">43.8</td><td class="num">2.5%</td><td class="num">0.0%</td><td class="num">—</td><td class="num">—</td><td>2030-08-15</td><td>—</td><td>—</td><td>—</td></tr></tbody></table>
 </div>
 
 <div class="section">
@@ -292,7 +273,7 @@ p.empty, p.peer-empty { color: var(--muted); font-style: italic; font-size: 13px
 <div class="section">
   <h2>Peer Set</h2>
   <p class="purpose">Subject deal alongside representative peer deals — one most-recent deal per peer issuer in the subject's cohort.</p>
-  <p class="criteria">Peer cohort: same sponsor-type + same FICO tier. Most-recent deal per peer ticker (max 5).</p><table class="grid comparison"><colgroup><col style="width:22%"><col style="width:13.00%"><col style="width:13.00%"><col style="width:13.00%"><col style="width:13.00%"><col style="width:13.00%"><col style="width:13.00%"></colgroup><thead><tr><th></th><th class="col-subject">TAOT 2024-A</th><th>MBART 2024-1</th><th>GMCAR 2024-1</th><th>VALET 2023-2</th><th>FCAOT 2023-C</th><th>HART 2023-C</th></tr></thead><tbody><tr class="section-hdr"><th colspan="7">Collateral (pool at cut-off)</th></tr><tr class=""><th class="src-424b5">Closing date</th><td class="num col-subject"><span class="val-primary">2024-01-30</span></td><td class="num">2024-01-24</td><td class="num">2024-01-17</td><td class="num">2023-11-21</td><td class="num">2023-11-21</td><td class="num">2023-11-13</td></tr><tr class=""><th class="src-424b5">Pool balance</th><td class="num col-subject"><span class="val-primary">$1,908.5MM</span></td><td class="num">—</td><td class="num">$1,657.3MM</td><td class="num">$1,418.8MM</td><td class="num">$1,443.4MM</td><td class="num">$1,822.5MM</td></tr><tr class=""><th class="src-424b5">WA Credit Score</th><td class="num col-subject"><span class="val-primary">767</span><span class="delta-unf delta-compact" title="−1 vs peer median (n=5)">−1</span></td><td class="num">754</td><td class="num">783</td><td class="num">774</td><td class="num">754</td><td class="num">768</td></tr><tr class=""><th class="src-424b5">WA APR</th><td class="num col-subject"><span class="val-primary">5.37%</span><span class="delta-fav delta-compact" title="−0.26pp vs peer median (n=5)">−0.26pp</span></td><td class="num">7.74%</td><td class="num">5.21%</td><td class="num">5.69%</td><td class="num">4.92%</td><td class="num">5.63%</td></tr><tr class=""><th class="src-424b5">WA original term<span class="unit"> mo</span></th><td class="num col-subject"><span class="val-primary">66.0</span><span class="delta-fav delta-compact" title="−1.3 vs peer median (n=4)">−1.3</span></td><td class="num">69.6 mo</td><td class="num">69.0 mo</td><td class="num">—</td><td class="num">63.6 mo</td><td class="num">65.5 mo</td></tr><tr class=""><th class="src-424b5">% new vehicles</th><td class="num col-subject"><span class="val-primary">84.2%</span></td><td class="num">40.3%</td><td class="num">—</td><td class="num">73.4%</td><td class="num">91.3%</td><td class="num">94.0%</td></tr><tr class=""><th class="src-424b5">Reserve %</th><td class="num col-subject"><span class="val-primary">0.25%</span></td><td class="num">—</td><td class="num">0.24%</td><td class="num">0.23%</td><td class="num">0.23%</td><td class="num">0.25%</td></tr><tr class=""><th class="src-424b5">Geo top-3</th><td class="num col-subject"><span class="geo-stack">CA 23.9%<br/>TX 15.3%<br/>IL 4.6%</span></td><td class="num"><span class="geo-stack">CA 21.5%<br/>FL 15.4%<br/>TX 14.1%</span></td><td class="num"><span class="geo-stack">TX 14.0%<br/>FL 7.3%<br/>CA 5.4%</span></td><td class="num"><span class="geo-stack">TX 14.8%<br/>CA 13.6%<br/>FL 9.6%</span></td><td class="num"><span class="geo-stack">TX 16.1%<br/>CA 9.5%<br/>FL 8.4%</span></td><td class="num"><span class="geo-stack">TX 12.0%<br/>FL 11.7%<br/>CA 11.0%</span></td></tr><tr class="section-hdr"><th colspan="7">Structure (at issuance)</th></tr><tr class=""><th class="src-fwp">AAA spread</th><td class="num col-subject"><span class="val-primary">+35 bps</span><span class="delta-fav delta-compact" title="−24bps vs peer median (n=4)">−24bps</span></td><td class="num">+40 bps</td><td class="num">—</td><td class="num">+64 bps</td><td class="num">+55 bps</td><td class="num">+63 bps</td></tr><tr class=""><th class="src-derived">AAA % of pool</th><td class="num col-subject"><span class="val-primary">77.8%</span><span class="delta-fav delta-compact" title="+8.0pp vs peer median (n=4)">+8.0pp</span></td><td class="num">78.2%</td><td class="num">—</td><td class="num">70.8%</td><td class="num">68.2%</td><td class="num">68.9%</td></tr><tr class=""><th class="src-derived">Subordination below AAA</th><td class="num col-subject"><span class="val-primary">2.5%</span><span class="delta-fav delta-compact" title="+0.3pp vs peer median (n=4)">+0.3pp</span></td><td class="num">0.0%</td><td class="num">—</td><td class="num">0.0%</td><td class="num">4.6%</td><td class="num">4.4%</td></tr><tr class=""><th class="src-derived">Overcollateralization</th><td class="num col-subject"><span class="val-primary">8.30%</span></td><td class="num">—</td><td class="num">—</td><td class="num">11.90%</td><td class="num">8.84%</td><td class="num">10.67%</td></tr><tr class=""><th class="src-424b5">Yield Supplement OC</th><td class="num col-subject"><span class="val-primary">8.30%</span></td><td class="num">—</td><td class="num">5.45%</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr><tr class=""><th class="src-fwp">Tranches</th><td class="num col-subject"><span class="val-primary">6</span></td><td class="num">5</td><td class="num">6</td><td class="num">5</td><td class="num">7</td><td class="num">7</td></tr></tbody></table>
+  <p class="criteria">Peer cohort: same sponsor-type + same FICO tier. Most-recent deal per peer ticker (max 5).</p><table class="grid comparison"><colgroup><col style="width:22%"><col style="width:13.00%"><col style="width:13.00%"><col style="width:13.00%"><col style="width:13.00%"><col style="width:13.00%"><col style="width:13.00%"></colgroup><thead><tr><th></th><th class="col-subject">TAOT 2024-A</th><th>MBART 2024-1</th><th>GMCAR 2024-1</th><th>FCAOT 2023-C</th><th>VALET 2023-2</th><th>HART 2023-C</th></tr></thead><tbody><tr class="section-hdr"><th colspan="7">Collateral (pool at cut-off)</th></tr><tr class=""><th class="src-424b5">Closing date</th><td class="num col-subject"><span class="val-primary">2024-01-30</span></td><td class="num">2024-01-24</td><td class="num">2024-01-17</td><td class="num">2023-11-21</td><td class="num">2023-11-21</td><td class="num">2023-11-13</td></tr><tr class=""><th class="src-424b5">Pool balance</th><td class="num col-subject"><span class="val-primary">$1,908.5MM</span></td><td class="num">—</td><td class="num">$1,657.3MM</td><td class="num">$1,443.4MM</td><td class="num">$1,418.8MM</td><td class="num">$1,822.5MM</td></tr><tr class=""><th class="src-424b5">WA Credit Score</th><td class="num col-subject"><span class="val-primary">767</span><span class="delta-unf delta-compact" title="−1 vs peer median (n=5)">−1</span></td><td class="num">754</td><td class="num">783</td><td class="num">754</td><td class="num">774</td><td class="num">768</td></tr><tr class=""><th class="src-424b5">WA APR</th><td class="num col-subject"><span class="val-primary">5.37%</span><span class="delta-fav delta-compact" title="−0.26pp vs peer median (n=5)">−0.26pp</span></td><td class="num">7.74%</td><td class="num">5.21%</td><td class="num">4.92%</td><td class="num">5.69%</td><td class="num">5.63%</td></tr><tr class=""><th class="src-424b5">WA original term<span class="unit"> mo</span></th><td class="num col-subject"><span class="val-primary">66.0</span><span class="delta-fav delta-compact" title="−1.3 vs peer median (n=4)">−1.3</span></td><td class="num">69.6 mo</td><td class="num">69.0 mo</td><td class="num">63.6 mo</td><td class="num">—</td><td class="num">65.5 mo</td></tr><tr class=""><th class="src-424b5">% new vehicles</th><td class="num col-subject"><span class="val-primary">84.2%</span></td><td class="num">40.3%</td><td class="num">—</td><td class="num">91.3%</td><td class="num">73.4%</td><td class="num">94.0%</td></tr><tr class=""><th class="src-424b5">Reserve %</th><td class="num col-subject"><span class="val-primary">0.25%</span></td><td class="num">—</td><td class="num">0.24%</td><td class="num">0.23%</td><td class="num">0.23%</td><td class="num">0.25%</td></tr><tr class=""><th class="src-424b5">Geo top-3</th><td class="num col-subject"><span class="geo-stack">CA 23.9%<br/>TX 15.3%<br/>IL 4.6%</span></td><td class="num"><span class="geo-stack">CA 21.5%<br/>FL 15.4%<br/>TX 14.1%</span></td><td class="num"><span class="geo-stack">TX 14.0%<br/>FL 7.3%<br/>CA 5.4%</span></td><td class="num"><span class="geo-stack">TX 16.1%<br/>CA 9.5%<br/>FL 8.4%</span></td><td class="num"><span class="geo-stack">TX 14.8%<br/>CA 13.6%<br/>FL 9.6%</span></td><td class="num"><span class="geo-stack">TX 12.0%<br/>FL 11.7%<br/>CA 11.0%</span></td></tr><tr class="section-hdr"><th colspan="7">Structure (at issuance)</th></tr><tr class=""><th class="src-fwp">AAA spread</th><td class="num col-subject"><span class="val-primary">+35 bps</span><span class="delta-fav delta-compact" title="−24bps vs peer median (n=4)">−24bps</span></td><td class="num">+40 bps</td><td class="num">—</td><td class="num">+55 bps</td><td class="num">+64 bps</td><td class="num">+63 bps</td></tr><tr class=""><th class="src-derived">AAA % of pool</th><td class="num col-subject"><span class="val-primary">77.8%</span><span class="delta-fav delta-compact" title="+8.0pp vs peer median (n=4)">+8.0pp</span></td><td class="num">78.2%</td><td class="num">—</td><td class="num">68.2%</td><td class="num">70.8%</td><td class="num">68.9%</td></tr><tr class=""><th class="src-derived">Subordination below AAA</th><td class="num col-subject"><span class="val-primary">2.5%</span><span class="delta-fav delta-compact" title="+0.3pp vs peer median (n=4)">+0.3pp</span></td><td class="num">0.0%</td><td class="num">—</td><td class="num">4.6%</td><td class="num">0.0%</td><td class="num">4.4%</td></tr><tr class=""><th class="src-derived">Overcollateralization</th><td class="num col-subject"><span class="val-primary">8.30%</span></td><td class="num">—</td><td class="num">—</td><td class="num">8.84%</td><td class="num">11.90%</td><td class="num">10.67%</td></tr><tr class=""><th class="src-424b5">Yield Supplement OC</th><td class="num col-subject"><span class="val-primary">8.30%</span></td><td class="num">—</td><td class="num">5.45%</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr><tr class=""><th class="src-fwp">Tranches</th><td class="num col-subject"><span class="val-primary">6</span></td><td class="num">5</td><td class="num">6</td><td class="num">7</td><td class="num">5</td><td class="num">7</td></tr></tbody></table>
 </div>
 
 <div class="section">
@@ -321,46 +302,17 @@ p.empty, p.peer-empty { color: var(--muted); font-style: italic; font-size: 13px
 </div>
 
 <footer>
-  <strong>Methodology &amp; data lineage</strong>
-  <dl class="methodology">
-    <dt>Sources</dt>
-    <dd>
-      <span class="src-fwp">FWP</span> = Free Writing Prospectus pricing table (class name, principal,
-      coupon/spread, rating, benchmark).
-      <span class="src-424b5">424B5</span> = prospectus supplement (pool composition, credit enhancement,
-      cut-off date, legal final).
-      <span class="src-absee">ABS-EE</span> = monthly 10-D loan-level reports (per-series CNL, DQ).
-    </dd>
-    <dt>Capital-Structure footnotes</dt>
-    <dd>
-      <sup class="fn fn-a">a</sup> FWP pricing table &nbsp;·&nbsp;
-      <sup class="fn fn-b">b</sup> Derived (principal &divide; initial pool balance from 424B5;
-      reverts to principal &divide; total notes when pool balance isn't extracted) &nbsp;·&nbsp;
-      <sup class="fn fn-c">c</sup> 424B5 prospectus
-    </dd>
-    <dt>Comparison-table conventions</dt>
-    <dd>
-      Row-label color indicates source of record (same key as above). Subject-column cells are
-      annotated with a compact signed delta vs. peer median — green when the subject sits on the
-      favorable side of its peer set, red when unfavorable; hover for context.
-      <br/>AAA spreads reflect market conditions at each deal's pricing date; multi-bp differences
-      between deals priced months apart may reflect rate-environment drift rather than credit
-      fundamentals.
-    </dd>
-    <dt>Peer cohort</dt>
-    <dd>
-      Subject&rsquo;s <em>sponsor-type</em> (captive / bank / IFC / online) <strong>and</strong>
-      <em>FICO tier</em> (prime &ge;720, near-prime 640&ndash;719, subprime &lt;640), with a fallback
-      chain when the strict cohort is too thin. &ldquo;Representative&rdquo; peer set = one most-recent
-      deal per peer ticker, capped at five columns.
-    </dd>
-    <dt>Historical performance</dt>
-    <dd>
-      CNL = cumulative charge-off&nbsp;$ &divide; original pool&nbsp;$, computed per-series from
-      ABS-EE loan-level reports via <code>generate_series_loss_data.py</code>.
-    </dd>
-  </dl>
-  <p class="gen">Generated 2026-05-06 07:56 &nbsp;·&nbsp;
+  <strong>Methodology &amp; Sources</strong>
+  <p class="methodology-prose">
+    Capital structure (class size, coupon / spread, WAL, ratings) is sourced from
+    the issuer&rsquo;s pricing FWP and 424B5 prospectus supplement on EDGAR. Pool
+    statistics (WA FICO, WA APR, % new, geographic concentration) are sourced from
+    the 424B5. Historical performance (CNL by seasoning, 60+ DQ) is computed from
+    ABS-EE loan-level filings. Subordination, AAA share, and OC are derived from
+    class principals and the initial pool balance. Peer cohorts are sliced to the
+    subject&rsquo;s closing date so the snapshot reflects what was knowable at issuance.
+  </p>
+  <p class="gen">Generated 2026-05-06 09:09 &nbsp;·&nbsp;
     <a href="https://blackanalytics.com/abs/explorer/" target="_blank">Interactive explorer</a> &nbsp;·&nbsp;
     <a href="https://blackanalytics.com/abs/prospectus/" target="_blank">Issuance index</a>
   </p>

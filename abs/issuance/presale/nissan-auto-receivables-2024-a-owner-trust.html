@@ -138,19 +138,6 @@ table.grid.comparison td.col-subject .geo-stack { color: var(--fg); }
 .src-notext  { color: var(--chip-notext); }
 .lg-swatch { font-weight: 600; margin-right: 6px; }
 
-/* Capital Structure footnote markers */
-sup.fn {
-    font-size: 9px; margin-left: 2px; font-weight: 700;
-    vertical-align: super; line-height: 0;
-}
-sup.fn-a { color: var(--chip-fwp); }
-sup.fn-b { color: var(--chip-derived); }
-sup.fn-c { color: var(--chip-derived); }
-sup.fn-d { color: var(--chip-424b5); }
-p.fn-legend {
-    font-size: 11px; color: var(--muted);
-    margin: 6px 0 2px 0; line-height: 1.5;
-}
 @media (prefers-color-scheme: dark) {
   table.grid.comparison thead th.col-subject,
   table.grid.comparison td.col-subject { background: #2d3039; }
@@ -212,12 +199,7 @@ p.fn-legend {
 footer { margin-top: 28px; padding-top: 14px; border-top: 1px solid var(--grid);
          color: var(--muted); font-size: 11px; }
 footer strong { color: var(--fg); }
-footer dl.methodology { margin: 8px 0 0 0; padding: 0; }
-footer dl.methodology dt { color: var(--fg); font-weight: 600; margin-top: 8px;
-                           font-size: 11px; letter-spacing: 0.02em; }
-footer dl.methodology dd { margin: 2px 0 0 0; padding: 0 0 0 0; line-height: 1.5; }
-footer dl.methodology code { background: var(--head); padding: 1px 3px; border-radius: 2px;
-                             color: var(--fg); font-size: 10px; }
+footer p.methodology-prose { margin: 6px 0 0 0; line-height: 1.55; }
 footer .gen { margin-top: 12px; }
 footer a { color: var(--accent); text-decoration: none; }
 footer a:hover { text-decoration: underline; }
@@ -279,8 +261,7 @@ p.empty, p.peer-empty { color: var(--muted); font-style: italic; font-size: 13px
 
 <div class="section">
   <h2>Capital Structure</h2>
-  <p class="purpose">Bond-side risk distribution — how principal splits across tranches and how each is supported.</p>
-  <table class="grid cap-structure"><thead><tr><th>Class</th><th class="num">Size ($MM)<sup class="fn fn-a">a</sup></th><th class="num">% Pool<sup class="fn fn-b">b</sup></th><th class="num">Sub %<sup class="fn fn-b">b</sup></th><th class="num">Coupon / Spread<sup class="fn fn-a">a</sup></th><th class="num">WAL<sup class="fn fn-a">a</sup></th><th>Legal Final<sup class="fn fn-c">c</sup></th><th>Moody's<sup class="fn fn-a">a</sup></th><th>Fitch<sup class="fn fn-a">a</sup></th></tr></thead><tbody><tr><td>Class A-1</td><td class="num">279.0</td><td class="num">22.3%</td><td class="num">77.6%</td><td class="num">5.51% fxd</td><td class="num">0.27</td><td>2025-05-15</td><td>P-1</td><td>F1+</td></tr><tr><td>Class A-2A</td><td class="num">145.0</td><td class="num">11.6%</td><td class="num">66.0%</td><td class="num">5.47% fxd</td><td class="num">1.01</td><td>2026-12-15</td><td>Aaa</td><td>AAA</td></tr><tr><td>Class A-2B</td><td class="num">293.0</td><td class="num">23.4%</td><td class="num">42.6%</td><td class="num">+38 bps SOFR</td><td class="num">1.01</td><td>2026-12-15</td><td>Aaa</td><td>AAA</td></tr><tr><td>Class A-3</td><td class="num">438.0</td><td class="num">35.0%</td><td class="num">7.6%</td><td class="num">5.28% fxd</td><td class="num">2.26</td><td>2028-12-15</td><td>Aaa</td><td>AAA</td></tr><tr><td>Class A-4</td><td class="num">95.0</td><td class="num">7.6%</td><td class="num">0.0%</td><td class="num">5.18% fxd</td><td class="num">3.62</td><td>2031-04-15</td><td>Aaa</td><td>AAA</td></tr></tbody></table>
+  <table class="grid cap-structure"><thead><tr><th>Class</th><th class="num">Size ($MM)</th><th class="num">% of Pool</th><th class="num">Sub %</th><th class="num">Coupon / Spread</th><th class="num">WAL</th><th>Legal Final</th><th>Moody's</th><th>Fitch</th></tr></thead><tbody><tr><td>Class A-1</td><td class="num">279.0</td><td class="num">22.3%</td><td class="num">77.6%</td><td class="num">5.51% fxd</td><td class="num">0.27</td><td>2025-05-15</td><td>P-1</td><td>F1+</td></tr><tr><td>Class A-2A</td><td class="num">145.0</td><td class="num">11.6%</td><td class="num">66.0%</td><td class="num">5.47% fxd</td><td class="num">1.01</td><td>2026-12-15</td><td>Aaa</td><td>AAA</td></tr><tr><td>Class A-2B</td><td class="num">293.0</td><td class="num">23.4%</td><td class="num">42.6%</td><td class="num">+38 bps SOFR</td><td class="num">1.01</td><td>2026-12-15</td><td>Aaa</td><td>AAA</td></tr><tr><td>Class A-3</td><td class="num">438.0</td><td class="num">35.0%</td><td class="num">7.6%</td><td class="num">5.28% fxd</td><td class="num">2.26</td><td>2028-12-15</td><td>Aaa</td><td>AAA</td></tr><tr><td>Class A-4</td><td class="num">95.0</td><td class="num">7.6%</td><td class="num">0.0%</td><td class="num">5.18% fxd</td><td class="num">3.62</td><td>2031-04-15</td><td>Aaa</td><td>AAA</td></tr></tbody></table>
 </div>
 
 <div class="section">
@@ -321,46 +302,17 @@ p.empty, p.peer-empty { color: var(--muted); font-style: italic; font-size: 13px
 </div>
 
 <footer>
-  <strong>Methodology &amp; data lineage</strong>
-  <dl class="methodology">
-    <dt>Sources</dt>
-    <dd>
-      <span class="src-fwp">FWP</span> = Free Writing Prospectus pricing table (class name, principal,
-      coupon/spread, rating, benchmark).
-      <span class="src-424b5">424B5</span> = prospectus supplement (pool composition, credit enhancement,
-      cut-off date, legal final).
-      <span class="src-absee">ABS-EE</span> = monthly 10-D loan-level reports (per-series CNL, DQ).
-    </dd>
-    <dt>Capital-Structure footnotes</dt>
-    <dd>
-      <sup class="fn fn-a">a</sup> FWP pricing table &nbsp;·&nbsp;
-      <sup class="fn fn-b">b</sup> Derived (principal &divide; initial pool balance from 424B5;
-      reverts to principal &divide; total notes when pool balance isn't extracted) &nbsp;·&nbsp;
-      <sup class="fn fn-c">c</sup> 424B5 prospectus
-    </dd>
-    <dt>Comparison-table conventions</dt>
-    <dd>
-      Row-label color indicates source of record (same key as above). Subject-column cells are
-      annotated with a compact signed delta vs. peer median — green when the subject sits on the
-      favorable side of its peer set, red when unfavorable; hover for context.
-      <br/>AAA spreads reflect market conditions at each deal's pricing date; multi-bp differences
-      between deals priced months apart may reflect rate-environment drift rather than credit
-      fundamentals.
-    </dd>
-    <dt>Peer cohort</dt>
-    <dd>
-      Subject&rsquo;s <em>sponsor-type</em> (captive / bank / IFC / online) <strong>and</strong>
-      <em>FICO tier</em> (prime &ge;720, near-prime 640&ndash;719, subprime &lt;640), with a fallback
-      chain when the strict cohort is too thin. &ldquo;Representative&rdquo; peer set = one most-recent
-      deal per peer ticker, capped at five columns.
-    </dd>
-    <dt>Historical performance</dt>
-    <dd>
-      CNL = cumulative charge-off&nbsp;$ &divide; original pool&nbsp;$, computed per-series from
-      ABS-EE loan-level reports via <code>generate_series_loss_data.py</code>.
-    </dd>
-  </dl>
-  <p class="gen">Generated 2026-05-06 07:56 &nbsp;·&nbsp;
+  <strong>Methodology &amp; Sources</strong>
+  <p class="methodology-prose">
+    Capital structure (class size, coupon / spread, WAL, ratings) is sourced from
+    the issuer&rsquo;s pricing FWP and 424B5 prospectus supplement on EDGAR. Pool
+    statistics (WA FICO, WA APR, % new, geographic concentration) are sourced from
+    the 424B5. Historical performance (CNL by seasoning, 60+ DQ) is computed from
+    ABS-EE loan-level filings. Subordination, AAA share, and OC are derived from
+    class principals and the initial pool balance. Peer cohorts are sliced to the
+    subject&rsquo;s closing date so the snapshot reflects what was knowable at issuance.
+  </p>
+  <p class="gen">Generated 2026-05-06 09:09 &nbsp;·&nbsp;
     <a href="https://blackanalytics.com/abs/explorer/" target="_blank">Interactive explorer</a> &nbsp;·&nbsp;
     <a href="https://blackanalytics.com/abs/prospectus/" target="_blank">Issuance index</a>
   </p>
