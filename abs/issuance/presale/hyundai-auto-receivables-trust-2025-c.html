@@ -36,14 +36,32 @@ h2 .sub { text-transform: none; letter-spacing: 0; font-weight: 400; color: var(
     padding: 3px 7px; font-weight: 700; color: var(--fg);
     background: var(--bg);
 }
-.header-strip .about-blurb {
-    margin: 8px 0 0 0; font-size: 11.5px; line-height: 1.5;
+.about-blurb {
+    margin: 0 0 10px 0; font-size: 11.5px; line-height: 1.5;
     color: var(--muted); font-style: normal;
 }
-.header-strip .about-blurb strong { color: var(--fg); font-weight: 600; }
-.header-strip .about-blurb em { color: var(--muted); font-style: italic; font-size: 11px; }
-.header-strip .about-blurb a { color: var(--accent); text-decoration: none; }
-.header-strip .about-blurb a:hover { text-decoration: underline; }
+.about-blurb strong { color: var(--fg); font-weight: 600; }
+.about-blurb em { color: var(--muted); font-style: italic; font-size: 11px; }
+.about-blurb a { color: var(--accent); text-decoration: none; }
+.about-blurb a:hover { text-decoration: underline; }
+.metric-strip {
+    display: flex; margin: 12px 0 10px 0;
+    border: 1px solid var(--grid); border-radius: 4px; overflow: hidden;
+    background: var(--bg);
+}
+.metric-strip .metric {
+    flex: 1; padding: 8px 14px;
+    border-left: 1px solid var(--grid);
+}
+.metric-strip .metric:first-child { border-left: none; }
+.metric-strip .metric-label {
+    font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--muted); font-weight: 600;
+}
+.metric-strip .metric-value {
+    font-size: 17px; font-weight: 700; color: var(--fg);
+    font-variant-numeric: tabular-nums; margin-top: 2px;
+}
 #print-btn {
     position: absolute; top: 0; right: 0;
     padding: 6px 8px; border: 1px solid var(--grid);
@@ -246,26 +264,17 @@ p.empty, p.peer-empty { color: var(--muted); font-style: italic; font-size: 13px
     <span class="badge tier-prime">prime</span>
     <span class="status">FINAL · CLOSED 2025-09-17</span>
   </h1>
-  <div class="rating-chips"><span class="rchip"><span class="rchip-a">S&amp;P</span><span class="rchip-v">AAA</span></span> <span class="rchip"><span class="rchip-a">Fitch</span><span class="rchip-v">AAA</span></span></div>
-  <div class="meta"><strong>Sponsor:</strong> Hyundai Capital America &nbsp;·&nbsp;
-    <strong>Total notes:</strong> $1,987.8MM
-  </div>
-  <div class="meta"><strong>Servicer:</strong> Hyundai Capital America &nbsp;·&nbsp;
+  <div class="metric-strip"><div class="metric"><div class="metric-label">Notes</div><div class="metric-value">$1,987.8MM</div></div><div class="metric"><div class="metric-label">Pool</div><div class="metric-value">$2,148.3MM</div></div><div class="metric"><div class="metric-label">Reserve</div><div class="metric-value">0.25%</div></div><div class="metric"><div class="metric-label">AAA Sub</div><div class="metric-value">4.6%</div></div></div>
+  <div class="meta">
+    <strong>Sponsor:</strong> Hyundai Capital America &nbsp;·&nbsp;
+    <strong>Servicer:</strong> Hyundai Capital America &nbsp;·&nbsp;
     <strong>Trustee:</strong> Citibank, N.A
   </div>
-  <p class="about-blurb">
-    Presale Reports are compiled by <strong>Black Analytics</strong> from SEC EDGAR filings
-    (424B5, FWP) and ABS-EE loan-level data. Published the same day a deal&rsquo;s first
-    filing reaches EDGAR; pool, structural, and peer context reflects what was known
-    at the subject&rsquo;s issuance. For ongoing deal performance after closing, see the
-    <a href="https://blackanalytics.com/abs/explorer/" target="_blank" rel="noopener">Auto ABS Explorer</a>.
-    <em>Informational only &mdash; not a credit rating.</em>
-  </p>
 </div>
 
 <div class="section">
   <h2>Capital Structure</h2>
-  <table class="grid cap-structure"><colgroup><col style="width:18%"/><col style="width:10%"/><col style="width:9%"/><col style="width:8%"/><col style="width:14%"/><col style="width:7%"/><col style="width:12%"/><col style="width:11.00%"/><col style="width:11.00%"/></colgroup><thead><tr><th>Class</th><th class="num">Size ($MM)</th><th class="num">% of Pool</th><th class="num">Sub %</th><th class="num">Coupon / Spread</th><th class="num">WAL</th><th>Legal Final</th><th>S&P</th><th>Fitch</th></tr></thead><tbody><tr><td>Class A-1</td><td class="num">410.0</td><td class="num">19.1%</td><td class="num">73.4%</td><td class="num">4.15% fxd</td><td class="num">0.25</td><td>2026-09-15</td><td>A-1+</td><td>F1+</td></tr><tr><td>Class A-2a</td><td class="num">421.0</td><td class="num">19.6%</td><td class="num">53.9%</td><td class="num">3.97% fxd</td><td class="num">1.03</td><td>2028-07-17</td><td>AAA</td><td>AAA</td></tr><tr><td>Class A-2b</td><td class="num">269.0</td><td class="num">12.5%</td><td class="num">41.3%</td><td class="num">+35 bps SOFR</td><td class="num">1.03</td><td>2028-07-17</td><td>AAA</td><td>AAA</td></tr><tr><td>Class A-3</td><td class="num">690.0</td><td class="num">32.1%</td><td class="num">9.2%</td><td class="num">3.88% fxd</td><td class="num">2.32</td><td>2030-04-15</td><td>AAA</td><td>AAA</td></tr><tr><td>Class A-4</td><td class="num">100.0</td><td class="num">4.7%</td><td class="num">4.6%</td><td class="num">3.89% fxd</td><td class="num">3.43</td><td>2032-01-15</td><td>AAA</td><td>AAA</td></tr><tr><td>Class B</td><td class="num">36.7</td><td class="num">1.7%</td><td class="num">2.8%</td><td class="num">4.13% fxd</td><td class="num">3.72</td><td>2032-01-15</td><td>AA+</td><td>AA+</td></tr><tr><td>Class C</td><td class="num">61.2</td><td class="num">2.8%</td><td class="num">0.0%</td><td class="num">4.37% fxd</td><td class="num">3.90</td><td>2033-01-18</td><td>AA</td><td>A+</td></tr></tbody></table>
+  <table class="grid cap-structure"><colgroup><col style="width:18%"/><col style="width:10%"/><col style="width:9%"/><col style="width:8%"/><col style="width:14%"/><col style="width:7%"/><col style="width:12%"/><col style="width:11.00%"/><col style="width:11.00%"/></colgroup><thead><tr><th>Class</th><th class="num">Size ($MM)</th><th class="num">% of Pool</th><th class="num">Sub %</th><th class="num">CPN / Spread</th><th class="num">WAL</th><th>Legal Final</th><th>S&P</th><th>Fitch</th></tr></thead><tbody><tr><td>Class A-1</td><td class="num">410.0</td><td class="num">19.1%</td><td class="num">73.4%</td><td class="num">4.15% fxd</td><td class="num">0.25</td><td>2026-09-15</td><td>A-1+</td><td>F1+</td></tr><tr><td>Class A-2a</td><td class="num">421.0</td><td class="num">19.6%</td><td class="num">53.9%</td><td class="num">3.97% fxd</td><td class="num">1.03</td><td>2028-07-17</td><td>AAA</td><td>AAA</td></tr><tr><td>Class A-2b</td><td class="num">269.0</td><td class="num">12.5%</td><td class="num">41.3%</td><td class="num">+35 bps SOFR</td><td class="num">1.03</td><td>2028-07-17</td><td>AAA</td><td>AAA</td></tr><tr><td>Class A-3</td><td class="num">690.0</td><td class="num">32.1%</td><td class="num">9.2%</td><td class="num">3.88% fxd</td><td class="num">2.32</td><td>2030-04-15</td><td>AAA</td><td>AAA</td></tr><tr><td>Class A-4</td><td class="num">100.0</td><td class="num">4.7%</td><td class="num">4.6%</td><td class="num">3.89% fxd</td><td class="num">3.43</td><td>2032-01-15</td><td>AAA</td><td>AAA</td></tr><tr><td>Class B</td><td class="num">36.7</td><td class="num">1.7%</td><td class="num">2.8%</td><td class="num">4.13% fxd</td><td class="num">3.72</td><td>2032-01-15</td><td>AA+</td><td>AA+</td></tr><tr><td>Class C</td><td class="num">61.2</td><td class="num">2.8%</td><td class="num">0.0%</td><td class="num">4.37% fxd</td><td class="num">3.90</td><td>2033-01-18</td><td>AA</td><td>A+</td></tr></tbody></table>
 </div>
 
 <div class="section">
@@ -306,6 +315,14 @@ p.empty, p.peer-empty { color: var(--muted); font-style: italic; font-size: 13px
 </div>
 
 <footer>
+  <p class="about-blurb">
+    Presale Reports are compiled by <strong>Black Analytics</strong> from SEC EDGAR filings
+    (424B5, FWP) and ABS-EE loan-level data. Published the same day a deal&rsquo;s first
+    filing reaches EDGAR; pool, structural, and peer context reflects what was known
+    at the subject&rsquo;s issuance. For ongoing deal performance after closing, see the
+    <a href="https://blackanalytics.com/abs/explorer/" target="_blank" rel="noopener">Auto ABS Explorer</a>.
+    <em>Informational only &mdash; not a credit rating.</em>
+  </p>
   <strong>Methodology &amp; Sources</strong>
   <p class="methodology-prose">
     Capital structure (class size, coupon / spread, WAL, ratings) is sourced from
@@ -316,6 +333,6 @@ p.empty, p.peer-empty { color: var(--muted); font-style: italic; font-size: 13px
     class principals and the initial pool balance. Peer cohorts are sliced to the
     subject&rsquo;s closing date so the snapshot reflects what was knowable at issuance.
   </p>
-  <p class="gen">Generated 2026-05-06 12:44</p>
+  <p class="gen">Generated 2026-05-06 13:21</p>
 </footer>
 </body></html>

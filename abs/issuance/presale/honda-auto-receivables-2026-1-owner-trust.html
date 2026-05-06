@@ -36,14 +36,32 @@ h2 .sub { text-transform: none; letter-spacing: 0; font-weight: 400; color: var(
     padding: 3px 7px; font-weight: 700; color: var(--fg);
     background: var(--bg);
 }
-.header-strip .about-blurb {
-    margin: 8px 0 0 0; font-size: 11.5px; line-height: 1.5;
+.about-blurb {
+    margin: 0 0 10px 0; font-size: 11.5px; line-height: 1.5;
     color: var(--muted); font-style: normal;
 }
-.header-strip .about-blurb strong { color: var(--fg); font-weight: 600; }
-.header-strip .about-blurb em { color: var(--muted); font-style: italic; font-size: 11px; }
-.header-strip .about-blurb a { color: var(--accent); text-decoration: none; }
-.header-strip .about-blurb a:hover { text-decoration: underline; }
+.about-blurb strong { color: var(--fg); font-weight: 600; }
+.about-blurb em { color: var(--muted); font-style: italic; font-size: 11px; }
+.about-blurb a { color: var(--accent); text-decoration: none; }
+.about-blurb a:hover { text-decoration: underline; }
+.metric-strip {
+    display: flex; margin: 12px 0 10px 0;
+    border: 1px solid var(--grid); border-radius: 4px; overflow: hidden;
+    background: var(--bg);
+}
+.metric-strip .metric {
+    flex: 1; padding: 8px 14px;
+    border-left: 1px solid var(--grid);
+}
+.metric-strip .metric:first-child { border-left: none; }
+.metric-strip .metric-label {
+    font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--muted); font-weight: 600;
+}
+.metric-strip .metric-value {
+    font-size: 17px; font-weight: 700; color: var(--fg);
+    font-variant-numeric: tabular-nums; margin-top: 2px;
+}
 #print-btn {
     position: absolute; top: 0; right: 0;
     padding: 6px 8px; border: 1px solid var(--grid);
@@ -246,26 +264,17 @@ p.empty, p.peer-empty { color: var(--muted); font-style: italic; font-size: 13px
     <span class="badge tier-prime">prime</span>
     <span class="status">FINAL · CLOSED 2026-02-18</span>
   </h1>
-  <div class="rating-chips"><span class="rchip"><span class="rchip-a">Moody&#x27;s</span><span class="rchip-v">Aaa</span></span> <span class="rchip"><span class="rchip-a">S&amp;P</span><span class="rchip-v">AAA</span></span> <span class="rchip"><span class="rchip-a">Fitch</span><span class="rchip-v">AAA</span></span></div>
-  <div class="meta"><strong>Sponsor:</strong> American Honda Finance Corporation &nbsp;·&nbsp;
-    <strong>Total notes:</strong> $2,421.1MM
-  </div>
-  <div class="meta"><strong>Servicer:</strong> American Honda Finance Corporation &nbsp;·&nbsp;
+  <div class="metric-strip"><div class="metric"><div class="metric-label">Notes</div><div class="metric-value">$2,421.1MM</div></div><div class="metric"><div class="metric-label">Pool</div><div class="metric-value">$2,483.1MM</div></div><div class="metric"><div class="metric-label">Reserve</div><div class="metric-value">0.25%</div></div><div class="metric"><div class="metric-label">AAA Sub</div><div class="metric-value">0.0%</div></div></div>
+  <div class="meta">
+    <strong>Sponsor:</strong> American Honda Finance Corporation &nbsp;·&nbsp;
+    <strong>Servicer:</strong> American Honda Finance Corporation &nbsp;·&nbsp;
     <strong>Trustee:</strong> Citibank N.A.
   </div>
-  <p class="about-blurb">
-    Presale Reports are compiled by <strong>Black Analytics</strong> from SEC EDGAR filings
-    (424B5, FWP) and ABS-EE loan-level data. Published the same day a deal&rsquo;s first
-    filing reaches EDGAR; pool, structural, and peer context reflects what was known
-    at the subject&rsquo;s issuance. For ongoing deal performance after closing, see the
-    <a href="https://blackanalytics.com/abs/explorer/" target="_blank" rel="noopener">Auto ABS Explorer</a>.
-    <em>Informational only &mdash; not a credit rating.</em>
-  </p>
 </div>
 
 <div class="section">
   <h2>Capital Structure</h2>
-  <table class="grid cap-structure"><colgroup><col style="width:18%"/><col style="width:10%"/><col style="width:9%"/><col style="width:8%"/><col style="width:14%"/><col style="width:7%"/><col style="width:12%"/><col style="width:7.33%"/><col style="width:7.33%"/><col style="width:7.33%"/></colgroup><thead><tr><th>Class</th><th class="num">Size ($MM)</th><th class="num">% of Pool</th><th class="num">Sub %</th><th class="num">Coupon / Spread</th><th class="num">WAL</th><th>Legal Final</th><th>S&P</th><th>Moody's</th><th>Fitch</th></tr></thead><tbody><tr><td>Class A-1</td><td class="num">604.8</td><td class="num">24.4%</td><td class="num">73.1%</td><td class="num">+14 bps</td><td class="num">0.28</td><td>—</td><td>—</td><td>P-1</td><td>F1+</td></tr><tr><td>Class A-2A</td><td class="num">505.0</td><td class="num">20.3%</td><td class="num">52.8%</td><td class="num">+34 bps</td><td class="num">1.07</td><td>2028-09-28</td><td>AAA</td><td>Aaa</td><td>AAA</td></tr><tr><td>Class A-2B</td><td class="num">333.5</td><td class="num">13.4%</td><td class="num">39.4%</td><td class="num">+34 bps SOFR</td><td class="num">1.07</td><td>2028-09-28</td><td>AAA</td><td>Aaa</td><td>AAA</td></tr><tr><td>Class A-3</td><td class="num">838.5</td><td class="num">33.8%</td><td class="num">5.6%</td><td class="num">+34 bps</td><td class="num">2.38</td><td>2030-09-30</td><td>AAA</td><td>Aaa</td><td>AAA</td></tr><tr><td>Class A-4</td><td class="num">139.3</td><td class="num">5.6%</td><td class="num">0.0%</td><td class="num">+36 bps</td><td class="num">3.26</td><td>2032-05-31</td><td>AAA</td><td>Aaa</td><td>AAA</td></tr></tbody></table>
+  <table class="grid cap-structure"><colgroup><col style="width:18%"/><col style="width:10%"/><col style="width:9%"/><col style="width:8%"/><col style="width:14%"/><col style="width:7%"/><col style="width:12%"/><col style="width:7.33%"/><col style="width:7.33%"/><col style="width:7.33%"/></colgroup><thead><tr><th>Class</th><th class="num">Size ($MM)</th><th class="num">% of Pool</th><th class="num">Sub %</th><th class="num">CPN / Spread</th><th class="num">WAL</th><th>Legal Final</th><th>S&P</th><th>Moody's</th><th>Fitch</th></tr></thead><tbody><tr><td>Class A-1</td><td class="num">604.8</td><td class="num">24.4%</td><td class="num">73.1%</td><td class="num">+14 bps</td><td class="num">0.28</td><td>—</td><td>—</td><td>P-1</td><td>F1+</td></tr><tr><td>Class A-2A</td><td class="num">505.0</td><td class="num">20.3%</td><td class="num">52.8%</td><td class="num">+34 bps</td><td class="num">1.07</td><td>2028-09-28</td><td>AAA</td><td>Aaa</td><td>AAA</td></tr><tr><td>Class A-2B</td><td class="num">333.5</td><td class="num">13.4%</td><td class="num">39.4%</td><td class="num">+34 bps SOFR</td><td class="num">1.07</td><td>2028-09-28</td><td>AAA</td><td>Aaa</td><td>AAA</td></tr><tr><td>Class A-3</td><td class="num">838.5</td><td class="num">33.8%</td><td class="num">5.6%</td><td class="num">+34 bps</td><td class="num">2.38</td><td>2030-09-30</td><td>AAA</td><td>Aaa</td><td>AAA</td></tr><tr><td>Class A-4</td><td class="num">139.3</td><td class="num">5.6%</td><td class="num">0.0%</td><td class="num">+36 bps</td><td class="num">3.26</td><td>2032-05-31</td><td>AAA</td><td>Aaa</td><td>AAA</td></tr></tbody></table>
 </div>
 
 <div class="section">
@@ -277,7 +286,7 @@ p.empty, p.peer-empty { color: var(--muted); font-style: italic; font-size: 13px
 <div class="section">
   <h2>Peer Set</h2>
   <p class="purpose">Subject deal alongside representative peer deals.</p>
-  <table class="grid comparison"><colgroup><col style="width:22%"><col style="width:13.00%"><col style="width:13.00%"><col style="width:13.00%"><col style="width:13.00%"><col style="width:13.00%"><col style="width:13.00%"></colgroup><thead><tr><th></th><th class="col-subject">HAROT 2026-1</th><th>WOART 2026-A</th><th>HART 2026-A</th><th>TAOT 2026-A</th><th>GMCAR 2026-1</th><th>FCAOT 2025-C</th></tr></thead><tbody><tr class="section-hdr"><th colspan="7">Collateral (pool at cut-off)</th></tr><tr class=""><th class="src-424b5">Closing date</th><td class="num col-subject"><span class="val-primary">2026-02-18</span></td><td class="num">2026-02-18</td><td class="num">2026-02-18</td><td class="num">2026-01-21</td><td class="num">2026-01-14</td><td class="num">2025-11-25</td></tr><tr class=""><th class="src-424b5">Pool balance</th><td class="num col-subject"><span class="val-primary">$2,483.1MM</span></td><td class="num">$1,312.6MM</td><td class="num">$2,392.4MM</td><td class="num">$1,995.4MM</td><td class="num">$1,317.6MM</td><td class="num">$1,096.6MM</td></tr><tr class=""><th class="src-424b5">WA Credit Score</th><td class="num col-subject"><span class="val-primary">770</span><span class="delta-unf delta-compact" title="−1 vs peer median (n=5)">−1</span></td><td class="num">758</td><td class="num">775</td><td class="num">771</td><td class="num">779</td><td class="num">752</td></tr><tr class=""><th class="src-424b5">WA APR</th><td class="num col-subject"><span class="val-primary">5.00%</span><span class="delta-fav delta-compact" title="−0.68pp vs peer median (n=5)">−0.68pp</span></td><td class="num">5.87%</td><td class="num">5.38%</td><td class="num">5.68%</td><td class="num">5.97%</td><td class="num">5.15%</td></tr><tr class=""><th class="src-424b5">WA original term<span class="unit"> mo</span></th><td class="num col-subject"><span class="val-primary">61.6</span><span class="delta-fav delta-compact" title="−5.5 vs peer median (n=5)">−5.5</span></td><td class="num">68.4 mo</td><td class="num">67.2 mo</td><td class="num">65.9 mo</td><td class="num">70.0 mo</td><td class="num">65.9 mo</td></tr><tr class=""><th class="src-424b5">% new vehicles</th><td class="num col-subject"><span class="val-primary">86.5%</span></td><td class="num">98.0%</td><td class="num">99.8%</td><td class="num">88.0%</td><td class="num">80.8%</td><td class="num">93.7%</td></tr><tr class=""><th class="src-424b5">Reserve %</th><td class="num col-subject"><span class="val-primary">0.25%</span></td><td class="num">0.24%</td><td class="num">0.25%</td><td class="num">0.25%</td><td class="num">0.25%</td><td class="num">0.24%</td></tr><tr class=""><th class="src-424b5">Geo top-3</th><td class="num col-subject"><span class="geo-stack">CA 16.0%<br/>TX 9.5%<br/>NY 6.7%</span></td><td class="num"><span class="geo-stack">FL 44.5%<br/>GA 18.5%<br/>NC 16.2%</span></td><td class="num"><span class="geo-stack">TX 13.2%<br/>FL 10.1%<br/>CA 9.1%</span></td><td class="num"><span class="geo-stack">CA 24.0%<br/>TX 16.5%<br/>IL 3.9%</span></td><td class="num"><span class="geo-stack">TX 14.6%<br/>FL 7.1%<br/>CA 6.3%</span></td><td class="num"><span class="geo-stack">TX 16.6%<br/>CA 8.8%<br/>FL 8.4%</span></td></tr><tr class="section-hdr"><th colspan="7">Structure (at issuance)</th></tr><tr class=""><th class="src-fwp">AAA spread</th><td class="num col-subject"><span class="val-primary">+34 bps</span><span class="delta-unf delta-compact" title="+1bps vs peer median (n=5)">+1bps</span></td><td class="num">+31 bps</td><td class="num">+34 bps</td><td class="num">+33 bps</td><td class="num">+32 bps</td><td class="num">+36 bps</td></tr><tr class=""><th class="src-derived">AAA % of pool</th><td class="num col-subject"><span class="val-primary">73.1%</span><span class="delta-fav delta-compact" title="+3.5pp vs peer median (n=5)">+3.5pp</span></td><td class="num">69.7%</td><td class="num">69.0%</td><td class="num">70.0%</td><td class="num">75.6%</td><td class="num">69.3%</td></tr><tr class=""><th class="src-derived">Subordination below AAA</th><td class="num col-subject"><span class="val-primary">0.0%</span><span class="delta-unf delta-compact" title="−4.2pp vs peer median (n=5)">−4.2pp</span></td><td class="num">4.2%</td><td class="num">4.5%</td><td class="num">0.0%</td><td class="num">3.0%</td><td class="num">4.8%</td></tr><tr class=""><th class="src-derived">Overcollateralization</th><td class="num col-subject"><span class="val-primary">2.50%</span></td><td class="num">5.77%</td><td class="num">8.05%</td><td class="num">11.80%</td><td class="num">5.12%</td><td class="num">4.01%</td></tr><tr class=""><th class="src-424b5">Yield Supplement OC</th><td class="num col-subject"><span class="val-primary">4.09%</span></td><td class="num">—</td><td class="num">5.70%</td><td class="num">4.78%</td><td class="num">2.44%</td><td class="num">4.01%</td></tr><tr class=""><th class="src-fwp">Tranches</th><td class="num col-subject"><span class="val-primary">5</span></td><td class="num">7</td><td class="num">7</td><td class="num">5</td><td class="num">7</td><td class="num">7</td></tr></tbody></table>
+  <table class="grid comparison"><colgroup><col style="width:22%"><col style="width:13.00%"><col style="width:13.00%"><col style="width:13.00%"><col style="width:13.00%"><col style="width:13.00%"><col style="width:13.00%"></colgroup><thead><tr><th></th><th class="col-subject">HAROT 2026-1</th><th>HART 2026-A</th><th>WOART 2026-A</th><th>TAOT 2026-A</th><th>GMCAR 2026-1</th><th>FCAOT 2025-C</th></tr></thead><tbody><tr class="section-hdr"><th colspan="7">Collateral (pool at cut-off)</th></tr><tr class=""><th class="src-424b5">Closing date</th><td class="num col-subject"><span class="val-primary">2026-02-18</span></td><td class="num">2026-02-18</td><td class="num">2026-02-18</td><td class="num">2026-01-21</td><td class="num">2026-01-14</td><td class="num">2025-11-25</td></tr><tr class=""><th class="src-424b5">Pool balance</th><td class="num col-subject"><span class="val-primary">$2,483.1MM</span></td><td class="num">$2,392.4MM</td><td class="num">$1,312.6MM</td><td class="num">$1,995.4MM</td><td class="num">$1,317.6MM</td><td class="num">$1,096.6MM</td></tr><tr class=""><th class="src-424b5">WA Credit Score</th><td class="num col-subject"><span class="val-primary">770</span><span class="delta-unf delta-compact" title="−1 vs peer median (n=5)">−1</span></td><td class="num">775</td><td class="num">758</td><td class="num">771</td><td class="num">779</td><td class="num">752</td></tr><tr class=""><th class="src-424b5">WA APR</th><td class="num col-subject"><span class="val-primary">5.00%</span><span class="delta-fav delta-compact" title="−0.68pp vs peer median (n=5)">−0.68pp</span></td><td class="num">5.38%</td><td class="num">5.87%</td><td class="num">5.68%</td><td class="num">5.97%</td><td class="num">5.15%</td></tr><tr class=""><th class="src-424b5">WA original term<span class="unit"> mo</span></th><td class="num col-subject"><span class="val-primary">61.6</span><span class="delta-fav delta-compact" title="−5.5 vs peer median (n=5)">−5.5</span></td><td class="num">67.2 mo</td><td class="num">68.4 mo</td><td class="num">65.9 mo</td><td class="num">70.0 mo</td><td class="num">65.9 mo</td></tr><tr class=""><th class="src-424b5">% new vehicles</th><td class="num col-subject"><span class="val-primary">86.5%</span></td><td class="num">99.8%</td><td class="num">98.0%</td><td class="num">88.0%</td><td class="num">80.8%</td><td class="num">93.7%</td></tr><tr class=""><th class="src-424b5">Reserve %</th><td class="num col-subject"><span class="val-primary">0.25%</span></td><td class="num">0.25%</td><td class="num">0.24%</td><td class="num">0.25%</td><td class="num">0.25%</td><td class="num">0.24%</td></tr><tr class=""><th class="src-424b5">Geo top-3</th><td class="num col-subject"><span class="geo-stack">CA 16.0%<br/>TX 9.5%<br/>NY 6.7%</span></td><td class="num"><span class="geo-stack">TX 13.2%<br/>FL 10.1%<br/>CA 9.1%</span></td><td class="num"><span class="geo-stack">FL 44.5%<br/>GA 18.5%<br/>NC 16.2%</span></td><td class="num"><span class="geo-stack">CA 24.0%<br/>TX 16.5%<br/>IL 3.9%</span></td><td class="num"><span class="geo-stack">TX 14.6%<br/>FL 7.1%<br/>CA 6.3%</span></td><td class="num"><span class="geo-stack">TX 16.6%<br/>CA 8.8%<br/>FL 8.4%</span></td></tr><tr class="section-hdr"><th colspan="7">Structure (at issuance)</th></tr><tr class=""><th class="src-fwp">AAA spread</th><td class="num col-subject"><span class="val-primary">+34 bps</span><span class="delta-unf delta-compact" title="+1bps vs peer median (n=5)">+1bps</span></td><td class="num">+34 bps</td><td class="num">+31 bps</td><td class="num">+33 bps</td><td class="num">+32 bps</td><td class="num">+36 bps</td></tr><tr class=""><th class="src-derived">AAA % of pool</th><td class="num col-subject"><span class="val-primary">73.1%</span><span class="delta-fav delta-compact" title="+3.5pp vs peer median (n=5)">+3.5pp</span></td><td class="num">69.0%</td><td class="num">69.7%</td><td class="num">70.0%</td><td class="num">75.6%</td><td class="num">69.3%</td></tr><tr class=""><th class="src-derived">Subordination below AAA</th><td class="num col-subject"><span class="val-primary">0.0%</span><span class="delta-unf delta-compact" title="−4.2pp vs peer median (n=5)">−4.2pp</span></td><td class="num">4.5%</td><td class="num">4.2%</td><td class="num">0.0%</td><td class="num">3.0%</td><td class="num">4.8%</td></tr><tr class=""><th class="src-derived">Overcollateralization</th><td class="num col-subject"><span class="val-primary">2.50%</span></td><td class="num">8.05%</td><td class="num">5.77%</td><td class="num">11.80%</td><td class="num">5.12%</td><td class="num">4.01%</td></tr><tr class=""><th class="src-424b5">Yield Supplement OC</th><td class="num col-subject"><span class="val-primary">4.09%</span></td><td class="num">5.70%</td><td class="num">—</td><td class="num">4.78%</td><td class="num">2.44%</td><td class="num">4.01%</td></tr><tr class=""><th class="src-fwp">Tranches</th><td class="num col-subject"><span class="val-primary">5</span></td><td class="num">7</td><td class="num">7</td><td class="num">5</td><td class="num">7</td><td class="num">7</td></tr></tbody></table>
 </div>
 
 <div class="section">
@@ -306,6 +315,14 @@ p.empty, p.peer-empty { color: var(--muted); font-style: italic; font-size: 13px
 </div>
 
 <footer>
+  <p class="about-blurb">
+    Presale Reports are compiled by <strong>Black Analytics</strong> from SEC EDGAR filings
+    (424B5, FWP) and ABS-EE loan-level data. Published the same day a deal&rsquo;s first
+    filing reaches EDGAR; pool, structural, and peer context reflects what was known
+    at the subject&rsquo;s issuance. For ongoing deal performance after closing, see the
+    <a href="https://blackanalytics.com/abs/explorer/" target="_blank" rel="noopener">Auto ABS Explorer</a>.
+    <em>Informational only &mdash; not a credit rating.</em>
+  </p>
   <strong>Methodology &amp; Sources</strong>
   <p class="methodology-prose">
     Capital structure (class size, coupon / spread, WAL, ratings) is sourced from
@@ -316,6 +333,6 @@ p.empty, p.peer-empty { color: var(--muted); font-style: italic; font-size: 13px
     class principals and the initial pool balance. Peer cohorts are sliced to the
     subject&rsquo;s closing date so the snapshot reflects what was knowable at issuance.
   </p>
-  <p class="gen">Generated 2026-05-06 12:44</p>
+  <p class="gen">Generated 2026-05-06 13:21</p>
 </footer>
 </body></html>
