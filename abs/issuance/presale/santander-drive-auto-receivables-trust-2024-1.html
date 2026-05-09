@@ -247,6 +247,24 @@ p.empty, p.peer-empty { color: var(--muted); font-style: italic; font-size: 13px
   .header-strip .meta code, .ticker-note code, footer ul.provenance code { background:#2d3748; }
   .chart-cell { background:#1a202c; border-color:#2d3748; }
 }
+/* Portrait / narrow viewports: dense PSR tables become horizontally
+   scrollable instead of truncating values (cap-structure ellipsis) or
+   compressing columns into unreadable single-letter stacks (comparison).
+   Applies to all .grid tables; .kv key-value tables are left alone. */
+@media (max-width: 768px) {
+  table.grid {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  table.grid th, table.grid td {
+    white-space: nowrap;
+    overflow: visible;
+    text-overflow: clip;
+    overflow-wrap: normal;
+  }
+}
 @media print {
   body { padding: 10px; font-size: 11px; max-width: 100%; }
   h2 { margin: 10px 0 4px 0; }
@@ -344,6 +362,6 @@ p.empty, p.peer-empty { color: var(--muted); font-style: italic; font-size: 13px
     class principals and the initial pool balance. Peer cohorts are sliced to the
     subject&rsquo;s closing date so the snapshot reflects what was knowable at issuance.
   </p>
-  <p class="gen">Generated 2026-05-09 06:12</p>
+  <p class="gen">Generated 2026-05-09 16:29</p>
 </footer>
 </body></html>
