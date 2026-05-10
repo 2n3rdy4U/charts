@@ -1043,7 +1043,7 @@
     </table>
 
     <footer>
-        Data sourced from SEC EDGAR &bull; Last updated: May 10, 2026 at 08:32 &bull;
+        Data sourced from SEC EDGAR &bull; Last updated: May 10, 2026 at 08:33 &bull;
         <a href="https://www.sec.gov/cgi-bin/browse-edgar" target="_blank" rel="noopener">EDGAR Search ↗</a>
     </footer>
 </div>
@@ -1460,7 +1460,23 @@ $(document).ready(function () {
         // doesn't track the parent scroll, so it never appears.
         fixedHeader: !window.matchMedia('(max-width: 900px)').matches
     });
-    $('#deals-search').on('input', function() { table.search(this.value).draw(); });
+    $('#deals-search').on('input', function() {
+        const v = this.value.trim();
+        if (!v) { table.search('').draw(); return; }
+        // Word-boundary regex search. DataTables' default smart-search uses
+        // bare-substring lookahead, so typing 'BA' matches every row containing
+        // 'Bank...' anywhere in any column — collapsing the filter to all CC
+        // trusts when the user types 'BA Credit Card Trust'. This builds an
+        // explicit '(?=.*\bword)...' regex per token instead, with smart
+        // case (any uppercase in input → case-sensitive, vim/ripgrep style)
+        // so 'BA' excludes 'Bank' but lowercase 'synch' still matches inside
+        // 'Synchrony'.
+        const escape = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const tokens = v.split(/\s+/).filter(Boolean).map(escape);
+        const re = '(?=.*\\b' + tokens.join(')(?=.*\\b') + ')';
+        const caseInsen = !/[A-Z]/.test(v);
+        table.search(re, true /* regex */, false /* not smart */, caseInsen).draw();
+    });
     $('#deals-table tbody').on('click', '.toggle-btn', function () {
         var $btn = $(this);
         var tr   = $btn.closest('tr')[0];
