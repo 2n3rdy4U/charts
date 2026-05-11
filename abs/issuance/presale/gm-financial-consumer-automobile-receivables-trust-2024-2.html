@@ -9,6 +9,7 @@
         --chip-fwp:#3182ce; --chip-424b5:#805ad5; --chip-absee:#2f855a;
         --chip-derived:#718096; --chip-notext:#c53030; --chip-sec:#4a5568; }
 * { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
        color: var(--fg); background: var(--bg); margin: 0 auto; padding: 24px;
        max-width: 1200px; line-height: 1.45; font-size: 14px; }
@@ -98,6 +99,7 @@ h2 .sub { text-transform: none; letter-spacing: 0; font-weight: 400; color: var(
 .section:first-of-type { border-top: none; padding-top: 0; margin-top: 20px; }
 
 table.grid { border-collapse: collapse; width: 100%; font-size: 13px; }
+table.grid.tx-parties { font-size: 13px; }
 table.grid th, table.grid td { padding: 5px 8px; border-bottom: 1px solid var(--grid);
                                 text-align: left; vertical-align: top; }
 table.grid thead th { background: var(--head); font-weight: 600;
@@ -264,6 +266,23 @@ p.empty, p.peer-empty { color: var(--muted); font-style: italic; font-size: 13px
     text-overflow: clip;
     overflow-wrap: normal;
   }
+  /* Comparison-table section dividers ("Collateral (pool at cut-off)",
+     "Structure (at issuance)") read oversized on mobile relative to the
+     14px h2 above them. Shrink to 9px + tighter padding so the visual
+     hierarchy reads h2 (section) → section-hdr (sub-section) → cells. */
+  table.grid.comparison tr.section-hdr th {
+    font-size: 9px;
+    letter-spacing: 0.06em;
+    padding-top: 6px;
+    padding-bottom: 2px;
+  }
+  /* Lease PSR only: Transaction Parties table renders with long
+     underwriter syndicate strings + "white-space:nowrap" cells, so 13px
+     feels oversized in narrow viewports. Loan PSR parties are shorter
+     and look fine, so the override is scoped to body.lease. */
+  body.lease table.grid.tx-parties { font-size: 11px; }
+  body.lease table.grid.tx-parties th,
+  body.lease table.grid.tx-parties td { padding: 4px 6px; }
 }
 @media print {
   body { padding: 10px; font-size: 11px; max-width: 100%; }
@@ -273,7 +292,7 @@ p.empty, p.peer-empty { color: var(--muted); font-style: italic; font-size: 13px
   .peer-list[open] summary { color: var(--muted); }
 }
 </style>
-</head><body>
+</head><body class="loan">
 <div class="header-strip">
   <button id="print-btn" onclick="window.print()" title="Print this credit summary"
     aria-label="Print this credit summary">
@@ -305,7 +324,7 @@ p.empty, p.peer-empty { color: var(--muted); font-style: italic; font-size: 13px
 
 <div class="section">
   <h2>Transaction Parties</h2>
-  <table class="grid" style="font-size:13px;"><tbody><tr><th style="width:30%;text-align:left;font-weight:500;color:var(--muted);">Sponsor</th><td>AmeriCredit</td></tr><tr><th style="width:30%;text-align:left;font-weight:500;color:var(--muted);">Servicer</th><td>AmeriCredit Financial Services, Inc.</td></tr><tr><th style="width:30%;text-align:left;font-weight:500;color:var(--muted);">Depositor / Transferor</th><td>AFS SenSub Corp</td></tr><tr><th style="width:30%;text-align:left;font-weight:500;color:var(--muted);">Indenture Trustee</th><td>—</td></tr><tr><th style="width:30%;text-align:left;font-weight:500;color:var(--muted);">Owner Trustee</th><td>Wilmington Trust Company</td></tr><tr><th style="width:30%;text-align:left;font-weight:500;color:var(--muted);">Asset Rep. Reviewer</th><td>Clayton Fixed Income Services LLC</td></tr><tr><th style="width:30%;text-align:left;font-weight:500;color:var(--muted);">Underwriters</th><td>BNP Paribas Securities, Lloyds Securities, Wells Fargo Securities, Goldman Sachs, MUFG Securities Americas, Scotia Capital</td></tr></tbody></table>
+  <table class="grid tx-parties"><tbody><tr><th style="width:30%;text-align:left;font-weight:500;color:var(--muted);">Sponsor</th><td>AmeriCredit</td></tr><tr><th style="width:30%;text-align:left;font-weight:500;color:var(--muted);">Servicer</th><td>AmeriCredit Financial Services, Inc.</td></tr><tr><th style="width:30%;text-align:left;font-weight:500;color:var(--muted);">Depositor / Transferor</th><td>AFS SenSub Corp</td></tr><tr><th style="width:30%;text-align:left;font-weight:500;color:var(--muted);">Indenture Trustee</th><td>—</td></tr><tr><th style="width:30%;text-align:left;font-weight:500;color:var(--muted);">Owner Trustee</th><td>Wilmington Trust Company</td></tr><tr><th style="width:30%;text-align:left;font-weight:500;color:var(--muted);">Asset Rep. Reviewer</th><td>Clayton Fixed Income Services LLC</td></tr><tr><th style="width:30%;text-align:left;font-weight:500;color:var(--muted);">Underwriters</th><td>BNP Paribas Securities, Lloyds Securities, Wells Fargo Securities, Goldman Sachs, MUFG Securities Americas, Scotia Capital</td></tr></tbody></table>
 </div>
 
 <div class="section">
@@ -362,6 +381,6 @@ p.empty, p.peer-empty { color: var(--muted); font-style: italic; font-size: 13px
     class principals and the initial pool balance. Peer cohorts are sliced to the
     subject&rsquo;s closing date so the snapshot reflects what was knowable at issuance.
   </p>
-  <p class="gen">Generated 2026-05-10 11:29</p>
+  <p class="gen">Generated 2026-05-11 09:08</p>
 </footer>
 </body></html>
