@@ -60,14 +60,14 @@ All content is derived from <strong>SEC ABS-EE loan-level filings</strong> submi
 </p>
 <ul>
   <li><strong>Issuers covered:</strong> 24 active auto-loan securitizers (Ally, Ameri&shy;Credit, Bridgecrest, BMW, CarMax, Capital One Prime, California Republic, Carvana, Exeter, Fifth Third, Ford, GM Financial, Honda, Hyundai, Mercedes&#8209;Benz, Nissan, Santander&nbsp;(SDART), Santander&nbsp;(DRIVE), Toyota, USAA, Volkswagen, World Omni, and CarMax&nbsp;Select, World&nbsp;Omni&nbsp;Select).</li>
-  <li><strong>Time coverage:</strong> Varies by issuer. Earliest data ~2010; most recent data is typically within a few weeks of the most recent filing deadline.</li>
-  <li><strong>Update cadence:</strong> The pipeline runs automatically on weekdays at 6:00 AM and 6:00 PM ET. New filings are fetched, parsed, and merged; aggregated CSVs and the dashboard HTML are regenerated. Typical data latency is &lt;24 hours after SEC filing.</li>
+  <li><strong>Time coverage:</strong> Issuance vintages begin in 2017, though individual loans in seasoned pools can extend back to ~2010. Most recent data is typically within a few weeks of the most recent filing deadline.</li>
+  <li><strong>Update cadence:</strong> The pipeline runs automatically twice daily on weekdays. New filings are fetched, parsed, and merged; aggregated CSVs and the dashboard HTML are regenerated. Typical data latency is &lt;24 hours after SEC filing.</li>
 </ul>
 
 <h2>2. Credit Score Methodology</h2>
-<div class="callout">
-<strong>Approved disclosure.</strong> Analysis uses the consumer credit bureau score reported in SEC ABS-EE filings, filtered to the 300&ndash;900 range. Seven of twenty-four issuers explicitly identify this as a FICO score; the remaining seventeen report a generic &ldquo;bureau score&rdquo; label. Industry practice strongly favors FICO Auto Score for auto lending decisions, but we cannot independently verify the score model for all issuers. Loans without a reported score (~0&ndash;15% by issuer) are excluded from the analysis.
-</div>
+<p>
+Analysis uses the consumer credit bureau score reported in SEC ABS-EE filings, filtered to the 300&ndash;900 range. Seven of twenty-four issuers explicitly identify this as a FICO score; the remaining seventeen report a generic &ldquo;bureau score&rdquo; label. Industry practice strongly favors FICO Auto Score for auto lending decisions, but we cannot independently verify the score model for all issuers. Loans without a reported score (~0&ndash;15% by issuer) are excluded from the analysis.
+</p>
 <p>
 Commercial / dealer bureau scores (<code>obligorCreditScoreType LIKE '%commercial%'</code>) are excluded because they use a different scoring scale than consumer scores and would contaminate the low-score bands of prime issuers.
 </p>
@@ -128,7 +128,7 @@ Commercial / dealer bureau scores (<code>obligorCreditScoreType LIKE '%commercia
 
 <h2>6. Update Schedule &amp; Audit Trail</h2>
 <ul>
-  <li><strong>Daily pipeline:</strong> Monday&ndash;Friday at 6:00 AM and 6:00 PM ET.</li>
+  <li><strong>Daily pipeline:</strong> Runs twice daily on weekdays.</li>
   <li><strong>Weekend behavior:</strong> Pipeline does not run; data is stable Saturday&ndash;Sunday.</li>
   <li><strong>Build identifier:</strong> Each generated HTML includes a build timestamp in the page header (<code>BUILD_ID</code>).</li>
 </ul>
