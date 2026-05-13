@@ -1,76 +1,108 @@
 <!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Methodology | SEC Auto Lease ABS Data Explorer</title>
+<title>Methodology | Auto Lease ABS Data Explorer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../../style.css" />
 <style>
-  :root { --text:#111827; --muted:#6b7280; --border:#e5e7eb; --bg:#fafafa; --accent:#1e40af; --code-bg:#f3f4f6; }
-  * { box-sizing:border-box; }
-  body { font-family:Georgia,"Times New Roman",serif; margin:0; background:var(--bg); color:var(--text); line-height:1.55; }
-  header { background:#fff; border-bottom:1px solid var(--border); padding:18px 32px; display:flex; align-items:baseline; gap:16px; }
+  :root {
+    --text:    var(--color-text);
+    --muted:   var(--color-muted);
+    --border:  var(--color-border);
+    --bg:      var(--color-surface);
+    --accent:  var(--color-accent-strong);
+    --code-bg: #f3f4f6;
+  }
+  body { font-family:-apple-system,"Inter",BlinkMacSystemFont,sans-serif; margin:0;
+         background:var(--bg); color:var(--text); line-height:1.55; }
+  header { background:#fff; border-bottom:1px solid var(--border); padding:18px 32px;
+           display:flex; align-items:baseline; gap:16px; flex-wrap:wrap; }
   header h1 { margin:0; font-size:22px; color:var(--accent); }
   header .sub { color:var(--muted); font-size:13px; }
-  .back { margin-left:auto; font-size:13px; } .back a { color:var(--accent); text-decoration:none; } .back a:hover { text-decoration:underline; }
-  main { max-width:880px; margin:0 auto; padding:32px 36px 80px; background:#fff; border-left:1px solid var(--border); border-right:1px solid var(--border); }
-  h2 { color:var(--accent); font-size:19px; margin:32px 0 8px; border-bottom:1px solid var(--border); padding-bottom:6px; }
-  h3 { font-size:15px; margin:20px 0 6px; color:var(--text); font-family:-apple-system,BlinkMacSystemFont,sans-serif; font-weight:600; }
-  p,li { font-size:14.5px; color:#1f2937; }
-  ul { padding-left:22px; } li { margin-bottom:4px; }
-  code { background:var(--code-bg); padding:1px 5px; border-radius:3px; font-size:13px; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; color:#374151; }
-  .callout { background:#fffbeb; border-left:3px solid #d97706; padding:12px 16px; margin:12px 0; font-size:13.5px; border-radius:0 6px 6px 0; }
+  .back { margin-left:auto; font-size:13px; }
+  .back a { color:var(--accent); text-decoration:none; }
+  .back a:hover { text-decoration:underline; }
+  main { max-width:860px; margin:0 auto; padding:28px 36px 80px; background:#fff;
+         border-left:1px solid var(--border); border-right:1px solid var(--border); }
+  h2 { color:var(--accent); font-size:18px; margin:28px 0 8px; border-bottom:1px solid var(--border); padding-bottom:6px; }
+  h3 { font-size:15px; margin:18px 0 6px; color:var(--text); font-weight:600; }
+  p, li { font-size:14px; color:#1f2937; }
+  ul { padding-left:22px; }
+  li { margin-bottom:4px; }
+  code { background:var(--code-bg); padding:1px 5px; border-radius:3px; font-size:12.5px;
+         font-family:ui-monospace,SFMono-Regular,Menlo,monospace; color:#374151; }
+  .callout { background:#fffbeb; border-left:3px solid #d97706; padding:12px 16px;
+             margin:14px 0; font-size:13.5px; border-radius:0 6px 6px 0; }
   .callout strong { color:#92400e; }
+  table { border-collapse:collapse; font-size:13px; margin:10px 0; }
+  th, td { padding:5px 10px; border-bottom:1px solid var(--border); text-align:left; }
+  th { background:#f9fafb; font-weight:600; }
+  td.num { text-align:right; font-variant-numeric:tabular-nums; }
 </style></head><body>
 <header>
   <h1>Methodology &amp; Definitions</h1>
-  <span class="sub">SEC Auto Lease ABS Data Explorer</span>
+  <span class="sub">Auto Lease ABS Data Explorer</span>
   <span class="back"><a href="index.html">&larr; Back to Explorer</a></span>
 </header>
 <main>
 
-<p>This page documents the data sources, field definitions, and analytical conventions behind every chart and table in the SEC Auto Lease ABS Data Explorer.</p>
+<p>This explorer surfaces lease-level delinquency performance from SEC ABS-EE filings, presented in the same visual idiom as the companion Auto Loan ABS Explorer. The current release focuses on a single performance dimension — delinquency by DPD bucket — with additional panels (residual realization, disposition mix, cumulative net loss) deferred until the underlying data has been independently corroborated.</p>
 
 <h2>1. Data Source</h2>
-<p>All content is derived from <strong>SEC ABS-EE loan-level filings</strong> filed by auto-lease securitization trusts under Regulation AB II. These are monthly regulatory filings (~70 fields per lease per reporting period) disclosed to EDGAR. Our pipeline fetches the XML, parses it into per-issuer DuckDB files, dedups across filings, and aggregates here.</p>
+<p>All content is derived from <strong>SEC ABS-EE asset-level filings</strong> submitted under Regulation AB II. Each auto-lease securitization trust files monthly XML disclosures (~70 fields per lease per reporting period) on EDGAR. Our pipeline fetches the XML, parses into per-issuer DuckDB files, deduplicates across filings, and aggregates here.</p>
 <ul>
-  <li><strong>Issuers covered:</strong> 10 active auto-lease securitizers — American Honda (AHALT), BMW Vehicle Lease (BMWLT), Ford Credit (FCALT), GM Financial (GMALT), Hyundai (HALST), Mercedes-Benz (MBALT), Nissan (NALT), Toyota Lease (TMCLT), Volkswagen (VWALT), World Omni (WOALT).</li>
-  <li><strong>Update cadence:</strong> The pipeline runs daily (SEC fetch at 6AM / 6PM ET). Typical latency from SEC filing to explorer is &lt;24 hours.</li>
+  <li><strong>Issuers covered (SEC-registered, public ABS-EE filers):</strong> BMW Vehicle Lease (BMWLT), Ford Credit (FCALT), GM Financial (GMALT), Mercedes-Benz (MBALT), Nissan (NALT), Volkswagen (VWALT), World Omni (WOALT).</li>
+  <li><strong>Excluded:</strong> Toyota Lease (TMCLT) and American Honda (AHALT) file under Rule 144A only — not SEC-registered and outside ABS-EE scope.</li>
+  <li><strong>Update cadence:</strong> Pipeline runs daily (6 AM and 6 PM ET). Typical latency from a new SEC filing to this explorer is under 24 hours.</li>
 </ul>
 
-<h2>2. Residual Value (RV) Methodology</h2>
-<div class="callout"><strong>RV is the dominant risk in lease ABS.</strong> When a lease terminates, the trust takes back the vehicle and sells it; if sale proceeds fall short of the originally-modeled residual, the trust realises a loss. We track both the <em>static</em> RV characteristics of each pool and the <em>dynamic</em> realized performance over time.</div>
+<h2>2. Delinquency Methodology</h2>
 <ul>
-  <li><strong>WA RV as % of vehicle value:</strong> <code>SUM(baseResidualValue) / SUM(vehicleValueAmount)</code>, pool-weighted across active leases. Higher values = more RV exposure.</li>
-  <li><strong>Residual source mix:</strong> SEC ABS-EE field <code>baseResidualSourceCode</code> — codes are <code>1</code> (Black Book), <code>2</code> (Automotive Lease Guide / ALG; industry standard for manufacturer-marked residuals), <code>98</code> (Other). An ALG-heavy pool typically carries conservative residuals and manufacturer backstop.</li>
-  <li><strong>Cumulative realized gain/loss:</strong> For each terminated lease with both <code>liquidationProceedsAmount</code> and <code>baseResidualValue</code> populated, gain/loss = proceeds − residual. Summed over the life of the deal and signed (positive = pool recovered more than modeled).</li>
+  <li><strong>60+ DPD rate:</strong> Active leases with <code>currentDelinquencyStatus &ge; 60</code>, divided by total active leases.</li>
+  <li><strong>30&ndash;59 DPD rate:</strong> Active leases with <code>30 &le; currentDelinquencyStatus &le; 59</code>, same denominator.</li>
+  <li><strong>30+ DPD rate:</strong> Combined 30&ndash;59 and 60+ buckets.</li>
+</ul>
+<p><strong>Count-weighted, exclusive buckets.</strong> The 30&ndash;59 bucket and the 60+ bucket sum (with the &lt;30 / current bucket) to the total active count; they do not overlap. Charts are unit-count weighted, mirroring the auto-loan explorer's convention.</p>
+
+<h2>3. Active-Pool Definition</h2>
+<p>A lease counts as <em>active</em> at a given reporting period if both:</p>
+<ul>
+  <li><code>reportingPeriodEndingActualBalanceAmount &gt; $10</code>, <strong>and</strong></li>
+  <li><code>zeroBalanceCode</code> is not one of the ABS-EE termination codes (<code>1</code>=prepaid/matured, <code>2</code>=liquidated, <code>3</code>=charged-off, <code>4</code>=servicer repurchase, <code>5</code>=substituted, <code>6</code>=defaulted).</li>
+</ul>
+<p>Most filers leave <code>zeroBalanceCode</code> empty for active leases; BMW uses <code>'99'</code> as their active marker. Excluding only the termination codes accommodates both conventions.</p>
+
+<h3>Reconciliation against issuer-filed Form 10-D</h3>
+<p>The active-pool definition was validated against Ford Credit Auto Lease Trust 2023-A's Monthly Investor Report (Form 10-D) for the December 2024 collection period. The 10-D's reported end-of-period pool count and securitization value reproduce exactly under our definition:</p>
+<table>
+  <thead><tr><th>Metric</th><th class="num">Our value</th><th class="num">Ford 10-D</th></tr></thead>
+  <tbody>
+    <tr><td>Active lease count (EOP)</td><td class="num">21,649</td><td class="num">21,649</td></tr>
+    <tr><td>EOP securitization value</td><td class="num">$660,433,746</td><td class="num">$660,433,746</td></tr>
+  </tbody>
+</table>
+
+<h3>Where our numerator will diverge from issuer reports</h3>
+<p>Even with matched denominators, our 30+ DPD count typically runs <strong>10&ndash;20% above</strong> the corresponding figure in monthly investor reports. Two structural reasons:</p>
+<ul>
+  <li><strong>Payment extensions.</strong> When a lessee receives a payment extension during a collection period, the issuer treats the lease as cured for reporting purposes. Our ABS-EE snapshot still carries the lease at its pre-extension DPD until the following month's filing.</li>
+  <li><strong>Charge-off-pending exclusions.</strong> Issuers typically remove leases flagged for default/repossession (ABS-EE <code>terminationIndicator = '3'</code>) from the delinquency table and report them separately. Our snapshot still includes those leases in the 60+ bucket while they retain a non-zero balance.</li>
+</ul>
+<p>The trends and relative comparisons across issuers remain meaningful. For deal-level absolute counts, consult the issuer's Form 10-D.</p>
+
+<h2>4. Vintage Curves vs Time Series</h2>
+<ul>
+  <li><strong>Vintage Curves</strong> plot DPD rate as a function of months since deal issuance, one line per deal series. Useful for comparing the seasoning behavior of different vintages within the same issuer.</li>
+  <li><strong>Time Series</strong> aggregates each issuer's deals into a single calendar-time curve, one line per issuer. Useful for cross-issuer trend comparisons.</li>
 </ul>
 
-<h2>3. Disposition / Termination Methodology</h2>
-<p>SEC ABS-EE field <code>terminationIndicator</code> records the reason a lease ended. Each asset's termination event is pulled from its <em>final</em> reporting row in the deduped database. Observed codes:</p>
+<h2>5. Scope &amp; Known Limitations</h2>
 <ul>
-  <li><code>1</code> — Matured (scheduled end-of-term return)</li>
-  <li><code>2</code> — Early termination (purchase / payoff)</li>
-  <li><code>3</code> — Early termination (default)</li>
-  <li><code>4</code> — Repossession</li>
-  <li><code>5</code> — Casualty / total loss</li>
-  <li><code>6</code>, other — Other / unspecified</li>
-</ul>
-<p>Pool-level disposition mix is a health signal: a rising purchase-rate implies lessees perceive the vehicle as worth more than the contract residual (positive for the trust); a rising default-rate signals credit deterioration.</p>
-
-<h2>4. Delinquency Methodology</h2>
-<ul>
-  <li><strong>60+ DPD rate:</strong> Leases with <code>currentDelinquencyStatus &ge; 60</code> AND end-of-period balance &gt; $10, divided by total active leases (balance &gt; $10).</li>
-  <li><strong>30–59 DPD rate:</strong> 30 &le; <code>currentDelinquencyStatus</code> &le; 59, same denominator.</li>
-  <li><strong>30+ DPD rate:</strong> Combined 30–59 and 60+.</li>
-</ul>
-<p>Lease DQ typically runs lower than loan DQ because lease pools are typically higher-FICO and lease terms are shorter.</p>
-
-<h2>5. Model Concentration</h2>
-<p>Top-3 vehicle models per series, ranked by asset count. Concentrated pools (&gt;60% in three models) carry heightened exposure to model-specific resale shocks (e.g., a Consumer Reports downgrade or a recall affecting residual values on one nameplate).</p>
-
-<h2>6. Known Limitations</h2>
-<ul>
-  <li>Some deals report vehicle-value at different points in the lifecycle (MSRP, cap cost, capitalized cost reduction net). Cross-issuer WA RV% comparisons should be treated as directional.</li>
-  <li>Termination codes beyond the 1–6 range are mapped to "Other" until observed in real data and documented here.</li>
-  <li>This explorer does not track deal-specific triggers (CNL thresholds, RV loss thresholds) written into individual indentures; those require prospectus-specific parsing.</li>
+  <li><strong>Delinquency only (MVP).</strong> Residual-value realization, disposition mix, and cumulative net loss metrics are computed by the pipeline but are not yet surfaced on this page pending independent corroboration.</li>
+  <li><strong>Entity-name aliasing.</strong> A handful of issuers (notably Ford) file under both their trust name and depositor name (e.g., "Ford Credit Auto Lease Two LLC"); these may appear as separate series in the legend with identical numbers.</li>
+  <li><strong>No deal-specific triggers.</strong> Pool-level performance vs deal-specific covenants (delinquency triggers, residual loss triggers) requires prospectus-level data not included in ABS-EE.</li>
 </ul>
 
 </main></body></html>
