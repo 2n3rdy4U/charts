@@ -13,6 +13,24 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
        color: var(--fg); background: var(--bg); margin: 0 auto; padding: 24px;
        max-width: 1200px; line-height: 1.45; font-size: 14px; }
+.ba-nav { position: sticky; top: 0; z-index: 100;
+          display: flex; justify-content: space-between; align-items: center;
+          margin: -24px -24px 16px -24px; padding: 10px 24px;
+          background: var(--bg); border-bottom: 1px solid var(--grid);
+          font-size: 12px; }
+.ba-nav .ba-brand { font-weight: 700; color: var(--fg); text-decoration: none;
+                    letter-spacing: -0.01em; font-size: 13px; }
+.ba-nav .ba-brand:hover { color: var(--accent); }
+.ba-nav .ba-links { list-style: none; margin: 0; padding: 0;
+                    display: flex; gap: 18px; }
+.ba-nav .ba-links a { color: var(--muted); text-decoration: none; }
+.ba-nav .ba-links a:hover { color: var(--accent); }
+@media (max-width: 480px) {
+  .ba-nav { padding: 8px 16px; margin: -24px -24px 12px -24px; font-size: 11px; }
+  .ba-nav .ba-brand { font-size: 12px; }
+  .ba-nav .ba-links { gap: 12px; }
+}
+@media print { .ba-nav { display: none; } }
 h1 { font-size: 20px; margin: 0 0 4px 0; letter-spacing: -0.01em; }
 h2 { font-size: 14px; text-transform: uppercase; letter-spacing: 0.06em;
      color: var(--fg); margin: 0 0 8px 0; font-weight: 700; }
@@ -293,7 +311,14 @@ p.empty, p.peer-empty { color: var(--muted); font-style: italic; font-size: 13px
   .peer-list[open] summary { color: var(--muted); }
 }
 </style>
-</head><body class="loan">
+</head><body class="loan"><nav class="ba-nav" aria-label="Site">
+  <a class="ba-brand" href="https://www.consumercreditmatters.com/">Black Analytics</a>
+  <ul class="ba-links">
+    <li><a href="https://www.consumercreditmatters.com/">Home</a></li>
+    <li><a href="https://www.consumercreditmatters.com/newsletter">Newsletter</a></li>
+    <li><a href="https://www.consumercreditmatters.com/podcasts">Podcasts</a></li>
+  </ul>
+</nav>
 <div class="header-strip">
   <button id="print-btn" onclick="window.print()" title="Print this credit summary"
     aria-label="Print this credit summary">
@@ -382,6 +407,6 @@ p.empty, p.peer-empty { color: var(--muted); font-style: italic; font-size: 13px
     class principals and the initial pool balance. Peer cohorts are sliced to the
     subject&rsquo;s closing date so the snapshot reflects what was knowable at issuance.
   </p>
-  <p class="gen">Generated 2026-05-14 10:16</p>
+  <p class="gen">Generated 2026-05-14 18:09</p>
 </footer>
 </body></html>
