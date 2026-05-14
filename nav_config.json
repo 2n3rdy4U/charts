@@ -11,11 +11,19 @@
       "items": [
         {
           "id": "abs-auto",
-          "label": "Auto",
+          "label": "Auto Loan",
           "icon": "car",
           "type": "panel",
           "url": "https://2n3rdy4u.github.io/charts/abs/explorer/index.html",
           "badge": null
+        },
+        {
+          "id": "abs-auto-lease",
+          "label": "Auto Lease",
+          "icon": "car",
+          "type": "panel",
+          "url": "https://2n3rdy4u.github.io/charts/abs/lease_explorer/index.html",
+          "badge": "NEW"
         },
         {
           "id": "abs-credit-card",
