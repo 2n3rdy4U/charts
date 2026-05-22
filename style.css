@@ -120,22 +120,14 @@ html, body {
 
 #header .brand {
   display: flex;
-  flex-direction: column;
-  line-height: 1.2;
+  align-items: center;
+  text-decoration: none;
 }
 
-#header .brand-name {
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: 0.01em;
-  color: var(--color-shell-text);
-}
-
-#header .brand-sub {
-  font-size: 11px;
-  color: var(--color-shell-muted);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+#header .brand-logo {
+  height: 36px;
+  width: auto;
+  display: block;
 }
 
 #header .header-right {
@@ -642,8 +634,7 @@ html, body {
     overflow: visible;
     padding: 0 max(12px, env(safe-area-inset-right)) 0 max(12px, env(safe-area-inset-left));
   }
-  #header .brand-name { font-size: 13px; }
-  #header .brand-sub  { font-size: 10px; }
+  #header .brand-logo { height: 28px; }
   #header .header-right .btn-primary {
     padding: 5px 10px;
     font-size: 11px;
