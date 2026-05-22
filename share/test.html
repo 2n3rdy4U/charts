@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChartShare Test — Mock CPI YoY</title>
+
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/share/share.css" />
+
+  <style>
+    body {
+      font-family: Inter, system-ui, -apple-system, sans-serif;
+      background: #f0f3f8;
+      margin: 0;
+      padding: 40px 20px;
+      color: #111827;
+    }
+    .container {
+      max-width: 820px;
+      margin: 0 auto;
+    }
+    h1 {
+      font-size: 20px;
+      font-weight: 600;
+      margin: 0 0 8px;
+      color: #111827;
+    }
+    .subtitle {
+      color: #6b7280;
+      font-size: 13px;
+      margin-bottom: 24px;
+    }
+    .chart-card {
+      background: #fff;
+      border: 1px solid #dde2ed;
+      border-radius: 8px;
+      padding: 16px;
+      position: relative;
+    }
+    .test-note {
+      margin-top: 16px;
+      font-size: 12px;
+      color: #6b7280;
+      background: rgba(0, 52, 165, 0.06);
+      padding: 12px 14px;
+      border-radius: 6px;
+    }
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.20.1"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+  <script src="/share/share.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>CPI Headline YoY %</h1>
+    <p class="subtitle">Mock chart for ChartShare module integration testing.</p>
+
+    <div class="chart-card">
+      <div id="vis"></div>
+    </div>
+
+    <p class="test-note">
+      Click the share icon in the top-right of the chart to open the share modal.
+      The PNG preview is built on-the-fly using <code>view.toImageURL()</code> and composited
+      with the brand frame (cream background, header logo, footer URL/date).
+    </p>
+  </div>
+
+  <div id="debug" style="margin-top:16px;font-size:12px;color:#dc2626;font-family:monospace;white-space:pre-wrap;"></div>
+
+  <script>
+    function logDebug(msg) {
+      var el = document.getElementById("debug");
+      if (el) el.textContent += msg + "\n";
+      console.log("[test]", msg);
+    }
+    window.addEventListener("error", function (e) {
+      logDebug("ERROR: " + e.message + " at " + e.filename + ":" + e.lineno);
+    });
+
+    logDebug("Boot. vega=" + typeof vega + " vegaEmbed=" + typeof vegaEmbed + " ChartShare=" + typeof ChartShare);
+
+    // Mock CPI YoY data
+    var mockData = [];
+    var start = new Date(2018, 0, 1);
+    for (var i = 0; i < 96; i++) {
+      var d = new Date(start.getTime());
+      d.setMonth(d.getMonth() + i);
+      var phase = i / 95;
+      var v = 2.0 + 7 * Math.sin(phase * Math.PI) + (Math.random() - 0.5) * 0.3;
+      mockData.push({ date: d.toISOString().slice(0, 10), value: Math.max(0.5, v) });
+    }
+    logDebug("Mock data: " + mockData.length + " points, first=" + JSON.stringify(mockData[0]));
+
+    var spec = {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      data: { values: mockData },
+      mark: { type: "line", color: "#0034A5", strokeWidth: 2.5 },
+      width: 720,
+      height: 360,
+      encoding: {
+        x: {
+          field: "date",
+          type: "temporal",
+          axis: { format: "%Y", labelFontSize: 11, labelColor: "#555" },
+          title: null
+        },
+        y: {
+          field: "value",
+          type: "quantitative",
+          axis: { format: ".1f", labelFontSize: 11, labelColor: "#555", gridColor: "#E8E8E8" },
+          title: "YoY %"
+        },
+        tooltip: [
+          { field: "date", type: "temporal", format: "%B %Y" },
+          { field: "value", type: "quantitative", format: ".2f" }
+        ]
+      },
+      config: {
+        view: { stroke: null },
+        axis: { labelFont: "Inter, sans-serif", titleFont: "Inter, sans-serif" }
+      }
+    };
+
+    if (typeof vegaEmbed !== "function") {
+      logDebug("vegaEmbed is not loaded. Check CDN scripts.");
+    } else {
+      vegaEmbed("#vis", spec, { actions: false })
+        .then(function (result) {
+          logDebug("vegaEmbed OK. view=" + (result.view ? "ok" : "missing"));
+          ChartShare.attach(result.view, {
+            title: "CPI Headline YoY %",
+            url: "https://www.consumercreditmatters.com/inflation",
+            asof: "May 22, 2026"
+          });
+          logDebug("ChartShare.attach OK");
+        })
+        .catch(function (err) {
+          logDebug("vegaEmbed FAILED: " + err.message);
+          console.error(err);
+        });
+    }
+  </script>
+</body>
+</html>
