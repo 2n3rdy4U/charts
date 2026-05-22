@@ -1,35 +1,43 @@
 /* ── ChartShare ──────────────────────────────────────────────────────
-   Reusable share-button + branded-PNG-export module for Vega-Lite
-   charts on consumercreditmatters.com.
+   Self-installing share-button + branded-PNG-export module.
 
    Usage:
-     vegaEmbed("#vis", spec, opt).then(result => {
-       ChartShare.attach(result.view, {
-         title: "CPI Headline YoY %",
-         url:   window.location.href,
-         asof:  "2026-05-22"        // optional, defaults to today
-       });
-     });
+     <script src="../share/share.js"></script>
+
+   That's it. The module:
+   - Adds a small floating share button at the top-right of the viewport
+   - On click: rasterizes the page (or a chosen container) via html2canvas,
+     composites with the Consumer Credit Matters brand frame, and shows a
+     modal with Download / Copy / Share actions
+   - Auto-derives title from <title> and URL from location.href
+
+   Optional per-page overrides (place a <script> before share.js):
+     window.CC_CHART_META   = { title, url, asof };   // explicit meta
+     window.CC_CHART_TARGET = "#chart" or ".whatever"; // CSS selector for
+                                                       // the region to capture
+                                                       // (default: <main> if
+                                                       // present, else <body>)
 
    Brand: cream #FAF9F5, royal blue #0034A5
    ───────────────────────────────────────────────────────────────── */
 (function () {
   "use strict";
 
-  // Derive asset paths from this script's own URL so they resolve
-  // correctly whether the chart is served from localhost, github.io,
-  // or the consumercreditmatters.com iframe (same-origin to GH Pages).
-  // share.js lives at <base>/share/share.js -> brand assets at <base>/assets/brand/
+  // ── Self-locate so asset paths work from any nesting depth ────────
   var SCRIPT_EL = document.currentScript || (function () {
     var s = document.getElementsByTagName("script");
     return s[s.length - 1];
   })();
   var SCRIPT_URL = SCRIPT_EL ? new URL(SCRIPT_EL.src, document.baseURI).toString() : "";
   var ASSETS_BASE = SCRIPT_URL ? new URL("../assets/brand/", SCRIPT_URL).toString() : "/assets/brand/";
+  var CSS_URL = SCRIPT_URL ? new URL("./share.css", SCRIPT_URL).toString() : "/share/share.css";
   var LOGO_URL = ASSETS_BASE + "logo-horizontal-primary.png";
+
+  var HTML2CANVAS_URL = "https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js";
+
   var FOOTER_URL = "consumercreditmatters.com";
 
-  // Branded frame dimensions (1200×630 = OG aspect ratio)
+  // Branded frame dimensions (1200×630 = OG aspect)
   var FRAME_W = 1200;
   var FRAME_H = 630;
   var HEADER_H = 96;
@@ -41,63 +49,57 @@
   var BLUE = "#0034A5";
   var MUTED = "#6b7280";
 
-  // ── SVG icons (inline so no external deps) ────────────────────────
+  // ── Inline SVG icons ──────────────────────────────────────────────
   var ICON_SHARE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>';
   var ICON_DOWNLOAD = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>';
   var ICON_COPY = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
   var ICON_X = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>';
   var ICON_LINKEDIN = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.063 2.063 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>';
 
-  // ── Public API ────────────────────────────────────────────────────
-  var ChartShare = {
-    attach: function (view, opts) {
-      opts = opts || {};
-      var meta = {
-        title: opts.title || document.title || "Consumer Credit Matters chart",
-        url: opts.url || window.location.href,
-        asof: opts.asof || formatToday()
-      };
-      var btn = buildShareButton();
-      btn.addEventListener("click", function (e) {
-        e.preventDefault();
-        openModal(view, meta);
-      });
+  // ── Init: install button on DOM ready ─────────────────────────────
+  function init() {
+    if (document.getElementById("cc-share-floating-btn")) return; // idempotent
+    ensureStylesheet();
 
-      // Place the button absolutely against the chart container.
-      // Look for #vis (Altair default) first, else find chart's parent
-      // container by walking up from the Vega view.
-      var host = document.getElementById("vis") || findHost(view);
-      if (host) {
-        var cs = getComputedStyle(host);
-        if (cs.position === "static") host.style.position = "relative";
-        host.appendChild(btn);
-      } else {
-        // Fallback: pin to top-right of viewport
-        btn.style.position = "fixed";
-        btn.style.top = "12px";
-        btn.style.right = "12px";
-        document.body.appendChild(btn);
-      }
-    }
-  };
-
-  function findHost(view) {
-    try {
-      var sceneRoot = view.container && view.container();
-      return sceneRoot && sceneRoot.parentElement;
-    } catch (e) {
-      return null;
-    }
-  }
-
-  function buildShareButton() {
     var btn = document.createElement("button");
     btn.type = "button";
-    btn.className = "cc-share-btn";
-    btn.setAttribute("aria-label", "Share or save this chart");
-    btn.title = "Share or save this chart";
+    btn.id = "cc-share-floating-btn";
+    btn.className = "cc-share-btn cc-share-btn--floating";
+    btn.setAttribute("aria-label", "Save chart as branded image");
+    btn.title = "Save chart as branded image";
     btn.innerHTML = ICON_SHARE;
-    return btn;
+    btn.addEventListener("click", function (e) {
+      e.preventDefault();
+      openModal(currentMeta());
+    });
+    document.body.appendChild(btn);
+  }
+
+  function currentMeta() {
+    var override = window.CC_CHART_META || {};
+    return {
+      title: override.title || document.title || "Consumer Credit Matters chart",
+      url:   override.url   || window.location.href,
+      asof:  override.asof  || formatToday()
+    };
+  }
+
+  function ensureStylesheet() {
+    // Idempotent: only inject the <link> if it isn't already present.
+    var links = document.getElementsByTagName("link");
+    for (var i = 0; i < links.length; i++) {
+      if (links[i].href && links[i].href.indexOf("/share/share.css") !== -1) return;
+    }
+    var link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = CSS_URL;
+    document.head.appendChild(link);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
   }
 
   function formatToday() {
@@ -107,33 +109,28 @@
   }
 
   // ── Modal ─────────────────────────────────────────────────────────
-  function openModal(view, meta) {
-    // Detect Web Share API with file support (mobile + Chrome/Safari/Edge desktop).
-    // We'll build the actual File from the blob later; the canShare probe needs
-    // a placeholder File of the same type to return an accurate answer.
+  function openModal(meta) {
+    // Web Share API only shown on touch devices (mobile/tablet) where the
+    // native share sheet is the conventional flow. On desktop, Copy + Download
+    // are simpler and more reliable.
+    var isTouch = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
     var probeFile = new File([new Blob([""], { type: "image/png" })], "probe.png", { type: "image/png" });
-    var webShareSupported =
+    var showSendToApp = isTouch &&
       typeof navigator.share === "function" &&
       typeof navigator.canShare === "function" &&
       navigator.canShare({ files: [probeFile] });
 
-    var actionsHTML;
-    if (webShareSupported) {
-      actionsHTML =
-        '<button class="cc-share-action" data-action="download" disabled>' + ICON_DOWNLOAD + '<span>Download</span></button>' +
-        '<button class="cc-share-action" data-action="copy" disabled>' + ICON_COPY + '<span>Copy image</span></button>' +
-        '<button class="cc-share-action" data-action="share" disabled>' + ICON_SHARE + '<span>Share…</span></button>';
-    } else {
-      actionsHTML =
-        '<button class="cc-share-action" data-action="download" disabled>' + ICON_DOWNLOAD + '<span>Download</span></button>' +
-        '<button class="cc-share-action" data-action="copy" disabled>' + ICON_COPY + '<span>Copy image</span></button>' +
-        '<button class="cc-share-action" data-action="tweet" disabled>' + ICON_X + '<span>Tweet</span></button>' +
-        '<button class="cc-share-action" data-action="linkedin" disabled>' + ICON_LINKEDIN + '<span>LinkedIn</span></button>';
+    var actionsHTML =
+      '<button class="cc-share-action" data-action="download" disabled>' + ICON_DOWNLOAD + '<span>Download</span></button>' +
+      '<button class="cc-share-action" data-action="copy" disabled>' + ICON_COPY + '<span>Copy image</span></button>';
+    if (showSendToApp) {
+      actionsHTML +=
+        '<button class="cc-share-action" data-action="share" disabled>' + ICON_SHARE + '<span>Send to app…</span></button>';
     }
 
-    var footerNote = webShareSupported
-      ? "Share… opens your system share sheet so you can post the chart image directly to LinkedIn, X, Slack, Messages, etc."
-      : "Tweet and LinkedIn auto-copy the image, then open the post dialog — paste with Cmd+V (Ctrl+V on Windows).";
+    var footerNote = showSendToApp
+      ? "Send to app… opens your system share sheet to post the image directly to LinkedIn, X, Slack, Messages, etc."
+      : "Download saves a PNG. Copy puts the image on your clipboard — paste it directly into a LinkedIn post, tweet, Slack message, email, etc.";
 
     var bg = document.createElement("div");
     bg.className = "cc-share-modal-bg cc-open";
@@ -163,12 +160,13 @@
     }
     bg.addEventListener("click", function (e) { if (e.target === bg) close(); });
     bg.querySelector(".cc-share-close").addEventListener("click", close);
-    document.addEventListener("keydown", function escHandler(e) {
+    var escHandler = function (e) {
       if (e.key === "Escape") { close(); document.removeEventListener("keydown", escHandler); }
-    });
+    };
+    document.addEventListener("keydown", escHandler);
 
     // Build branded PNG and wire actions
-    buildBrandedPNG(view, meta)
+    buildBrandedPNG(meta)
       .then(function (result) {
         var previewWrap = bg.querySelector(".cc-share-preview");
         previewWrap.innerHTML = "";
@@ -177,15 +175,12 @@
         img.alt = meta.title;
         previewWrap.appendChild(img);
 
-        // Enable all action buttons
         var buttons = bg.querySelectorAll(".cc-share-action");
-        buttons.forEach(function (b) { b.disabled = false; });
+        for (var i = 0; i < buttons.length; i++) buttons[i].disabled = false;
 
         var dlBtn = bg.querySelector('[data-action="download"]');
         var cpBtn = bg.querySelector('[data-action="copy"]');
         var shareBtn = bg.querySelector('[data-action="share"]');
-        var tw = bg.querySelector('[data-action="tweet"]');
-        var li = bg.querySelector('[data-action="linkedin"]');
         var toast = bg.querySelector('.cc-share-toast');
 
         function flashToast(msg, ms) {
@@ -195,7 +190,6 @@
           clearTimeout(toast._t);
           toast._t = setTimeout(function () { toast.style.display = "none"; }, ms || 3500);
         }
-
         function flashCopied(btn) {
           btn.classList.add("cc-copied");
           var span = btn.querySelector("span");
@@ -226,59 +220,25 @@
         if (shareBtn) {
           shareBtn.addEventListener("click", function () {
             var file = new File([result.blob], slugify(meta.title) + ".png", { type: "image/png" });
-            // Pass ONLY files. Including text/url in the same share payload caused
-            // some macOS share targets (notably LinkedIn) to attach the image twice
-            // (once from the file, once from a URL-preview representation).
             navigator.share({ files: [file] })
               .catch(function (err) {
-                if (err && err.name === "AbortError") return; // user cancelled
+                if (err && err.name === "AbortError") return;
                 console.warn("Web Share failed:", err);
-                flashToast("Share dialog unavailable. Use Download or Copy.", 4000);
+                flashToast("Share unavailable. Use Download or Copy.", 4000);
               });
-          });
-        }
-
-        function copyThenOpen(intentURL) {
-          copyToClipboard(result.blob)
-            .then(function () {
-              flashToast("Image copied — paste it into your post (Cmd+V / Ctrl+V).", 5000);
-              setTimeout(function () { window.open(intentURL, "_blank", "noopener"); }, 350);
-            })
-            .catch(function (err) {
-              console.warn("Auto-copy failed, opening dialog anyway:", err);
-              flashToast("Couldn't auto-copy. Use Download then attach manually.", 4500);
-              window.open(intentURL, "_blank", "noopener");
-            });
-        }
-
-        if (tw) {
-          tw.addEventListener("click", function () {
-            copyThenOpen(
-              "https://twitter.com/intent/tweet?" +
-              "text=" + encodeURIComponent(meta.title + " — via consumercreditmatters.com") +
-              "&url=" + encodeURIComponent(meta.url)
-            );
-          });
-        }
-        if (li) {
-          li.addEventListener("click", function () {
-            copyThenOpen(
-              "https://www.linkedin.com/sharing/share-offsite/?url=" +
-              encodeURIComponent(meta.url)
-            );
           });
         }
       })
       .catch(function (err) {
         console.error("Branded PNG render failed:", err);
         var previewWrap = bg.querySelector(".cc-share-preview");
-        previewWrap.innerHTML = '<div class="cc-share-preview-loading" style="color:#dc2626;flex-direction:column;gap:8px;padding:24px;font-family:monospace;font-size:11px;line-height:1.4;text-align:left;align-items:flex-start;white-space:pre-wrap;">PNG render failed:\n' + (err && err.message ? err.message : String(err)) + '\n\nLOGO_URL=' + LOGO_URL + '</div>';
+        previewWrap.innerHTML = '<div class="cc-share-preview-loading" style="color:#dc2626;flex-direction:column;gap:8px;padding:24px;font-family:monospace;font-size:11px;line-height:1.4;text-align:left;align-items:flex-start;white-space:pre-wrap;">PNG render failed:\n' + (err && err.message ? err.message : String(err)) + '</div>';
       });
   }
 
   function copyToClipboard(blob) {
     if (!navigator.clipboard || !window.ClipboardItem) {
-      return Promise.reject(new Error("Clipboard API not supported in this browser"));
+      return Promise.reject(new Error("Clipboard API not supported"));
     }
     return navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
   }
@@ -287,14 +247,57 @@
     return (s || "chart").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
   }
 
-  // ── Branded PNG compositor ────────────────────────────────────────
-  function buildBrandedPNG(view, meta) {
-    var chartPromise = view.toImageURL("png", 2)
-      .then(function (url) { return loadImage(url); });
-    var logoPromise = loadImage(LOGO_URL, false);
+  // ── Capture: html2canvas (lazy-loaded on first share click) ───────
+  function loadHtml2Canvas() {
+    if (window.html2canvas) return Promise.resolve(window.html2canvas);
+    return new Promise(function (resolve, reject) {
+      var s = document.createElement("script");
+      s.src = HTML2CANVAS_URL;
+      s.onload = function () { resolve(window.html2canvas); };
+      s.onerror = function () { reject(new Error("Failed to load html2canvas from " + HTML2CANVAS_URL)); };
+      document.head.appendChild(s);
+    });
+  }
 
-    return Promise.all([chartPromise, logoPromise]).then(function (parts) {
-      var chartImg = parts[0];
+  function captureChart() {
+    return loadHtml2Canvas().then(function (html2canvas) {
+      // Pick target: explicit override, else <main>, else <body>
+      var target = null;
+      if (window.CC_CHART_TARGET) {
+        target = document.querySelector(window.CC_CHART_TARGET);
+      }
+      if (!target) target = document.querySelector("main");
+      if (!target) target = document.body;
+
+      // Hide the floating share button so it doesn't appear in the capture
+      var floatBtn = document.getElementById("cc-share-floating-btn");
+      var prevVis = floatBtn ? floatBtn.style.visibility : null;
+      if (floatBtn) floatBtn.style.visibility = "hidden";
+
+      return html2canvas(target, {
+        scale: window.devicePixelRatio > 1 ? 2 : 1.5,
+        backgroundColor: "#ffffff",
+        useCORS: true,
+        logging: false,
+        // Skip the modal itself (added to body) and the share button from capture
+        ignoreElements: function (el) {
+          if (!el.classList) return false;
+          return (
+            el.classList.contains("cc-share-modal-bg") ||
+            el.id === "cc-share-floating-btn"
+          );
+        }
+      }).then(function (canvas) {
+        if (floatBtn) floatBtn.style.visibility = prevVis || "";
+        return canvas;
+      });
+    });
+  }
+
+  // ── Branded PNG compositor ────────────────────────────────────────
+  function buildBrandedPNG(meta) {
+    return Promise.all([captureChart(), loadImage(LOGO_URL, false)]).then(function (parts) {
+      var chartCanvas = parts[0];
       var logoImg = parts[1];
 
       var canvas = document.createElement("canvas");
@@ -306,7 +309,7 @@
       ctx.fillStyle = CREAM;
       ctx.fillRect(0, 0, FRAME_W, FRAME_H);
 
-      // Header bar — logo on left, title on right
+      // Header — logo on left, title on right
       var logoH = 56;
       var logoW = (logoImg.width / logoImg.height) * logoH;
       var logoY = (HEADER_H - logoH) / 2;
@@ -314,7 +317,6 @@
         ctx.drawImage(logoImg, PAD_X, logoY, logoW, logoH);
       }
 
-      // Title (right of logo, vertically centered in header)
       ctx.fillStyle = INK;
       ctx.font = '600 26px Inter, system-ui, -apple-system, sans-serif';
       ctx.textBaseline = "middle";
@@ -323,7 +325,6 @@
       var title = truncateToWidth(ctx, meta.title, maxTitleWidth);
       ctx.fillText(title, titleX, HEADER_H / 2);
 
-      // Subtle divider under header
       ctx.strokeStyle = "#ECE9DD";
       ctx.lineWidth = 1;
       ctx.beginPath();
@@ -331,14 +332,14 @@
       ctx.lineTo(FRAME_W - PAD_X, HEADER_H);
       ctx.stroke();
 
-      // Chart area — fit-to-box, preserve aspect
+      // Chart fits in middle, preserve aspect
       var chartBoxX = PAD_X;
       var chartBoxY = HEADER_H + 16;
       var chartBoxW = FRAME_W - 2 * PAD_X;
       var chartBoxH = FRAME_H - HEADER_H - FOOTER_H - 32;
-      var fitted = fitContain(chartImg.width, chartImg.height, chartBoxW, chartBoxH);
+      var fitted = fitContain(chartCanvas.width, chartCanvas.height, chartBoxW, chartBoxH);
       ctx.drawImage(
-        chartImg,
+        chartCanvas,
         chartBoxX + (chartBoxW - fitted.w) / 2,
         chartBoxY + (chartBoxH - fitted.h) / 2,
         fitted.w, fitted.h
@@ -361,7 +362,7 @@
       ctx.font = '400 14px Inter, system-ui, -apple-system, sans-serif';
       ctx.textAlign = "right";
       ctx.fillText("Data as of " + meta.asof, FRAME_W - PAD_X, footerY);
-      ctx.textAlign = "left"; // reset
+      ctx.textAlign = "left";
 
       var dataURL = canvas.toDataURL("image/png");
       return new Promise(function (resolve) {
@@ -373,13 +374,8 @@
   }
 
   function fitContain(srcW, srcH, boxW, boxH) {
-    var srcRatio = srcW / srcH;
-    var boxRatio = boxW / boxH;
-    if (srcRatio > boxRatio) {
-      return { w: boxW, h: boxW / srcRatio };
-    } else {
-      return { w: boxH * srcRatio, h: boxH };
-    }
+    var sr = srcW / srcH, br = boxW / boxH;
+    return sr > br ? { w: boxW, h: boxW / sr } : { w: boxH * sr, h: boxH };
   }
 
   function truncateToWidth(ctx, text, maxW) {
@@ -396,11 +392,8 @@
       var img = new Image();
       if (crossOrigin) img.crossOrigin = "anonymous";
       img.onload = function () { resolve(img); };
-      img.onerror = function (e) { reject(new Error("Image load failed: " + src)); };
+      img.onerror = function () { reject(new Error("Image load failed: " + src)); };
       img.src = src;
     });
   }
-
-  // Expose
-  window.ChartShare = ChartShare;
 })();

@@ -18,8 +18,53 @@
   cursor: pointer;
   z-index: 10;
   color: #0034A5;
-  transition: background 150ms ease, border-color 150ms ease;
+  transition: background 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
   -webkit-tap-highlight-color: transparent;
+}
+
+.cc-share-btn--floating {
+  position: fixed;
+  top: auto;
+  right: 20px;
+  bottom: 20px;
+  width: auto;
+  height: 44px;
+  padding: 0 16px 0 14px;
+  gap: 8px;
+  background: #0034A5;
+  border-color: #0034A5;
+  color: #ffffff;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  box-shadow: 0 4px 14px rgba(0, 52, 165, 0.30);
+  z-index: 9998;
+}
+
+.cc-share-btn--floating svg {
+  width: 18px;
+  height: 18px;
+}
+
+.cc-share-btn--floating:hover,
+.cc-share-btn--floating:focus {
+  background: #002a85;
+  border-color: #002a85;
+  color: #ffffff;
+  box-shadow: 0 6px 18px rgba(0, 52, 165, 0.40);
+}
+
+.cc-share-btn--floating::after {
+  content: "Save image";
+}
+
+@media (max-width: 480px) {
+  .cc-share-btn--floating {
+    padding: 0 14px 0 12px;
+    font-size: 13px;
+    height: 40px;
+  }
 }
 
 .cc-share-btn:hover,
