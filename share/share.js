@@ -137,7 +137,9 @@
   }
 
   function initPerChart(selector) {
-    var elements = document.querySelectorAll(selector);
+    // Accept array of selectors (joined into a CSS selector list) or a single string.
+    var selectorStr = Array.isArray(selector) ? selector.join(", ") : selector;
+    var elements = document.querySelectorAll(selectorStr);
     if (elements.length === 0) {
       console.warn("ChartShare: no elements matched", selector);
       return;
