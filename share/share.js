@@ -227,10 +227,20 @@
         if (sTxt) dynTitle = dynTitle ? dynTitle + " — " + sTxt : sTxt;
       }
     }
+    // Dynamic "as of" line: a page can set CC_CHART_DYNAMIC_ASOF_SELECTOR
+    // pointing to an element whose text already reads as a complete line
+    // (e.g. "Most recent data: April 2026"). Used verbatim in the brand
+    // frame's right-footer cell — no "Data as of" prefix added.
+    var dynAsof = "";
+    if (window.CC_CHART_DYNAMIC_ASOF_SELECTOR) {
+      var a = document.querySelector(window.CC_CHART_DYNAMIC_ASOF_SELECTOR);
+      if (a) dynAsof = (a.textContent || "").trim();
+    }
     return {
-      title: dynTitle || override.title || document.title || "Consumer Credit Matters chart",
-      url:   override.url || window.location.href,
-      asof:  override.asof || formatToday()
+      title:    dynTitle || override.title || document.title || "Consumer Credit Matters chart",
+      url:      override.url || window.location.href,
+      asof:     override.asof || formatToday(),
+      asofLine: dynAsof  // empty unless explicit; compositor falls back to "Data as of " + asof
     };
   }
 
@@ -577,7 +587,10 @@
       ctx.fillStyle = MUTED;
       ctx.font = '400 28px Inter, system-ui, -apple-system, sans-serif';
       ctx.textAlign = "right";
-      ctx.fillText("Data as of " + meta.asof, FRAME_W - PAD_X, footerY);
+      // Use the page's own as-of line verbatim if provided, else fall back
+      // to the capture-date stamp. Keeps page UI and shared PNG consistent.
+      var asofText = meta.asofLine || ("Data as of " + meta.asof);
+      ctx.fillText(asofText, FRAME_W - PAD_X, footerY);
       ctx.textAlign = "left";
 
       var dataURL = canvas.toDataURL("image/png");

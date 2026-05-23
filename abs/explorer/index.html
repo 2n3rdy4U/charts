@@ -456,6 +456,7 @@
     window.CC_CHART_CAPTURE_SELECTOR          = ["#vis", "#repoChart", ".fico-chart"];
     window.CC_CHART_DYNAMIC_TITLE_SELECTOR    = "#viewTitle";
     window.CC_CHART_DYNAMIC_SUBTITLE_SELECTOR = "#viewSubtitle";
+    window.CC_CHART_DYNAMIC_ASOF_SELECTOR     = "#lastUpdated";
   </script>
   <script src="../../share/share.js"></script>
 </head>
@@ -467,7 +468,6 @@
     <div class="brand">
       <div class="brand-title">Auto Loan ABS Data Explorer</div>
     </div>
-    <div class="meta-date"><span id="lastUpdated"></span></div>
     <button id="export-btn" onclick="exportExplorer()" title="Download chart as PNG" style="padding:6px 8px;border:1px solid transparent;border-radius:5px;background:transparent;cursor:pointer;color:var(--muted);margin-left:8px;display:inline-flex;align-items:center;justify-content:center;line-height:1;min-height:36px;min-width:36px;"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></button>
   </div>
   <nav class="mode-tabs" id="modeGroup">
@@ -713,7 +713,7 @@
         <div class="fico-method" id="fico-methodology"></div>
       </div>
     </div>
-    <div id="source-bar">Source: SEC ABS-EE filings, EDGAR &middot; <a href="methodology.html" style="color:inherit;text-decoration:underline;">Methodology &amp; Data Quality</a> &middot; Consumer Credit Matters</div>
+    <div id="source-bar">Source: SEC ABS-EE filings, EDGAR &middot; <a href="methodology.html" style="color:inherit;text-decoration:underline;">Methodology &amp; Data Quality</a> &middot; Consumer Credit Matters &middot; <span id="lastUpdated"></span></div>
   </div>
 
 </div>
