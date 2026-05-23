@@ -37,12 +37,14 @@
 
   var FOOTER_URL = "consumercreditmatters.com";
 
-  // Branded frame dimensions (1200×630 = OG aspect)
-  var FRAME_W = 1200;
-  var FRAME_H = 630;
-  var HEADER_H = 96;
-  var FOOTER_H = 56;
-  var PAD_X = 40;
+  // Branded frame dimensions — rendered at 2x social-card size for crispness.
+  // 2400×1260 keeps the 1200×630 OG aspect ratio; social platforms downscale
+  // on display but the source is sharp at full-screen view too.
+  var FRAME_W = 2400;
+  var FRAME_H = 1260;
+  var HEADER_H = 192;
+  var FOOTER_H = 112;
+  var PAD_X = 80;
 
   var CREAM = "#FAF9F5";
   var INK = "#111827";
@@ -275,7 +277,7 @@
       if (floatBtn) floatBtn.style.visibility = "hidden";
 
       return html2canvas(target, {
-        scale: window.devicePixelRatio > 1 ? 2 : 1.5,
+        scale: 3,
         backgroundColor: "#ffffff",
         useCORS: true,
         logging: false,
@@ -309,8 +311,8 @@
       ctx.fillStyle = CREAM;
       ctx.fillRect(0, 0, FRAME_W, FRAME_H);
 
-      // Header — logo on left, title on right
-      var logoH = 56;
+      // Header — logo on left, title on right (all dimensions 2x for crispness)
+      var logoH = 112;
       var logoW = (logoImg.width / logoImg.height) * logoH;
       var logoY = (HEADER_H - logoH) / 2;
       if (logoImg.complete && logoImg.naturalWidth) {
@@ -318,15 +320,15 @@
       }
 
       ctx.fillStyle = INK;
-      ctx.font = '600 26px Inter, system-ui, -apple-system, sans-serif';
+      ctx.font = '600 52px Inter, system-ui, -apple-system, sans-serif';
       ctx.textBaseline = "middle";
-      var titleX = PAD_X + logoW + 28;
+      var titleX = PAD_X + logoW + 56;
       var maxTitleWidth = FRAME_W - titleX - PAD_X;
       var title = truncateToWidth(ctx, meta.title, maxTitleWidth);
       ctx.fillText(title, titleX, HEADER_H / 2);
 
       ctx.strokeStyle = "#ECE9DD";
-      ctx.lineWidth = 1;
+      ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.moveTo(PAD_X, HEADER_H);
       ctx.lineTo(FRAME_W - PAD_X, HEADER_H);
@@ -334,9 +336,9 @@
 
       // Chart fits in middle, preserve aspect
       var chartBoxX = PAD_X;
-      var chartBoxY = HEADER_H + 16;
+      var chartBoxY = HEADER_H + 32;
       var chartBoxW = FRAME_W - 2 * PAD_X;
-      var chartBoxH = FRAME_H - HEADER_H - FOOTER_H - 32;
+      var chartBoxH = FRAME_H - HEADER_H - FOOTER_H - 64;
       var fitted = fitContain(chartCanvas.width, chartCanvas.height, chartBoxW, chartBoxH);
       ctx.drawImage(
         chartCanvas,
@@ -348,18 +350,19 @@
       // Footer — URL on left, date on right
       var footerY = FRAME_H - FOOTER_H + FOOTER_H / 2;
       ctx.strokeStyle = "#ECE9DD";
+      ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.moveTo(PAD_X, FRAME_H - FOOTER_H);
       ctx.lineTo(FRAME_W - PAD_X, FRAME_H - FOOTER_H);
       ctx.stroke();
 
       ctx.fillStyle = BLUE;
-      ctx.font = '600 16px Inter, system-ui, -apple-system, sans-serif';
+      ctx.font = '600 32px Inter, system-ui, -apple-system, sans-serif';
       ctx.textAlign = "left";
       ctx.fillText(FOOTER_URL, PAD_X, footerY);
 
       ctx.fillStyle = MUTED;
-      ctx.font = '400 14px Inter, system-ui, -apple-system, sans-serif';
+      ctx.font = '400 28px Inter, system-ui, -apple-system, sans-serif';
       ctx.textAlign = "right";
       ctx.fillText("Data as of " + meta.asof, FRAME_W - PAD_X, footerY);
       ctx.textAlign = "left";
