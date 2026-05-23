@@ -91,13 +91,34 @@
     btn.innerHTML = ICON_SHARE;
     btn.addEventListener("click", function (e) {
       e.preventDefault();
+      // resolveCaptureTarget(null) returns CC_CHART_CAPTURE_SELECTOR's first
+      // visible match if set, else null. captureChart() handles a null target
+      // by falling back to CC_CHART_TARGET / <main> / <body>.
+      var captureEl = resolveCaptureTarget(null);
       if (shouldGoDirectToShareSheet()) {
-        captureAndShare(currentMeta(), null);
+        captureAndShare(currentMeta(), captureEl);
       } else {
-        openModal(currentMeta(), null);
+        openModal(currentMeta(), captureEl);
       }
     });
     document.body.appendChild(btn);
+  }
+
+  // If CC_CHART_CAPTURE_SELECTOR is set, return the first visible element
+  // matching it; otherwise fall back to the supplied default (typically the
+  // button's anchor element). Lets a page decouple the button's location
+  // from the actual capture target.
+  function resolveCaptureTarget(defaultEl) {
+    if (window.CC_CHART_CAPTURE_SELECTOR) {
+      var sels = Array.isArray(window.CC_CHART_CAPTURE_SELECTOR)
+        ? window.CC_CHART_CAPTURE_SELECTOR
+        : [window.CC_CHART_CAPTURE_SELECTOR];
+      for (var i = 0; i < sels.length; i++) {
+        var c = document.querySelector(sels[i]);
+        if (c && c.offsetWidth > 0 && c.offsetHeight > 0) return c;
+      }
+    }
+    return defaultEl;
   }
 
   // Returns true when the OS native share sheet should handle sharing
@@ -161,7 +182,8 @@
         //   1. data-chart-title attribute on the target element
         //   2. .chart-title child (used by CC chart sections)
         //   3. aria-label on an inline <svg> (used by presale chart cells)
-        //   4. fall back to the global CC_CHART_META.title
+        //   4. fall back to the global CC_CHART_META.title (which itself
+        //      may have come from CC_CHART_DYNAMIC_TITLE_SELECTOR)
         var titleEl = el.querySelector(".chart-title");
         var svgEl   = el.tagName === "SVG" ? el : el.querySelector("svg[aria-label]");
         var perTitle =
@@ -170,15 +192,16 @@
           (svgEl && svgEl.getAttribute("aria-label")) ||
           override.title;
         var perMeta = { title: perTitle, url: override.url, asof: override.asof };
-        // On touch devices, skip the modal and hand the PNG directly to the
-        // OS share sheet via Web Share API. The OS sheet covers Save / Copy /
-        // Send-to-app natively, so our modal would be redundant. Fall back
-        // to the modal if Web Share isn't supported or the user cancels and
-        // we still want to give them Download/Copy.
+        // Capture target may differ from the button's anchor element. Useful
+        // when the anchor is a stable wrapper (e.g. #export-region on the
+        // SEC explorer) but the actual chart to capture is a child or
+        // sibling.  CC_CHART_CAPTURE_SELECTOR (string or array of selectors)
+        // takes precedence; first visible match wins.
+        var captureEl = resolveCaptureTarget(el);
         if (shouldGoDirectToShareSheet()) {
-          captureAndShare(perMeta, el);
+          captureAndShare(perMeta, captureEl);
         } else {
-          openModal(perMeta, el);
+          openModal(perMeta, captureEl);
         }
       });
       el.appendChild(btn);
