@@ -361,16 +361,17 @@
          as a single row visually, not a set of mismatched chips. */
       select, .multi-sel-btn, .btn-group {
         box-sizing:border-box; height:32px; min-height:32px;
-        padding:0 8px; font-size:12.5px; line-height:1;
+        padding:0 8px; font-size:12px; line-height:1;
       }
       .btn-group { padding:0; display:inline-flex; align-items:stretch; }
       .btn-group button {
         box-sizing:border-box; height:32px; min-height:32px;
         padding:0 10px; font-size:12px; line-height:1;
       }
-      /* Smaller info button — still tappable (32x32 ≈ touch-friendly) but
-         no longer the visual heavyweight of the bar. */
-      .info-btn { width:30px; height:30px; font-size:13px; opacity:0.7; }
+      /* Smaller info button — circle scaled down to match the rest of the
+         bar; 26x26 (matches desktop's resting size) keeps it visually
+         subordinate while remaining tappable. */
+      .info-btn { width:26px; height:26px; font-size:12px; opacity:0.7; }
       #export-btn { min-height:30px; min-width:30px; padding:6px; }
       /* Mode tabs: horizontally scrollable so the 4th tab ("Credit Score
          Analysis") is reachable even at 360px viewport; tighter font/padding
