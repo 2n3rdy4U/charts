@@ -17,6 +17,10 @@
   --color-text:        #111827;
   --color-muted:       #6b7280;
 
+  /* Brand */
+  --color-brand:       #0034A5;
+  --color-brand-cream: #FAF9F5;
+
   /* Accent */
   --color-accent:      #3b7eff;
   --color-accent-dim:  rgba(59,126,255,0.12);
@@ -383,20 +387,45 @@ html, body {
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  align-items: center;
+  gap: 18px;
+  max-width: 680px;
 }
+
+.welcome-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 10px;
+}
+
+.welcome-mark {
+  height: 140px;
+  width: 140px;
+  display: block;
+}
+
+.welcome-wordmark {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 56px;
+  font-weight: 700;
+  color: var(--color-brand);
+  letter-spacing: -0.025em;
+  line-height: 0.95;
+  text-align: center;
+}
+
+.welcome-wordmark span { display: block; }
 
 #welcome .welcome-title {
-  font-size: 30px;
-  font-weight: 700;
-  color: var(--color-text);
-  letter-spacing: -0.02em;
-}
-
-#welcome .welcome-sub {
-  font-size: 15px;
+  font-size: 22px;
+  font-weight: 500;
   color: var(--color-muted);
-  line-height: 1.6;
+  letter-spacing: -0.005em;
+  line-height: 1.3;
+  margin: 0;
+  max-width: 580px;
 }
 
 /* ── Tile grid ─────────────────────────────────────────────────── */
@@ -443,7 +472,7 @@ html, body {
 .tile-icon {
   width: 34px;
   height: 34px;
-  color: var(--color-accent);
+  color: var(--color-brand);
   flex-shrink: 0;
 }
 
@@ -685,9 +714,11 @@ html, body {
     align-items: stretch;
   }
 
-  .welcome-header { gap: 4px; align-items: center; }
-  #welcome .welcome-title { font-size: 20px; }
-  #welcome .welcome-sub   { font-size: 12px; }
+  .welcome-header { gap: 12px; align-items: center; }
+  .welcome-brand { gap: 12px; margin-bottom: 4px; }
+  .welcome-mark { height: 88px; width: 88px; }
+  .welcome-wordmark { font-size: 32px; }
+  #welcome .welcome-title { font-size: 15px; line-height: 1.35; }
 
   /* ── Tile grid: single column, full width ── */
   .tile-grid {
