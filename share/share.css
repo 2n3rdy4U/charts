@@ -25,8 +25,11 @@
 .cc-share-btn--floating {
   position: fixed;
   top: auto;
-  right: 20px;
-  bottom: 20px;
+  /* Right: respect notch on landscape iPhones */
+  right: max(20px, env(safe-area-inset-right));
+  /* Bottom: respect home-indicator + safe area so the button never lands
+     under iOS Safari's auto-hiding URL bar / home swipe area */
+  bottom: max(24px, calc(env(safe-area-inset-bottom) + 12px));
   width: auto;
   height: 44px;
   padding: 0 16px 0 14px;
