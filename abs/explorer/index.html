@@ -351,20 +351,43 @@
          bottom of the clipped page. */
       #vis { min-height:320px; height:520px; max-height:560px; }
       #tblWrap { max-height:420px; -webkit-overflow-scrolling:touch; }
-      /* ── compact touch targets (≥36px — WCAG AAA, density-tuned) ── */
-      .fbar { padding:4px 0; gap:4px 10px; }
+      /* ── Tight portrait controls (consistent box-sizing/heights, smaller
+            footprint, less label visual weight) ── */
+      .fbar { padding:4px 0; gap:6px 8px; }
       .ctrl { gap:1px; }
-      label.lbl { font-size:10.5px; margin-bottom:0; }
+      label.lbl { font-size:10px; margin-bottom:0; line-height:1.2; font-weight:400; }
       #delSubBar { padding:4px 0 2px !important; }
-      select, .multi-sel-btn { min-height:36px; padding:6px 10px; font-size:13px; }
-      .btn-group button { min-height:36px; padding:7px 12px; font-size:12.5px; }
-      .info-btn { width:36px; height:36px; font-size:15px; }
-      #export-btn { min-height:36px; min-width:36px; padding:8px; }
-      .mode-tab { min-height:38px; padding:8px 12px; font-size:13px; }
-      .hm-switch { min-height:44px; }
-      .hm-track { width:40px; height:24px; border-radius:12px; }
-      .hm-track::after { width:18px; height:18px; top:3px; left:3px; }
-      .hm-switch input:checked + .hm-track::after { transform:translateX(16px); }
+      /* All filter controls share the same exact height so the bar reads
+         as a single row visually, not a set of mismatched chips. */
+      select, .multi-sel-btn, .btn-group {
+        box-sizing:border-box; height:32px; min-height:32px;
+        padding:0 8px; font-size:12.5px; line-height:1;
+      }
+      .btn-group { padding:0; display:inline-flex; align-items:stretch; }
+      .btn-group button {
+        box-sizing:border-box; height:32px; min-height:32px;
+        padding:0 10px; font-size:12px; line-height:1;
+      }
+      /* Smaller info button — still tappable (32x32 ≈ touch-friendly) but
+         no longer the visual heavyweight of the bar. */
+      .info-btn { width:30px; height:30px; font-size:13px; opacity:0.7; }
+      #export-btn { min-height:30px; min-width:30px; padding:6px; }
+      /* Mode tabs: horizontally scrollable so the 4th tab ("Credit Score
+         Analysis") is reachable even at 360px viewport; tighter font/padding
+         so it usually fits without scrolling. */
+      .mode-tabs {
+        overflow-x:auto; -webkit-overflow-scrolling:touch;
+        scrollbar-width:none;
+      }
+      .mode-tabs::-webkit-scrollbar { display:none; }
+      .mode-tab {
+        min-height:36px; padding:7px 10px; font-size:12.5px;
+        flex-shrink:0;
+      }
+      .hm-switch { min-height:40px; }
+      .hm-track { width:36px; height:22px; border-radius:11px; }
+      .hm-track::after { width:16px; height:16px; top:3px; left:3px; }
+      .hm-switch input:checked + .hm-track::after { transform:translateX(14px); }
       /* ── touch feedback ── */
       .btn-group button:active, .mode-tab:active, .multi-sel-btn:active, select:active {
         transform:scale(0.97); transition:transform 0.08s;
