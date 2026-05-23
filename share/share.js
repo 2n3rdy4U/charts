@@ -108,8 +108,18 @@
       btn.addEventListener("click", function (e) {
         e.preventDefault();
         var override = currentMeta();
+        // Per-chart title resolution (best signal first):
+        //   1. data-chart-title attribute on the target element
+        //   2. .chart-title child (used by CC chart sections)
+        //   3. aria-label on an inline <svg> (used by presale chart cells)
+        //   4. fall back to the global CC_CHART_META.title
         var titleEl = el.querySelector(".chart-title");
-        var perTitle = el.dataset.chartTitle || (titleEl && titleEl.textContent.trim()) || override.title;
+        var svgEl   = el.tagName === "SVG" ? el : el.querySelector("svg[aria-label]");
+        var perTitle =
+          el.dataset.chartTitle ||
+          (titleEl && titleEl.textContent.trim()) ||
+          (svgEl && svgEl.getAttribute("aria-label")) ||
+          override.title;
         openModal({ title: perTitle, url: override.url, asof: override.asof }, el);
       });
       el.appendChild(btn);
