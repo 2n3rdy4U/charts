@@ -441,30 +441,70 @@
         ));
       }
 
-      // Use scrollWidth/scrollHeight (not clientWidth/Height) so we capture
-      // the full content even when the element extends beyond its visible box
-      // (e.g. tall data tables, multi-chart sections).
-      var fullW = Math.max(target.scrollWidth, target.clientWidth);
-      var fullH = Math.max(target.scrollHeight, target.clientHeight);
+      // On narrow viewports, Vega-Lite charts using width:container render in
+      // portrait (~360×600) which looks small + letterboxed in the landscape
+      // brand frame. Temporarily force the target to a desktop-like width
+      // and dispatch a resize event so Vega re-renders at landscape. After
+      // capture, restore. Disruption is brief and hidden by the modal/share-
+      // sheet UI that's already on screen.
+      var DESKTOP_W = 1100;
+      var origWidth = "";
+      var origMaxWidth = "";
+      var origMinWidth = "";
+      var needsReflow = target.offsetWidth < 700;
+      if (needsReflow) {
+        origWidth    = target.style.width;
+        origMaxWidth = target.style.maxWidth;
+        origMinWidth = target.style.minWidth;
+        target.style.width    = DESKTOP_W + "px";
+        target.style.maxWidth = "none";
+        target.style.minWidth = DESKTOP_W + "px";
+        window.dispatchEvent(new Event("resize"));
+      }
 
-      return html2canvas(target, {
-        scale: 3,
-        backgroundColor: "#ffffff",
-        useCORS: true,
-        logging: false,
-        width: fullW,
-        height: fullH,
-        windowWidth: Math.max(document.documentElement.scrollWidth, window.innerWidth),
-        windowHeight: Math.max(document.documentElement.scrollHeight, window.innerHeight),
-        // Skip the modal, the floating button, and any inline share buttons
-        ignoreElements: function (el) {
-          if (!el.classList) return false;
-          return (
-            el.classList.contains("cc-share-modal-bg") ||
-            el.classList.contains("cc-share-btn") ||
-            el.id === "cc-share-floating-btn"
-          );
+      // Wait for Vega-Lite ResizeObserver to fire + redraw. ~500ms is the
+      // sweet spot — long enough for the redraw, short enough to feel snappy.
+      var wait = needsReflow
+        ? new Promise(function (r) { setTimeout(r, 500); })
+        : Promise.resolve();
+
+      return wait.then(function () {
+        var fullW = Math.max(target.scrollWidth, target.clientWidth);
+        var fullH = Math.max(target.scrollHeight, target.clientHeight);
+        return html2canvas(target, {
+          scale: 3,
+          backgroundColor: "#ffffff",
+          useCORS: true,
+          logging: false,
+          width: fullW,
+          height: fullH,
+          windowWidth: Math.max(document.documentElement.scrollWidth, window.innerWidth, DESKTOP_W),
+          windowHeight: Math.max(document.documentElement.scrollHeight, window.innerHeight),
+          ignoreElements: function (el) {
+            if (!el.classList) return false;
+            return (
+              el.classList.contains("cc-share-modal-bg") ||
+              el.classList.contains("cc-share-btn") ||
+              el.id === "cc-share-floating-btn"
+            );
+          }
+        });
+      }).then(function (canvas) {
+        if (needsReflow) {
+          target.style.width    = origWidth;
+          target.style.maxWidth = origMaxWidth;
+          target.style.minWidth = origMinWidth;
+          window.dispatchEvent(new Event("resize"));
         }
+        return canvas;
+      }).catch(function (err) {
+        if (needsReflow) {
+          target.style.width    = origWidth;
+          target.style.maxWidth = origMaxWidth;
+          target.style.minWidth = origMinWidth;
+          window.dispatchEvent(new Event("resize"));
+        }
+        throw err;
       });
     });
   }
