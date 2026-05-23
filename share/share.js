@@ -304,16 +304,49 @@
     return loadHtml2Canvas().then(function (html2canvas) {
       var target = explicitTarget || null;
       if (!target && window.CC_CHART_TARGET) {
-        target = document.querySelector(window.CC_CHART_TARGET);
+        // CC_CHART_TARGET may be a string OR an array of selectors. For arrays,
+        // try each in order and use the first that's visible (non-zero size).
+        // Useful for pages where the active chart container changes by tab
+        // (e.g., #vis, #repoChart, .fico-chart on the SEC explorer).
+        var selectors = Array.isArray(window.CC_CHART_TARGET)
+          ? window.CC_CHART_TARGET
+          : [window.CC_CHART_TARGET];
+        for (var i = 0; i < selectors.length; i++) {
+          var cand = document.querySelector(selectors[i]);
+          if (cand && cand.offsetWidth > 0 && cand.offsetHeight > 0) {
+            target = cand;
+            break;
+          }
+        }
       }
       if (!target) target = document.querySelector("main");
       if (!target) target = document.body;
+
+      // Guard: if the target collapses to 0×0 (e.g. user is on a non-chart
+      // view like a data table), bail with a clear error instead of letting
+      // html2canvas produce a 0-sized canvas that crashes drawImage later.
+      if (target.offsetWidth === 0 || target.offsetHeight === 0) {
+        return Promise.reject(new Error(
+          "Nothing to share — the chart isn't visible. " +
+          "Switch to a chart view and try again."
+        ));
+      }
+
+      // Use scrollWidth/scrollHeight (not clientWidth/Height) so we capture
+      // the full content even when the element extends beyond its visible box
+      // (e.g. tall data tables, multi-chart sections).
+      var fullW = Math.max(target.scrollWidth, target.clientWidth);
+      var fullH = Math.max(target.scrollHeight, target.clientHeight);
 
       return html2canvas(target, {
         scale: 3,
         backgroundColor: "#ffffff",
         useCORS: true,
         logging: false,
+        width: fullW,
+        height: fullH,
+        windowWidth: Math.max(document.documentElement.scrollWidth, window.innerWidth),
+        windowHeight: Math.max(document.documentElement.scrollHeight, window.innerHeight),
         // Skip the modal, the floating button, and any inline share buttons
         ignoreElements: function (el) {
           if (!el.classList) return false;
