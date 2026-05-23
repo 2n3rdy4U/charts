@@ -60,6 +60,40 @@ html, body {
   .cc-share-btn--floating {
     bottom: max(80px, calc(env(safe-area-inset-bottom) + 70px));
   }
+
+  /* On touch devices the per-chart inline button is upsized + labeled +
+     brand-blue, since it's now the primary share affordance (no floating
+     button at viewport-bottom anymore — that's broken inside iOS iframes). */
+  .cc-share-btn--inline {
+    width: auto;
+    height: 38px;
+    padding: 0 14px 0 10px;
+    gap: 6px;
+    background: #0034A5;
+    border-color: #0034A5;
+    color: #ffffff;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    box-shadow: 0 2px 8px rgba(0, 52, 165, 0.30);
+  }
+
+  .cc-share-btn--inline::after {
+    content: "Save";
+  }
+
+  .cc-share-btn--inline svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .cc-share-btn--inline:hover,
+  .cc-share-btn--inline:focus {
+    background: #002a85;
+    border-color: #002a85;
+    color: #ffffff;
+  }
 }
 
 .cc-share-btn--floating svg {

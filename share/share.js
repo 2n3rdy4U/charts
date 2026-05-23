@@ -91,9 +91,49 @@
     btn.innerHTML = ICON_SHARE;
     btn.addEventListener("click", function (e) {
       e.preventDefault();
-      openModal(currentMeta(), null);
+      if (shouldGoDirectToShareSheet()) {
+        captureAndShare(currentMeta(), null);
+      } else {
+        openModal(currentMeta(), null);
+      }
     });
     document.body.appendChild(btn);
+  }
+
+  // Returns true when the OS native share sheet should handle sharing
+  // directly (skipping our in-page modal). Mobile/touch + Web Share API
+  // with file support is the canonical case.
+  function shouldGoDirectToShareSheet() {
+    var isTouch = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+    if (!isTouch) return false;
+    if (typeof navigator.share !== "function") return false;
+    if (typeof navigator.canShare !== "function") return false;
+    try {
+      var probe = new File([new Blob([""], { type: "image/png" })], "p.png", { type: "image/png" });
+      return navigator.canShare({ files: [probe] });
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // Build the branded PNG, then hand it directly to the OS share sheet.
+  // On cancel: silent. On failure or missing capability: fall back to the
+  // in-page modal so the user still has Download / Copy / etc.
+  function captureAndShare(meta, target) {
+    buildBrandedPNG(meta, target)
+      .then(function (result) {
+        var file = new File(
+          [result.blob],
+          slugify(meta.title) + ".png",
+          { type: "image/png" }
+        );
+        return navigator.share({ files: [file] });
+      })
+      .catch(function (err) {
+        if (err && err.name === "AbortError") return; // user cancelled
+        console.warn("Direct share failed, opening modal fallback:", err);
+        openModal(meta, target);
+      });
   }
 
   function initPerChart(selector) {
@@ -127,7 +167,17 @@
           (titleEl && titleEl.textContent.trim()) ||
           (svgEl && svgEl.getAttribute("aria-label")) ||
           override.title;
-        openModal({ title: perTitle, url: override.url, asof: override.asof }, el);
+        var perMeta = { title: perTitle, url: override.url, asof: override.asof };
+        // On touch devices, skip the modal and hand the PNG directly to the
+        // OS share sheet via Web Share API. The OS sheet covers Save / Copy /
+        // Send-to-app natively, so our modal would be redundant. Fall back
+        // to the modal if Web Share isn't supported or the user cancels and
+        // we still want to give them Download/Copy.
+        if (shouldGoDirectToShareSheet()) {
+          captureAndShare(perMeta, el);
+        } else {
+          openModal(perMeta, el);
+        }
       });
       el.appendChild(btn);
     });
