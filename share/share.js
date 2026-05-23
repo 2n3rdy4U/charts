@@ -58,11 +58,23 @@
   var ICON_X = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>';
   var ICON_LINKEDIN = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.063 2.063 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>';
 
-  // ── Init: install button on DOM ready ─────────────────────────────
+  // ── Init ──────────────────────────────────────────────────────────
+  // Two modes:
+  //   1. window.CC_CHART_TARGETS = "selector"  → install one button per matched
+  //      element, inline at its top-right corner. Each captures that element.
+  //   2. (default) → install a single floating button at viewport bottom-right
+  //      that captures window.CC_CHART_TARGET (or <main>/<body>).
   function init() {
-    if (document.getElementById("cc-share-floating-btn")) return; // idempotent
     ensureStylesheet();
+    if (window.CC_CHART_TARGETS) {
+      initPerChart(window.CC_CHART_TARGETS);
+    } else {
+      initFloating();
+    }
+  }
 
+  function initFloating() {
+    if (document.getElementById("cc-share-floating-btn")) return;
     var btn = document.createElement("button");
     btn.type = "button";
     btn.id = "cc-share-floating-btn";
@@ -72,9 +84,36 @@
     btn.innerHTML = ICON_SHARE;
     btn.addEventListener("click", function (e) {
       e.preventDefault();
-      openModal(currentMeta());
+      openModal(currentMeta(), null);
     });
     document.body.appendChild(btn);
+  }
+
+  function initPerChart(selector) {
+    var elements = document.querySelectorAll(selector);
+    if (elements.length === 0) {
+      console.warn("ChartShare: no elements matched", selector);
+      return;
+    }
+    elements.forEach(function (el) {
+      if (el.querySelector(":scope > .cc-share-btn")) return; // idempotent
+      var cs = getComputedStyle(el);
+      if (cs.position === "static") el.style.position = "relative";
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "cc-share-btn cc-share-btn--inline";
+      btn.setAttribute("aria-label", "Save this chart as branded image");
+      btn.title = "Save this chart as branded image";
+      btn.innerHTML = ICON_SHARE;
+      btn.addEventListener("click", function (e) {
+        e.preventDefault();
+        var override = currentMeta();
+        var titleEl = el.querySelector(".chart-title");
+        var perTitle = el.dataset.chartTitle || (titleEl && titleEl.textContent.trim()) || override.title;
+        openModal({ title: perTitle, url: override.url, asof: override.asof }, el);
+      });
+      el.appendChild(btn);
+    });
   }
 
   function currentMeta() {
@@ -111,7 +150,7 @@
   }
 
   // ── Modal ─────────────────────────────────────────────────────────
-  function openModal(meta) {
+  function openModal(meta, explicitTarget) {
     // Web Share API only shown on touch devices (mobile/tablet) where the
     // native share sheet is the conventional flow. On desktop, Copy + Download
     // are simpler and more reliable.
@@ -168,7 +207,7 @@
     document.addEventListener("keydown", escHandler);
 
     // Build branded PNG and wire actions
-    buildBrandedPNG(meta)
+    buildBrandedPNG(meta, explicitTarget)
       .then(function (result) {
         var previewWrap = bg.querySelector(".cc-share-preview");
         previewWrap.innerHTML = "";
@@ -261,44 +300,36 @@
     });
   }
 
-  function captureChart() {
+  function captureChart(explicitTarget) {
     return loadHtml2Canvas().then(function (html2canvas) {
-      // Pick target: explicit override, else <main>, else <body>
-      var target = null;
-      if (window.CC_CHART_TARGET) {
+      var target = explicitTarget || null;
+      if (!target && window.CC_CHART_TARGET) {
         target = document.querySelector(window.CC_CHART_TARGET);
       }
       if (!target) target = document.querySelector("main");
       if (!target) target = document.body;
-
-      // Hide the floating share button so it doesn't appear in the capture
-      var floatBtn = document.getElementById("cc-share-floating-btn");
-      var prevVis = floatBtn ? floatBtn.style.visibility : null;
-      if (floatBtn) floatBtn.style.visibility = "hidden";
 
       return html2canvas(target, {
         scale: 3,
         backgroundColor: "#ffffff",
         useCORS: true,
         logging: false,
-        // Skip the modal itself (added to body) and the share button from capture
+        // Skip the modal, the floating button, and any inline share buttons
         ignoreElements: function (el) {
           if (!el.classList) return false;
           return (
             el.classList.contains("cc-share-modal-bg") ||
+            el.classList.contains("cc-share-btn") ||
             el.id === "cc-share-floating-btn"
           );
         }
-      }).then(function (canvas) {
-        if (floatBtn) floatBtn.style.visibility = prevVis || "";
-        return canvas;
       });
     });
   }
 
   // ── Branded PNG compositor ────────────────────────────────────────
-  function buildBrandedPNG(meta) {
-    return Promise.all([captureChart(), loadImage(LOGO_URL, false)]).then(function (parts) {
+  function buildBrandedPNG(meta, explicitTarget) {
+    return Promise.all([captureChart(explicitTarget), loadImage(LOGO_URL, false)]).then(function (parts) {
       var chartCanvas = parts[0];
       var logoImg = parts[1];
 
