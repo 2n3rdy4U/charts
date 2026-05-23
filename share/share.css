@@ -3,6 +3,15 @@
    Cream #FAF9F5, Royal Blue #0034A5
    ───────────────────────────────────────────────────────────────── */
 
+/* iOS WebKit (Safari + Chrome on iPhone) demotes position:fixed to
+   position:absolute inside iframes, so the floating Save image button
+   sits at the bottom of the document instead of the viewport. Rubber-
+   band overscroll then carries it off-screen when the user reaches the
+   document end. Containing the overscroll keeps the button reachable. */
+html, body {
+  overscroll-behavior-y: contain;
+}
+
 .cc-share-btn {
   position: absolute;
   top: 8px;
