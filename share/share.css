@@ -27,8 +27,10 @@
   top: auto;
   /* Right: respect notch on landscape iPhones */
   right: max(20px, env(safe-area-inset-right));
-  /* Bottom: respect home-indicator + safe area so the button never lands
-     under iOS Safari's auto-hiding URL bar / home swipe area */
+  /* Bottom: on desktop, tight margin. On mobile, push up significantly to
+     clear iOS Chrome's persistent bottom toolbar (~55px) + iOS Safari's
+     URL bar + the home-indicator zone. env() doesn't expose the browser's
+     own toolbar, so we account for it manually via the media query below. */
   bottom: max(24px, calc(env(safe-area-inset-bottom) + 12px));
   width: auto;
   height: 44px;
@@ -43,6 +45,12 @@
   letter-spacing: 0.01em;
   box-shadow: 0 4px 14px rgba(0, 52, 165, 0.30);
   z-index: 9998;
+}
+
+@media (max-width: 900px), (pointer: coarse) {
+  .cc-share-btn--floating {
+    bottom: max(80px, calc(env(safe-area-inset-bottom) + 70px));
+  }
 }
 
 .cc-share-btn--floating svg {
