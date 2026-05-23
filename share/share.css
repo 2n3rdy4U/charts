@@ -12,6 +12,12 @@ html, body {
   overscroll-behavior-y: contain;
 }
 
+/* Suppress legacy per-chart "export as PNG" camera buttons on any page
+   that loads share.js. Our Save button supersedes them: produces a
+   brand-framed image AND opens the OS share sheet on mobile rather
+   than just downloading a raw chart PNG. */
+#export-btn { display: none !important; }
+
 .cc-share-btn {
   position: absolute;
   top: 8px;
@@ -61,38 +67,36 @@ html, body {
     bottom: max(80px, calc(env(safe-area-inset-bottom) + 70px));
   }
 
-  /* On touch devices the per-chart inline button is labeled (so first-time
-     users know it's tappable) but ghost-styled (white bg, blue outline +
-     text) so it doesn't dominate the chart visually. Goal: discoverable
-     without grabbing the eye away from the data. */
+  /* On touch devices the per-chart inline button matches the host page's
+     other small icon buttons (transparent, neutral grey, ~32px). Icon-only,
+     no label — the chart-page UI is already busy enough. Tooltip + aria-label
+     carry the meaning for assistive tech. */
   .cc-share-btn--inline {
-    width: auto;
-    height: 28px;
-    padding: 0 10px 0 8px;
-    gap: 5px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid #0034A5;
-    color: #0034A5;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.01em;
-    box-shadow: 0 1px 3px rgba(0, 52, 165, 0.12);
+    width: 32px;
+    height: 32px;
+    padding: 6px;
+    gap: 0;
+    background: transparent;
+    border: 1px solid transparent;
+    color: #6b7280;
+    box-shadow: none;
+    font-size: 0; /* belt + suspenders: no leftover label space */
   }
 
   .cc-share-btn--inline::after {
-    content: "Save";
+    content: "";
   }
 
   .cc-share-btn--inline svg {
-    width: 12px;
-    height: 12px;
+    width: 18px;
+    height: 18px;
   }
 
   .cc-share-btn--inline:hover,
   .cc-share-btn--inline:focus {
-    background: #0034A5;
-    color: #ffffff;
+    background: rgba(0, 52, 165, 0.08);
+    border-color: transparent;
+    color: #0034A5;
   }
 }
 
