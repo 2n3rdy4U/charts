@@ -61,22 +61,23 @@ html, body {
     bottom: max(80px, calc(env(safe-area-inset-bottom) + 70px));
   }
 
-  /* On touch devices the per-chart inline button is upsized + labeled +
-     brand-blue, since it's now the primary share affordance (no floating
-     button at viewport-bottom anymore — that's broken inside iOS iframes). */
+  /* On touch devices the per-chart inline button is labeled (so first-time
+     users know it's tappable) but ghost-styled (white bg, blue outline +
+     text) so it doesn't dominate the chart visually. Goal: discoverable
+     without grabbing the eye away from the data. */
   .cc-share-btn--inline {
     width: auto;
-    height: 38px;
-    padding: 0 14px 0 10px;
-    gap: 6px;
-    background: #0034A5;
-    border-color: #0034A5;
-    color: #ffffff;
+    height: 28px;
+    padding: 0 10px 0 8px;
+    gap: 5px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid #0034A5;
+    color: #0034A5;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    font-size: 13px;
+    font-size: 11px;
     font-weight: 600;
     letter-spacing: 0.01em;
-    box-shadow: 0 2px 8px rgba(0, 52, 165, 0.30);
+    box-shadow: 0 1px 3px rgba(0, 52, 165, 0.12);
   }
 
   .cc-share-btn--inline::after {
@@ -84,14 +85,13 @@ html, body {
   }
 
   .cc-share-btn--inline svg {
-    width: 16px;
-    height: 16px;
+    width: 12px;
+    height: 12px;
   }
 
   .cc-share-btn--inline:hover,
   .cc-share-btn--inline:focus {
-    background: #002a85;
-    border-color: #002a85;
+    background: #0034A5;
     color: #ffffff;
   }
 }

@@ -185,10 +185,27 @@
 
   function currentMeta() {
     var override = window.CC_CHART_META || {};
+    // Dynamic title: a page can set CC_CHART_DYNAMIC_TITLE_SELECTOR pointing
+    // to a DOM element whose text is the *current* chart title (e.g. for the
+    // SEC explorer where the title changes per active tab). Optionally a
+    // second SUBTITLE selector. Read at capture time so the brand-frame
+    // header reflects exactly what the user is looking at.
+    var dynTitle = "";
+    if (window.CC_CHART_DYNAMIC_TITLE_SELECTOR) {
+      var t = document.querySelector(window.CC_CHART_DYNAMIC_TITLE_SELECTOR);
+      if (t) dynTitle = (t.textContent || "").trim();
+    }
+    if (window.CC_CHART_DYNAMIC_SUBTITLE_SELECTOR) {
+      var s = document.querySelector(window.CC_CHART_DYNAMIC_SUBTITLE_SELECTOR);
+      if (s) {
+        var sTxt = (s.textContent || "").trim();
+        if (sTxt) dynTitle = dynTitle ? dynTitle + " — " + sTxt : sTxt;
+      }
+    }
     return {
-      title: override.title || document.title || "Consumer Credit Matters chart",
-      url:   override.url   || window.location.href,
-      asof:  override.asof  || formatToday()
+      title: dynTitle || override.title || document.title || "Consumer Credit Matters chart",
+      url:   override.url || window.location.href,
+      asof:  override.asof || formatToday()
     };
   }
 
