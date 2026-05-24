@@ -134,6 +134,51 @@
       sep.style.display = title.textContent ? 'inline' : 'none';
     });
     obs.observe(title, { childList: true, characterData: true, subtree: true });
+
+    // ── "Add to Home Screen" banner (iOS Safari only) ──────────────
+    // iOS Safari never auto-prompts the user to install. Show a small,
+    // dismissable banner after 30s of engagement, once per browser,
+    // explaining the Share → Add to Home Screen flow. Skip if already
+    // running as an installed PWA (navigator.standalone) or if the user
+    // has previously dismissed.
+    (function installBanner() {
+      var ua  = navigator.userAgent;
+      var iOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+      var isSafari = /Safari/.test(ua) && !/CriOS|FxiOS|EdgiOS|OPiOS/.test(ua);
+      var alreadyInstalled = ('standalone' in window.navigator) && window.navigator.standalone === true;
+      var dismissed = false;
+      try { dismissed = localStorage.getItem('ccm_install_banner_dismissed') === '1'; } catch (_) {}
+      if (!iOS || !isSafari || alreadyInstalled || dismissed) return;
+
+      setTimeout(function () {
+        var bar = document.createElement('div');
+        bar.id = 'cc-install-banner';
+        bar.style.cssText = [
+          'position:fixed', 'left:12px', 'right:12px',
+          'bottom:max(12px,calc(env(safe-area-inset-bottom) + 8px))',
+          'z-index:9999', 'background:#0e1a30', 'color:#e8edf8',
+          'border:1px solid #1e3260', 'border-radius:10px',
+          'padding:12px 14px', 'display:flex', 'align-items:center', 'gap:10px',
+          'font-family:Inter,system-ui,sans-serif', 'font-size:13px',
+          'box-shadow:0 6px 24px rgba(0,0,0,0.30)'
+        ].join(';');
+        bar.innerHTML =
+          '<div style="flex:1;line-height:1.4;">' +
+            'Add <strong>Consumer Credit Matters</strong> to your home screen — ' +
+            'tap <span style="display:inline-block;border:1px solid #7eb3ff;border-radius:4px;padding:0 5px;font-size:11px;color:#7eb3ff;">Share</span>, ' +
+            'then <em>Add to Home Screen</em>.' +
+          '</div>' +
+          '<button type="button" aria-label="Dismiss" ' +
+            'style="background:transparent;border:none;color:#7b92bc;font-size:18px;line-height:1;cursor:pointer;padding:4px 6px;">' +
+            '×' +
+          '</button>';
+        bar.querySelector('button').addEventListener('click', function () {
+          try { localStorage.setItem('ccm_install_banner_dismissed', '1'); } catch (_) {}
+          bar.remove();
+        });
+        document.body.appendChild(bar);
+      }, 30000); // 30s engagement
+    })();
   </script>
 </body>
 </html>
