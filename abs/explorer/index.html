@@ -2103,12 +2103,15 @@
   // button takes you to the prior tab). Non-tab filters (dq, vehicle)
   // use replaceState — they update the URL without polluting history.
   function _saveExplorerState() {
+    var _issuer = null;
+    try { _issuer = document.getElementById('issuerSel') && document.getElementById('issuerSel').value; } catch (_e) {}
     try {
       localStorage.setItem('ccm_explorer_state', JSON.stringify({
         tab:     currentTab,
         sub:     currentTab === 'delinquency' ? currentSub : null,
         dq:      (typeof dqFilter !== 'undefined') ? dqFilter : null,
-        vehicle: (typeof vehicleType !== 'undefined') ? vehicleType : null
+        vehicle: (typeof vehicleType !== 'undefined') ? vehicleType : null,
+        issuer:  _issuer
       }));
     } catch (_e) { /* private mode / disabled storage — silent no-op */ }
     try {
@@ -2117,6 +2120,7 @@
       else _u.searchParams.delete('dq');
       if (typeof vehicleType !== 'undefined' && vehicleType && vehicleType !== 'all') _u.searchParams.set('vehicle', vehicleType);
       else _u.searchParams.delete('vehicle');
+      if (_issuer) _u.searchParams.set('issuer', _issuer); else _u.searchParams.delete('issuer');
       history.replaceState({}, '', _u);
     } catch (_e) { /* file:// protocol blocks replaceState — fine */ }
   }
@@ -2237,6 +2241,7 @@
   });
 
   issuerSel.addEventListener('change', () => {
+    _saveExplorerState();
     if (currentTab === 'losses') { loadLossAndRender(); }
     else { loadVintageAndRender(); }
   });
@@ -2482,20 +2487,22 @@
   //   2. localStorage (return-visitor's last-active state)
   //   3. Defaults
   const _params = new URLSearchParams(window.location.search);
-  let _initTab = _params.get('tab');
-  let _initSub = _params.get('sub');
-  let _initDq  = _params.get('dq');
-  let _initVeh = _params.get('vehicle');
+  let _initTab    = _params.get('tab');
+  let _initSub    = _params.get('sub');
+  let _initDq     = _params.get('dq');
+  let _initVeh    = _params.get('vehicle');
+  let _initIssuer = _params.get('issuer');
   const _legacyView = _params.get('view');
 
   // Load saved state. URL params win field-by-field.
   let _saved = null;
   try { _saved = JSON.parse(localStorage.getItem('ccm_explorer_state') || 'null'); } catch (_e) {}
   if (_saved) {
-    if (!_initTab && !_legacyView && _saved.tab) _initTab = _saved.tab;
-    if (!_initSub && _saved.sub)                 _initSub = _saved.sub;
-    if (!_initDq && _saved.dq)                   _initDq  = _saved.dq;
-    if (!_initVeh && _saved.vehicle)             _initVeh = _saved.vehicle;
+    if (!_initTab && !_legacyView && _saved.tab) _initTab    = _saved.tab;
+    if (!_initSub && _saved.sub)                 _initSub    = _saved.sub;
+    if (!_initDq && _saved.dq)                   _initDq     = _saved.dq;
+    if (!_initVeh && _saved.vehicle)             _initVeh    = _saved.vehicle;
+    if (!_initIssuer && _saved.issuer)           _initIssuer = _saved.issuer;
   }
 
   // Apply non-tab state to the DOM before setTab runs, so setTab's
@@ -2508,6 +2515,10 @@
     vehicleType = _initVeh;
     for (const _b of document.querySelectorAll('#vehicleGroup button'))
       _b.classList.toggle('active', _b.dataset.vehicle === _initVeh);
+  }
+  if (_initIssuer) {
+    const _iOpt = Array.from(issuerSel.options).find(o => o.value === _initIssuer);
+    if (_iOpt) issuerSel.value = _initIssuer;
   }
 
   // Legacy URL redirects (old ?view= param)
