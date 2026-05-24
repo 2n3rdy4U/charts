@@ -397,6 +397,32 @@
     el.classList.add('active');
     activeItemId = item.id;
 
+    // Sync mobile top-nav: highlight the section pill that owns this item
+    // and reveal its sub-items so the user can see (and reach) sibling
+    // items from the section without going back to the welcome screen.
+    // Skip when the click originated FROM a mobile sub-item button — that
+    // path already set its own active state and rebuilding would lose it.
+    var fromMobileSub = el && el.classList && el.classList.contains('mobile-nav-sub');
+    var ownerSection = null;
+    for (var si = 0; si < config.sections.length; si++) {
+      var sec = config.sections[si];
+      if (sec.id === item.id) { ownerSection = sec; break; } // section-level panel
+      if (sec.items) {
+        for (var ii = 0; ii < sec.items.length; ii++) {
+          if (sec.items[ii].id === item.id) { ownerSection = sec; break; }
+        }
+        if (ownerSection) break;
+      }
+    }
+    if (ownerSection && !fromMobileSub) {
+      setMobileSectionActive(ownerSection.id);
+      if (ownerSection.type === 'accordion' && ownerSection.items && ownerSection.items.length) {
+        buildMobileSubItems(ownerSection);
+      } else {
+        mobileNavItems.hidden = true;
+      }
+    }
+
     // Update breadcrumb
     panelSection.textContent = sectionLabel;
     panelTitle.textContent   = item.label;
