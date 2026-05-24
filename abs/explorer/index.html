@@ -2121,6 +2121,16 @@
       history.pushState({}, '', _u);
     } catch (_e) { /* file:// protocol blocks pushState — fine, no-op */ }
 
+    // Persist to localStorage so a return visitor lands back on their last
+    // active tab when no URL params are present. URL params still win on
+    // first read (bookmarks / shared links override last-used state).
+    try {
+      localStorage.setItem('ccm_explorer_state', JSON.stringify({
+        tab: tab,
+        sub: tab === 'delinquency' ? currentSub : null
+      }));
+    } catch (_e) { /* private mode / disabled storage — silent no-op */ }
+
     if (tab === 'credit-score') {
       mode = 'fico';
       loadFicoData();
@@ -2450,10 +2460,24 @@
   })();
 
   // ── Init ─────────────────────────────────────────────────────────────
+  // Initial state priority:
+  //   1. URL params (explicit user intent via bookmark / shared link)
+  //   2. localStorage (return-visitor's last-active tab)
+  //   3. Defaults (Delinquency / Vintage)
   const _params = new URLSearchParams(window.location.search);
-  const _initTab = _params.get('tab');
-  const _initSub = _params.get('sub');
+  let _initTab = _params.get('tab');
+  let _initSub = _params.get('sub');
   const _legacyView = _params.get('view');
+
+  if (!_initTab && !_legacyView) {
+    try {
+      const _saved = JSON.parse(localStorage.getItem('ccm_explorer_state') || 'null');
+      if (_saved && _saved.tab) {
+        _initTab = _saved.tab;
+        if (_saved.sub) _initSub = _saved.sub;
+      }
+    } catch (_e) { /* malformed JSON or storage unavailable — silent no-op */ }
+  }
 
   // Legacy URL redirects (old ?view= param)
   if (!_initTab && _legacyView) {
