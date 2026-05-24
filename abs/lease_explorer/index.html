@@ -314,7 +314,36 @@ subViewGrp.addEventListener('click', e => {
 issuerSel.addEventListener('change', () => { selectedIssuer = issuerSel.value; render(); });
 vintageRange.addEventListener('change', render);
 tsRange.addEventListener('change', render);
-dqSel.addEventListener('change', () => { dqFilter = dqSel.value; render(); });
+// Tier 1 (localStorage) + Tier 2 (URL) persistence for the dq filter.
+// Lease explorer has a single tab so no tab/sub state; dq is the only
+// user-facing filter worth carrying across visits.
+function _saveLeaseState() {
+  try {
+    localStorage.setItem('ccm_lease_state', JSON.stringify({ dq: dqFilter }));
+  } catch (_e) {}
+  try {
+    const _u = new URL(window.location.href);
+    if (dqFilter) _u.searchParams.set('dq', dqFilter); else _u.searchParams.delete('dq');
+    history.replaceState({}, '', _u);
+  } catch (_e) {}
+}
+
+// Restore dq from URL > localStorage > default, before first render.
+(function _restoreLeaseState() {
+  let _dq = new URLSearchParams(window.location.search).get('dq');
+  if (!_dq) {
+    try {
+      const _s = JSON.parse(localStorage.getItem('ccm_lease_state') || 'null');
+      if (_s && _s.dq) _dq = _s.dq;
+    } catch (_e) {}
+  }
+  if (_dq) {
+    const _opt = Array.from(dqSel.options).find(o => o.value === _dq);
+    if (_opt) { dqSel.value = _dq; dqFilter = _dq; }
+  }
+})();
+
+dqSel.addEventListener('change', () => { dqFilter = dqSel.value; _saveLeaseState(); render(); });
 
 function dqRate(g, total) {
   if (total < 10) return null;

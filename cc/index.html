@@ -477,7 +477,44 @@ document.getElementById('metricPanel').addEventListener('change', function(e) {
     _updateSelectAll();
   }
   _updateMetricBtn();
+  _saveCcState();
 });
+
+// Tier 1 (localStorage) + Tier 2 (URL) persistence for metric selection.
+function _saveCcState() {
+  const ids = [...document.querySelectorAll('#metricPanel input[data-metric]:checked')].map(cb => cb.dataset.metric);
+  try { localStorage.setItem('ccm_cc_state', JSON.stringify({ metrics: ids })); } catch (_e) {}
+  try {
+    const _u = new URL(window.location.href);
+    const _all = document.querySelectorAll('#metricPanel input[data-metric]').length;
+    if (ids.length > 0 && ids.length < _all) _u.searchParams.set('metrics', ids.join(','));
+    else _u.searchParams.delete('metrics');
+    history.replaceState({}, '', _u);
+  } catch (_e) {}
+}
+
+// Restore metric selection from URL > localStorage > defaults (all checked).
+// Run BEFORE embedAll so only the restored-visible sections get rendered.
+(function _restoreCcState() {
+  let _metricsStr = new URLSearchParams(window.location.search).get('metrics');
+  if (_metricsStr === null) {
+    try {
+      const _s = JSON.parse(localStorage.getItem('ccm_cc_state') || 'null');
+      if (_s && Array.isArray(_s.metrics)) _metricsStr = _s.metrics.join(',');
+    } catch (_e) {}
+  }
+  if (_metricsStr !== null) {
+    const wanted = new Set(_metricsStr.split(',').filter(Boolean));
+    document.querySelectorAll('#metricPanel input[data-metric]').forEach(cb => {
+      const want = wanted.has(cb.dataset.metric);
+      cb.checked = want;
+      const sec = document.getElementById('section-' + cb.dataset.metric);
+      if (sec) sec.classList.toggle('hidden', !want);
+    });
+    _updateMetricBtn();
+    _updateSelectAll();
+  }
+})();
 
 embedAll();
 
