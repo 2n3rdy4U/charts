@@ -250,7 +250,7 @@ if (selectedIssuer) issuerSel.value = selectedIssuer;
   const cb  = document.createElement('input');
   cb.type = 'checkbox'; cb.value = '__all__';
   cb.title = 'Lease-count weighted aggregate: delinquent leases and total leases are summed across all issuers before dividing. Every lease has equal weight regardless of deal size.';
-  cb.addEventListener('change', () => { showAllAvg = cb.checked; updateIssuerBtnText(); render(); });
+  cb.addEventListener('change', () => { showAllAvg = cb.checked; updateIssuerBtnText(); _saveLeaseState(); render(); });
   lbl.appendChild(cb);
   lbl.appendChild(document.createTextNode(' All Issuers'));
   issuerPanel.appendChild(lbl);
@@ -296,6 +296,7 @@ issuerPanel.addEventListener('change', e => {
   if (e.target.checked) selectedIssuers.add(e.target.value);
   else selectedIssuers.delete(e.target.value);
   updateIssuerBtnText();
+  _saveLeaseState();
   render();
 });
 document.addEventListener('click', e => {
@@ -308,39 +309,85 @@ subViewGrp.addEventListener('click', e => {
   e.target.classList.add('active');
   mode = e.target.dataset.subview;
   document.body.dataset.sub = (mode === 'vintage') ? 'vintage' : 'timeseries';
+  _saveLeaseState();
   render();
 });
 
-issuerSel.addEventListener('change', () => { selectedIssuer = issuerSel.value; render(); });
+issuerSel.addEventListener('change', () => { selectedIssuer = issuerSel.value; _saveLeaseState(); render(); });
 vintageRange.addEventListener('change', render);
 tsRange.addEventListener('change', render);
-// Tier 1 (localStorage) + Tier 2 (URL) persistence for the dq filter.
-// Lease explorer has a single tab so no tab/sub state; dq is the only
-// user-facing filter worth carrying across visits.
+// Tier 1 (localStorage) + Tier 2 (URL) persistence.
+// Persists: dq, mode (vintage vs timeseries), single-issuer dropdown
+// (vintage mode), multi-issuer checkboxes + All-Issuers toggle (timeseries).
 function _saveLeaseState() {
   try {
-    localStorage.setItem('ccm_lease_state', JSON.stringify({ dq: dqFilter }));
+    localStorage.setItem('ccm_lease_state', JSON.stringify({
+      dq: dqFilter,
+      mode: mode,
+      issuer: selectedIssuer,
+      issuers: [...selectedIssuers],
+      allAvg: showAllAvg
+    }));
   } catch (_e) {}
   try {
     const _u = new URL(window.location.href);
     if (dqFilter) _u.searchParams.set('dq', dqFilter); else _u.searchParams.delete('dq');
+    if (mode && mode !== 'vintage') _u.searchParams.set('mode', mode); else _u.searchParams.delete('mode');
+    if (selectedIssuer) _u.searchParams.set('issuer', selectedIssuer); else _u.searchParams.delete('issuer');
+    if (selectedIssuers.size > 0) _u.searchParams.set('issuers', [...selectedIssuers].join(','));
+    else _u.searchParams.delete('issuers');
+    if (showAllAvg) _u.searchParams.set('allAvg', '1'); else _u.searchParams.delete('allAvg');
     history.replaceState({}, '', _u);
   } catch (_e) {}
 }
 
-// Restore dq from URL > localStorage > default, before first render.
+// Restore from URL > localStorage > defaults, before first render.
 (function _restoreLeaseState() {
-  let _dq = new URLSearchParams(window.location.search).get('dq');
-  if (!_dq) {
-    try {
-      const _s = JSON.parse(localStorage.getItem('ccm_lease_state') || 'null');
-      if (_s && _s.dq) _dq = _s.dq;
-    } catch (_e) {}
-  }
+  const _params = new URLSearchParams(window.location.search);
+  let _saved = {};
+  try { _saved = JSON.parse(localStorage.getItem('ccm_lease_state') || '{}') || {}; } catch (_e) {}
+  const _pick = (k) => _params.has(k) ? _params.get(k) : _saved[k];
+
+  const _dq = _pick('dq');
   if (_dq) {
     const _opt = Array.from(dqSel.options).find(o => o.value === _dq);
     if (_opt) { dqSel.value = _dq; dqFilter = _dq; }
   }
+
+  const _mode = _pick('mode');
+  if (_mode === 'timeseries' || _mode === 'vintage') {
+    mode = _mode;
+    document.body.dataset.sub = (mode === 'vintage') ? 'vintage' : 'timeseries';
+    [...subViewGrp.children].forEach(b => b.classList.toggle('active', b.dataset.subview === mode));
+  }
+
+  const _issuer = _pick('issuer');
+  if (_issuer && dataByIssuer[_issuer]) {
+    selectedIssuer = _issuer;
+    issuerSel.value = _issuer;
+  }
+
+  let _issuers = null;
+  if (_params.has('issuers')) _issuers = _params.get('issuers').split(',').filter(Boolean);
+  else if (Array.isArray(_saved.issuers)) _issuers = _saved.issuers;
+  if (_issuers) {
+    selectedIssuers.clear();
+    issuerPanel.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+      if (cb.value === '__all__') return;
+      const want = _issuers.includes(cb.value);
+      cb.checked = want;
+      if (want) selectedIssuers.add(cb.value);
+    });
+  }
+
+  const _allAvg = _params.has('allAvg') ? _params.get('allAvg') === '1' : _saved.allAvg;
+  if (_allAvg) {
+    showAllAvg = true;
+    const _cb = issuerPanel.querySelector('input[value="__all__"]');
+    if (_cb) _cb.checked = true;
+  }
+
+  updateIssuerBtnText();
 })();
 
 dqSel.addEventListener('change', () => { dqFilter = dqSel.value; _saveLeaseState(); render(); });
