@@ -2098,6 +2098,29 @@
   let currentTab = 'delinquency';
   let currentSub = 'vintage';  // 'vintage' | 'timeseries' (only for delinquency)
 
+  // Tier 1 (localStorage) + Tier 2 (URL params) for the user's filter
+  // selections. Tab/sub use pushState (creates a history entry — back
+  // button takes you to the prior tab). Non-tab filters (dq, vehicle)
+  // use replaceState — they update the URL without polluting history.
+  function _saveExplorerState() {
+    try {
+      localStorage.setItem('ccm_explorer_state', JSON.stringify({
+        tab:     currentTab,
+        sub:     currentTab === 'delinquency' ? currentSub : null,
+        dq:      (typeof dqFilter !== 'undefined') ? dqFilter : null,
+        vehicle: (typeof vehicleType !== 'undefined') ? vehicleType : null
+      }));
+    } catch (_e) { /* private mode / disabled storage — silent no-op */ }
+    try {
+      const _u = new URL(window.location.href);
+      if (typeof dqFilter !== 'undefined' && dqFilter) _u.searchParams.set('dq', dqFilter);
+      else _u.searchParams.delete('dq');
+      if (typeof vehicleType !== 'undefined' && vehicleType && vehicleType !== 'all') _u.searchParams.set('vehicle', vehicleType);
+      else _u.searchParams.delete('vehicle');
+      history.replaceState({}, '', _u);
+    } catch (_e) { /* file:// protocol blocks replaceState — fine */ }
+  }
+
   function setTab(tab, sub) {
     currentTab = tab;
     document.body.dataset.tab = tab;
@@ -2121,15 +2144,8 @@
       history.pushState({}, '', _u);
     } catch (_e) { /* file:// protocol blocks pushState — fine, no-op */ }
 
-    // Persist to localStorage so a return visitor lands back on their last
-    // active tab when no URL params are present. URL params still win on
-    // first read (bookmarks / shared links override last-used state).
-    try {
-      localStorage.setItem('ccm_explorer_state', JSON.stringify({
-        tab: tab,
-        sub: tab === 'delinquency' ? currentSub : null
-      }));
-    } catch (_e) { /* private mode / disabled storage — silent no-op */ }
+    // Persist full filter state (tab/sub + dq + vehicle) to localStorage
+    _saveExplorerState();
 
     if (tab === 'credit-score') {
       mode = 'fico';
@@ -2192,7 +2208,7 @@
   // DQ Status dropdown
   const dqSel = document.getElementById('dqSel');
   dqSel.value = dqFilter;
-  dqSel.addEventListener('change', () => { dqFilter = dqSel.value; render(); });
+  dqSel.addEventListener('change', () => { dqFilter = dqSel.value; _saveExplorerState(); render(); });
 
   // Credit Score dropdown + optional custom range
   const scoreSel    = document.getElementById('scoreSel');
@@ -2425,6 +2441,7 @@
       const badge = document.getElementById('propBadge');
       if (badge) badge.textContent = '';
     }
+    _saveExplorerState();
     render();
   });
 
@@ -2462,21 +2479,35 @@
   // ── Init ─────────────────────────────────────────────────────────────
   // Initial state priority:
   //   1. URL params (explicit user intent via bookmark / shared link)
-  //   2. localStorage (return-visitor's last-active tab)
-  //   3. Defaults (Delinquency / Vintage)
+  //   2. localStorage (return-visitor's last-active state)
+  //   3. Defaults
   const _params = new URLSearchParams(window.location.search);
   let _initTab = _params.get('tab');
   let _initSub = _params.get('sub');
+  let _initDq  = _params.get('dq');
+  let _initVeh = _params.get('vehicle');
   const _legacyView = _params.get('view');
 
-  if (!_initTab && !_legacyView) {
-    try {
-      const _saved = JSON.parse(localStorage.getItem('ccm_explorer_state') || 'null');
-      if (_saved && _saved.tab) {
-        _initTab = _saved.tab;
-        if (_saved.sub) _initSub = _saved.sub;
-      }
-    } catch (_e) { /* malformed JSON or storage unavailable — silent no-op */ }
+  // Load saved state. URL params win field-by-field.
+  let _saved = null;
+  try { _saved = JSON.parse(localStorage.getItem('ccm_explorer_state') || 'null'); } catch (_e) {}
+  if (_saved) {
+    if (!_initTab && !_legacyView && _saved.tab) _initTab = _saved.tab;
+    if (!_initSub && _saved.sub)                 _initSub = _saved.sub;
+    if (!_initDq && _saved.dq)                   _initDq  = _saved.dq;
+    if (!_initVeh && _saved.vehicle)             _initVeh = _saved.vehicle;
+  }
+
+  // Apply non-tab state to the DOM before setTab runs, so setTab's
+  // _saveExplorerState() captures the restored values (not the defaults).
+  if (_initDq) {
+    const _dqOpt = Array.from(dqSel.options).find(o => o.value === _initDq);
+    if (_dqOpt) { dqSel.value = _initDq; dqFilter = _initDq; }
+  }
+  if (_initVeh && ['all','new','used'].indexOf(_initVeh) !== -1) {
+    vehicleType = _initVeh;
+    for (const _b of document.querySelectorAll('#vehicleGroup button'))
+      _b.classList.toggle('active', _b.dataset.vehicle === _initVeh);
   }
 
   // Legacy URL redirects (old ?view= param)
