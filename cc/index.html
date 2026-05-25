@@ -72,13 +72,20 @@
   .metric-sel-panel label:hover{background:#f1f5f9}
   .metric-sel-panel input[type=checkbox]{cursor:pointer;accent-color:#1e40af}
   .metric-sel-sep{height:1px;background:#e2e8f0;margin:4px 8px}
-  /* ── Range buttons ── */
-  .rng-btn{padding:3px 10px;font-size:12px;border-radius:4px;border:1px solid #cbd5e1;
-            background:#fff;cursor:pointer;color:#475569;transition:all 0.15s}
-  .rng-btn:hover{background:#f1f5f9}
-  .rng-btn.active{background:#dbeafe;color:#1e40af;border-color:#1e40af}
-  input[type=date]{font-size:12px;padding:3px 6px;border:1px solid #cbd5e1;
-                    border-radius:4px;color:#475569}
+  /* ── Date Range <select> — matches the auto-loan / auto-lease explorer's
+        rectangular, white-background look (overrides iOS Safari's default
+        rounded gradient styling so the control reads as part of the CCM
+        design system, not a native form widget). ── */
+  select{
+    font-size:12.5px;padding:4px 7px;
+    border:1px solid #cbd5e1;border-radius:6px;background:#fff;color:#334155;
+    -webkit-appearance:none;-moz-appearance:none;appearance:none;
+    /* Inline SVG chevron so the control still reads as a dropdown after
+       the native chevron is suppressed by -webkit-appearance:none. */
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M1 1l4 4 4-4' stroke='%2364748b' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+    background-repeat:no-repeat;background-position:right 8px center;
+    padding-right:24px;
+  }
   /* ── Chart legend (bottom of each section) ── */
   .chart-legend{display:flex;flex-wrap:wrap;gap:4px 12px;padding:8px 4px 4px;
                  border-top:1px solid #e2e8f0;margin-top:4px}
@@ -128,16 +135,16 @@
     .ctrl-label{font-size:10px;font-weight:400;color:#94a3b8;min-width:0;margin-bottom:0;line-height:1.2}
     .ctrl-sep{margin:0 2px}
     /* Unified 28px control height + 12px font (matches auto explorer) */
-    .metric-sel-btn,.rng-btn,input[type=date]{
+    .metric-sel-btn,select{
       box-sizing:border-box;height:28px;min-height:28px;
       padding:0 8px;font-size:12px;line-height:1;
     }
-    .rng-btn{padding:0 10px}
+    select{padding-right:24px}  /* keep room for chevron */
     .export-btn{min-height:30px;min-width:30px;padding:6px}
     /* Dropdown panel: cap width to viewport so it doesn't overflow */
     .metric-sel-panel{max-width:calc(100vw - 24px)}
     /* touch feedback */
-    .metric-sel-btn:active,.rng-btn:active,.export-btn:active{transform:scale(0.97);transition:transform 0.08s}
+    .metric-sel-btn:active,.export-btn:active{transform:scale(0.97);transition:transform 0.08s}
   }
   /* ── landscape (phones) ── */
   @media (max-height:500px) and (orientation:landscape) {
