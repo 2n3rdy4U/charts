@@ -111,16 +111,31 @@
   .meta-date{font-size:11px;color:#999;white-space:nowrap}
   /* ── focus-visible inherited from shared style.css ── */
   /* ── mobile portrait ── */
+  /* Matches the canonical auto-loan/auto-lease explorer portrait spec
+     (generate_sec_explorer_data.py @media max-width:640px): 28px control
+     height, 12px font, tight padding, 10px de-weighted labels. Keeps the
+     CC and ABS pages visually consistent on a phone. */
   @media (max-width:640px) {
     .wrap{padding:10px 4px 24px}
     .chart-section{padding:8px 4px}
     .page-hdr{gap:8px}
-    .brand-title{font-size:15px}
-    /* touch targets */
-    .metric-sel-btn{min-height:44px;padding:10px 12px;font-size:14px}
-    .rng-btn{min-height:44px;padding:10px 12px}
-    input[type=date]{min-height:44px;padding:10px 8px}
-    .export-btn{min-height:44px;min-width:44px;padding:10px}
+    .brand-title{font-size:16px}
+    .meta-date{font-size:11px}
+    /* Tight control bar — de-weight labels, collapse gaps */
+    .ctrl-bar{padding:6px 10px;margin-bottom:8px}
+    .ctrl-row{gap:4px 8px}
+    .ctrl-row+.ctrl-row{margin-top:4px;padding-top:4px}
+    .ctrl-label{font-size:10px;font-weight:400;color:#94a3b8;min-width:0;margin-bottom:0;line-height:1.2}
+    .ctrl-sep{margin:0 2px}
+    /* Unified 28px control height + 12px font (matches auto explorer) */
+    .metric-sel-btn,.rng-btn,input[type=date]{
+      box-sizing:border-box;height:28px;min-height:28px;
+      padding:0 8px;font-size:12px;line-height:1;
+    }
+    .rng-btn{padding:0 10px}
+    .export-btn{min-height:30px;min-width:30px;padding:6px}
+    /* Dropdown panel: cap width to viewport so it doesn't overflow */
+    .metric-sel-panel{max-width:calc(100vw - 24px)}
     /* touch feedback */
     .metric-sel-btn:active,.rng-btn:active,.export-btn:active{transform:scale(0.97);transition:transform 0.08s}
   }
