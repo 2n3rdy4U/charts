@@ -428,10 +428,14 @@ function makeSpec(field, title, fmtAx, fmtTip) {
 
 const OPTS = {renderer:"svg", actions:false, tooltip:{disableDefaultStyle:true}};
 const METRICS = [
-  {id:'pr',  sel:'#chart-pr',  field:'payment_rate',       title:'Monthly Payment Rate (%)',       fmtAx:'.1f', fmtTip:'.2f'},
-  {id:'xs',  sel:'#chart-xs',  field:'excess_spread',      title:'Excess Spread (%)',              fmtAx:'.1f', fmtTip:'.2f'},
-  {id:'dr',  sel:'#chart-dr',  field:'default_rate',       title:'Net Default Rate (%)',           fmtAx:'.2f', fmtTip:'.2f'},
-  {id:'dq',  sel:'#chart-dq',  field:'delinquency_30plus', title:'30+ Day Delinquency (%)',        fmtAx:'.2f', fmtTip:'.2f'},
+  // fmtAx: y-axis tick label format. Use `.0f` (whole numbers) across all
+  // five charts — the y-axis only needs to convey scale, and decimals on
+  // tick marks clutter the chart for mobile-portrait read. Precise values
+  // remain in fmtTip for the hover tooltip.
+  {id:'pr',  sel:'#chart-pr',  field:'payment_rate',       title:'Monthly Payment Rate (%)',       fmtAx:'.0f', fmtTip:'.2f'},
+  {id:'xs',  sel:'#chart-xs',  field:'excess_spread',      title:'Excess Spread (%)',              fmtAx:'.0f', fmtTip:'.2f'},
+  {id:'dr',  sel:'#chart-dr',  field:'default_rate',       title:'Net Default Rate (%)',           fmtAx:'.0f', fmtTip:'.2f'},
+  {id:'dq',  sel:'#chart-dq',  field:'delinquency_30plus', title:'30+ Day Delinquency (%)',        fmtAx:'.0f', fmtTip:'.2f'},
   {id:'bal', sel:'#chart-bal', field:'balance_bn',          title:'Trust Receivables Balance ($B)', fmtAx:'.0f', fmtTip:'.1f'},
 ];
 
