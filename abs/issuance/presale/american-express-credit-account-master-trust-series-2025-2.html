@@ -39,7 +39,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans
        color: var(--fg); background: var(--bg); margin: 0 auto; padding: 24px;
        max-width: 1200px; line-height: 1.45; font-size: 14px; }
 .ba-nav { position: sticky; top: 0; z-index: 100;
-          display: flex; justify-content: space-between; align-items: center;
+          display: flex; align-items: center;
           margin: -24px -24px 16px -24px; padding: 10px 24px;
           background: var(--bg); border-bottom: 2px solid var(--color-brand);
           font-size: 12px; }
@@ -47,10 +47,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans
                     color: var(--color-brand); text-decoration: none; }
 .ba-nav .ba-brand:hover { opacity: 0.85; }
 .ba-nav .ba-logo { display: block; width: auto; }
-.ba-nav .ba-links { list-style: none; margin: 0; padding: 0;
-                    display: flex; gap: 18px; }
-.ba-nav .ba-links a { color: var(--muted); text-decoration: none; }
-.ba-nav .ba-links a:hover { color: var(--color-brand); }
 .ba-footer { margin: 32px -24px -24px -24px; padding: 16px 24px;
              border-top: 1px solid var(--grid); background: var(--head);
              font-size: 11px; color: var(--muted);
@@ -62,7 +58,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans
 @media (max-width: 480px) {
   .ba-nav { padding: 8px 16px; margin: -24px -24px 12px -24px; font-size: 11px; }
   .ba-nav .ba-logo { height: 18px; }
-  .ba-nav .ba-links { gap: 12px; }
   .ba-footer { padding: 12px 16px; font-size: 10px; }
 }
 @media print { .ba-nav, .ba-footer { display: none; } }
@@ -352,14 +347,9 @@ p.empty, p.peer-empty { color: var(--muted); font-style: italic; font-size: 13px
 </script>
 <script src="../../../share/share.js"></script>
 </head><body><nav class="ba-nav" aria-label="Site">
-  <a class="ba-brand" href="https://www.consumercreditmatters.com/" aria-label="Consumer Credit Matters">
+  <a class="ba-brand" href="https://www.consumercreditmatters.com/" aria-label="Consumer Credit Matters — home">
     <img class="ba-logo" src="https://2n3rdy4u.github.io/charts/assets/brand/logo-horizontal-primary.png" alt="Consumer Credit Matters" height="22" />
   </a>
-  <ul class="ba-links">
-    <li><a href="https://www.consumercreditmatters.com/">Home</a></li>
-    <li><a href="https://www.consumercreditmatters.com/newsletter">Newsletter</a></li>
-    <li><a href="https://www.consumercreditmatters.com/podcasts">Podcasts</a></li>
-  </ul>
 </nav>
 <div class="header-strip">
   <button id="print-btn" onclick="window.print()" title="Print this credit summary"
@@ -431,6 +421,6 @@ p.empty, p.peer-empty { color: var(--muted); font-style: italic; font-size: 13px
     are sliced to the subject&rsquo;s closing date so the snapshot reflects what was knowable
     at issuance.
   </p>
-  <p class="gen">Generated 2026-05-25 14:56</p>
+  <p class="gen">Generated 2026-05-25 15:46</p>
 </footer>
 </body></html>
