@@ -626,5 +626,26 @@ function render() {
 
 render();
 </script>
+
+<script>
+// ── iframe-resizer content side ───────────────────────────────────
+// Post our content height to the parent shell (Squarespace) so it can
+// grow the iframe to match. Without this, the iframe stays at a small
+// default height, content overflows, and iOS Safari rubber-bands at the
+// bottom of the chart. Mirrors generate_sec_explorer_data.py.
+(function() {
+  function postHeight() {
+    var h = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
+    try { window.parent.postMessage({type:'cm-iframe-height', height:h}, '*'); } catch (e) {}
+  }
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(postHeight).observe(document.body);
+  }
+  window.addEventListener('resize', postHeight);
+  postHeight();
+  setTimeout(postHeight, 300);
+  setTimeout(postHeight, 1500);
+})();
+</script>
 </body>
 </html>
