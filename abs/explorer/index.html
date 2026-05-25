@@ -760,7 +760,7 @@
   };
 })();
 (function () {
-  const BUILD_ID   = "2026-05-25 08:40";
+  const BUILD_ID   = "2026-05-25 11:35";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "Santander (DRIVE)"}, {"code": "EART", "label": "Exeter"}, {"code": "EARTS", "label": "Exeter Select"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander (SDART)"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -1344,12 +1344,49 @@
     // On portrait mobile, ~10 years of 4-digit horizontal labels at the default
     // 13pt font crowd against each other and the y-axis labels. Switch to a
     // smaller font + -45° angle so they read cleanly without truncation.
+    //
+    // Adaptive tier (TS only): with only ~14 months of EARTS data, a single
+    // "2026" tick reads as one bare label in the middle of the plot. Pick
+    // tick density + format based on the actual data window (months between
+    // earliest and latest reporting_date in the current `data` array):
+    //   <= 24 mo  → "Apr 2025" style, ~6 ticks (every ~3 mo)
+    //   24-72 mo  → bare year (current default behavior)
+    //   > 72 mo   → every-other-year (compact long histories)
     const _isNarrow = (window.innerWidth || 1024) <= 640;
-    const _tsAxis = _isNarrow
-      ? { tickCount:{utcyear:1}, format:"%Y", labelAngle:-45,
-           labelFontSize:10, labelOverlap:false }
-      : { tickCount:{utcyear:1}, format:"%Y", labelAngle:0,
-           labelOverlap:false };
+    let _tsWindowMonths = 0;
+    if (!isVintage) {
+      try {
+        const _ms = data
+          .map(d => d.reporting_date && Date.parse(d.reporting_date))
+          .filter(n => n && !isNaN(n));
+        if (_ms.length >= 2) {
+          _tsWindowMonths = (Math.max(..._ms) - Math.min(..._ms))
+            / (1000 * 60 * 60 * 24 * 30.4375);
+        }
+      } catch (e) { _tsWindowMonths = 0; }
+    }
+    let _tsAxis;
+    if (!isVintage && _tsWindowMonths > 0 && _tsWindowMonths <= 24) {
+      _tsAxis = {
+        tickCount: 6, format: "%b %Y",
+        labelAngle: _isNarrow ? -45 : 0,
+        labelFontSize: _isNarrow ? 10 : 12,
+        labelOverlap: false,
+      };
+    } else if (!isVintage && _tsWindowMonths > 72) {
+      _tsAxis = {
+        tickCount: {utcyear: 2}, format: "%Y",
+        labelAngle: _isNarrow ? -45 : 0,
+        labelFontSize: _isNarrow ? 10 : undefined,
+        labelOverlap: false,
+      };
+    } else {
+      _tsAxis = _isNarrow
+        ? { tickCount: {utcyear: 1}, format: "%Y", labelAngle: -45,
+             labelFontSize: 10, labelOverlap: false }
+        : { tickCount: {utcyear: 1}, format: "%Y", labelAngle: 0,
+             labelOverlap: false };
+    }
     const xEnc = isVintage
       ? { field:'vintage_month', type:'quantitative',
            title:'Months Since Issuance', axis:{ tickMinStep:1 } }
