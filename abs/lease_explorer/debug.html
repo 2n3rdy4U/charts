@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset="utf-8">
+<title>Lease Explorer — Vega Diagnostic</title>
+<style>
+  body { font-family: -apple-system, sans-serif; padding: 24px; max-width: 900px; margin: 0 auto; }
+  h1 { font-size: 18px; }
+  .test { border: 1px solid #e5e7eb; padding: 16px; margin-bottom: 18px; border-radius: 8px; }
+  .status { font-size: 13px; font-family: monospace; white-space: pre-wrap; background: #f3f4f6; padding: 6px 10px; border-radius: 4px; margin-top: 8px; }
+  .ok { color: #047857; } .err { color: #b91c1c; }
+  .chart { min-height: 280px; margin-top: 8px; }
+</style>
+<script src="vendor/vega.min.js"></script>
+<script src="vendor/vega-lite.min.js"></script>
+<script src="vendor/vega-embed.min.js"></script>
+</head>
+<body>
+<h1>Vega Diagnostic</h1>
+<p>Each test reports its status in the gray box. If a chart appears, the renderer works for that spec.</p>
+
+<div class="test">
+  <strong>1. Library load check</strong>
+  <div class="status" id="libs"></div>
+</div>
+
+<div class="test">
+  <strong>2. Trivial bar chart (sanity)</strong>
+  <div id="chart1" class="chart"></div>
+  <div class="status" id="status1"></div>
+</div>
+
+<div class="test">
+  <strong>3. Stacked-bar "disposition" with real BMWLT data</strong>
+  <div id="chart2" class="chart"></div>
+  <div class="status" id="status2"></div>
+</div>
+
+<div class="test">
+  <strong>4. Line chart "DQ" with real BMWLT data (2 points)</strong>
+  <div id="chart3" class="chart"></div>
+  <div class="status" id="status3"></div>
+</div>
+
+<script>
+// 1. Library load
+const libs = document.getElementById("libs");
+libs.textContent =
+  `vega: ${typeof vega}\n` +
+  `vegaLite: ${typeof vegaLite}\n` +
+  `vegaEmbed: ${typeof vegaEmbed}`;
+libs.className = "status " + (typeof vegaEmbed === "function" ? "ok" : "err");
+
+// 2. Trivial bar
+(() => {
+  const spec = {
+    $schema: "https://vega.github.io/schema/vega-lite/v5.json",
+    width: 400, height: 200,
+    data: { values: [{a:"A",b:10},{a:"B",b:20},{a:"C",b:15}] },
+    mark: "bar",
+    encoding: { x:{field:"a",type:"nominal"}, y:{field:"b",type:"quantitative"} }
+  };
+  vegaEmbed("#chart1", spec, { actions: false })
+    .then(() => { const s=document.getElementById("status1"); s.textContent="OK — basic rendering works"; s.className="status ok"; })
+    .catch(e => { const s=document.getElementById("status1"); s.textContent="FAIL: "+(e.message||e); s.className="status err"; });
+})();
+
+// 3. Disposition (stacked normalize) with real shape of data
+(() => {
+  const data = [
+    { issuer: "BMWLT", label: "Matured / return", pct: 2090/22659, n: 2090 },
+    { issuer: "BMWLT", label: "Purchase",         pct: 20433/22659, n: 20433 },
+    { issuer: "BMWLT", label: "Default",          pct: 123/22659, n: 123 },
+    { issuer: "BMWLT", label: "Repossession",     pct: 7/22659, n: 7 },
+    { issuer: "BMWLT", label: "Other",            pct: 6/22659, n: 6 },
+  ];
+  const spec = {
+    $schema: "https://vega.github.io/schema/vega-lite/v5.json",
+    width: "container", height: 320,
+    autosize: { type: "fit-x" },
+    data: { values: data },
+    mark: { type: "bar" },
+    encoding: {
+      x: { field: "issuer", type: "nominal", sort: ["BMWLT"] },
+      y: { field: "pct", type: "quantitative", stack: "normalize", axis: { format: "%" } },
+      color: { field: "label", type: "nominal" }
+    }
+  };
+  vegaEmbed("#chart2", spec, { actions: false })
+    .then(() => { const s=document.getElementById("status2"); s.textContent="OK — stacked bar renders"; s.className="status ok"; })
+    .catch(e => { const s=document.getElementById("status2"); s.textContent="FAIL: "+(e.message||e)+"\n"+(e.stack||""); s.className="status err"; });
+})();
+
+// 4. Line chart with 2 points
+(() => {
+  const flat = [
+    { issuer:"BMWLT", period:"2020-12-31", dpd_60p_rate: 45/10779,  dpd_30p_rate: (42+45)/10779 },
+    { issuer:"BMWLT", period:"2021-01-31", dpd_60p_rate: 32/9092,   dpd_30p_rate: (36+32)/9092 }
+  ];
+  const spec = {
+    $schema: "https://vega.github.io/schema/vega-lite/v5.json",
+    width: "container", height: 320,
+    autosize: { type: "fit-x" },
+    data: { values: flat },
+    mark: { type: "line", strokeWidth: 2, point: true },
+    encoding: {
+      x: { field: "period", type: "temporal" },
+      y: { field: "dpd_60p_rate", type: "quantitative", axis: { format: ".2%" } },
+      color: { field: "issuer", type: "nominal" }
+    }
+  };
+  vegaEmbed("#chart3", spec, { actions: false })
+    .then(() => { const s=document.getElementById("status3"); s.textContent="OK — line renders"; s.className="status ok"; })
+    .catch(e => { const s=document.getElementById("status3"); s.textContent="FAIL: "+(e.message||e)+"\n"+(e.stack||""); s.className="status err"; });
+})();
+</script>
+</body></html>

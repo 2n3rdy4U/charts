@@ -96,10 +96,40 @@
                   border-top:1px solid var(--border); font-size:11px;
                   color:var(--muted); line-height:1.4; }
     /* .multi-sel*  styles inherited from shared style.css */
+    /* ── Narrow viewports (all phones + tablets): release the desktop
+          body-as-scroll-container so the iframe parent's scroll engages
+          naturally and the page doesn't trap touch scrolls in .wrap.
+          Without this rule the parent Squarespace shell rubber-bands at
+          the bottom of the chart because body overflow:hidden blocks the
+          scroll gesture from reaching the iframe boundary. Matches the
+          pattern used by generate_sec_explorer_data.py (auto-loan). ──── */
+    @media (max-width: 1000px) {
+      html, body {
+        overflow-x: clip !important;
+        overflow-y: visible !important;
+        height: auto !important;
+      }
+      .wrap {
+        overflow: visible !important;
+        height: auto;
+        min-height: 0;
+      }
+      /* Cap #vis height — with body unconstrained, flex:1 + Vega's
+         height:100% would expand unbounded and distort the chart
+         (ResizeObserver feedback loop). */
+      #vis { flex: none !important; height: 380px; min-height: 320px; max-height: 440px; }
+    }
     @media (max-width: 720px) {
       .mode-tab { padding:6px 12px; font-size:12px; min-height:36px; }
       .brand-title { font-size:14px; }
       .fbar { gap:4px 10px; }
+    }
+    /* ── Mobile portrait — wrap padding (incl. safe-area) and tighter
+          chart height. Mirrors auto-loan explorer's portrait block. ── */
+    @media (max-width: 640px) {
+      body { overflow-y: auto; }
+      .wrap { padding: 8px 8px calc(8px + env(safe-area-inset-bottom)); }
+      #vis { height: 420px; max-height: 480px; }
     }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
