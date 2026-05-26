@@ -760,7 +760,7 @@
   };
 })();
 (function () {
-  const BUILD_ID   = "2026-05-26 07:34";
+  const BUILD_ID   = "2026-05-26 16:29";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "Santander (DRIVE)"}, {"code": "EART", "label": "Exeter"}, {"code": "EARTS", "label": "Exeter Select"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander (SDART)"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -2557,6 +2557,23 @@
   if (_initIssuer) {
     const _iOpt = Array.from(issuerSel.options).find(o => o.value === _initIssuer);
     if (_iOpt) issuerSel.value = _initIssuer;
+  }
+  // For the time-series sub-tab, the active issuer selector is the
+  // multi-select panel (issuerCbs + selectedIssuers), not the single dropdown.
+  // When a newsletter deep-link arrives with ?issuer=X&sub=timeseries, pre-check
+  // only that issuer so the chart lands on exactly the same view shown in the
+  // newsletter card. Added 2026-05-26.
+  if (_initIssuer && _initSub === 'timeseries') {
+    showAllAvg = false;
+    selectedIssuers.clear();
+    const _allCb = issuerPanel.querySelector('input[value="__all__"]');
+    if (_allCb) _allCb.checked = false;
+    for (const cb of issuerCbs) {
+      cb.checked = (cb.value === _initIssuer);
+      if (cb.checked) selectedIssuers.add(cb.value);
+    }
+    if (typeof syncSelectAll === 'function') syncSelectAll();
+    if (typeof updateIssuerBtn === 'function') updateIssuerBtn();
   }
 
   // Legacy URL redirects (old ?view= param)
