@@ -760,7 +760,7 @@
   };
 })();
 (function () {
-  const BUILD_ID   = "2026-05-25 14:48";
+  const BUILD_ID   = "2026-05-26 07:34";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "Santander (DRIVE)"}, {"code": "EART", "label": "Exeter"}, {"code": "EARTS", "label": "Exeter Select"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander (SDART)"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -774,11 +774,10 @@
   // rotating between portrait and landscape reflows correctly.
   function legendColumns() {
     const w = window.innerWidth || document.documentElement.clientWidth || 1024;
-    if (w <= 640)  return 3;   // portrait phones — 3 wide spreads the legend
-                                // across the chart width; 2 produced a tall
-                                // narrow block left-aligned under the y-axis
-    if (w <= 1024) return 5;   // landscape phones + tablets
-    return 8;                  // desktop
+    if (w <= 640)  return 4;   // portrait phones — bumped 3→4 to use the
+                                // unused horizontal space on the right
+    if (w <= 1024) return 6;   // landscape phones + tablets (bumped 5→6)
+    return 9;                  // desktop (bumped 8→9)
   }
   function updateDataThrough(rows) {
     if (!rows || !rows.length) return;
