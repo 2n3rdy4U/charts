@@ -444,6 +444,33 @@
       #tblWrap { overflow:visible; height:auto; display:block !important; page-break-inside:avoid; padding-bottom:24px; }
       #source-bar { font-size:11px; padding:2px 0 8px; }
     }
+    
+/* CCM data-subdomain top bar — shared across explorer / macro / issuance */
+.ccm-topbar{display:flex;align-items:center;justify-content:space-between;
+  height:56px;padding:0 24px;background:#0e1d2e;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  position:relative;z-index:100;box-sizing:border-box}
+.ccm-topbar a{text-decoration:none;border:none}
+.ccm-topbar-brand{display:flex;align-items:center;gap:12px;color:#fafafa}
+.ccm-mark{flex:none;width:32px;height:32px;display:flex;align-items:center;justify-content:center}
+.ccm-mark svg{width:24px;height:24px}
+.ccm-brand-name{font-family:Georgia,"Iowan Old Style",serif;font-size:18px;font-weight:600;
+  color:#fafafa;letter-spacing:-0.01em;line-height:1}
+.ccm-brand-name .ccm-dot{color:#7dd3a8}
+.ccm-topbar-nav{display:flex;align-items:center;gap:24px;font-size:13.5px}
+.ccm-topbar-nav a:not(.ccm-cta){color:#a8b5c4;font-weight:500;letter-spacing:0.02em;
+  transition:color 0.15s}
+.ccm-topbar-nav a:not(.ccm-cta):hover{color:#fafafa}
+.ccm-topbar-nav .ccm-cta{background:#4ade80;color:#0e1d2e;padding:8px 16px;
+  border-radius:4px;font-weight:600;letter-spacing:0.02em;transition:background 0.15s}
+.ccm-topbar-nav .ccm-cta:hover{background:#65f08e}
+@media (max-width:640px){
+  .ccm-topbar{padding:0 14px}
+  .ccm-brand-name{font-size:15px}
+  .ccm-topbar-nav{gap:14px;font-size:12px}
+  .ccm-topbar-nav a:not(.ccm-cta){display:none}
+}
+
   </style>
   <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
@@ -464,6 +491,20 @@
   <script src="../../share/share.js"></script>
 </head>
 <body data-tab="delinquency" data-sub="vintage">
+
+<header class="ccm-topbar" role="banner">
+  <a class="ccm-topbar-brand" href="https://www.consumercreditmatters.com/" aria-label="Consumer Credit Matters home">
+    <span class="ccm-mark"><svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M16 2 L29 9 L29 23 L16 30 L3 23 L3 9 Z" stroke="#7dd3a8" stroke-width="2" fill="none"/><path d="M11 11 L21 21 M21 11 L11 21" stroke="#7dd3a8" stroke-width="2.2" stroke-linecap="round"/></svg></span>
+    <span class="ccm-brand-name">Consumer Credit Matters<span class="ccm-dot">.</span></span>
+  </a>
+  <nav class="ccm-topbar-nav" aria-label="Site navigation">
+    <a href="https://www.consumercreditmatters.com/">Home</a>
+    <a href="https://www.consumercreditmatters.com/newsletter">Newsletter</a>
+    <a href="https://www.consumercreditmatters.com/podcasts">Podcast</a>
+    <a class="ccm-cta" href="https://www.consumercreditmatters.com/subscribe">Subscribe</a>
+  </nav>
+</header>
+
 <div class="wrap">
 
   <!-- ── Row 1: header (title + mode toggle + last updated) ── -->
@@ -760,7 +801,7 @@
   };
 })();
 (function () {
-  const BUILD_ID   = "2026-05-26 16:29";
+  const BUILD_ID   = "2026-05-26 18:11";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "Santander (DRIVE)"}, {"code": "EART", "label": "Exeter"}, {"code": "EARTS", "label": "Exeter Select"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander (SDART)"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
