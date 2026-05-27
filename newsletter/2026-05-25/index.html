@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CCM Weekly — May 25, 2026</title>
+<style>
+  :root{
+    --ink:#1a1d1a;--ink-soft:#4a4f4a;--ink-faint:#8a8f8a;
+    --rule:#e6e3da;--rule-soft:#f0ede4;--paper:#fbfaf5;
+    --brand:#1f4d3a;--brand-soft:#e8efe9;
+    --accent:#b7472a;--accent-soft:#f6e6df;
+    --pos:#2f6b3a;--neg:#b7472a;
+    --auto-loan-bg:#dbeafe;--auto-loan-fg:#1e40af;
+    --auto-lease-bg:#f3e8ff;--auto-lease-fg:#7e22ce;
+    --credit-card-bg:#fce7f3;--credit-card-fg:#be185d;
+    --floorplan-bg:#d1fae5;--floorplan-fg:#047857;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);
+    font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  a{color:var(--brand);text-decoration:none;border-bottom:1px solid var(--rule)}
+  a:hover{border-bottom-color:var(--brand)}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  .wide{max-width:1080px;margin:0 auto;padding:0 24px}
+  /* Narrow inner column for prose readability within the wider canvas. */
+  .prose{max-width:720px;margin:0 auto}
+  h1,h2,h3,h4{font-family:Georgia,"Iowan Old Style",serif;color:var(--ink);font-weight:600;line-height:1.2}
+
+  .masthead{border-bottom:2px solid var(--ink);padding:28px 0 18px;margin-bottom:8px}
+  .masthead-row{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+  .brand-block{display:flex;align-items:center;gap:14px}
+  .brand-mark{flex:none;width:42px;height:42px;background:#0e1d2e;border-radius:6px;
+    display:flex;align-items:center;justify-content:center}
+  .brand-mark svg{width:30px;height:30px}
+  .brand-words{display:flex;flex-direction:column;line-height:1.05}
+  .brand{font-family:Georgia,serif;font-size:26px;font-weight:700;letter-spacing:-0.01em;color:var(--ink)}
+  .brand .dot{color:var(--brand)}
+  .brand-sub{font-size:10.5px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px}
+  .issue-meta{font-size:13px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:0.08em}
+  .tagline{font-size:13px;color:var(--ink-soft);margin-top:14px;font-style:italic}
+
+  .toc{background:var(--brand-soft);border-radius:6px;padding:18px 22px;margin:24px 0 36px;font-size:14px;line-height:1.8}
+  .toc-label{font-size:11px;text-transform:uppercase;letter-spacing:0.12em;color:var(--brand);font-weight:600;display:block;margin-bottom:6px}
+  .toc a{border:none;color:var(--ink);display:inline-block;margin-right:18px}
+  .toc a:hover{color:var(--brand)}
+  .toc .num{color:var(--brand);font-weight:600;margin-right:4px}
+
+  section{margin:0 0 48px}
+  .section-head{display:flex;align-items:baseline;gap:14px;border-bottom:1px solid var(--ink);padding-bottom:8px;margin-bottom:20px}
+  .section-num{font-size:13px;color:var(--brand);font-weight:600;letter-spacing:0.05em}
+  .section-head h2{font-size:24px;margin:0;flex:1}
+  .section-kicker{font-size:12px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-faint)}
+
+  .hero h1{font-size:36px;margin:8px 0 16px;letter-spacing:-0.01em;line-height:1.15}
+  .hero .lede{font-size:18px;line-height:1.6;color:var(--ink-soft);margin-bottom:14px}
+  .hero p{font-size:16.5px;line-height:1.65;margin:0 0 14px}
+  .pull{border-left:3px solid var(--accent);padding:4px 0 4px 18px;margin:22px 0;
+    font-family:Georgia,serif;font-style:italic;font-size:18px;color:var(--ink);line-height:1.5}
+
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);
+    border:1px solid var(--rule);border-radius:4px;margin:24px 0;overflow:hidden}
+  .stat{background:var(--paper);padding:14px 16px}
+  .stat .label{font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink-faint);margin-bottom:6px}
+  .stat .val{font-family:Georgia,serif;font-size:22px;font-weight:600;color:var(--ink);line-height:1.1}
+  .stat .delta{font-size:12px;margin-top:3px}
+  .delta.up{color:var(--neg)}.delta.dn{color:var(--pos)}
+
+  table.deals{width:100%;border-collapse:collapse;font-size:13.5px;margin:8px 0}
+  table.deals th{text-align:left;font-weight:600;font-size:11px;text-transform:uppercase;
+    letter-spacing:0.05em;color:var(--ink-faint);border-bottom:1px solid var(--ink);
+    padding:8px 8px 8px 0;white-space:nowrap}
+  table.deals th.num,table.deals td.num{text-align:right;font-variant-numeric:tabular-nums}
+  table.deals td{padding:10px 8px 10px 0;border-bottom:1px solid var(--rule-soft);vertical-align:top}
+  table.deals tr.deal-row:hover td{background:#f4f1e8}
+  table.deals tr.deal-row{cursor:pointer}
+  .issuer-link{color:var(--ink);font-weight:600;border:none}
+  .issuer-link:hover{color:var(--brand)}
+  .deal-sub{font-size:12px;color:var(--ink-faint);margin-top:2px}
+  .deal-arrow{color:var(--ink-faint);font-size:14px;font-weight:600;text-align:right;width:20px}
+  table.deals tr.deal-row:hover .deal-arrow{color:var(--brand)}
+
+  .chip{display:inline-block;font-size:10.5px;text-transform:uppercase;letter-spacing:0.06em;padding:2px 8px;border-radius:10px;font-weight:600}
+  .chip.al-loan {background:var(--auto-loan-bg);color:var(--auto-loan-fg)}
+  .chip.al-lease{background:var(--auto-lease-bg);color:var(--auto-lease-fg)}
+  .chip.cc      {background:var(--credit-card-bg);color:var(--credit-card-fg)}
+  .chip.fp      {background:var(--floorplan-bg);color:var(--floorplan-fg)}
+
+  .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+  .filter{font-size:12px;padding:5px 12px;border:1px solid var(--rule);border-radius:14px;color:var(--ink-soft);background:var(--paper);cursor:pointer}
+  .filter.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+
+  .charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .chart-card{border:1px solid var(--rule);border-radius:6px;padding:16px 18px;background:#fff;
+    transition:border-color 0.15s, transform 0.15s; display:block; color:inherit; text-decoration:none}
+  .chart-card:hover{border-color:var(--brand)}
+  a.chart-card{text-decoration:none}
+  a.chart-card,a.stat{color:inherit;text-decoration:none;border:none}
+  a.stat:hover{background:#f7f5ed}
+  .chart-card h4{font-size:14px;margin:0 0 4px;font-family:inherit}
+  .chart-card .chart-sub{font-size:11.5px;color:var(--ink-faint);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.05em}
+  .chart-card .chart-now{font-family:Georgia,serif;font-size:24px;font-weight:600;line-height:1}
+  .chart-card .chart-now .delta{font-size:13px;font-family:inherit;margin-left:8px;font-weight:500}
+  svg.spark{width:100%;height:60px;display:block;margin-top:10px}
+
+  .callout{background:#fff;border:1px solid var(--rule);border-left:3px solid var(--brand);border-radius:4px;padding:16px 20px;margin:24px 0}
+  .callout .label{font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--brand);font-weight:600;margin-bottom:4px}
+  .callout p{margin:0;font-size:14.5px;line-height:1.55}
+
+  .pod-card{display:grid;grid-template-columns:1.4fr 1fr;gap:0;border:1px solid var(--rule);border-radius:8px;overflow:hidden;background:#fff}
+  .pod-card:hover{border-color:var(--brand)}
+  .pod-thumb{position:relative;aspect-ratio:16/9;
+    background:linear-gradient(135deg,#0e1d2e 0%,#1f4d3a 60%,#2a6b4f 100%);
+    display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .pod-thumb::after{content:"";position:absolute;inset:0;
+    background:radial-gradient(circle at 30% 40%,rgba(255,255,255,0.06) 0%,transparent 60%)}
+  .pod-play{position:relative;z-index:2;width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,0.92);display:flex;align-items:center;justify-content:center;transition:transform 0.15s}
+  .pod-card:hover .pod-play{transform:scale(1.08)}
+  .pod-play svg{width:24px;height:24px;margin-left:3px;fill:#0e1d2e}
+  .pod-duration{position:absolute;bottom:8px;right:8px;z-index:2;background:rgba(0,0,0,0.75);color:#fff;font-size:11px;font-weight:600;padding:2px 6px;border-radius:3px;font-variant-numeric:tabular-nums}
+  .pod-source{position:absolute;top:8px;left:8px;z-index:2;background:rgba(255,0,0,0.92);color:#fff;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;padding:3px 7px;border-radius:3px}
+  .pod-body{padding:20px 22px;display:flex;flex-direction:column;justify-content:center}
+  .pod-eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--accent);font-weight:600;margin-bottom:8px}
+  .pod-title{font-family:Georgia,serif;font-size:19px;line-height:1.3;font-weight:600;color:var(--ink);margin:0 0 10px}
+  .pod-desc{font-size:13.5px;line-height:1.5;color:var(--ink-soft);margin:0 0 14px}
+  .pod-cta{font-size:13px;color:var(--brand);font-weight:600;border:none;display:inline-flex;align-items:center;gap:6px}
+
+  .cal{display:grid;grid-template-columns:1fr;gap:24px;max-width:720px;margin:0 auto}
+  .cal h4{font-size:13px;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink-faint);font-family:inherit;font-weight:600;margin:0 0 10px;padding-bottom:6px;border-bottom:1px solid var(--rule)}
+  .cal ul{margin:0;padding:0;list-style:none;font-size:14px}
+  .cal li{padding:8px 0;border-bottom:1px solid var(--rule-soft);display:flex;gap:12px;align-items:baseline}
+  .cal .when{font-variant-numeric:tabular-nums;color:var(--ink-faint);font-size:12px;text-transform:uppercase;letter-spacing:0.05em;min-width:60px}
+  .cal .what{flex:1;color:var(--ink)}
+  .cal .what em{font-style:normal;color:var(--ink-soft);font-size:12.5px;display:block;margin-top:2px}
+  .cal .what a{color:var(--ink);border-bottom:1px dotted var(--rule)}
+  .cal .what a:hover{color:var(--brand);border-bottom-color:var(--brand)}
+
+  footer{border-top:2px solid var(--ink);margin-top:60px;padding:32px 0;background:var(--brand-soft)}
+  footer .cols{display:grid;grid-template-columns:2fr 1fr 1fr;gap:32px;font-size:13px;color:var(--ink-soft)}
+  footer h4{font-size:12px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink);font-family:inherit;margin:0 0 10px;font-weight:600}
+  footer ul{margin:0;padding:0;list-style:none}
+  footer li{padding:3px 0}
+  footer a{color:var(--ink-soft);border:none}
+  footer a:hover{color:var(--brand)}
+  .footer-brand-row{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+  .footer-brand-mark{flex:none;width:32px;height:32px;background:#0e1d2e;border-radius:5px;display:flex;align-items:center;justify-content:center}
+  .footer-brand-mark svg{width:22px;height:22px}
+  .footer-brand{font-family:Georgia,serif;font-size:18px;font-weight:600;color:var(--ink)}
+  .disclaimer{font-size:11px;color:var(--ink-faint);margin-top:24px;padding-top:18px;border-top:1px solid var(--rule);line-height:1.5}
+
+  @media (max-width:700px){
+    .wrap,.wide{padding:0 18px}
+    .hero h1{font-size:28px}
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .charts-grid,.cal,footer .cols,.pod-card{grid-template-columns:1fr;gap:16px}
+    table.deals{font-size:12.5px}
+    table.deals th:nth-child(4),table.deals td:nth-child(4),
+    table.deals th:nth-child(5),table.deals td:nth-child(5){display:none}
+    .brand{font-size:22px}
+  }
+</style>
+</head>
+<body>
+
+
+<div class="wide">
+  <header class="masthead">
+    <div class="masthead-row">
+      <div class="brand-block">
+        <div class="brand-mark" aria-label="Consumer Credit Matters">
+          <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 2 L29 9 L29 23 L16 30 L3 23 L3 9 Z" stroke="#7dd3a8" stroke-width="2" fill="none"/>
+            <path d="M11 11 L21 21 M21 11 L11 21" stroke="#7dd3a8" stroke-width="2.2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="brand-words">
+          <span class="brand">Consumer Credit Matters<span class="dot">.</span></span>
+          <span class="brand-sub">Weekly &middot; Issue No. 4</span>
+        </div>
+      </div>
+      <div class="issue-meta">May 25, 2026</div>
+    </div>
+    <div class="tagline">Every Monday, 6:30 AM ET &middot; 8-minute read &middot; 23 auto securitizers tracked at the loan level &middot; No paywall</div>
+  </header>
+
+  <nav class="toc">
+    <span class="toc-label">In this issue</span>
+    <a href="#lead"><span class="num">01</span>The Week</a>
+    <a href="#deals"><span class="num">02</span>New Deals</a>
+    <a href="#pulse"><span class="num">03</span>Loan-Level Pulse</a>
+    <a href="#macro"><span class="num">04</span>Macro</a>
+    <a href="#pod"><span class="num">05</span>From the Pod</a>
+    <a href="#calendar"><span class="num">06</span>On Deck</a>
+  </nav>
+</div>
+
+<div class="wide">
+
+  <section id="lead" class="hero">
+    <div class="section-head">
+      <span class="section-num">01</span><h2>The Week</h2>
+      <span class="section-kicker">May 18 &ndash; May 24</span>
+    </div>
+    <div class="prose">
+      <h1>Bank-card AAAs print $1.75B as the prime/non-prime FICO gap collapses to a five-sigma low.</h1>
+        <p class="lede">Chase ($1.25B, 2.97 WAL) and First National ($500M, 2.97 WAL) tag-teamed $1.75B of AAA credit-card paper this week, and the macro backdrop did the marketing for them: card charge-offs fell 62bp to 3.84% and 30+ DQs slipped 14bp to 2.92%. With the effective Fed funds rate down a basis point to 3.62% and 48-month auto rates dropping a chunky 35bp to 7.36%, the consumer-credit tape is printing the cleanest set of fundamentals we&#39;ve seen all year. Issuers noticed. Two jumbo card prints in a single week is not a coincidence — it&#39;s a window.</p>
+        <p>Auto told a more textured story. Nissan A-3 cleared at I+44 and Mercedes A-3 at I+41 on near-identical 2.3-year WALs, a 3bp captive-vs-captive spread that looks like noise. Carvana A-3 came at I+68 on a 2.26 WAL — a 24–27bp pickup over the captives for what is structurally a deeper book. That premium has compressed meaningfully versus where Carvana paper traded a year ago, and it&#39;s hard to separate from the tape&#39;s other tell: the prime/non-prime FICO gap is 132 points, 5.2σ below the 24-month mean of 137.</p>
+        <p>The position: non-prime pools are quietly re-rating. A five-sigma narrowing in the credit-tier FICO gap isn&#39;t a measurement artifact — it&#39;s issuers tightening at the margin while prime pools sit at the ceiling. If you believe the loss-curve implication, the Carvana-style 25bp pickup over captive AAA is mispriced rich for the buyer, not the seller. Watch next week&#39;s deeper sub-prime auto shelves: if subordinate spreads compress faster than seniors, the tape is confirming what the FICO data is already saying. If they don&#39;t, the bank-card bid is doing all the work and the non-prime story is just optics.</p>
+      <div class="pull">&ldquo;When the FICO gap moves five sigma, it&#39;s not the borrowers changing — it&#39;s the underwriters.&rdquo; &mdash; as one ABS structurer framed it on a recent roadshow call</div>
+    </div>
+    <div class="stats">
+      <a class="stat" href="https://data.consumercreditmatters.com/abs/issuance/">
+        <div class="label">YTD ABS issuance</div>
+        <div class="val">$249.9B</div>
+        <div class="delta up">+24.5% vs. 2025</div>
+      </a>
+      <a class="stat" href="https://data.consumercreditmatters.com/abs/issuance/">
+        <div class="label">Deals priced this wk</div>
+        <div class="val">5</div>
+        <div class="delta ">$5.2B notional</div>
+      </a>
+      <a class="stat" href="https://data.consumercreditmatters.com/macro/">
+        <div class="label">2yr Treasury</div>
+        <div class="val">4.13%</div>
+        <div class="delta up">+12bp wk/wk</div>
+      </a>
+      <a class="stat" href="https://data.consumercreditmatters.com/abs/issuance/">
+        <div class="label">Prime auto AAA spread</div>
+        <div class="val">I+47</div>
+        <div class="delta ">flat wk/wk</div>
+      </a>
+    </div>
+  </section>
+
+  <section id="deals">
+    <div class="section-head">
+      <span class="section-num">02</span><h2>New Deals</h2>
+      <span class="section-kicker">5 publicly-registered issues priced</span>
+    </div>
+    <p style="margin-top:0;color:var(--ink-soft);font-size:14.5px">Click any row to open the <a href="https://data.consumercreditmatters.com/abs/issuance/">CCM Issuance table</a>. SEC publicly registered transactions only — 144A and private placements excluded.</p>
+    <table class="deals">
+      <thead>
+        <tr>
+          <th>Issuer / Series</th><th>Class</th>
+          <th class="num">Size&nbsp;($M)</th><th class="num">WAL</th>
+          <th class="num">Spread</th><th class="num">Yield</th><th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="deal-row" onclick="location.href='https://data.consumercreditmatters.com/abs/issuance/'">
+          <td>
+            <a class="issuer-link" href="https://data.consumercreditmatters.com/abs/issuance/">Chase Issuance Trust CHASEseries Class A(2026-1)</a>
+            <div class="deal-sub"><span class="chip cc">Credit Card</span> J.P. Morgan Securities · Academy Securities · Barclays Capital · Scotia Capital</div>
+          </td>
+          <td>A(2026-1) AAA</td>
+          <td class="num">1250.0</td>
+          <td class="num">2.97</td>
+          <td class="num">&mdash;</td>
+          <td class="num">4.400</td>
+          <td class="deal-arrow">&rsaquo;</td>
+        </tr>
+        <tr class="deal-row" onclick="location.href='https://data.consumercreditmatters.com/abs/issuance/'">
+          <td>
+            <a class="issuer-link" href="https://data.consumercreditmatters.com/abs/issuance/">First National Master Note Trust Series 2026-1 Asset Backed Notes</a>
+            <div class="deal-sub"><span class="chip cc">Credit Card</span> J.P. Morgan Securities · Wells Fargo Securities · BMO Capital Markets</div>
+          </td>
+          <td>A AAA</td>
+          <td class="num">500.0</td>
+          <td class="num">2.97</td>
+          <td class="num">&mdash;</td>
+          <td class="num">4.610</td>
+          <td class="deal-arrow">&rsaquo;</td>
+        </tr>
+        <tr class="deal-row" onclick="location.href='https://data.consumercreditmatters.com/abs/issuance/'">
+          <td>
+            <a class="issuer-link" href="https://data.consumercreditmatters.com/abs/issuance/">Nissan Auto Receivables 2026-A Owner Trust</a>
+            <div class="deal-sub"><span class="chip al-loan">Auto Loan</span> —</div>
+          </td>
+          <td>A-3 AAA</td>
+          <td class="num">438.1</td>
+          <td class="num">2.33</td>
+          <td class="num">I+44</td>
+          <td class="num">4.470</td>
+          <td class="deal-arrow">&rsaquo;</td>
+        </tr>
+        <tr class="deal-row" onclick="location.href='https://data.consumercreditmatters.com/abs/issuance/'">
+          <td>
+            <a class="issuer-link" href="https://data.consumercreditmatters.com/abs/issuance/">Carvana Auto Receivables Trust 2026-P2</a>
+            <div class="deal-sub"><span class="chip al-loan">Auto Loan</span> —</div>
+          </td>
+          <td>A-3 AAA</td>
+          <td class="num">323.5</td>
+          <td class="num">2.26</td>
+          <td class="num">I+68</td>
+          <td class="num">4.770</td>
+          <td class="deal-arrow">&rsaquo;</td>
+        </tr>
+        <tr class="deal-row" onclick="location.href='https://data.consumercreditmatters.com/abs/issuance/'">
+          <td>
+            <a class="issuer-link" href="https://data.consumercreditmatters.com/abs/issuance/">Mercedes-Benz Auto Receivables Trust 2026-1</a>
+            <div class="deal-sub"><span class="chip al-loan">Auto Loan</span> BNP Paribas Securities · MUFG Securities Americas · Mizuho Securities</div>
+          </td>
+          <td>A-3 AAA</td>
+          <td class="num">454.0</td>
+          <td class="num">2.30</td>
+          <td class="num">I+41</td>
+          <td class="num">4.360</td>
+          <td class="deal-arrow">&rsaquo;</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:13px;color:var(--ink-faint);margin-top:14px">
+      <a href="https://data.consumercreditmatters.com/abs/issuance/">View the full Issuance table on CCM &rarr;</a>
+    </p>
+  </section>
+
+  <section id="pulse">
+    <div class="section-head">
+      <span class="section-num">03</span><h2>Loan-Level Pulse</h2>
+      <span class="section-kicker">ABS-EE surveillance</span>
+    </div>
+    <p style="margin-top:0;color:var(--ink-soft)">Pulled from the latest ABS-EE 10-D filings across all 23 active auto securitizers. <a href="https://data.consumercreditmatters.com/abs/explorer/">Explore the full data on CCM &rsaquo;</a></p>
+    <div class="charts-grid">
+      <a class="chart-card" href="https://data.consumercreditmatters.com/abs/explorer/?issuer=MBART&amp;tab=delinquency&amp;sub=timeseries&amp;dq=60">
+        <h4>Mercedes-Benz - 60+ DQ rate</h4>
+        <div class="chart-sub">Monthly - click to view in the explorer</div>
+        <div class="chart-now">0.46%<span class="delta" style="color:var(--neg)">+14bp YoY</span></div>
+        <svg class="spark" viewBox="0 0 300 60" preserveAspectRatio="none">
+  <polyline fill="none" stroke="#b7472a" stroke-width="2"
+    points="0,54.142354866119724 25,55.0 50,37.94317171798241 75,42.149284927336886 100,33.422673475569255 125,7.998419134331421 150,20.61027532307702 175,5.0 200,7.826919587434837 225,13.976721678059896 250,8.371795950955494 275,22.040287810187877 300,11.44138792725164"/>
+</svg>
+
+      </a>
+      <a class="chart-card" href="https://data.consumercreditmatters.com/abs/explorer/?issuer=BMWOT&amp;tab=delinquency&amp;sub=timeseries&amp;dq=60">
+        <h4>BMW - 60+ DQ rate</h4>
+        <div class="chart-sub">Monthly - click to view in the explorer</div>
+        <div class="chart-now">0.34%<span class="delta" style="color:var(--neg)">+14bp YoY</span></div>
+        <svg class="spark" viewBox="0 0 300 60" preserveAspectRatio="none">
+  <polyline fill="none" stroke="#b7472a" stroke-width="2"
+    points="0,55.0 25,48.58867107815283 50,45.90335567353063 75,38.16573940255327 100,40.75959670622128 125,33.34991472874741 150,32.48711760329505 175,28.418198838965935 200,14.391580145825571 225,8.976817448495694 250,5.0 275,19.044600837284108 300,22.86242265340664"/>
+</svg>
+
+      </a>
+      <a class="chart-card" href="https://data.consumercreditmatters.com/abs/explorer/?issuer=SDART&amp;tab=delinquency&amp;sub=timeseries&amp;dq=60">
+        <h4>Santander - 60+ DQ rate</h4>
+        <div class="chart-sub">Monthly - click to view in the explorer</div>
+        <div class="chart-now">6.80%<span class="delta" style="color:var(--neg)">+91bp YoY</span></div>
+        <svg class="spark" viewBox="0 0 300 60" preserveAspectRatio="none">
+  <polyline fill="none" stroke="#b7472a" stroke-width="2"
+    points="0,55.0 25,45.66034264475005 50,26.101624195701348 75,34.406214213807985 100,27.442847017034453 125,16.179469353115586 150,18.483370299646054 175,16.85356263827302 200,5.0 225,9.480099994186368 250,32.71281702886591 275,41.11927759073134 300,32.18969499822235"/>
+</svg>
+
+      </a>
+      <a class="chart-card" href="https://data.consumercreditmatters.com/abs/explorer/?issuer=CMXS&amp;tab=delinquency&amp;sub=timeseries&amp;dq=60">
+        <h4>CarMax Select - 60+ DQ rate</h4>
+        <div class="chart-sub">Monthly - click to view in the explorer</div>
+        <div class="chart-now">3.48%<span class="delta" style="color:var(--neg)">+89bp YoY</span></div>
+        <svg class="spark" viewBox="0 0 300 60" preserveAspectRatio="none">
+  <polyline fill="none" stroke="#b7472a" stroke-width="2"
+    points="0,50.78354277956238 25,30.617772748166388 50,15.742398763381956 75,13.795945240654888 100,5.0 125,55.0 150,44.41986632493393 175,27.114177876407894 200,16.048454574137487 225,9.984929630266691 250,54.985925921729375 275,48.47976829050363 300,26.864280814558022"/>
+</svg>
+
+      </a>
+    </div>
+    <div class="callout">
+      <div class="label">From the Tape &middot; What we're watching</div>
+      <p>The credit-tier divergence — measured as prime WA FICO minus non-prime WA FICO — sits at <strong>132 points</strong>, 5.2σ below the 24-month average of 137. Non-prime pools are catching up on credit quality, a constructive signal for relative loss curves.</p>
+    </div>
+  </section>
+
+  <section id="macro">
+    <div class="section-head">
+      <span class="section-num">04</span><h2>Macro</h2>
+      <span class="section-kicker">Rates &middot; Used cars &middot; Consumer</span>
+    </div>
+    <div class="charts-grid">
+      <a class="chart-card" href="https://data.consumercreditmatters.com/macro/?cat=Interest+Rates&amp;series=DFF">
+        <h4>Fed Funds rate (effective)</h4>
+        <div class="chart-sub">Daily - click to view on the macro dashboard</div>
+        <div class="chart-now">3.62%<span class="delta" style="color:var(--pos)">−1bp</span></div>
+        <svg class="spark" viewBox="0 0 300 60" preserveAspectRatio="none">
+  <polyline fill="none" stroke="#1f4d3a" stroke-width="2"
+    points="0,5.0 25,5.0 50,5.0 75,5.0 100,5.0 125,5.0 150,5.0 175,5.0 200,5.0 225,5.0 250,55.0 275,55.0 300,55.0"/>
+</svg>
+
+      </a>
+      <a class="chart-card" href="https://data.consumercreditmatters.com/macro/?cat=Interest+Rates&amp;series=TERMCBAUTO48NS">
+        <h4>48-month auto loan rate</h4>
+        <div class="chart-sub">Quarterly, commercial banks - G.19</div>
+        <div class="chart-now">7.36%<span class="delta" style="color:var(--pos)">−35bp</span></div>
+        <svg class="spark" viewBox="0 0 300 60" preserveAspectRatio="none">
+  <polyline fill="none" stroke="#1f4d3a" stroke-width="2"
+    points="0,51.12403100775195 25,46.08527131782947 50,18.565891472868202 75,10.42635658914731 100,8.100775193798448 125,5.0 150,5.7751937984496 175,25.542635658914776 200,41.4341085271318 225,44.53488372093025 250,49.18604651162793 275,48.4108527131783 300,55.0"/>
+</svg>
+
+      </a>
+      <a class="chart-card" href="https://data.consumercreditmatters.com/macro/?cat=Card+Market&amp;series=CORCCACBS">
+        <h4>Credit-card charge-off rate</h4>
+        <div class="chart-sub">Monthly, net charge-offs - Fed</div>
+        <div class="chart-now">3.84%<span class="delta" style="color:var(--pos)">−62bp</span></div>
+        <svg class="spark" viewBox="0 0 300 60" preserveAspectRatio="none">
+  <polyline fill="none" stroke="#1f4d3a" stroke-width="2"
+    points="0,55.0 25,44.20454545454545 50,31.704545454545446 75,18.352272727272727 100,10.965909090909086 125,6.42045454545454 150,5.0 175,7.272727272727273 200,10.113636363636353 225,17.21590909090908 250,18.920454545454533 275,21.1931818181818 300,27.72727272727272"/>
+</svg>
+
+      </a>
+      <a class="chart-card" href="https://data.consumercreditmatters.com/macro/?cat=Card+Market&amp;series=DRCCLACBS">
+        <h4>Credit-card 30+ DQ rate</h4>
+        <div class="chart-sub">Monthly, commercial banks - Fed H.8</div>
+        <div class="chart-now">2.92%<span class="delta" style="color:var(--pos)">−14bp</span></div>
+        <svg class="spark" viewBox="0 0 300 60" preserveAspectRatio="none">
+  <polyline fill="none" stroke="#b7472a" stroke-width="2"
+    points="0,55.0 25,36.33333333333334 50,23.666666666666686 75,13.000000000000007 100,8.33333333333335 125,5.0 150,6.333333333333336 175,14.333333333333343 200,15.666666666666671 225,17.000000000000014 250,21.000000000000014 275,23.666666666666686 300,25.000000000000014"/>
+</svg>
+
+      </a>
+    </div>
+  </section>
+
+  <section id="pod">
+    <div class="section-head">
+      <span class="section-num">05</span><h2>From the Pod</h2>
+      <span class="section-kicker">This week's episode</span>
+    </div>
+    <a href="https://www.youtube.com/@ConsumerCreditMatters" class="pod-card" style="text-decoration:none;color:inherit">
+      <div class="pod-thumb">
+        <span class="pod-source">YouTube</span>
+        <div class="pod-play" aria-label="Play episode"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+        <span class="pod-duration">27:38</span>
+      </div>
+      <div class="pod-body">
+        <div class="pod-eyebrow">Latest episode &middot; Released May 19</div>
+        <h3 class="pod-title">When Retailers Can&#39;t Move the Goods</h3>
+        <p class="pod-desc">There&#39;s an operational layer underneath consumer credit that most analysts never see: what actually happens to retail inventory when it doesn&#39;t sell, when a retailer goes bankrupt, or when a brand orders too much for the wrong season. Someone has to move those goods, and how efficiently they get moved determines recovery values in bankruptcy, margin protection for healthy…</p>
+        <span class="pod-cta">Watch on YouTube &rsaquo;</span>
+      </div>
+    </a>
+  </section>
+
+  <section id="calendar">
+    <div class="section-head">
+      <span class="section-num">06</span><h2>On Deck</h2>
+      <span class="section-kicker">Data releases &middot; ABS-EE filings &middot; events</span>
+    </div>
+    <div class="cal">
+      <div>
+        <h4>Coming up — data &amp; events</h4>
+        <ul>
+          <li><span class="when">May 27</span><span class="what"><a href="https://data.consumercreditmatters.com/macro/">Conference Board Consumer Confidence</a><em>May print</em></span></li>
+          <li><span class="when">May 28</span><span class="what"><a href="https://data.consumercreditmatters.com/macro/">FOMC minutes</a><em>May 6 meeting</em></span></li>
+          <li><span class="when">May 30</span><span class="what"><a href="https://data.consumercreditmatters.com/macro/">Core PCE</a><em>April</em></span></li>
+          <li><span class="when">Jun 02</span><span class="what">RiskSpan client summit<em>NYC - AI MBS tooling launch</em></span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <div class="wide">
+    <div class="cols">
+      <div>
+        <div class="footer-brand-row">
+          <div class="footer-brand-mark">
+            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M16 2 L29 9 L29 23 L16 30 L3 23 L3 9 Z" stroke="#7dd3a8" stroke-width="2" fill="none"/>
+              <path d="M11 11 L21 21 M21 11 L11 21" stroke="#7dd3a8" stroke-width="2.2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="footer-brand">Consumer Credit Matters<span style="color:var(--brand)">.</span></div>
+        </div>
+        <div>The week in U.S. consumer-credit securitization, data, and policy. Independent, data-first, no paywall.</div>
+        <div style="margin-top:14px"><a href="https://www.consumercreditmatters.com/subscribe" style="color:var(--brand);font-weight:600">Subscribe (free) &rarr;</a></div>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="https://data.consumercreditmatters.com/abs/explorer/">Auto loan explorer</a></li>
+          <li><a href="https://data.consumercreditmatters.com/abs/issuance/">Issuance table</a></li>
+          <li><a href="https://data.consumercreditmatters.com/macro/">Macro dashboard</a></li>
+          <li><a href="https://www.consumercreditmatters.com/podcasts">Podcast</a></li>
+          <li><a href="https://www.consumercreditmatters.com/subscribe">Subscribe</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Follow</h4>
+        <ul>
+          <li><a href="#">YouTube</a></li>
+          <li><a href="#">LinkedIn</a></li>
+          <li><a href="#">RSS</a></li>
+          <li><a href="https://www.consumercreditmatters.com/contact">Email author</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="disclaimer">
+      Consumer Credit Matters is published by William Black. Deal pricing data sourced from SEC filings and issuer disclosures. Loan-level statistics derived from ABS-EE filings (Reg AB II). Macro series from FRED, NY Fed, and other primary sources. This is not investment advice. &copy; 2026.
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
