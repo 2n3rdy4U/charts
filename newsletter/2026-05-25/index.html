@@ -104,6 +104,46 @@
   .chart-card .chart-now .delta{font-size:13px;font-family:inherit;margin-left:8px;font-weight:500}
   svg.spark{width:100%;height:60px;display:block;margin-top:10px}
 
+  /* Pulse spotlight (hero issuer card) */
+  .spotlight-card{display:grid;grid-template-columns:1.5fr 1fr;gap:24px;
+    border:1px solid var(--rule);border-radius:6px;padding:22px 26px;background:#fff;
+    text-decoration:none;color:inherit;transition:border-color 0.15s;margin:0 0 16px}
+  .spotlight-card:hover{border-color:var(--brand)}
+  .spotlight-eyebrow{font-size:10.5px;text-transform:uppercase;letter-spacing:0.12em;
+    color:var(--accent);font-weight:600;margin-bottom:6px}
+  .spotlight-title{font-family:Georgia,serif;font-size:22px;font-weight:600;margin:0 0 4px;line-height:1.2}
+  .spotlight-sub{font-size:12px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:14px}
+  .spotlight-value{font-family:Georgia,serif;font-size:34px;font-weight:600;line-height:1;margin-bottom:14px}
+  .spotlight-value .delta{font-family:inherit;font-size:15px;font-weight:500;margin-left:10px}
+  .spotlight-narrative{font-size:14px;line-height:1.55;color:var(--ink-soft);margin:0}
+  .spotlight-narrative strong{color:var(--ink)}
+  .spotlight-right{display:flex;align-items:center;justify-content:center}
+  .spotlight-right svg.spark{height:120px}
+  /* Runners-up (smaller cards) */
+  .runners-up{margin:18px 0 8px}
+  .runners-up-label{font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink-faint);
+    font-weight:600;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--rule)}
+  .runners-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .runner-card{display:block;border:1px solid var(--rule);border-radius:4px;padding:12px 14px;
+    background:#fff;text-decoration:none;color:inherit;transition:border-color 0.15s}
+  .runner-card:hover{border-color:var(--brand)}
+  .runner-title{font-size:12.5px;color:var(--ink-soft);margin-bottom:6px;line-height:1.3}
+  .runner-value{font-family:Georgia,serif;font-size:18px;font-weight:600;line-height:1}
+  .runner-value .delta{font-family:inherit;font-size:11.5px;font-weight:500;margin-left:6px}
+  /* "Why this matters" annotation on macro cards */
+  .why-care{font-size:11.5px;color:var(--ink-faint);line-height:1.45;margin-top:10px;
+    padding-top:8px;border-top:1px dotted var(--rule);font-style:italic}
+  /* PSR icon button (New Deals table) */
+  th.psr-col,td.psr-col{text-align:center;width:30px}
+  .psr-icon{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;
+    border-radius:3px;color:var(--ink-faint);transition:color 0.15s,background 0.15s;border:none !important}
+  .psr-icon:hover{color:var(--brand);background:var(--brand-soft)}
+  /* Pod thumbnail: when a real image is set, add a dark gradient overlay so
+     the white play button + duration tag stay legible. */
+  .pod-thumb[style*="background-image"]::before{content:"";position:absolute;inset:0;
+    background:linear-gradient(180deg,rgba(0,0,0,0.15) 0%,rgba(0,0,0,0.55) 100%);z-index:1}
+  .pod-thumb[style*="background-image"]::after{display:none}
+
   .callout{background:#fff;border:1px solid var(--rule);border-left:3px solid var(--brand);border-radius:4px;padding:16px 20px;margin:24px 0}
   .callout .label{font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--brand);font-weight:600;margin-bottom:4px}
   .callout p{margin:0;font-size:14.5px;line-height:1.55}
@@ -153,7 +193,9 @@
     .wrap,.wide{padding:0 18px}
     .hero h1{font-size:28px}
     .stats{grid-template-columns:repeat(2,1fr)}
-    .charts-grid,.cal,footer .cols,.pod-card{grid-template-columns:1fr;gap:16px}
+    .charts-grid,.cal,footer .cols,.pod-card,.spotlight-card{grid-template-columns:1fr;gap:16px}
+    .runners-grid{grid-template-columns:1fr;gap:8px}
+    .spotlight-right svg.spark{height:80px}
     table.deals{font-size:12.5px}
     table.deals th:nth-child(4),table.deals td:nth-child(4),
     table.deals th:nth-child(5),table.deals td:nth-child(5){display:none}
@@ -203,11 +245,12 @@
       <span class="section-kicker">May 18 &ndash; May 24</span>
     </div>
     <div class="prose">
-      <h1>Bank-card AAAs print $1.75B as the prime/non-prime FICO gap collapses to a five-sigma low.</h1>
-        <p class="lede">Chase ($1.25B, 2.97 WAL) and First National ($500M, 2.97 WAL) tag-teamed $1.75B of AAA credit-card paper this week, and the macro backdrop did the marketing for them: card charge-offs fell 62bp to 3.84% and 30+ DQs slipped 14bp to 2.92%. With the effective Fed funds rate down a basis point to 3.62% and 48-month auto rates dropping a chunky 35bp to 7.36%, the consumer-credit tape is printing the cleanest set of fundamentals we&#39;ve seen all year. Issuers noticed. Two jumbo card prints in a single week is not a coincidence — it&#39;s a window.</p>
-        <p>Auto told a more textured story. Nissan A-3 cleared at I+44 and Mercedes A-3 at I+41 on near-identical 2.3-year WALs, a 3bp captive-vs-captive spread that looks like noise. Carvana A-3 came at I+68 on a 2.26 WAL — a 24–27bp pickup over the captives for what is structurally a deeper book. That premium has compressed meaningfully versus where Carvana paper traded a year ago, and it&#39;s hard to separate from the tape&#39;s other tell: the prime/non-prime FICO gap is 132 points, 5.2σ below the 24-month mean of 137.</p>
-        <p>The position: non-prime pools are quietly re-rating. A five-sigma narrowing in the credit-tier FICO gap isn&#39;t a measurement artifact — it&#39;s issuers tightening at the margin while prime pools sit at the ceiling. If you believe the loss-curve implication, the Carvana-style 25bp pickup over captive AAA is mispriced rich for the buyer, not the seller. Watch next week&#39;s deeper sub-prime auto shelves: if subordinate spreads compress faster than seniors, the tape is confirming what the FICO data is already saying. If they don&#39;t, the bank-card bid is doing all the work and the non-prime story is just optics.</p>
-      <div class="pull">&ldquo;When the FICO gap moves five sigma, it&#39;s not the borrowers changing — it&#39;s the underwriters.&rdquo; &mdash; as one ABS structurer framed it on a recent roadshow call</div>
+      <h1>Mercedes inside Nissan inside Carvana: the 27bp prime auto stack tells you everything about where risk is priced.</h1>
+        <p class="lede">Three prime auto AAAs cleared this week inside a 27bp band — Mercedes-Benz 2026-1 A-3 at I+41, Nissan 2026-A A-3 at I+44, and Carvana 2026-P2 A-3 at I+68 — all at roughly identical 2.3-year WALs. The captive-versus-Carvana basis is now 24-27bp, which is tight by any post-2022 standard and suggests the market is no longer demanding a meaningful &#39;Carvana-the-issuer&#39; premium so much as a &#39;Carvana-the-collateral&#39; premium. With the 48-month auto loan rate down 35bp on the week to 7.36%, the consumer carrying cost is finally moving in originators&#39; favor for the first sustained stretch this cycle.</p>
+        <p>Card paper showed up in size: Chase printed $1.25B and FNB another $500M, both AAA at 2.97 WAL, against a backdrop where credit-card charge-offs collapsed 62bp to 3.84% and 30+ DQs ticked down 14bp to 2.92%. That charge-off print is the cleanest tape we&#39;ve seen in roughly a year, and it lines up with what the loan-level data is whispering: the prime/non-prime FICO gap has compressed to 132 points, 5.2σ below the 24-month mean of 137. Non-prime pools are not deteriorating — prime pools are letting them catch up, because originators have been adding cleaner non-prime borrowers at the margin.</p>
+        <p>Position: the relative-value trade is no longer captive-vs-deep-subprime in autos — it&#39;s mezz card vs. mezz auto, where card fundamentals are improving faster than spreads are tightening. If charge-offs hold sub-4% through the June prints, the BBB card stack looks mispriced against a BBB Carvana tranche carrying materially more loss volatility. Watch next week&#39;s subprime auto shelf — if DRIVE or AMCAR clear inside +120 at the 2-year, the FICO-gap compression story stops being a curiosity and starts being a spread thesis.</p>
+        <p></p>
+      <div class="pull">&ldquo;Nobody&#39;s getting paid for prime auto credit risk anymore — you&#39;re getting paid for being awake at pricing.&rdquo; &mdash; as one ABS PM put it on a recent BWIC call</div>
     </div>
     <div class="stats">
       <a class="stat" href="https://data.consumercreditmatters.com/abs/issuance/">
@@ -238,74 +281,93 @@
       <span class="section-num">02</span><h2>New Deals</h2>
       <span class="section-kicker">5 publicly-registered issues priced</span>
     </div>
-    <p style="margin-top:0;color:var(--ink-soft);font-size:14.5px">Click any row to open the <a href="https://data.consumercreditmatters.com/abs/issuance/">CCM Issuance table</a>. SEC publicly registered transactions only — 144A and private placements excluded.</p>
+    <p style="margin-top:0;color:var(--ink-soft);font-size:14.5px">Click any row to open the <a href="https://data.consumercreditmatters.com/abs/issuance/">CCM Issuance table</a>. SEC publicly registered transactions only &mdash; 144A and private placements excluded.</p>
     <table class="deals">
       <thead>
         <tr>
-          <th>Issuer / Series</th><th>Class</th>
-          <th class="num">Size&nbsp;($M)</th><th class="num">WAL</th>
-          <th class="num">Spread</th><th class="num">Yield</th><th></th>
+          <th>Issuer / Series</th>
+          <th class="psr-col">PSR</th>
+          <th>Closed</th>
+          <th class="num">Size&nbsp;($MM)</th>
+          <th class="num">WAL</th>
+          <th class="num">WA&nbsp;FICO</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
         <tr class="deal-row" onclick="location.href='https://data.consumercreditmatters.com/abs/issuance/'">
           <td>
             <a class="issuer-link" href="https://data.consumercreditmatters.com/abs/issuance/">Chase Issuance Trust CHASEseries Class A(2026-1)</a>
-            <div class="deal-sub"><span class="chip cc">Credit Card</span> J.P. Morgan Securities · Academy Securities · Barclays Capital · Scotia Capital</div>
+            <div class="deal-sub"><span class="chip cc">Credit Card</span></div>
           </td>
-          <td>A(2026-1) AAA</td>
+          <td class="psr-col">
+<a href="https://data.consumercreditmatters.com/abs/issuance/presale/chase-issuance-trust-chaseseries-class-a-2026-1.html" class="psr-icon" title="Presale report" onclick="event.stopPropagation();">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>
+            </a>          </td>
+          <td>May&nbsp;28</td>
           <td class="num">1250.0</td>
           <td class="num">2.97</td>
-          <td class="num">&mdash;</td>
-          <td class="num">4.400</td>
+          <td class="num">737</td>
           <td class="deal-arrow">&rsaquo;</td>
         </tr>
         <tr class="deal-row" onclick="location.href='https://data.consumercreditmatters.com/abs/issuance/'">
           <td>
             <a class="issuer-link" href="https://data.consumercreditmatters.com/abs/issuance/">First National Master Note Trust Series 2026-1 Asset Backed Notes</a>
-            <div class="deal-sub"><span class="chip cc">Credit Card</span> J.P. Morgan Securities · Wells Fargo Securities · BMO Capital Markets</div>
+            <div class="deal-sub"><span class="chip cc">Credit Card</span></div>
           </td>
-          <td>A AAA</td>
-          <td class="num">500.0</td>
+          <td class="psr-col">
+<a href="https://data.consumercreditmatters.com/abs/issuance/presale/first-national-master-note-trust-series-2026-1-asset-backed-notes.html" class="psr-icon" title="Presale report" onclick="event.stopPropagation();">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>
+            </a>          </td>
+          <td>May&nbsp;28</td>
+          <td class="num">641.0</td>
           <td class="num">2.97</td>
-          <td class="num">&mdash;</td>
-          <td class="num">4.610</td>
+          <td class="num">736</td>
           <td class="deal-arrow">&rsaquo;</td>
         </tr>
         <tr class="deal-row" onclick="location.href='https://data.consumercreditmatters.com/abs/issuance/'">
           <td>
             <a class="issuer-link" href="https://data.consumercreditmatters.com/abs/issuance/">Nissan Auto Receivables 2026-A Owner Trust</a>
-            <div class="deal-sub"><span class="chip al-loan">Auto Loan</span> —</div>
+            <div class="deal-sub"><span class="chip al-loan">Auto Loan</span></div>
           </td>
-          <td>A-3 AAA</td>
-          <td class="num">438.1</td>
+          <td class="psr-col">
+<a href="https://data.consumercreditmatters.com/abs/issuance/presale/nissan-auto-receivables-2026-a-owner-trust.html" class="psr-icon" title="Presale report" onclick="event.stopPropagation();">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>
+            </a>          </td>
+          <td>May&nbsp;27</td>
+          <td class="num">1268.5</td>
           <td class="num">2.33</td>
-          <td class="num">I+44</td>
-          <td class="num">4.470</td>
+          <td class="num">787</td>
           <td class="deal-arrow">&rsaquo;</td>
         </tr>
         <tr class="deal-row" onclick="location.href='https://data.consumercreditmatters.com/abs/issuance/'">
           <td>
             <a class="issuer-link" href="https://data.consumercreditmatters.com/abs/issuance/">Carvana Auto Receivables Trust 2026-P2</a>
-            <div class="deal-sub"><span class="chip al-loan">Auto Loan</span> —</div>
+            <div class="deal-sub"><span class="chip al-loan">Auto Loan</span></div>
           </td>
-          <td>A-3 AAA</td>
-          <td class="num">323.5</td>
+          <td class="psr-col">
+<a href="https://data.consumercreditmatters.com/abs/issuance/presale/carvana-auto-receivables-trust-2026-p2.html" class="psr-icon" title="Presale report" onclick="event.stopPropagation();">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>
+            </a>          </td>
+          <td>May&nbsp;27</td>
+          <td class="num">1045.3</td>
           <td class="num">2.26</td>
-          <td class="num">I+68</td>
-          <td class="num">4.770</td>
+          <td class="num">708</td>
           <td class="deal-arrow">&rsaquo;</td>
         </tr>
         <tr class="deal-row" onclick="location.href='https://data.consumercreditmatters.com/abs/issuance/'">
           <td>
             <a class="issuer-link" href="https://data.consumercreditmatters.com/abs/issuance/">Mercedes-Benz Auto Receivables Trust 2026-1</a>
-            <div class="deal-sub"><span class="chip al-loan">Auto Loan</span> BNP Paribas Securities · MUFG Securities Americas · Mizuho Securities</div>
+            <div class="deal-sub"><span class="chip al-loan">Auto Loan</span></div>
           </td>
-          <td>A-3 AAA</td>
-          <td class="num">454.0</td>
+          <td class="psr-col">
+<a href="https://data.consumercreditmatters.com/abs/issuance/presale/mercedes-benz-auto-receivables-trust-2026-1.html" class="psr-icon" title="Presale report" onclick="event.stopPropagation();">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>
+            </a>          </td>
+          <td>May&nbsp;20</td>
+          <td class="num">997.7</td>
           <td class="num">2.30</td>
-          <td class="num">I+41</td>
-          <td class="num">4.360</td>
+          <td class="num">779</td>
           <td class="deal-arrow">&rsaquo;</td>
         </tr>
       </tbody>
@@ -318,51 +380,54 @@
   <section id="pulse">
     <div class="section-head">
       <span class="section-num">03</span><h2>Loan-Level Pulse</h2>
-      <span class="section-kicker">ABS-EE surveillance</span>
+      <span class="section-kicker">Issuer spotlight &middot; ABS-EE surveillance</span>
     </div>
-    <p style="margin-top:0;color:var(--ink-soft)">Pulled from the latest ABS-EE 10-D filings across all 23 active auto securitizers. <a href="https://data.consumercreditmatters.com/abs/explorer/">Explore the full data on CCM &rsaquo;</a></p>
-    <div class="charts-grid">
-      <a class="chart-card" href="https://data.consumercreditmatters.com/abs/explorer/?issuer=MBART&amp;tab=delinquency&amp;sub=timeseries&amp;dq=60">
-        <h4>Mercedes-Benz - 60+ DQ rate</h4>
-        <div class="chart-sub">Monthly - click to view in the explorer</div>
-        <div class="chart-now">0.46%<span class="delta" style="color:var(--neg)">+14bp YoY</span></div>
-        <svg class="spark" viewBox="0 0 300 60" preserveAspectRatio="none">
-  <polyline fill="none" stroke="#b7472a" stroke-width="2"
-    points="0,54.142354866119724 25,55.0 50,37.94317171798241 75,42.149284927336886 100,33.422673475569255 125,7.998419134331421 150,20.61027532307702 175,5.0 200,7.826919587434837 225,13.976721678059896 250,8.371795950955494 275,22.040287810187877 300,11.44138792725164"/>
-</svg>
+    <p style="margin-top:0;color:var(--ink-soft)">This week's most-moved issuer on 60+ DQ, with three runners-up. <a href="https://data.consumercreditmatters.com/abs/explorer/">Explore the full data on CCM &rsaquo;</a></p>
 
-      </a>
-      <a class="chart-card" href="https://data.consumercreditmatters.com/abs/explorer/?issuer=BMWOT&amp;tab=delinquency&amp;sub=timeseries&amp;dq=60">
-        <h4>BMW - 60+ DQ rate</h4>
-        <div class="chart-sub">Monthly - click to view in the explorer</div>
-        <div class="chart-now">0.34%<span class="delta" style="color:var(--neg)">+14bp YoY</span></div>
-        <svg class="spark" viewBox="0 0 300 60" preserveAspectRatio="none">
-  <polyline fill="none" stroke="#b7472a" stroke-width="2"
-    points="0,55.0 25,48.58867107815283 50,45.90335567353063 75,38.16573940255327 100,40.75959670622128 125,33.34991472874741 150,32.48711760329505 175,28.418198838965935 200,14.391580145825571 225,8.976817448495694 250,5.0 275,19.044600837284108 300,22.86242265340664"/>
-</svg>
-
-      </a>
-      <a class="chart-card" href="https://data.consumercreditmatters.com/abs/explorer/?issuer=SDART&amp;tab=delinquency&amp;sub=timeseries&amp;dq=60">
-        <h4>Santander - 60+ DQ rate</h4>
-        <div class="chart-sub">Monthly - click to view in the explorer</div>
-        <div class="chart-now">6.80%<span class="delta" style="color:var(--neg)">+91bp YoY</span></div>
+    <a class="spotlight-card" href="https://data.consumercreditmatters.com/abs/explorer/?issuer=SDART&amp;tab=delinquency&amp;sub=timeseries&amp;dq=60">
+      <div class="spotlight-left">
+        <div class="spotlight-eyebrow">This week's spotlight</div>
+        <h3 class="spotlight-title">Santander — 60+ DQ rate</h3>
+        <div class="spotlight-sub">Non-prime captive · 12-month time series</div>
+        <div class="spotlight-value">
+          6.80%
+          <span class="delta" style="color:var(--neg)">+91bp YoY</span>
+        </div>
+        <p class="spotlight-narrative"><strong>Santander</strong> was among the biggest YoY movers in non-prime 60+ DQ this month; the rate rose 91bp. At <strong>6.80%</strong>, it sits 2.44pp above the non-prime sector average of 4.36%.</p>
+      </div>
+      <div class="spotlight-right">
         <svg class="spark" viewBox="0 0 300 60" preserveAspectRatio="none">
   <polyline fill="none" stroke="#b7472a" stroke-width="2"
     points="0,55.0 25,45.66034264475005 50,26.101624195701348 75,34.406214213807985 100,27.442847017034453 125,16.179469353115586 150,18.483370299646054 175,16.85356263827302 200,5.0 225,9.480099994186368 250,32.71281702886591 275,41.11927759073134 300,32.18969499822235"/>
 </svg>
 
-      </a>
-      <a class="chart-card" href="https://data.consumercreditmatters.com/abs/explorer/?issuer=CMXS&amp;tab=delinquency&amp;sub=timeseries&amp;dq=60">
-        <h4>CarMax Select - 60+ DQ rate</h4>
-        <div class="chart-sub">Monthly - click to view in the explorer</div>
-        <div class="chart-now">3.48%<span class="delta" style="color:var(--neg)">+89bp YoY</span></div>
-        <svg class="spark" viewBox="0 0 300 60" preserveAspectRatio="none">
-  <polyline fill="none" stroke="#b7472a" stroke-width="2"
-    points="0,50.78354277956238 25,30.617772748166388 50,15.742398763381956 75,13.795945240654888 100,5.0 125,55.0 150,44.41986632493393 175,27.114177876407894 200,16.048454574137487 225,9.984929630266691 250,54.985925921729375 275,48.47976829050363 300,26.864280814558022"/>
-</svg>
+      </div>
+    </a>
 
-      </a>
+    <div class="runners-up">
+      <div class="runners-up-label">Also worth watching &mdash; next-biggest YoY moves</div>
+      <div class="runners-grid">
+        <a class="runner-card" href="https://data.consumercreditmatters.com/abs/explorer/?issuer=CMXS&amp;tab=delinquency&amp;sub=timeseries&amp;dq=60">
+          <div class="runner-title">CarMax Select — 60+ DQ</div>
+          <div class="runner-value">3.48%
+            <span class="delta" style="color:var(--neg)">+89bp YoY</span>
+          </div>
+        </a>
+        <a class="runner-card" href="https://data.consumercreditmatters.com/abs/explorer/?issuer=AMCAR&amp;tab=delinquency&amp;sub=timeseries&amp;dq=60">
+          <div class="runner-title">AmeriCredit — 60+ DQ</div>
+          <div class="runner-value">3.43%
+            <span class="delta" style="color:var(--neg)">+76bp YoY</span>
+          </div>
+        </a>
+        <a class="runner-card" href="https://data.consumercreditmatters.com/abs/explorer/?issuer=CRVNA&amp;tab=delinquency&amp;sub=timeseries&amp;dq=60">
+          <div class="runner-title">Carvana — 60+ DQ</div>
+          <div class="runner-value">2.44%
+            <span class="delta" style="color:var(--pos)">−69bp YoY</span>
+          </div>
+        </a>
+      </div>
     </div>
+
     <div class="callout">
       <div class="label">From the Tape &middot; What we're watching</div>
       <p>The credit-tier divergence — measured as prime WA FICO minus non-prime WA FICO — sits at <strong>132 points</strong>, 5.2σ below the 24-month average of 137. Non-prime pools are catching up on credit quality, a constructive signal for relative loss curves.</p>
@@ -377,14 +442,14 @@
     <div class="charts-grid">
       <a class="chart-card" href="https://data.consumercreditmatters.com/macro/?cat=Interest+Rates&amp;series=DFF">
         <h4>Fed Funds rate (effective)</h4>
-        <div class="chart-sub">Daily - click to view on the macro dashboard</div>
-        <div class="chart-now">3.62%<span class="delta" style="color:var(--pos)">−1bp</span></div>
+        <div class="chart-sub">Daily - Federal Reserve</div>
+        <div class="chart-now">3.62%<span class="delta" style="color:var(--ink-faint)">flat</span></div>
         <svg class="spark" viewBox="0 0 300 60" preserveAspectRatio="none">
   <polyline fill="none" stroke="#1f4d3a" stroke-width="2"
-    points="0,5.0 25,5.0 50,5.0 75,5.0 100,5.0 125,5.0 150,5.0 175,5.0 200,5.0 225,5.0 250,55.0 275,55.0 300,55.0"/>
+    points="0,5.0 25,5.0 50,5.0 75,5.0 100,5.0 125,5.0 150,55.0 175,55.0 200,55.0 225,55.0 250,55.0 275,55.0 300,55.0"/>
 </svg>
 
-      </a>
+<div class="why-care">Sets the baseline funding cost for every senior ABS tranche; every 25bp here flows through to AAA spreads.</div>      </a>
       <a class="chart-card" href="https://data.consumercreditmatters.com/macro/?cat=Interest+Rates&amp;series=TERMCBAUTO48NS">
         <h4>48-month auto loan rate</h4>
         <div class="chart-sub">Quarterly, commercial banks - G.19</div>
@@ -394,7 +459,7 @@
     points="0,51.12403100775195 25,46.08527131782947 50,18.565891472868202 75,10.42635658914731 100,8.100775193798448 125,5.0 150,5.7751937984496 175,25.542635658914776 200,41.4341085271318 225,44.53488372093025 250,49.18604651162793 275,48.4108527131783 300,55.0"/>
 </svg>
 
-      </a>
+<div class="why-care">Consumer auto borrowing cost. Widening vs Fed Funds means dealer subvention is drying up and pool yields are rising.</div>      </a>
       <a class="chart-card" href="https://data.consumercreditmatters.com/macro/?cat=Card+Market&amp;series=CORCCACBS">
         <h4>Credit-card charge-off rate</h4>
         <div class="chart-sub">Monthly, net charge-offs - Fed</div>
@@ -404,7 +469,7 @@
     points="0,55.0 25,44.20454545454545 50,31.704545454545446 75,18.352272727272727 100,10.965909090909086 125,6.42045454545454 150,5.0 175,7.272727272727273 200,10.113636363636353 225,17.21590909090908 250,18.920454545454533 275,21.1931818181818 300,27.72727272727272"/>
 </svg>
 
-      </a>
+<div class="why-care">Lagging consumer-stress signal; tracks the back end of the cumulative-loss curve on outstanding card pools.</div>      </a>
       <a class="chart-card" href="https://data.consumercreditmatters.com/macro/?cat=Card+Market&amp;series=DRCCLACBS">
         <h4>Credit-card 30+ DQ rate</h4>
         <div class="chart-sub">Monthly, commercial banks - Fed H.8</div>
@@ -414,7 +479,7 @@
     points="0,55.0 25,36.33333333333334 50,23.666666666666686 75,13.000000000000007 100,8.33333333333335 125,5.0 150,6.333333333333336 175,14.333333333333343 200,15.666666666666671 225,17.000000000000014 250,21.000000000000014 275,23.666666666666686 300,25.000000000000014"/>
 </svg>
 
-      </a>
+<div class="why-care">Leading indicator — feeds into charge-offs 4-6 months out. The early signal of card-pool health.</div>      </a>
     </div>
   </section>
 
@@ -423,15 +488,15 @@
       <span class="section-num">05</span><h2>From the Pod</h2>
       <span class="section-kicker">This week's episode</span>
     </div>
-    <a href="https://www.youtube.com/@ConsumerCreditMatters" class="pod-card" style="text-decoration:none;color:inherit">
-      <div class="pod-thumb">
+    <a href="https://www.youtube.com/watch?v=pWUbEhgCWhg" class="pod-card" style="text-decoration:none;color:inherit">
+      <div class="pod-thumb" style="background-image:url('https://img.youtube.com/vi/pWUbEhgCWhg/maxresdefault.jpg');background-size:cover;background-position:center">
         <span class="pod-source">YouTube</span>
         <div class="pod-play" aria-label="Play episode"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
         <span class="pod-duration">27:38</span>
       </div>
       <div class="pod-body">
         <div class="pod-eyebrow">Latest episode &middot; Released May 19</div>
-        <h3 class="pod-title">When Retailers Can&#39;t Move the Goods</h3>
+        <h3 class="pod-title">When Retailers Can&#39;t Move the Goods | E28</h3>
         <p class="pod-desc">There&#39;s an operational layer underneath consumer credit that most analysts never see: what actually happens to retail inventory when it doesn&#39;t sell, when a retailer goes bankrupt, or when a brand orders too much for the wrong season. Someone has to move those goods, and how efficiently they get moved determines recovery values in bankruptcy, margin protection for healthy…</p>
         <span class="pod-cta">Watch on YouTube &rsaquo;</span>
       </div>
