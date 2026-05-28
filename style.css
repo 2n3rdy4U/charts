@@ -1117,11 +1117,11 @@ button.btn {
    scroller — the established iOS workaround for scrollable iframes. This is
    landscape-only; portrait keeps the body-scroll model untouched. */
 @media (orientation: landscape) and (max-height: 500px) {
-  html, body {
-    height: 100dvh !important;
-    min-height: 0 !important;
-    overflow: hidden !important;
-  }
+  /* NOTE: do not set overflow/height on html,body here. Leaving them to the
+     mobile block above (overflow-y:auto) keeps the navy background painting
+     into the iPhone notch/rounded-corner safe-area zones in landscape; setting
+     overflow:hidden on the root left light bars on those edges. The
+     fixed-viewport box that drives the scroller is #app below. */
   #app {
     height: 100dvh !important;
     min-height: 0 !important;
