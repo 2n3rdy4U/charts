@@ -81,6 +81,9 @@
     /* ── multi-select dropdown — styles inherited from shared style.css ── */
     /* ── chart ── */
     #vis { flex:1; width:100%; min-height:0; overflow:visible; margin-bottom:4px; }
+    /* Desktop height for the repossessions chart; the media queries below
+       shrink it on narrow/landscape so the dual-axis plot doesn't stretch. */
+    #repoChart { height:440px; }
     .vega-embed { width:100% !important; height:100% !important; }
     .vega-embed > div { height:100% !important; }
     /* Let vertical scroll pass through chart areas on touch devices —
@@ -810,7 +813,7 @@ if (window.self !== window.top) {
   };
 })();
 (function () {
-  const BUILD_ID   = "2026-05-28 14:49";
+  const BUILD_ID   = "2026-05-28 16:59";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "Santander (DRIVE)"}, {"code": "EART", "label": "Exeter"}, {"code": "EARTS", "label": "Exeter Select"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander (SDART)"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -3191,7 +3194,7 @@ async function renderRepoTab() {
         </span>
       </div>
     </div>
-    <div id="repoChart" style="width:100%;min-height:440px;"></div>
+    <div id="repoChart" style="width:100%;"></div>
     <p style="margin:10px 2px 0;font-size:11.5px;color:var(--muted);">
       ${totalRepos.toLocaleString()} 1st-time repossessions over the shown period · average rate ${(avgRate*100).toFixed(3)}%.
     </p>
@@ -3199,8 +3202,8 @@ async function renderRepoTab() {
 
   const spec = {
     $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
-    width: 'container', height: 420,
-    autosize: {type: 'fit-x', contains: 'padding'},
+    width: 'container', height: 'container',
+    autosize: {type: 'fit', contains: 'padding'},
     padding: {left: 55, right: 65, top: 10, bottom: 40},
     data: {values: agg},
     encoding: {
