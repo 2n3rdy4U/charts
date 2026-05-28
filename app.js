@@ -468,13 +468,20 @@
     if (e.origin !== 'https://2n3rdy4u.github.io') return;
     if (!e.data || typeof e.data.height !== 'number') return;
     if (e.data.height < 200 || e.data.height > 20000) return;  // sanity bounds
-    // Mobile only: desktop's #panel-content has overflow:hidden and the
-    // iframe fills it 100% with internal scroll. Resizing the iframe to
-    // content height on desktop pushes it past panel-content and the
-    // overflow:hidden clips it — no way to scroll. Skip on desktop;
-    // clear any leftover inline height in case a viewport flip from
-    // mobile→desktop landed an old value.
-    if (!window.matchMedia('(max-width: 900px)').matches) {
+    // Grow the iframe to content height only when the shell is in its
+    // "mobile" layout, where #panel-content scrolls the page and the iframe
+    // is a static block (see style.css @media below). This condition MUST
+    // match that media query exactly — including the landscape-phone clause —
+    // otherwise a wide-but-short landscape phone (e.g. 932×430) is treated as
+    // desktop here while the CSS treats it as mobile: the iframe stays pinned
+    // at 800px, its taller content scrolls internally, and that nested scroll
+    // freezes iOS Safari. On true desktop, #panel-content is overflow:hidden
+    // and the iframe fills it 100% with its own scroll, so skip and clear any
+    // leftover inline height.
+    var isMobileShell =
+      window.matchMedia('(max-width: 768px)').matches ||
+      window.matchMedia('(orientation: landscape) and (max-height: 500px)').matches;
+    if (!isMobileShell) {
       document.querySelectorAll('#panel-content iframe').forEach(function(f) {
         if (f.style.height) f.style.height = '';
       });
