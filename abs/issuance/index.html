@@ -450,6 +450,15 @@
     <a class="ccm-cta" href="https://www.consumercreditmatters.com/subscribe">Subscribe</a>
   </nav>
 </header>
+<script>
+/* These data pages are normally shown inside the /charts/ shell, which has
+   its own header — so this in-page bar would duplicate it. Hide it when we're
+   embedded in an iframe; keep it when the page is opened standalone. */
+if (window.self !== window.top) {
+  var _ccmBar = document.querySelector('.ccm-topbar');
+  if (_ccmBar) _ccmBar.style.display = 'none';
+}
+</script>
 
 <div class="wrap">
     <div class="top">
@@ -1124,7 +1133,7 @@
     </table>
 
     <footer>
-        Data sourced from SEC EDGAR &bull; Last updated: May 28, 2026 at 09:15 &bull;
+        Data sourced from SEC EDGAR &bull; Last updated: May 28, 2026 at 15:12 &bull;
         <a href="https://www.sec.gov/cgi-bin/browse-edgar" target="_blank" rel="noopener">EDGAR Search ↗</a>
     </footer>
 </div>
