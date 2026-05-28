@@ -1106,3 +1106,36 @@ button.btn {
     font-size: var(--type-sm);
   }
 }
+
+/* ── Landscape phones: scroll fix ─────────────────────────────────────
+   In portrait the mobile block (top of file) lets the page <body> scroll and
+   grows the tool iframe to full height. iOS Safari will NOT reliably chain a
+   touch-drag out of a nested iframe to the <body> in landscape, so the page
+   locks up. Fix: pin the shell to the viewport and scroll a DEDICATED
+   container (#main) that holds the grown iframe, with
+   -webkit-overflow-scrolling:touch. Touch then drives #main's own momentum
+   scroller — the established iOS workaround for scrollable iframes. This is
+   landscape-only; portrait keeps the body-scroll model untouched. */
+@media (orientation: landscape) and (max-height: 500px) {
+  html, body {
+    height: 100dvh !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+  }
+  #app {
+    height: 100dvh !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+  }
+  #main {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+  #panel-content {
+    flex: none;
+    overflow: visible !important;
+    min-height: 0 !important;
+  }
+}
