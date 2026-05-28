@@ -131,6 +131,23 @@
       .wrap { padding: 8px 8px calc(8px + env(safe-area-inset-bottom)); }
       #vis { height: 420px; max-height: 480px; }
     }
+    /* ── Landscape phones (viewport height < 500px). The auto-loan explorer
+          had this block; the lease page was missing it, so in landscape the
+          chart stayed full-size and crowded the short viewport. Reset the
+          iPhone safe-area side padding, hide control labels, and shrink the
+          chart so it doesn't fill the whole screen. ── */
+    @media (max-height: 500px) and (orientation: landscape) {
+      html, body { padding-left: 0 !important; padding-right: 0 !important; }
+      .hdr { padding-bottom: 4px; gap: 6px; }
+      .fbar { padding: 4px 0; gap: 4px 10px; }
+      label.lbl { display: none; }
+      .mode-tab { padding: 6px 12px; font-size: 12px; min-height: 36px; }
+      .wrap { padding: 4px 8px calc(4px + env(safe-area-inset-bottom)); }
+      #vis { min-height: 200px; height: 240px; }
+      select, .multi-sel-btn { min-height: 36px; padding: 6px 10px; }
+      .btn-group button { min-height: 36px; padding: 6px 10px; }
+      #source-bar { padding: 4px 0 2px; font-size: 10px; }
+    }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
@@ -559,7 +576,7 @@ function buildSpec(data) {
     },
     "data":   { "values": data },
     "width":  "container",
-    "height": 460,
+    "height": "container",
     "layer": [
       {
         "params": [{
