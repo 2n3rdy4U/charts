@@ -813,7 +813,7 @@ if (window.self !== window.top) {
   };
 })();
 (function () {
-  const BUILD_ID   = "2026-05-29 11:10";
+  const BUILD_ID   = "2026-05-29 19:02";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNA", "label": "Carvana"}, {"code": "DRIVE", "label": "Santander (DRIVE)"}, {"code": "EART", "label": "Exeter"}, {"code": "EARTS", "label": "Exeter Select"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander (SDART)"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -2598,6 +2598,7 @@ if (window.self !== window.top) {
   let _initDq     = _params.get('dq');
   let _initVeh    = _params.get('vehicle');
   let _initIssuer = _params.get('issuer');
+  let _initBasis  = _params.get('basis');   // 'deal' | 'orig' (Losses → Vintage)
   const _legacyView = _params.get('view');
 
   // Load saved state. URL params win field-by-field.
@@ -2621,6 +2622,13 @@ if (window.self !== window.top) {
     vehicleType = _initVeh;
     for (const _b of document.querySelectorAll('#vehicleGroup button'))
       _b.classList.toggle('active', _b.dataset.vehicle === _initVeh);
+  }
+  // Newsletter loss-vintage deep-links carry ?basis=orig so the reader lands
+  // on the same Losses → Vintage view (origination basis) the card sourced.
+  if (_initBasis === 'deal' || _initBasis === 'orig') {
+    vintageBasis = _initBasis;
+    for (const _b of document.querySelectorAll('button[data-basis]'))
+      _b.classList.toggle('active', _b.dataset.basis === vintageBasis);
   }
   if (_initIssuer) {
     const _iOpt = Array.from(issuerSel.options).find(o => o.value === _initIssuer);
