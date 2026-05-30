@@ -255,18 +255,14 @@
     table.deals th:nth-child(6),table.deals td:nth-child(6){display:none}
     .brand{font-size:22px}
   }
-  /* Embedded-iframe mode (set by tiny inline script in <body>). The Squarespace
-     wrapper already supplies brand + nav + footer, so we strip duplicates here
-     and show a slim issue strap instead of the full masthead. */
-  #embed-strap{display:none}
-  html.embedded #embed-strap{display:block;border-bottom:1px solid var(--rule);background:var(--paper)}
-  html.embedded #embed-strap .esi{max-width:1140px;margin:0 auto;padding:14px 24px;
-    display:flex;justify-content:space-between;align-items:baseline;
-    font-family:Georgia,serif;font-size:13px;color:var(--ink-soft);
-    text-transform:uppercase;letter-spacing:.09em}
-  html.embedded #embed-strap .esi-num{font-weight:700;color:var(--brand)}
-  html.embedded .masthead{display:none}
-  html.embedded .tagline{display:none}
+  /* Embedded-iframe mode (set by tiny inline script in <body>). Keep the
+     publication masthead — logo + "Consumer Credit Matters" + issue/date — so
+     each iframe page reads like a magazine cover with its own identity, even
+     though the Squarespace wrapper carries the publisher brand above. We only
+     strip the duplicates: the masthead's Subscribe button (Squarespace's
+     header provides one) and the publisher-level footer. */
+  #embed-strap{display:none}                    /* legacy slim strap — now unused */
+  html.embedded .masthead .subscribe-btn{display:none}
   html.embedded footer{display:none}
   html.embedded body{background:var(--paper)}
 </style>
@@ -275,14 +271,11 @@
 <script>
 /* Set .embedded BEFORE first paint when this page is loaded inside an iframe
    (e.g. the consumercreditmatters.com/newsletter Squarespace page). The CSS
-   in <head> then hides the duplicate masthead/footer and shows the slim
-   issue strap. Harmless when the page is viewed standalone (window===top). */
+   in <head> uses it to strip duplicates (masthead Subscribe button + footer)
+   that the Squarespace wrapper already provides. The masthead itself stays
+   visible — it's the publication's brand cover. Harmless when standalone. */
 if (window !== window.top) document.documentElement.classList.add('embedded');
 </script>
-<div id="embed-strap"><div class="esi">
-  <span><span class="esi-num">Issue No. 1</span> &middot; June 01, 2026</span>
-  <span>Every Monday &middot; No paywall</span>
-</div></div>
 
 
 
