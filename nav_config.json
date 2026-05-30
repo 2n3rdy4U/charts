@@ -65,8 +65,8 @@
     },
     {
       "id": "newsletter",
-      "label": "Newsletter",
-      "description": "Data-driven analysis and commentary on consumer credit markets, delivered to your inbox.",
+      "label": "Weekly Newsletter",
+      "description": "The week in U.S. consumer-credit securitization, data, and policy. Independent, data-first, no paywall.",
       "icon": "document",
       "badge": null,
       "type": "link",
