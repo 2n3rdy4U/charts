@@ -31,19 +31,21 @@
   var SCRIPT_URL = SCRIPT_EL ? new URL(SCRIPT_EL.src, document.baseURI).toString() : "";
   var ASSETS_BASE = SCRIPT_URL ? new URL("../assets/brand/", SCRIPT_URL).toString() : "/assets/brand/";
   var CSS_URL = SCRIPT_URL ? new URL("./share.css", SCRIPT_URL).toString() : "/share/share.css";
-  var LOGO_URL = ASSETS_BASE + "logo-horizontal-primary.png";
+  var MARK_URL = ASSETS_BASE + "logo-mark-primary.png";
 
   var HTML2CANVAS_URL = "https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js";
 
   var FOOTER_URL = "consumercreditmatters.com";
 
-  // Branded frame dimensions — rendered at 2x social-card size for crispness.
-  // 2400×1260 keeps the 1200×630 OG aspect ratio; social platforms downscale
-  // on display but the source is sharp at full-screen view too.
+  // Branded frame dimensions — rendered at 2x for crispness. 16:9 (1200×675
+  // at 1x) fits LinkedIn feed cards edge-to-edge and PowerPoint widescreen
+  // slides drop-in. Tightened chrome (110px header / 70px footer) maximises
+  // the chart plot area; institutional convention puts the brand as a small
+  // icon-mark bottom-right rather than a header wordmark.
   var FRAME_W = 2400;
-  var FRAME_H = 1260;
-  var HEADER_H = 192;
-  var FOOTER_H = 112;
+  var FRAME_H = 1350;
+  var HEADER_H = 110;
+  var FOOTER_H = 70;
   var PAD_X = 80;
 
   var CREAM = "#FAF9F5";
@@ -220,12 +222,10 @@
       var t = document.querySelector(window.CC_CHART_DYNAMIC_TITLE_SELECTOR);
       if (t) dynTitle = (t.textContent || "").trim();
     }
+    var dynSubtitle = "";
     if (window.CC_CHART_DYNAMIC_SUBTITLE_SELECTOR) {
       var s = document.querySelector(window.CC_CHART_DYNAMIC_SUBTITLE_SELECTOR);
-      if (s) {
-        var sTxt = (s.textContent || "").trim();
-        if (sTxt) dynTitle = dynTitle ? dynTitle + " — " + sTxt : sTxt;
-      }
+      if (s) dynSubtitle = (s.textContent || "").trim();
     }
     // Dynamic "as of" line: a page can set CC_CHART_DYNAMIC_ASOF_SELECTOR
     // pointing to an element whose text already reads as a complete line
@@ -238,6 +238,8 @@
     }
     return {
       title:    dynTitle || override.title || document.title || "Consumer Credit Matters chart",
+      subtitle: dynSubtitle || override.subtitle || "",
+      source:   window.CC_CHART_SOURCE || override.source || "SEC ABS-EE filings",
       url:      override.url || window.location.href,
       asof:     override.asof || formatToday(),
       asofLine: dynAsof  // empty unless explicit; compositor falls back to "Data as of " + asof
@@ -521,9 +523,9 @@
 
   // ── Branded PNG compositor ────────────────────────────────────────
   function buildBrandedPNG(meta, explicitTarget) {
-    return Promise.all([captureChart(explicitTarget), loadImage(LOGO_URL, false)]).then(function (parts) {
+    return Promise.all([captureChart(explicitTarget), loadImage(MARK_URL, false)]).then(function (parts) {
       var chartCanvas = parts[0];
-      var logoImg = parts[1];
+      var markImg = parts[1];
 
       var canvas = document.createElement("canvas");
       canvas.width = FRAME_W;
@@ -534,22 +536,40 @@
       ctx.fillStyle = CREAM;
       ctx.fillRect(0, 0, FRAME_W, FRAME_H);
 
-      // Header — logo on left, title on right (all dimensions 2x for crispness)
-      var logoH = 112;
-      var logoW = (logoImg.width / logoImg.height) * logoH;
-      var logoY = (HEADER_H - logoH) / 2;
-      if (logoImg.complete && logoImg.naturalWidth) {
-        ctx.drawImage(logoImg, PAD_X, logoY, logoW, logoH);
+      // Header — title left, "Data as of" right; subtitle wraps under title.
+      // 56px / 30px fonts = 28px / 15px at 1x (the export renders at 2x for
+      // crispness, so source font specs are doubled). Scale roughly matches
+      // the on-screen header so the image doesn't read as a different doc.
+      var TITLE_PAD_TOP = 36;
+      ctx.fillStyle = INK;
+      ctx.font = '600 56px Inter, system-ui, -apple-system, sans-serif';
+      ctx.textBaseline = "top";
+      ctx.textAlign = "left";
+      var asofText = meta.asofLine || ("Data as of " + meta.asof);
+      // Reserve room on the right for the as-of stamp; rest belongs to title.
+      ctx.font = '400 28px Inter, system-ui, -apple-system, sans-serif';
+      var asofW = ctx.measureText(asofText).width;
+      ctx.font = '600 56px Inter, system-ui, -apple-system, sans-serif';
+      var maxTitleWidth = FRAME_W - 2 * PAD_X - asofW - 40;
+      var title = truncateToWidth(ctx, meta.title, maxTitleWidth);
+      ctx.fillText(title, PAD_X, TITLE_PAD_TOP);
+
+      // Subtitle below title
+      if (meta.subtitle) {
+        ctx.fillStyle = MUTED;
+        ctx.font = '400 30px Inter, system-ui, -apple-system, sans-serif';
+        var subtitle = truncateToWidth(ctx, meta.subtitle, FRAME_W - 2 * PAD_X);
+        ctx.fillText(subtitle, PAD_X, TITLE_PAD_TOP + 70);
       }
 
-      ctx.fillStyle = INK;
-      ctx.font = '600 52px Inter, system-ui, -apple-system, sans-serif';
-      ctx.textBaseline = "middle";
-      var titleX = PAD_X + logoW + 56;
-      var maxTitleWidth = FRAME_W - titleX - PAD_X;
-      var title = truncateToWidth(ctx, meta.title, maxTitleWidth);
-      ctx.fillText(title, titleX, HEADER_H / 2);
+      // As-of stamp top-right, baseline-aligned with title
+      ctx.fillStyle = MUTED;
+      ctx.font = '400 28px Inter, system-ui, -apple-system, sans-serif';
+      ctx.textAlign = "right";
+      ctx.fillText(asofText, FRAME_W - PAD_X, TITLE_PAD_TOP + 12);
+      ctx.textAlign = "left";
 
+      // Separator below header
       ctx.strokeStyle = "#ECE9DD";
       ctx.lineWidth = 2;
       ctx.beginPath();
@@ -557,11 +577,11 @@
       ctx.lineTo(FRAME_W - PAD_X, HEADER_H);
       ctx.stroke();
 
-      // Chart fits in middle, preserve aspect
+      // Chart fits between header and footer; preserve aspect ratio.
       var chartBoxX = PAD_X;
-      var chartBoxY = HEADER_H + 32;
+      var chartBoxY = HEADER_H + 24;
       var chartBoxW = FRAME_W - 2 * PAD_X;
-      var chartBoxH = FRAME_H - HEADER_H - FOOTER_H - 64;
+      var chartBoxH = FRAME_H - HEADER_H - FOOTER_H - 48;
       var fitted = fitContain(chartCanvas.width, chartCanvas.height, chartBoxW, chartBoxH);
       ctx.drawImage(
         chartCanvas,
@@ -570,7 +590,7 @@
         fitted.w, fitted.h
       );
 
-      // Footer — URL on left, date on right
+      // Footer — source line left, icon-mark bottom-right (institutional convention).
       var footerY = FRAME_H - FOOTER_H + FOOTER_H / 2;
       ctx.strokeStyle = "#ECE9DD";
       ctx.lineWidth = 2;
@@ -579,19 +599,21 @@
       ctx.lineTo(FRAME_W - PAD_X, FRAME_H - FOOTER_H);
       ctx.stroke();
 
-      ctx.fillStyle = BLUE;
-      ctx.font = '600 32px Inter, system-ui, -apple-system, sans-serif';
-      ctx.textAlign = "left";
-      ctx.fillText(FOOTER_URL, PAD_X, footerY);
-
       ctx.fillStyle = MUTED;
-      ctx.font = '400 28px Inter, system-ui, -apple-system, sans-serif';
-      ctx.textAlign = "right";
-      // Use the page's own as-of line verbatim if provided, else fall back
-      // to the capture-date stamp. Keeps page UI and shared PNG consistent.
-      var asofText = meta.asofLine || ("Data as of " + meta.asof);
-      ctx.fillText(asofText, FRAME_W - PAD_X, footerY);
+      ctx.font = '400 26px Inter, system-ui, -apple-system, sans-serif';
       ctx.textAlign = "left";
+      ctx.textBaseline = "middle";
+      var sourceLine = "Source: " + (meta.source || "SEC ABS-EE filings") + " · " + FOOTER_URL;
+      ctx.fillText(sourceLine, PAD_X, footerY);
+
+      // Icon-mark bottom-right — preserves brand identity without competing
+      // with the title. ~44px @ 1x (88 @ 2x); square crop from logo-mark PNG.
+      if (markImg.complete && markImg.naturalWidth) {
+        var markSize = 88;
+        var markX = FRAME_W - PAD_X - markSize;
+        var markY = footerY - markSize / 2;
+        ctx.drawImage(markImg, markX, markY, markSize, markSize);
+      }
 
       var dataURL = canvas.toDataURL("image/png");
       return new Promise(function (resolve) {
