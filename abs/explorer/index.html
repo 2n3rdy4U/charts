@@ -128,11 +128,14 @@
       #vg-tooltip-element { display:none !important; }
     }
     .loading { padding:20px; font-size:13px; color:var(--muted); }
-    .basis-warn{display:none;margin:10px 0 4px;padding:10px 14px;background:#fef3c7;
-      border-left:3px solid #d97706;color:#78350f;font-size:12px;line-height:1.5;
-      border-radius:3px}
+    .basis-warn{display:none;margin:10px 22px 4px 50px;padding:8px 12px;
+      background:#fef3c7;border-left:3px solid #d97706;color:#78350f;
+      font-size:12px;line-height:1.45;border-radius:3px}
     .basis-warn.show{display:block}
     .basis-warn strong{color:#92400e}
+    @media (max-width:640px){
+      .basis-warn{margin:10px 8px 4px 36px}
+    }
     .err { color:#dc2626; }
     /* ── heatmap toggle switch ── */
     .hm-switch { display:flex; align-items:center; gap:6px; cursor:pointer; user-select:none; }
@@ -716,12 +719,10 @@ if (window.self !== window.top) {
       <div id="viewSubtitle" class="view-sub" style="font-size:11.5px;color:var(--muted);margin-top:2px;"></div>
     </div>
     <div id="vis"><div class="loading">Loading…</div></div>
-    <div id="basisWarn" class="basis-warn loss-only">
-      <strong>Note on Loan Origination basis:</strong> pre-2020 vintages are incomplete &mdash;
-      those loans only appear in ABS-EE data from when their deal began reporting, so the first
-      months of life-cycle losses for older vintages are missing from the cumulative. Older curves
-      may appear artificially low. <strong>Deal Issuance</strong> basis (default) avoids this and
-      matches industry surveillance convention.
+    <div id="basisWarn" class="basis-warn">
+      <strong>Origination-basis caveat:</strong> pre-2020 vintages have incomplete early-life data
+      (loans enter ABS-EE only when their deal begins reporting). Older curves may understate
+      cumulative losses.
     </div>
     <div id="tblWrap"></div>
     <div id="repoView" class="repo-only" style="padding-top:8px;">
@@ -2226,6 +2227,7 @@ if (window.self !== window.top) {
   function setTab(tab, sub) {
     currentTab = tab;
     document.body.dataset.tab = tab;
+    if (typeof _updateBasisWarn === 'function') _updateBasisWarn();
     if (sub) {
       currentSub = sub;
       document.body.dataset.sub = sub;
@@ -2346,7 +2348,7 @@ if (window.self !== window.top) {
 
   function _updateBasisWarn(){
     const w = document.getElementById('basisWarn');
-    if (w) w.classList.toggle('show', vintageBasis === 'orig');
+    if (w) w.classList.toggle('show', currentTab === 'losses' && vintageBasis === 'orig');
   }
   document.getElementById('vintageBasisGroup').addEventListener('click', e => {
     const b = e.target.closest('button[data-basis]');
