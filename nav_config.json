@@ -23,7 +23,7 @@
           "icon": "car",
           "type": "panel",
           "url": "https://2n3rdy4u.github.io/charts/abs/lease_explorer/index.html",
-          "badge": "NEW"
+          "badge": null
         },
         {
           "id": "abs-credit-card",
@@ -68,7 +68,7 @@
       "label": "Weekly Newsletter",
       "description": "The week in U.S. consumer-credit securitization, data, and policy. Independent, data-first, no paywall.",
       "icon": "document",
-      "badge": null,
+      "badge": "NEW",
       "type": "link",
       "url": "https://www.consumercreditmatters.com/newsletter"
     },
