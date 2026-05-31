@@ -777,5 +777,21 @@ if (window !== window.top) document.documentElement.classList.add('embedded');
   }
 })();
 </script>
+<script>
+/* Escape-the-iframe: when embedded in the Squarespace shell, every external
+   <a> click would otherwise try to load inside the iframe — breaking YouTube
+   (X-Frame-Options) and distorting chart pages (mobile-mode CSS kicks in at
+   iframe widths). Tag every absolute http(s) link with target=_blank so the
+   browser opens the destination in a new tab, bypassing the iframe. Internal
+   #anchor jump links (TOC) are unaffected because their href does not start
+   with http. Harmless when viewed standalone. */
+(function(){
+  var links = document.querySelectorAll('a[href^="http"]');
+  for (var i = 0; i < links.length; i++) {
+    links[i].setAttribute('target', '_blank');
+    links[i].setAttribute('rel', 'noopener noreferrer');
+  }
+})();
+</script>
 </body>
 </html>
