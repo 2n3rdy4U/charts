@@ -128,6 +128,11 @@
       #vg-tooltip-element { display:none !important; }
     }
     .loading { padding:20px; font-size:13px; color:var(--muted); }
+    .basis-warn{display:none;margin:10px 0 4px;padding:10px 14px;background:#fef3c7;
+      border-left:3px solid #d97706;color:#78350f;font-size:12px;line-height:1.5;
+      border-radius:3px}
+    .basis-warn.show{display:block}
+    .basis-warn strong{color:#92400e}
     .err { color:#dc2626; }
     /* ── heatmap toggle switch ── */
     .hm-switch { display:flex; align-items:center; gap:6px; cursor:pointer; user-select:none; }
@@ -711,6 +716,13 @@ if (window.self !== window.top) {
       <div id="viewSubtitle" class="view-sub" style="font-size:11.5px;color:var(--muted);margin-top:2px;"></div>
     </div>
     <div id="vis"><div class="loading">Loading…</div></div>
+    <div id="basisWarn" class="basis-warn loss-only">
+      <strong>Note on Loan Origination basis:</strong> pre-2020 vintages are incomplete &mdash;
+      those loans only appear in ABS-EE data from when their deal began reporting, so the first
+      months of life-cycle losses for older vintages are missing from the cumulative. Older curves
+      may appear artificially low. <strong>Deal Issuance</strong> basis (default) avoids this and
+      matches industry surveillance convention.
+    </div>
     <div id="tblWrap"></div>
     <div id="repoView" class="repo-only" style="padding-top:8px;">
       <div class="loading">Select one or more issuers to view repossession data.</div>
@@ -2332,12 +2344,17 @@ if (window.self !== window.top) {
     else { loadVintageAndRender(); }
   });
 
+  function _updateBasisWarn(){
+    const w = document.getElementById('basisWarn');
+    if (w) w.classList.toggle('show', vintageBasis === 'orig');
+  }
   document.getElementById('vintageBasisGroup').addEventListener('click', e => {
     const b = e.target.closest('button[data-basis]');
     if (!b) return;
     vintageBasis = b.dataset.basis;
     for (const btn of document.querySelectorAll('#vintageBasisGroup button'))
       btn.classList.toggle('active', btn.dataset.basis === vintageBasis);
+    _updateBasisWarn();
     loadLossAndRender();
   });
   // Vintage date range affects both Delinquency/Vintage and Losses tabs.
@@ -2618,13 +2635,18 @@ if (window.self !== window.top) {
     for (const _b of document.querySelectorAll('#vehicleGroup button'))
       _b.classList.toggle('active', _b.dataset.vehicle === _initVeh);
   }
-  // Newsletter loss-vintage deep-links carry ?basis=orig so the reader lands
-  // on the same Losses → Vintage view (origination basis) the card sourced.
+  // Newsletter loss-vintage deep-links may carry ?basis=deal|orig. Default
+  // (no URL param) is 'deal' — the industry surveillance convention. Origination
+  // basis surfaces a yellow caveat note about pre-2020 vintage data truncation.
   if (_initBasis === 'deal' || _initBasis === 'orig') {
     vintageBasis = _initBasis;
     for (const _b of document.querySelectorAll('button[data-basis]'))
       _b.classList.toggle('active', _b.dataset.basis === vintageBasis);
   }
+  // Sync the basis warning visibility to the resolved basis (after URL param +
+  // saved state apply). Function defined later; defer with a microtask so the
+  // element exists by the time we read it.
+  Promise.resolve().then(_updateBasisWarn);
   if (_initIssuer) {
     const _iOpt = Array.from(issuerSel.options).find(o => o.value === _initIssuer);
     if (_iOpt) issuerSel.value = _initIssuer;
