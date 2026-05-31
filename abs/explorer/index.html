@@ -454,12 +454,8 @@
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
   position:relative;z-index:100;box-sizing:border-box}
 .ccm-topbar a{text-decoration:none;border:none}
-.ccm-topbar-brand{display:flex;align-items:center;gap:12px;color:#fafafa}
-.ccm-mark{flex:none;width:32px;height:32px;display:flex;align-items:center;justify-content:center}
-.ccm-mark svg{width:24px;height:24px}
-.ccm-brand-name{font-family:Georgia,"Iowan Old Style",serif;font-size:18px;font-weight:600;
-  color:#fafafa;letter-spacing:-0.01em;line-height:1}
-.ccm-brand-name .ccm-dot{color:#7dd3a8}
+.ccm-topbar-brand{display:flex;align-items:center;color:#fafafa}
+.ccm-wordmark{display:block;height:32px;width:auto}
 .ccm-topbar-nav{display:flex;align-items:center;gap:24px;font-size:13.5px}
 .ccm-topbar-nav a:not(.ccm-cta){color:#a8b5c4;font-weight:500;letter-spacing:0.02em;
   transition:color 0.15s}
@@ -469,7 +465,7 @@
 .ccm-topbar-nav .ccm-cta:hover{background:#65f08e}
 @media (max-width:640px){
   .ccm-topbar{padding:0 14px}
-  .ccm-brand-name{font-size:15px}
+  .ccm-wordmark{height:26px}
   .ccm-topbar-nav{gap:14px;font-size:12px}
   .ccm-topbar-nav a:not(.ccm-cta){display:none}
 }
@@ -497,8 +493,7 @@
 
 <header class="ccm-topbar" role="banner">
   <a class="ccm-topbar-brand" href="https://www.consumercreditmatters.com/" aria-label="Consumer Credit Matters home">
-    <span class="ccm-mark"><svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M16 2 L29 9 L29 23 L16 30 L3 23 L3 9 Z" stroke="#7dd3a8" stroke-width="2" fill="none"/><path d="M11 11 L21 21 M21 11 L11 21" stroke="#7dd3a8" stroke-width="2.2" stroke-linecap="round"/></svg></span>
-    <span class="ccm-brand-name">Consumer Credit Matters<span class="ccm-dot">.</span></span>
+    <img src="https://data.consumercreditmatters.com/assets/brand/logo-horizontal-white.png" alt="Consumer Credit Matters" class="ccm-wordmark">
   </a>
   <nav class="ccm-topbar-nav" aria-label="Site navigation">
     <a href="https://www.consumercreditmatters.com/">Home</a>
