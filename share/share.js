@@ -536,37 +536,26 @@
       ctx.fillStyle = CREAM;
       ctx.fillRect(0, 0, FRAME_W, FRAME_H);
 
-      // Header — title left, "Data as of" right; subtitle wraps under title.
-      // 56px / 30px fonts = 28px / 15px at 1x (the export renders at 2x for
-      // crispness, so source font specs are doubled). Scale roughly matches
-      // the on-screen header so the image doesn't read as a different doc.
+      // Header — centered title + subtitle, mirroring the on-screen chart
+      // header (FT / NYT Upshot pattern). 56px / 30px font specs are 2x of
+      // the 1x display sizes (28px / 15px) — the export renders at 2x for
+      // retina crispness. As-of stamp lives in the bottom-source line rather
+      // than top-right so the header stays clean and centered.
       var TITLE_PAD_TOP = 36;
       ctx.fillStyle = INK;
       ctx.font = '600 56px Inter, system-ui, -apple-system, sans-serif';
       ctx.textBaseline = "top";
-      ctx.textAlign = "left";
-      var asofText = meta.asofLine || ("Data as of " + meta.asof);
-      // Reserve room on the right for the as-of stamp; rest belongs to title.
-      ctx.font = '400 28px Inter, system-ui, -apple-system, sans-serif';
-      var asofW = ctx.measureText(asofText).width;
-      ctx.font = '600 56px Inter, system-ui, -apple-system, sans-serif';
-      var maxTitleWidth = FRAME_W - 2 * PAD_X - asofW - 40;
+      ctx.textAlign = "center";
+      var maxTitleWidth = FRAME_W - 2 * PAD_X;
       var title = truncateToWidth(ctx, meta.title, maxTitleWidth);
-      ctx.fillText(title, PAD_X, TITLE_PAD_TOP);
+      ctx.fillText(title, FRAME_W / 2, TITLE_PAD_TOP);
 
-      // Subtitle below title
       if (meta.subtitle) {
         ctx.fillStyle = MUTED;
         ctx.font = '400 30px Inter, system-ui, -apple-system, sans-serif';
-        var subtitle = truncateToWidth(ctx, meta.subtitle, FRAME_W - 2 * PAD_X);
-        ctx.fillText(subtitle, PAD_X, TITLE_PAD_TOP + 70);
+        var subtitle = truncateToWidth(ctx, meta.subtitle, maxTitleWidth);
+        ctx.fillText(subtitle, FRAME_W / 2, TITLE_PAD_TOP + 70);
       }
-
-      // As-of stamp top-right, baseline-aligned with title
-      ctx.fillStyle = MUTED;
-      ctx.font = '400 28px Inter, system-ui, -apple-system, sans-serif';
-      ctx.textAlign = "right";
-      ctx.fillText(asofText, FRAME_W - PAD_X, TITLE_PAD_TOP + 12);
       ctx.textAlign = "left";
 
       // Separator below header
@@ -604,6 +593,11 @@
       ctx.textAlign = "left";
       ctx.textBaseline = "middle";
       var sourceLine = "Source: " + (meta.source || "SEC ABS-EE filings") + " · " + FOOTER_URL;
+      // Fold the as-of stamp into the source line (Pattern A) so the header
+      // stays a clean centered title/subtitle and the footer carries the
+      // attribution + dating together.
+      var asofText = meta.asofLine || ("Data as of " + meta.asof);
+      if (asofText) sourceLine += " · " + asofText;
       ctx.fillText(sourceLine, PAD_X, footerY);
 
       // Icon-mark bottom-right — preserves brand identity without competing
