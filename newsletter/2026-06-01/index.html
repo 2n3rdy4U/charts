@@ -499,9 +499,9 @@ if (window !== window.top) document.documentElement.classList.add('embedded');
         </tr>
       </thead>
       <tbody>
-        <tr class="deal-row" onclick="window.open('https://data.consumercreditmatters.com/abs/issuance/', '_blank', 'noopener,noreferrer')">
+        <tr class="deal-row" onclick="window.open('https://data.consumercreditmatters.com/abs/issuance/presale/chase-issuance-trust-chaseseries-class-a-2026-1.html', '_blank', 'noopener,noreferrer')">
           <td>
-            <a class="issuer-link" href="https://data.consumercreditmatters.com/abs/issuance/">Chase Issuance Trust CHASEseries Class A(2026-1)</a>
+            <a class="issuer-link" href="https://data.consumercreditmatters.com/abs/issuance/presale/chase-issuance-trust-chaseseries-class-a-2026-1.html">Chase Issuance Trust CHASEseries Class A(2026-1)</a>
           </td>
           <td class="asset-col">
             <span class="chip cc">Credit Card</span>
@@ -515,9 +515,9 @@ if (window !== window.top) document.documentElement.classList.add('embedded');
           <td class="num">2.97</td>
           <td class="num">737</td>
         </tr>
-        <tr class="deal-row" onclick="window.open('https://data.consumercreditmatters.com/abs/issuance/', '_blank', 'noopener,noreferrer')">
+        <tr class="deal-row" onclick="window.open('https://data.consumercreditmatters.com/abs/issuance/presale/first-national-master-note-trust-series-2026-1-asset-backed-notes.html', '_blank', 'noopener,noreferrer')">
           <td>
-            <a class="issuer-link" href="https://data.consumercreditmatters.com/abs/issuance/">First National Master Note Trust Series 2026-1 Asset Backed Notes</a>
+            <a class="issuer-link" href="https://data.consumercreditmatters.com/abs/issuance/presale/first-national-master-note-trust-series-2026-1-asset-backed-notes.html">First National Master Note Trust Series 2026-1 Asset Backed Notes</a>
           </td>
           <td class="asset-col">
             <span class="chip cc">Credit Card</span>
@@ -531,9 +531,9 @@ if (window !== window.top) document.documentElement.classList.add('embedded');
           <td class="num">2.97</td>
           <td class="num">736</td>
         </tr>
-        <tr class="deal-row" onclick="window.open('https://data.consumercreditmatters.com/abs/issuance/', '_blank', 'noopener,noreferrer')">
+        <tr class="deal-row" onclick="window.open('https://data.consumercreditmatters.com/abs/issuance/presale/nissan-auto-receivables-2026-a-owner-trust.html', '_blank', 'noopener,noreferrer')">
           <td>
-            <a class="issuer-link" href="https://data.consumercreditmatters.com/abs/issuance/">Nissan Auto Receivables 2026-A Owner Trust</a>
+            <a class="issuer-link" href="https://data.consumercreditmatters.com/abs/issuance/presale/nissan-auto-receivables-2026-a-owner-trust.html">Nissan Auto Receivables 2026-A Owner Trust</a>
           </td>
           <td class="asset-col">
             <span class="chip al-loan">Auto Loan</span>
@@ -547,9 +547,9 @@ if (window !== window.top) document.documentElement.classList.add('embedded');
           <td class="num">2.33</td>
           <td class="num">787</td>
         </tr>
-        <tr class="deal-row" onclick="window.open('https://data.consumercreditmatters.com/abs/issuance/', '_blank', 'noopener,noreferrer')">
+        <tr class="deal-row" onclick="window.open('https://data.consumercreditmatters.com/abs/issuance/presale/carvana-auto-receivables-trust-2026-p2.html', '_blank', 'noopener,noreferrer')">
           <td>
-            <a class="issuer-link" href="https://data.consumercreditmatters.com/abs/issuance/">Carvana Auto Receivables Trust 2026-P2</a>
+            <a class="issuer-link" href="https://data.consumercreditmatters.com/abs/issuance/presale/carvana-auto-receivables-trust-2026-p2.html">Carvana Auto Receivables Trust 2026-P2</a>
           </td>
           <td class="asset-col">
             <span class="chip al-loan">Auto Loan</span>
@@ -802,6 +802,32 @@ if (window !== window.top) document.documentElement.classList.add('embedded');
     links[i].setAttribute('target', '_blank');
     links[i].setAttribute('rel', 'noopener noreferrer');
   }
+})();
+/* In-page TOC scroll: when embedded in the Squarespace iframe, the iframe
+   is sized to its content (no internal scroll), so #anchor clicks have
+   nothing to scroll within. Send the target Y-offset to the parent via
+   postMessage and let the parent scroll its own window. Standalone view
+   falls back to native scrollIntoView. Parent listener must be added via
+   Squarespace Settings -> Advanced -> Code Injection -> Footer. */
+(function(){
+  document.addEventListener('click', function(e){
+    var a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    var href = a.getAttribute('href');
+    if (!href || href === '#') return;
+    var target = document.getElementById(href.slice(1));
+    if (!target) return;
+    e.preventDefault();
+    if (window.self !== window.top) {
+      var rect = target.getBoundingClientRect();
+      var y = rect.top + window.pageYOffset;
+      try {
+        window.parent.postMessage({type:'ccm-scroll-to', y: y, section: href.slice(1)}, '*');
+      } catch (err) {}
+    } else {
+      target.scrollIntoView({behavior:'smooth', block:'start'});
+    }
+  });
 })();
 </script>
 </body>
