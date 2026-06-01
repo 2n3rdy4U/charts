@@ -247,12 +247,23 @@
     .charts-grid,.cal,footer .cols,.pod-card,.spotlight-card{grid-template-columns:1fr;gap:16px}
     .runners-grid{grid-template-columns:1fr;gap:8px}
     .spotlight-right svg.spark{height:80px}
-    table.deals{font-size:12.5px}
+    table.deals{font-size:12.5px;table-layout:fixed}
     /* Hide PSR, Closed, WAL on mobile — leaves Issuer, Asset, Size, FICO */
     table.deals th:nth-child(3),table.deals td:nth-child(3),
     table.deals th:nth-child(4),table.deals td:nth-child(4),
     table.deals th:nth-child(6),table.deals td:nth-child(6){display:none}
+    /* Issuer cell wraps cleanly (long names like "First National Master
+       Note Trust Series 2026-1 Asset Backed Notes" otherwise overflow). */
+    table.deals td:first-child{word-break:break-word;line-height:1.3}
+    table.deals td:first-child a.issuer-link{display:inline-block}
     .brand{font-size:22px}
+  }
+  /* Very-narrow mobile — drop the asset-class chip too so the four columns
+     don't crush. Leaves Issuer / Size / FICO — the three columns a reader
+     actually wants on a phone. */
+  @media (max-width:480px){
+    table.deals th:nth-child(2),table.deals td:nth-child(2){display:none}
+    table.deals td.num,table.deals th.num{padding-left:6px}
   }
   /* Embedded-iframe mode (set by tiny inline script in <body>). Keep the
      publication masthead — logo + "Consumer Credit Matters" + issue/date — so
@@ -488,7 +499,7 @@ if (window !== window.top) document.documentElement.classList.add('embedded');
         </tr>
       </thead>
       <tbody>
-        <tr class="deal-row" onclick="location.href='https://data.consumercreditmatters.com/abs/issuance/'">
+        <tr class="deal-row" onclick="window.open('https://data.consumercreditmatters.com/abs/issuance/', '_blank', 'noopener,noreferrer')">
           <td>
             <a class="issuer-link" href="https://data.consumercreditmatters.com/abs/issuance/">Chase Issuance Trust CHASEseries Class A(2026-1)</a>
           </td>
@@ -504,7 +515,7 @@ if (window !== window.top) document.documentElement.classList.add('embedded');
           <td class="num">2.97</td>
           <td class="num">737</td>
         </tr>
-        <tr class="deal-row" onclick="location.href='https://data.consumercreditmatters.com/abs/issuance/'">
+        <tr class="deal-row" onclick="window.open('https://data.consumercreditmatters.com/abs/issuance/', '_blank', 'noopener,noreferrer')">
           <td>
             <a class="issuer-link" href="https://data.consumercreditmatters.com/abs/issuance/">First National Master Note Trust Series 2026-1 Asset Backed Notes</a>
           </td>
@@ -520,7 +531,7 @@ if (window !== window.top) document.documentElement.classList.add('embedded');
           <td class="num">2.97</td>
           <td class="num">736</td>
         </tr>
-        <tr class="deal-row" onclick="location.href='https://data.consumercreditmatters.com/abs/issuance/'">
+        <tr class="deal-row" onclick="window.open('https://data.consumercreditmatters.com/abs/issuance/', '_blank', 'noopener,noreferrer')">
           <td>
             <a class="issuer-link" href="https://data.consumercreditmatters.com/abs/issuance/">Nissan Auto Receivables 2026-A Owner Trust</a>
           </td>
@@ -536,7 +547,7 @@ if (window !== window.top) document.documentElement.classList.add('embedded');
           <td class="num">2.33</td>
           <td class="num">787</td>
         </tr>
-        <tr class="deal-row" onclick="location.href='https://data.consumercreditmatters.com/abs/issuance/'">
+        <tr class="deal-row" onclick="window.open('https://data.consumercreditmatters.com/abs/issuance/', '_blank', 'noopener,noreferrer')">
           <td>
             <a class="issuer-link" href="https://data.consumercreditmatters.com/abs/issuance/">Carvana Auto Receivables Trust 2026-P2</a>
           </td>
