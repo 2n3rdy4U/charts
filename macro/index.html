@@ -1535,9 +1535,26 @@ function init() {
     const _cb = document.querySelector('.series-cb[data-id="' + _paramSeries + '"]');
     if (_cb) _cb.checked = true;
   } else {
-    // Normal load: land on the "All" tab with nothing selected. The chart area
-    // renders its empty-state prompt; the user picks a series to begin.
-    activateCategory(ALL_CAT);
+    // Normal load: auto-select Auto Sales (SAAR) so the page never reads as
+    // "empty / broken" on first paint. This is the highest-signal default for
+    // CCM's audience (auto-ABS analysts) — they're most likely to want it
+    // and it demonstrates the dashboard is working. Reader can swap series
+    // freely from the panel; this is just a primed starting point.
+    const _defaultSeries = 'ALTSALES';
+    const _defaultCat = 'Auto Market';
+    if (DASHBOARD_DATA.series[_defaultSeries] && ALL_CATS.includes(_defaultCat)) {
+      state.selected.add(_defaultSeries);
+      state.markAssignment.set(_defaultSeries, "bar");
+      state.axisAssignment.set(_defaultSeries, "left");
+      const _info = DASHBOARD_DATA.series[_defaultSeries];
+      if (_info && _info.default_transform) state.transform = _info.default_transform;
+      activateCategory(_defaultCat);
+      const _cb = document.querySelector('.series-cb[data-id="' + _defaultSeries + '"]');
+      if (_cb) _cb.checked = true;
+    } else {
+      // Fallback if ALTSALES ever drops out of the dataset
+      activateCategory(ALL_CAT);
+    }
   }
 
   // Populate suggested views dropdown
