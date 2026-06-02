@@ -448,6 +448,12 @@
     const sep = item.url.includes('?') ? '&' : '?';
     iframe.src = `${item.url}${sep}_cb=${Date.now()}`;
     iframe.title = item.label;
+    // Delegate clipboard-write into the chart frame so the share modal's
+    // "Copy image" works. The outer Squarespace embed grants it across the
+    // cross-origin boundary; this same-origin nested frame still needs it set
+    // explicitly — Chrome does not reliably inherit it for dynamically-created
+    // iframes (NotAllowedError on navigator.clipboard.write otherwise).
+    iframe.allow = 'clipboard-write';
     iframe.addEventListener('load', () => panelLoading.classList.remove('visible'));
     panelContent.appendChild(iframe);
   }
