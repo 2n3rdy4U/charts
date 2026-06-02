@@ -14,7 +14,7 @@
           "label": "Auto Loan",
           "icon": "car",
           "type": "panel",
-          "url": "https://2n3rdy4u.github.io/charts/abs/explorer/index.html",
+          "url": "abs/explorer/index.html",
           "badge": null
         },
         {
@@ -22,7 +22,7 @@
           "label": "Auto Lease",
           "icon": "car",
           "type": "panel",
-          "url": "https://2n3rdy4u.github.io/charts/abs/lease_explorer/index.html",
+          "url": "abs/lease_explorer/index.html",
           "badge": null
         },
         {
@@ -30,7 +30,7 @@
           "label": "Credit Card",
           "icon": "credit-card",
           "type": "panel",
-          "url": "https://2n3rdy4u.github.io/charts/cc/index.html",
+          "url": "cc/index.html",
           "badge": null
         },
         {
@@ -38,7 +38,7 @@
           "label": "Issuance",
           "icon": "stack",
           "type": "panel",
-          "url": "https://2n3rdy4u.github.io/charts/abs/issuance/index.html",
+          "url": "abs/issuance/index.html",
           "badge": null
         }
       ]
@@ -51,7 +51,7 @@
       "icon": "globe",
       "badge": null,
       "type": "panel",
-      "url": "https://2n3rdy4u.github.io/charts/macro/index.html"
+      "url": "macro/index.html"
     },
     {
       "id": "data-calendar",
@@ -61,7 +61,7 @@
       "icon": "calendar",
       "badge": null,
       "type": "panel",
-      "url": "https://2n3rdy4u.github.io/charts/abs/schedule/Data_Cal_Calendar.html"
+      "url": "abs/schedule/Data_Cal_Calendar.html"
     },
     {
       "id": "newsletter",
