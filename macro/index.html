@@ -2658,7 +2658,7 @@ function updateChartMeta() {
     subtitle = sids.map(sid => {
       const info = DASHBOARD_DATA.nyfed[sid] || DASHBOARD_DATA.series[sid];
       const name = info ? (info.short_label || info.title || sid) : sid;
-      const t = state.transformAssignment.get(sid) || state.transform;
+      const t = DASHBOARD_DATA.nyfed[sid] ? "lin" : (state.transformAssignment.get(sid) || state.transform);
       const tLabel = (t && t !== "lin") ? " (" + (TRANSFORM_LABELS[t] || t) + ")" : "";
       return name + tLabel;
     }).join("  ·  ");
@@ -2674,8 +2674,14 @@ function updateChartMeta() {
     } else {
       title = (state.category || "Selected Series") + " — Selected Series";
     }
-    if (state.transform && state.transform !== "lin") {
-      const tLabel = TRANSFORM_LABELS[state.transform] || state.transform;
+    // Append the transform label only when it actually applies to a selected
+    // series. NY Fed series are raw rates (the transform is ignored when their
+    // rows are built), so a lone NY Fed selection must not inherit a FRED
+    // series' YoY% label, and an all-NY-Fed selection gets no label at all.
+    const anyFRED = sids.some(sid => DASHBOARD_DATA.series[sid]);
+    const labelT = (sids.length === 1 && DASHBOARD_DATA.nyfed[sids[0]]) ? "lin" : state.transform;
+    if (anyFRED && labelT && labelT !== "lin") {
+      const tLabel = TRANSFORM_LABELS[labelT] || labelT;
       title += "  —  " + tLabel;
     }
   }
