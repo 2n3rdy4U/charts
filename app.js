@@ -88,7 +88,7 @@
   }
 
   // ── Init ──────────────────────────────────────────────────────
-  const NAV_CONFIG_VERSION = '20260602-relative-urls';
+  const NAV_CONFIG_VERSION = '20260602-height-origin';
   const config = await fetch(`nav_config.json?v=${encodeURIComponent(NAV_CONFIG_VERSION)}`, { cache: 'no-store' })
     .then(r => r.json());
 
@@ -470,8 +470,14 @@
   // our charts host. Each iframe-loaded page sends its scrollHeight via a
   // ResizeObserver on body, so layout changes (filter, sort, page) update
   // live.
+  // The chart frames are served from the custom domain
+  // (data.consumercreditmatters.com) — same origin as this shell. We also keep
+  // the legacy github.io origin for the direct-Pages access path. (Before this,
+  // the hardcoded github.io check silently rejected the custom-domain frames,
+  // breaking the mobile iframe-grow behaviour.)
+  var CHART_ORIGINS = ['https://data.consumercreditmatters.com', 'https://2n3rdy4u.github.io'];
   window.addEventListener('message', function(e) {
-    if (e.origin !== 'https://2n3rdy4u.github.io') return;
+    if (e.origin !== location.origin && CHART_ORIGINS.indexOf(e.origin) === -1) return;
     if (!e.data || typeof e.data.height !== 'number') return;
     if (e.data.height < 200 || e.data.height > 20000) return;  // sanity bounds
     // Grow the iframe to content height only when the shell is in its
