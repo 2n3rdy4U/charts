@@ -452,33 +452,36 @@ html, body {
   html.intro-running #panel-content,
   html.intro-running #welcome { overflow: visible; }
 
-  /* iOS Safari (WebKit) ignores vw/vh inside transforms on inline-SVG <g>
-     elements — they resolve to 0, so nothing flies in. px IS honored in
-     SVG transforms on every engine, so the segment offsets are in px,
-     sized large enough to start off-screen on phones and laptops alike. */
+  /* NOTE on units: a CSS transform on an inline-SVG <g> resolves px as
+     SVG USER-SPACE units (this viewBox is 1187×1080), NOT screen pixels —
+     and viewport units (vw/vh) collapse to 0 on WebKit. The logo renders
+     at only 140px (88px mobile), so each user unit ≈ 0.12px on screen.
+     Hence these offsets are large: ~6500–8000 user units ≈ 700–950px of
+     real travel on desktop and ~480–590px on mobile, so every piece
+     starts well off-screen and flies inward (no "bloom from center"). */
   .logo-assemble .seg {
-    animation: seg-fly-in 0.90s cubic-bezier(0.34, 1.8, 0.64, 1) backwards;
+    animation: seg-fly-in 1.10s cubic-bezier(0.34, 1.8, 0.64, 1) backwards;
   }
-  .seg-tl { --tx: -1100px; --ty:  -900px; }
-  .seg-t  { --tx:     0;   --ty: -1100px; }
-  .seg-tr { --tx:  1100px; --ty:  -900px; }
-  .seg-l  { --tx: -1300px; --ty:     0;   }
-  .seg-r  { --tx:  1300px; --ty:     0;   }
-  .seg-bl { --tx: -1100px; --ty:   900px; }
-  .seg-b  { --tx:     0;   --ty:  1100px; }
-  .seg-br { --tx:  1100px; --ty:   900px; }
+  .seg-tl { --tx: -6500px; --ty: -5500px; }
+  .seg-t  { --tx:      0;  --ty: -6500px; }
+  .seg-tr { --tx:  6500px; --ty: -5500px; }
+  .seg-l  { --tx: -8000px; --ty:      0;  }
+  .seg-r  { --tx:  8000px; --ty:      0;  }
+  .seg-bl { --tx: -6500px; --ty:  5500px; }
+  .seg-b  { --tx:      0;  --ty:  6500px; }
+  .seg-br { --tx:  6500px; --ty:  5500px; }
 
-  /* Wordmark + tagline rise in as the logo lands. */
-  .welcome-wordmark       { animation: ccm-rise 0.55s ease-out 0.70s backwards; }
-  #welcome .welcome-title { animation: ccm-rise 0.55s ease-out 0.86s backwards; }
+  /* Wordmark + tagline rise in as the logo lands (~1.10s). */
+  .welcome-wordmark       { animation: ccm-rise 0.55s ease-out 0.95s backwards; }
+  #welcome .welcome-title { animation: ccm-rise 0.55s ease-out 1.12s backwards; }
 
   /* Tiles cascade in after. */
   #welcome .tile { animation: ccm-rise 0.50s ease-out backwards; }
-  #welcome .tile:nth-child(1) { animation-delay: 0.98s; }
-  #welcome .tile:nth-child(2) { animation-delay: 1.05s; }
-  #welcome .tile:nth-child(3) { animation-delay: 1.12s; }
-  #welcome .tile:nth-child(4) { animation-delay: 1.19s; }
-  #welcome .tile:nth-child(5) { animation-delay: 1.26s; }
+  #welcome .tile:nth-child(1) { animation-delay: 1.25s; }
+  #welcome .tile:nth-child(2) { animation-delay: 1.33s; }
+  #welcome .tile:nth-child(3) { animation-delay: 1.41s; }
+  #welcome .tile:nth-child(4) { animation-delay: 1.49s; }
+  #welcome .tile:nth-child(5) { animation-delay: 1.57s; }
 }
 
 @keyframes seg-fly-in {

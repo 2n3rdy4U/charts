@@ -230,12 +230,12 @@
         if (window.matchMedia &&
             window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
       } catch (_) {}
-      // Toggle on <html> so both the desktop (#welcome) and mobile
+      // Toggle on <html> so both the desktop (#app) and mobile
       // (html/body) scrollbar guards in style.css can key off it. Held
-      // just past the ~0.8s segment fly-in, then released.
+      // just past the ~1.1s segment fly-in, then released.
       var root = document.documentElement;
       root.classList.add('intro-running');
-      setTimeout(function () { root.classList.remove('intro-running'); }, 1100);
+      setTimeout(function () { root.classList.remove('intro-running'); }, 1350);
     })();
   </script>
 </body>
