@@ -439,25 +439,34 @@ html, body {
 .welcome-mark .seg { fill: var(--color-brand); }
 
 @media (prefers-reduced-motion: no-preference) {
-  /* Clip the welcome panel only while the intro runs, so off-screen
-     pieces never flash a scrollbar. Class is toggled on <html> by
-     index.html. Desktop: #welcome is the scroller, so clip it. (Mobile
-     re-asserts the clip at the document root — see the phone media
-     query below — because there the shell sets every container to
-     overflow:visible and html/body becomes the scroller.) */
-  html.intro-running #welcome { overflow: hidden; }
+  /* Let the fly-in be seen coming from the true screen edges. The shell
+     normally clips it three layers deep (#main / #panel-content / #welcome
+     are all overflow:hidden), so pieces only appeared at the inset content
+     panel's edge. While the intro runs, open those three so segments are
+     clipped ONLY at #app — which is exactly 100dvh = the real viewport, so
+     it still doubles as the scrollbar guard. Reverts when index.html drops
+     the class after ~1.1s. (Mobile re-asserts the clip at the document
+     root — see the phone media query below — because there the shell makes
+     every container overflow:visible and html/body becomes the scroller.) */
+  html.intro-running #main,
+  html.intro-running #panel-content,
+  html.intro-running #welcome { overflow: visible; }
 
+  /* iOS Safari (WebKit) ignores vw/vh inside transforms on inline-SVG <g>
+     elements — they resolve to 0, so nothing flies in. px IS honored in
+     SVG transforms on every engine, so the segment offsets are in px,
+     sized large enough to start off-screen on phones and laptops alike. */
   .logo-assemble .seg {
-    animation: seg-fly-in 0.80s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+    animation: seg-fly-in 0.90s cubic-bezier(0.34, 1.8, 0.64, 1) backwards;
   }
-  .seg-tl { --tx: -65vw; --ty: -65vh; }
-  .seg-t  { --tx:    0;  --ty: -90vh; }
-  .seg-tr { --tx:  65vw; --ty: -65vh; }
-  .seg-l  { --tx: -90vw; --ty:    0; }
-  .seg-r  { --tx:  90vw; --ty:    0; }
-  .seg-bl { --tx: -65vw; --ty:  65vh; }
-  .seg-b  { --tx:    0;  --ty:  90vh; }
-  .seg-br { --tx:  65vw; --ty:  65vh; }
+  .seg-tl { --tx: -1100px; --ty:  -900px; }
+  .seg-t  { --tx:     0;   --ty: -1100px; }
+  .seg-tr { --tx:  1100px; --ty:  -900px; }
+  .seg-l  { --tx: -1300px; --ty:     0;   }
+  .seg-r  { --tx:  1300px; --ty:     0;   }
+  .seg-bl { --tx: -1100px; --ty:   900px; }
+  .seg-b  { --tx:     0;   --ty:  1100px; }
+  .seg-br { --tx:  1100px; --ty:   900px; }
 
   /* Wordmark + tagline rise in as the logo lands. */
   .welcome-wordmark       { animation: ccm-rise 0.55s ease-out 0.70s backwards; }
@@ -770,7 +779,7 @@ html, body {
 
   /* Logo-intro scrollbar guard (mobile): the phone shell makes html/body
      the scroller and every inner container overflow:visible, so the
-     desktop #welcome clip can't catch the off-screen fly-in pieces. Clip
+     desktop #app clip can't catch the off-screen fly-in pieces. Clip
      at the document root instead while the intro runs. Only present when
      motion is allowed (class is added by JS, skipped under reduced
      motion) and removed after ~1.1s, so this briefly pins the page at the
