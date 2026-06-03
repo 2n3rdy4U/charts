@@ -401,6 +401,7 @@ html, body {
 }
 
 .welcome-mark {
+  position: relative;
   height: 140px;
   width: 140px;
   display: block;
@@ -436,7 +437,22 @@ html, body {
    users get the static logo + page with no animation. fill-mode
    `backwards` keeps each element hidden only during its start delay. */
 .welcome-mark { overflow: visible; }          /* let pieces fly outside the 140px box */
-.welcome-mark .seg { fill: var(--color-brand); }
+/* The mark is 8 stacked <svg> elements (one per direction), each carrying
+   the full 1187x1080 viewBox but only its own segment's paths, so they
+   overlay back into the complete logo. They're stacked rather than one
+   SVG-with-<g>s on purpose: transforms on HTML-level <svg> elements honor
+   px / vw / vh identically across engines, whereas the same transform on an
+   inline-SVG <g> is interpreted in user-space units on WebKit but screen
+   px on Blink (and vw/vh collapse to 0 on WebKit) — which made the fly-in
+   "bloom from center" on whichever engine got the small interpretation. */
+.welcome-mark .seg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  fill: var(--color-brand);
+}
 
 @media (prefers-reduced-motion: no-preference) {
   /* Let the fly-in be seen coming from the true screen edges. The shell
@@ -452,24 +468,21 @@ html, body {
   html.intro-running #panel-content,
   html.intro-running #welcome { overflow: visible; }
 
-  /* NOTE on units: a CSS transform on an inline-SVG <g> resolves px as
-     SVG USER-SPACE units (this viewBox is 1187×1080), NOT screen pixels —
-     and viewport units (vw/vh) collapse to 0 on WebKit. The logo renders
-     at only 140px (88px mobile), so each user unit ≈ 0.12px on screen.
-     Hence these offsets are large: ~6500–8000 user units ≈ 700–950px of
-     real travel on desktop and ~480–590px on mobile, so every piece
-     starts well off-screen and flies inward (no "bloom from center"). */
+  /* Offsets are viewport-relative (vw/vh) so each piece starts off its own
+     screen edge and flies to center, identically on desktop and mobile.
+     This works because the .seg elements are now HTML-level <svg>s — see
+     the unit note above .welcome-mark .seg. */
   .logo-assemble .seg {
     animation: seg-fly-in 1.10s cubic-bezier(0.34, 1.8, 0.64, 1) backwards;
   }
-  .seg-tl { --tx: -6500px; --ty: -5500px; }
-  .seg-t  { --tx:      0;  --ty: -6500px; }
-  .seg-tr { --tx:  6500px; --ty: -5500px; }
-  .seg-l  { --tx: -8000px; --ty:      0;  }
-  .seg-r  { --tx:  8000px; --ty:      0;  }
-  .seg-bl { --tx: -6500px; --ty:  5500px; }
-  .seg-b  { --tx:      0;  --ty:  6500px; }
-  .seg-br { --tx:  6500px; --ty:  5500px; }
+  .seg-tl { --tx: -70vw; --ty: -70vh; }
+  .seg-t  { --tx:    0;  --ty: -95vh; }
+  .seg-tr { --tx:  70vw; --ty: -70vh; }
+  .seg-l  { --tx: -95vw; --ty:    0;  }
+  .seg-r  { --tx:  95vw; --ty:    0;  }
+  .seg-bl { --tx: -70vw; --ty:  70vh; }
+  .seg-b  { --tx:    0;  --ty:  95vh; }
+  .seg-br { --tx:  70vw; --ty:  70vh; }
 
   /* Wordmark + tagline rise in as the logo lands (~1.10s). */
   .welcome-wordmark       { animation: ccm-rise 0.55s ease-out 0.95s backwards; }
