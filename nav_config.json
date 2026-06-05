@@ -12,7 +12,7 @@
         {
           "id": "abs-auto",
           "label": "Auto Loan",
-          "icon": "car",
+          "icon": "auto-loan",
           "type": "panel",
           "url": "abs/explorer/index.html",
           "badge": null
@@ -20,7 +20,7 @@
         {
           "id": "abs-auto-lease",
           "label": "Auto Lease",
-          "icon": "car",
+          "icon": "auto-lease",
           "type": "panel",
           "url": "abs/lease_explorer/index.html",
           "badge": null
@@ -45,7 +45,7 @@
     },
     {
       "id": "macro-data",
-      "label": "Macro Data",
+      "label": "Macro",
       "short_label": "Macro",
       "description": "Key economic indicators from FRED — employment, inflation, consumer spending, and credit conditions.",
       "icon": "globe",
