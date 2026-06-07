@@ -77,6 +77,7 @@
         <img src="assets/brand/logo-horizontal-white.png" alt="Consumer Credit Matters" class="brand-logo" />
       </a>
       <nav class="header-right">
+        <a href="https://www.consumercreditmatters.com/disclaimer" target="_top" rel="noopener" class="header-disclaimer">Disclaimer</a>
         <a href="https://www.consumercreditmatters.com/subscribe" target="_top" rel="noopener" class="btn-primary">Subscribe</a>
       </nav>
     </header>
@@ -160,6 +161,10 @@
           <div class="tile-grid" id="tile-grid">
             <!-- Populated by app.js -->
           </div>
+          <p class="welcome-legal">
+            &copy; <span id="ccm-year">2026</span> Black Analytics LLC &middot; For informational purposes only &mdash; not investment advice.
+            <a href="https://www.consumercreditmatters.com/disclaimer" target="_top" rel="noopener">Full disclaimer &rarr;</a>
+          </p>
         </div>
       </div>
 
@@ -175,6 +180,13 @@
       sep.style.display = title.textContent ? 'inline' : 'none';
     });
     obs.observe(title, { childList: true, characterData: true, subtree: true });
+
+    // Stamp the current year into the welcome-screen legal line so the
+    // copyright never goes stale (the shell is static HTML, not templated).
+    (function () {
+      var y = document.getElementById('ccm-year');
+      if (y) y.textContent = new Date().getFullYear();
+    })();
 
     // ── "Add to Home Screen" banner (iOS Safari only) ──────────────
     // iOS Safari never auto-prompts the user to install. Show a small,
