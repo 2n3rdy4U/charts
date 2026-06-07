@@ -781,8 +781,8 @@ html, body {
     padding: 0 max(12px, env(safe-area-inset-right)) 0 max(12px, env(safe-area-inset-left));
   }
   #header .brand-logo { height: 28px; }
-  /* Hide the header disclaimer link on narrow screens to keep the header
-     uncluttered — the welcome-screen legal line carries it on mobile. */
+  /* Hide the header disclaimer link on mobile to keep the compact header
+     uncluttered — the welcome-screen legal line carries the link on mobile. */
   #header .header-disclaimer { display: none; }
   #header .header-right .btn-primary {
     padding: 5px 10px;
