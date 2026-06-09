@@ -53,8 +53,8 @@
 <h2>1. Data Source</h2>
 <p>All content is derived from <strong>SEC ABS-EE asset-level filings</strong> submitted under Regulation AB II. Each auto-lease securitization trust files monthly XML disclosures (~70 fields per lease per reporting period) on EDGAR. Our pipeline fetches the XML, parses into per-issuer DuckDB files, deduplicates across filings, and aggregates here.</p>
 <ul>
-  <li><strong>Issuers covered (SEC-registered, public ABS-EE filers):</strong> BMW Vehicle Lease (BMWLT), Ford Credit (FCALT), GM Financial (GMALT), Mercedes-Benz (MBALT), Nissan (NALT), Volkswagen (VWALT), World Omni (WOALT).</li>
-  <li><strong>Excluded:</strong> Toyota Lease (TMCLT) and American Honda (AHALT) file under Rule 144A only — not SEC-registered and outside ABS-EE scope.</li>
+  <li><strong>Issuers covered (SEC-registered, public ABS-EE filers):</strong> BMW Vehicle Lease (BMWLT), Ford Credit (FCALT), GM Financial (GMALT), Mercedes-Benz (MBALT), Nissan (NALT), Porsche (PILOT), Volkswagen (VWALT), World Omni (WOALT).</li>
+  <li><strong>Excluded:</strong> Toyota Lease (TMCLT), American Honda (AHALT), and Hyundai (HALST) — no ongoing public ABS-EE (Rule 144A private placements; Hyundai filed a single public deal in 2021).</li>
   <li><strong>Update cadence:</strong> Pipeline runs daily (6 AM and 6 PM ET). Typical latency from a new SEC filing to this explorer is under 24 hours.</li>
 </ul>
 
