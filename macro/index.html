@@ -1568,11 +1568,20 @@ function init() {
   buildCategoryTabs();
   populateEmptyStateCount();
 
-  // Deep-link support: ?cat=Category+Name&series=SERIES_ID
+  // Deep-link support: ?cat=Category+Name&series=SERIES_ID  (or ?view=breakdown)
   const _urlParams = new URLSearchParams(window.location.search);
   const _paramCat = _urlParams.get('cat');
   const _paramSeries = _urlParams.get('series');
-  if (_paramCat && ALL_CATS.includes(_paramCat) && _paramSeries &&
+  const _paramView = _urlParams.get('view');
+  if (_paramView === 'breakdown' && ALL_CATS.includes('Inflation')) {
+    // Deep-link straight to the Inflation → Breakdown table. Set the view
+    // before activating Inflation: activateCategory keeps cpiView on the
+    // Inflation tab (only resets it when navigating away) and calls
+    // _applyViewMode(), which renders the breakdown panel. Invalid/renamed
+    // category falls through to the normal default load below.
+    state.cpiView = 'breakdown';
+    activateCategory('Inflation');
+  } else if (_paramCat && ALL_CATS.includes(_paramCat) && _paramSeries &&
       (DASHBOARD_DATA.series[_paramSeries] || DASHBOARD_DATA.nyfed[_paramSeries])) {
     // Deep-link: show only the requested series
     state.selected.add(_paramSeries);
