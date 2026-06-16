@@ -59,14 +59,14 @@ This page documents the data sources, definitions, and quality considerations be
 All content is derived from <strong>SEC ABS-EE loan-level filings</strong> submitted to EDGAR under Regulation AB II (Rule 17g-7). These are regulatory disclosures that auto-loan securitization trusts are legally required to file on a defined schedule &mdash; typically monthly &mdash; containing approximately 100 fields per loan per reporting period.
 </p>
 <ul>
-  <li><strong>Issuers covered:</strong> 23 active auto-loan securitizers (Ally, Ameri&shy;Credit, Bridgecrest, BMW, CarMax, Capital One Prime, Carvana, Exeter, Fifth Third, Ford, GM Financial, Honda, Hyundai, Mercedes&#8209;Benz, Nissan, Santander&nbsp;(SDART), Santander&nbsp;(DRIVE), Toyota, Volkswagen, World Omni, and CarMax&nbsp;Select, Exeter&nbsp;Select, World&nbsp;Omni&nbsp;Select). Retired trusts (California Republic, USAA) remain available for historical access.</li>
+  <li><strong>Issuers covered:</strong> 24 active auto-loan securitizers (Ally, Ameri&shy;Credit, Bridgecrest, BMW, CarMax, Capital One Prime, Carvana&nbsp;(P), Carvana&nbsp;(N), Exeter, Fifth Third, Ford, GM Financial, Honda, Hyundai, Mercedes&#8209;Benz, Nissan, Santander&nbsp;(SDART), Santander&nbsp;(DRIVE), Toyota, Volkswagen, World Omni, and CarMax&nbsp;Select, Exeter&nbsp;Select, World&nbsp;Omni&nbsp;Select). Carvana&rsquo;s single shelf is shown as two programs &mdash; P (prime) and N (non-prime) &mdash; which carry distinct collateral and report on different days of the month; blending them would distort both. Retired trusts (California Republic, USAA) remain available for historical access.</li>
   <li><strong>Time coverage:</strong> Issuance vintages begin in 2017, though individual loans in seasoned pools can extend back to ~2010. Most recent data is typically within a few weeks of the most recent filing deadline.</li>
   <li><strong>Update cadence:</strong> The pipeline runs automatically twice daily on weekdays. New filings are fetched, parsed, and merged; aggregated CSVs and the dashboard HTML are regenerated. Typical data latency is &lt;24 hours after SEC filing.</li>
 </ul>
 
 <h2>2. Credit Score Methodology</h2>
 <p>
-Analysis uses the consumer credit bureau score reported in SEC ABS-EE filings, filtered to the 300&ndash;900 range. Seven of twenty-four issuers explicitly identify this as a FICO score; the remaining seventeen report a generic &ldquo;bureau score&rdquo; label. Industry practice strongly favors FICO Auto Score for auto lending decisions, but we cannot independently verify the score model for all issuers. Loans without a reported score (~0&ndash;15% by issuer) are excluded from the analysis.
+Analysis uses the consumer credit bureau score reported in SEC ABS-EE filings, filtered to the 300&ndash;900 range. Seven of twenty-five issuers explicitly identify this as a FICO score; the remaining eighteen report a generic &ldquo;bureau score&rdquo; label. Industry practice strongly favors FICO Auto Score for auto lending decisions, but we cannot independently verify the score model for all issuers. Loans without a reported score (~0&ndash;15% by issuer) are excluded from the analysis.
 </p>
 <p>
 Commercial / dealer bureau scores (<code>obligorCreditScoreType LIKE '%commercial%'</code>) are excluded because they use a different scoring scale than consumer scores and would contaminate the low-score bands of prime issuers.
@@ -120,7 +120,7 @@ Commercial / dealer bureau scores (<code>obligorCreditScoreType LIKE '%commercia
 <h2>5. Known Limitations</h2>
 <ul>
   <li><strong>Repo indicator reporting lag:</strong> Some issuers (notably Exeter during 2023&ndash;2024) updated <code>repossessedIndicator</code> with delay, producing apparent anomalies in monthly rates. The cumulative count is still correct; monthly timing may be shifted.</li>
-  <li><strong>Score model ambiguity:</strong> As noted above, 17 of 24 issuers use a generic &ldquo;bureau&rdquo; label instead of explicitly naming FICO. A Vantage&shy;Score 640 may not be risk-equivalent to a FICO 640.</li>
+  <li><strong>Score model ambiguity:</strong> As noted above, 18 of 25 issuers use a generic &ldquo;bureau&rdquo; label instead of explicitly naming FICO. A Vantage&shy;Score 640 may not be risk-equivalent to a FICO 640.</li>
   <li><strong>Non-FICO fields not reported:</strong> SEC ABS-EE does not require disclosure of down payment amount, borrower income (only payment-to-income), employment status, housing, or dealer identity. These variables affect default risk but cannot be analyzed from this dataset.</li>
   <li><strong>Vehicle valuation varies by issuer:</strong> <code>vehicleValueAmount</code> may reflect wholesale, retail, dealer purchase price, or another basis depending on the issuer&rsquo;s servicing system. Cross-issuer LTV comparisons should be treated as directional, not precise.</li>
   <li><strong>Commercial purpose loans:</strong> Some consumer-bureau-scored loans may have commercial use (e.g., sole proprietors financing work vehicles). The loan tape does not distinguish these, but visible evidence of distortion is minimal.</li>
