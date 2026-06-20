@@ -822,7 +822,7 @@ if (window.self !== window.top) {
   };
 })();
 (function () {
-  const BUILD_ID   = "2026-06-18 23:47";
+  const BUILD_ID   = "2026-06-20 11:23";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNAN", "label": "Carvana N"}, {"code": "CRVNAP", "label": "Carvana P"}, {"code": "DRIVE", "label": "Santander (DRIVE)"}, {"code": "EART", "label": "Exeter"}, {"code": "EARTS", "label": "Exeter Select"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander (SDART)"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -2614,6 +2614,7 @@ if (window.self !== window.top) {
   let _initVeh    = _params.get('vehicle');
   let _initIssuer = _params.get('issuer');
   let _initBasis  = _params.get('basis');   // 'deal' | 'orig' (Losses → Vintage)
+  let _initPool   = _params.get('pool');    // 'all' | 'seasoned' (DQ pool toggle)
   const _legacyView = _params.get('view');
 
   // Load saved state. URL params win field-by-field.
@@ -2671,6 +2672,18 @@ if (window.self !== window.top) {
     if (typeof updateIssuerBtn === 'function') updateIssuerBtn();
   }
 
+  // Newsletter DQ deep-links may carry ?pool=seasoned to land on the Seasoned
+  // (>6 mo) view so the chart matches the newsletter card's spark (DQ candidates
+  // rank on the seasoned basis). Set the mode + toggle button before the first
+  // render; the seasoned summary is lazy-loaded, so the fetch + re-render is
+  // kicked off after setTab below.
+  let _wantSeasoned = (_initPool === 'seasoned');
+  if (_wantSeasoned) {
+    poolMode = 'seasoned';
+    for (const _b of document.querySelectorAll('#poolGroup button'))
+      _b.classList.toggle('active', _b.dataset.pool === 'seasoned');
+  }
+
   // Legacy URL redirects (old ?view= param)
   if (!_initTab && _legacyView) {
     if (_legacyView === 'timeseries') { setTab('delinquency', 'timeseries'); }
@@ -2688,6 +2701,13 @@ if (window.self !== window.top) {
   } else {
     // Default: Delinquency / Vintage
     setTab('delinquency', 'vintage');
+  }
+
+  // ?pool=seasoned arrived: the first setTab above rendered before the seasoned
+  // summary finished loading, so fetch it and re-render the current view.
+  if (_wantSeasoned) {
+    showMsg('Loading seasoned data…');
+    ensureSeasonedLoaded().then(() => setTab(currentTab, currentSub));
   }
 
   // Re-run the current tab's renderer on orientation change so Vega-Lite
