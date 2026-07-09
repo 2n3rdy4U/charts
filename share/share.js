@@ -57,6 +57,7 @@
   var ICON_SHARE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>';
   var ICON_DOWNLOAD = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>';
   var ICON_COPY = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+  var ICON_LINK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>';
   var ICON_X = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>';
   var ICON_LINKEDIN = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.063 2.063 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>';
 
@@ -284,7 +285,8 @@
 
     var actionsHTML =
       '<button class="cc-share-action" data-action="download" disabled>' + ICON_DOWNLOAD + '<span>Download</span></button>' +
-      '<button class="cc-share-action" data-action="copy" disabled>' + ICON_COPY + '<span>Copy image</span></button>';
+      '<button class="cc-share-action" data-action="copy" disabled>' + ICON_COPY + '<span>Copy image</span></button>' +
+      '<button class="cc-share-action" data-action="copylink">' + ICON_LINK + '<span>Copy link</span></button>';
     if (showSendToApp) {
       actionsHTML +=
         '<button class="cc-share-action" data-action="share" disabled>' + ICON_SHARE + '<span>Send to app…</span></button>';
@@ -315,6 +317,28 @@
       '</div>'
     );
     document.body.appendChild(bg);
+
+    // Copy-link: copies the URL of the CURRENT view (query params included), so
+    // an author can paste a deep link to exactly this chart + parameterization.
+    // Works immediately — it doesn't wait on the PNG preview.
+    var _clBtn = bg.querySelector('[data-action="copylink"]');
+    if (_clBtn) {
+      _clBtn.addEventListener("click", function () {
+        var href = window.location.href;
+        var t = bg.querySelector(".cc-share-toast");
+        function say(msg, ms) {
+          if (!t) return;
+          t.textContent = msg; t.style.display = "block";
+          clearTimeout(t._t); t._t = setTimeout(function () { t.style.display = "none"; }, ms || 3000);
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(href).then(
+            function () { say("Link to this view copied", 3000); },
+            function () { say("Couldn't copy automatically — " + href, 8000); }
+          );
+        } else { say("Couldn't copy automatically — " + href, 8000); }
+      });
+    }
 
     function close() {
       bg.classList.remove("cc-open");
