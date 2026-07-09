@@ -89,8 +89,8 @@
     btn.type = "button";
     btn.id = "cc-share-floating-btn";
     btn.className = "cc-share-btn cc-share-btn--floating";
-    btn.setAttribute("aria-label", "Save chart as branded image");
-    btn.title = "Save chart as branded image";
+    btn.setAttribute("aria-label", "Share or copy this chart");
+    btn.title = "Share or copy this chart";
     btn.innerHTML = ICON_SHARE;
     btn.addEventListener("click", function (e) {
       e.preventDefault();
@@ -175,8 +175,8 @@
       var btn = document.createElement("button");
       btn.type = "button";
       btn.className = "cc-share-btn cc-share-btn--inline";
-      btn.setAttribute("aria-label", "Save this chart as branded image");
-      btn.title = "Save this chart as branded image";
+      btn.setAttribute("aria-label", "Share or copy this chart");
+      btn.title = "Share or copy this chart";
       btn.innerHTML = ICON_SHARE;
       btn.addEventListener("click", function (e) {
         e.preventDefault();
@@ -293,8 +293,8 @@
     }
 
     var footerNote = showSendToApp
-      ? "Send to app… opens your system share sheet to post the image directly to LinkedIn, X, Slack, Messages, etc."
-      : "Download saves a PNG. Copy puts the image on your clipboard — paste it directly into a LinkedIn post, tweet, Slack message, email, etc.";
+      ? "Send to app… opens your system share sheet to post the image directly to LinkedIn, X, Slack, Messages, etc. Copy link copies a link back to this exact view."
+      : "Download saves a PNG; Copy image puts it on your clipboard. Copy link copies a link back to this exact view — paste it into your newsletter, an email, Slack, etc.";
 
     var bg = document.createElement("div");
     bg.className = "cc-share-modal-bg cc-open";

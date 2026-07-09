@@ -2816,6 +2816,23 @@ function updateChartMeta() {
   if (!titleEl || !sourceEl) return;
 
   const sids = [...state.selected];
+  try {
+    if (history.replaceState) {
+      if (sids.length === 0) {
+        history.replaceState(null, "", location.pathname);
+      } else {
+        const _pid = sids[0];
+        const _pinfo = DASHBOARD_DATA.series[_pid] || DASHBOARD_DATA.nyfed[_pid];
+        const _qs = new URLSearchParams();
+        if (_pinfo && _pinfo.category) _qs.set("cat", _pinfo.category);
+        _qs.set("series", _pid);
+        const _t = effectiveTransform(_pid);
+        if (_t && _t !== "lin") _qs.set("t", _t);
+        if (state.cpiView === "breakdown") _qs.set("view", "breakdown");
+        history.replaceState(null, "", location.pathname + "?" + _qs.toString());
+      }
+    }
+  } catch (_e) {}
   if (sids.length === 0) {
     titleEl.textContent = ""; subtitleEl.textContent = ""; sourceEl.textContent = "";
     if (nextRelEl) nextRelEl.textContent = "";
