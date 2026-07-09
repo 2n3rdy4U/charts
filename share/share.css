@@ -47,10 +47,11 @@ html, body {
      URL bar + the home-indicator zone. env() doesn't expose the browser's
      own toolbar, so we account for it manually via the media query below. */
   bottom: max(24px, calc(env(safe-area-inset-bottom) + 12px));
-  width: auto;
+  width: 44px;
   height: 44px;
-  padding: 0 16px 0 14px;
-  gap: 8px;
+  padding: 0;
+  gap: 0;
+  border-radius: 50%;
   background: #0034A5;
   border-color: #0034A5;
   color: #ffffff;
@@ -114,14 +115,14 @@ html, body {
 }
 
 .cc-share-btn--floating::after {
-  content: "Save image";
+  content: "";
 }
 
 @media (max-width: 480px) {
   .cc-share-btn--floating {
-    padding: 0 14px 0 12px;
-    font-size: 13px;
+    width: 40px;
     height: 40px;
+    padding: 0;
   }
 }
 
