@@ -324,7 +324,17 @@
     var _clBtn = bg.querySelector('[data-action="copylink"]');
     if (_clBtn) {
       _clBtn.addEventListener("click", function () {
-        var href = window.location.href;
+        // A page can supply window.CC_CHART_SHARE_URL() to build a deep link to
+        // its CURRENT view at click time (e.g. the macro dashboard encodes the
+        // active series + transform). Falls back to location.href for pages that
+        // keep their view state in the address bar (e.g. the SEC explorer).
+        var href;
+        try {
+          href = (typeof window.CC_CHART_SHARE_URL === "function"
+                    ? window.CC_CHART_SHARE_URL() : null) || window.location.href;
+        } catch (_urlErr) {
+          href = window.location.href;
+        }
         var t = bg.querySelector(".cc-share-toast");
         function say(msg, ms) {
           if (!t) return;
