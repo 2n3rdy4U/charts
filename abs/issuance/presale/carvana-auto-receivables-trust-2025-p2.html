@@ -30,7 +30,7 @@
   --fg:#1a202c; --muted:#4a5568; --bg:#fff; --grid:#e2e8f0; --head:#f7fafc;
   --accent:#2b6cb0; --fav:#2f855a; --unf:#c53030;
   --color-brand:#0034A5; --color-brand-line:#dde2ed;
-  --chip-fwp:#3182ce; --chip-424b5:#805ad5; --chip-absee:#2f855a;
+  --chip-fwp:#3182ce; --chip-424b5:#805ad5; --chip-absee:#2f855a; --chip-10d:#dd6b20;
   --chip-derived:#718096; --chip-notext:#c53030; --chip-sec:#4a5568;
 }
 * { box-sizing: border-box; }
@@ -272,6 +272,7 @@ table.grid.comparison td.col-subject .geo-stack { color: var(--fg); }
 .chip-fwp       { background: var(--chip-fwp); }
 .chip-424b5     { background: var(--chip-424b5); }
 .chip-absee     { background: var(--chip-absee); }
+.chip-10d       { background: var(--chip-10d); }
 .chip-derived        { background: var(--chip-derived); }
 .chip-derived-approx { background: var(--chip-derived); outline: 1px dashed #fff;
                        outline-offset: -2px; }
@@ -400,13 +401,13 @@ p.empty, p.peer-empty { color: var(--muted); font-style: italic; font-size: 13px
 <div class="section">
   <h2>Historical Performance Context</h2>
   <p class="purpose">Anchor expectations in empirical base rates from the sponsor's prior series and FICO-tier peer set.</p>
-  <p class="empty">No ABS-EE performance data available for this issuer.</p><p class="ticker-note">Interactive view: <a href="https://data.consumercreditmatters.com/abs/explorer/?ticker=CRVNA" target="_blank">Explorer ↗</a></p>
+  <p class="empty">No performance data available for this issuer.</p><p class="ticker-note">Interactive view: <a href="https://data.consumercreditmatters.com/abs/explorer/?ticker=CRVNA" target="_blank">Explorer ↗</a></p>
 </div>
 
 <footer>
   <p class="about-blurb">
     Presale Reports are compiled by <strong>Consumer Credit Matters</strong> from SEC EDGAR filings
-    (424B5, FWP) and ABS-EE loan-level data. Published the same day a deal&rsquo;s first
+    (424B5, FWP), 10-D servicer reports, and ABS-EE loan-level data. Published the same day a deal&rsquo;s first
     filing reaches EDGAR; pool, structural, and peer context reflects what was known
     at the subject&rsquo;s issuance. For ongoing deal performance after closing, see the
     <a href="https://data.consumercreditmatters.com/abs/explorer/" target="_blank" rel="noopener">Auto ABS Explorer</a>.
@@ -422,14 +423,14 @@ p.empty, p.peer-empty { color: var(--muted); font-style: italic; font-size: 13px
     class principals and the initial pool balance. Peer cohorts are sliced to the
     subject&rsquo;s closing date so the snapshot reflects what was knowable at issuance.
   </p>
-  <p class="gen">Generated 2026-07-18 14:23</p>
+  <p class="gen">Generated 2026-07-18 14:48</p>
 </footer>
 <footer class="ba-footer" role="contentinfo">
   <span class="ba-footer-brand">Consumer Credit Matters</span>
   <span class="ba-footer-dot">·</span>
   <span class="ba-footer-meta">Presale Report</span>
   <span class="ba-footer-dot">·</span>
-  <span class="ba-footer-meta">Sources: SEC EDGAR 424B5/FWP/ABS-EE</span>
+  <span class="ba-footer-meta">Sources: SEC EDGAR 424B5/FWP/10-D/ABS-EE</span>
   <span class="ba-footer-dot">·</span>
   <a class="ba-footer-link" href="https://www.consumercreditmatters.com/">consumercreditmatters.com</a>
 </footer></body></html>
