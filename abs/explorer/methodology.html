@@ -86,10 +86,9 @@ Commercial / dealer bureau scores (<code>obligorCreditScoreType LIKE '%commercia
 
 <h3>Losses (Cumulative Net Loss by Vintage)</h3>
 <ul>
-  <li><strong>Charge-off:</strong> <code>zeroBalanceCode = '4'</code> per SEC ABS-EE enum.</li>
-  <li><strong>Recovery:</strong> <code>recoveredAmount</code> field, summed per loan (reporting convention varies by issuer).</li>
-  <li><strong>Cumulative Net Loss Rate:</strong> Cumulative (charge&#8209;offs &minus; recoveries) &divide; original pool balance, tracked by vintage cohort.</li>
-  <li><strong>Vintage basis:</strong> Selectable &mdash; either <em>Deal Issuance</em> (months since first reporting period of the deal) or <em>Loan Origination</em> (months since the loan&rsquo;s <code>originationDate</code>).</li>
+  <li><strong>Source:</strong> Monthly 10-D servicer distribution reports (EDGAR), which state each deal&rsquo;s cumulative net loss directly &mdash; the authoritative pool-level figure.</li>
+  <li><strong>Cumulative Net Loss Rate:</strong> Cumulative net losses (charge&#8209;offs net of recoveries, per the servicer) &divide; original pool balance, by deal&#8209;issuance vintage.</li>
+  <li><strong>View:</strong> Selectable &mdash; <em>By Vintage</em> (pool&#8209;weighted across deals of the same issuance year) or <em>By Series</em> (individual deals).</li>
 </ul>
 
 <h3>Repossessions (1st-Time Repo Rate)</h3>
