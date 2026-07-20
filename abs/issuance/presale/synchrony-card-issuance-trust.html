@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Presale Report — Synchrony Card Issuance Trust</title>
+
+<!-- Social / SEO -->
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="Consumer Credit Matters" />
+<meta property="og:url" content="https://2n3rdy4u.github.io/charts/abs/issuance/presale/synchrony-card-issuance-trust.html" />
+<meta property="og:title" content="Presale Report — Synchrony Card Issuance Trust" />
+<meta property="og:description" content="Independent presale credit analysis — pool composition, structure, comparable deals, and rating-agency context." />
+<meta property="og:image" content="https://2n3rdy4u.github.io/charts/assets/brand/social-card.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Presale Report — Synchrony Card Issuance Trust" />
+<meta name="twitter:description" content="Independent presale credit analysis — pool composition, structure, comparable deals, and rating-agency context." />
+<meta name="twitter:image" content="https://2n3rdy4u.github.io/charts/assets/brand/social-card.png" />
+<link rel="canonical" href="https://2n3rdy4u.github.io/charts/abs/issuance/presale/synchrony-card-issuance-trust.html" />
+<link rel="icon" type="image/x-icon" href="https://2n3rdy4u.github.io/charts/favicon.ico" />
+<link rel="apple-touch-icon" href="https://2n3rdy4u.github.io/charts/apple-touch-icon.png" />
+
+<style>
+:root {
+  /* Brand palette aligned with consumercreditmatters.com / charts site
+     (see ~/ABS_db_data/charts/style.css). --color-brand is CCM navy
+     #0034A5; accents and grid tokens kept compatible with the existing
+     chart SVGs. */
+  --fg:#1a202c; --muted:#4a5568; --bg:#fff; --grid:#e2e8f0; --head:#f7fafc;
+  --accent:#2b6cb0; --fav:#2f855a; --unf:#c53030;
+  --color-brand:#0034A5; --color-brand-line:#dde2ed;
+  --chip-fwp:#3182ce; --chip-424b5:#805ad5; --chip-absee:#2f855a; --chip-10d:#dd6b20;
+  --chip-derived:#718096; --chip-notext:#c53030; --chip-sec:#4a5568;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+       color: var(--fg); background: var(--bg); margin: 0 auto; padding: 24px;
+       max-width: 1200px; line-height: 1.45; font-size: 14px; }
+.ba-nav { position: sticky; top: 0; z-index: 100;
+          display: flex; align-items: center;
+          margin: -24px -24px 16px -24px; padding: 10px 24px;
+          background: var(--bg); border-bottom: 2px solid var(--color-brand);
+          font-size: 12px; }
+.ba-nav .ba-brand { display: inline-flex; align-items: center;
+                    color: var(--color-brand); text-decoration: none; }
+.ba-nav .ba-brand:hover { opacity: 0.85; }
+.ba-nav .ba-logo { display: block; width: auto; }
+.ba-footer { margin: 32px -24px -24px -24px; padding: 16px 24px;
+             border-top: 1px solid var(--grid); background: var(--head);
+             font-size: 11px; color: var(--muted);
+             display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.ba-footer-brand { color: var(--color-brand); font-weight: 600; }
+.ba-footer-dot   { color: var(--grid); }
+.ba-footer-link  { color: var(--muted); text-decoration: none; }
+.ba-footer-link:hover { color: var(--color-brand); text-decoration: underline; }
+@media (max-width: 480px) {
+  .ba-nav { padding: 8px 16px; margin: -24px -24px 12px -24px; font-size: 11px; }
+  .ba-nav .ba-logo { height: 28px; }
+  .ba-footer { padding: 12px 16px; font-size: 10px; }
+}
+@media print { .ba-nav, .ba-footer { display: none; } }
+h1 { font-size: 20px; margin: 0 0 4px 0; letter-spacing: -0.01em; }
+h2 { font-size: 14px; text-transform: uppercase; letter-spacing: 0.06em;
+     color: var(--fg); margin: 0 0 8px 0; font-weight: 700; }
+h2 .sub { text-transform: none; letter-spacing: 0; font-weight: 400; color: var(--muted); }
+.header-strip { border-bottom: 2px solid var(--fg); padding-bottom: 12px; margin-bottom: 12px; position: relative; }
+.header-strip .eyebrow {
+    font-size: 11px; color: var(--muted); text-transform: uppercase;
+    letter-spacing: 0.08em; margin: 0 0 6px 0; font-weight: 500;
+}
+.header-strip .eyebrow strong { color: var(--fg); font-weight: 600; letter-spacing: 0; }
+.header-strip .rating-chips { margin: 6px 0 4px 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.header-strip .rchip {
+    display: inline-flex; align-items: center; overflow: hidden;
+    border: 1px solid var(--grid); border-radius: 4px; font-size: 11px;
+    line-height: 1; font-variant-numeric: tabular-nums;
+}
+.header-strip .rchip-a {
+    background: var(--head); color: var(--muted); padding: 3px 6px;
+    font-weight: 500; letter-spacing: 0.02em;
+}
+.header-strip .rchip-v {
+    padding: 3px 7px; font-weight: 700; color: var(--fg);
+    background: var(--bg);
+}
+.about-blurb {
+    margin: 0 0 10px 0; font-size: 11.5px; line-height: 1.5;
+    color: var(--muted); font-style: normal;
+}
+.about-blurb strong { color: var(--fg); font-weight: 600; }
+.about-blurb em { color: var(--muted); font-style: italic; font-size: 11px; }
+.about-blurb a { color: var(--accent); text-decoration: none; }
+.about-blurb a:hover { text-decoration: underline; }
+.metric-strip {
+    display: flex; margin: 12px 0 10px 0;
+    border: 1px solid var(--grid); border-radius: 4px; overflow: hidden;
+    background: var(--bg);
+}
+.metric-strip .metric {
+    flex: 1; padding: 8px 14px;
+    border-left: 1px solid var(--grid);
+}
+.metric-strip .metric:first-child { border-left: none; }
+.metric-strip .metric-label {
+    font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--muted); font-weight: 600;
+}
+.metric-strip .metric-value {
+    font-size: 17px; font-weight: 700; color: var(--fg);
+    font-variant-numeric: tabular-nums; margin-top: 2px;
+}
+#print-btn {
+    position: absolute; top: 0; right: 0;
+    padding: 6px 8px; border: 1px solid var(--grid);
+    border-radius: 4px; background: var(--bg); cursor: pointer;
+    color: var(--muted); display: inline-flex; align-items: center;
+    line-height: 1;
+}
+#print-btn:hover { color: var(--accent); border-color: var(--accent); }
+@media print { #print-btn { display: none !important; } }
+.header-strip .meta { color: var(--muted); font-size: 13px; margin: 2px 0; }
+.header-strip .meta.accessions { font-size: 11px; }
+.header-strip .meta code { background: var(--head); padding: 1px 4px; border-radius: 2px;
+                            font-size: 10px; }
+.header-strip .links { margin-top: 8px; font-size: 12px; }
+.header-strip .links a { color: var(--accent); text-decoration: none; }
+.header-strip .links a:hover { text-decoration: underline; }
+.badge { display: inline-block; padding: 1px 6px; border-radius: 3px;
+         background: #edf2f7; color: var(--muted); font-size: 11px;
+         letter-spacing: 0.05em; text-transform: uppercase; margin-left: 4px; }
+.badge.tier-prime      { background:#c6f6d5; color:#22543d; }
+.badge.tier-near-prime { background:#feebc8; color:#744210; }
+.badge.tier-subprime   { background:#fed7d7; color:#742a2a; }
+.status { font-size: 11px; color: var(--muted); margin-left: 6px; }
+.pricing-pending {
+    margin: 6px 0 10px 0; padding: 8px 12px;
+    background: #fffbea; border-left: 3px solid #d69e2e;
+    color: #744210; font-size: 12px; line-height: 1.5;
+    border-radius: 2px;
+}
+.pricing-pending strong { color: #744210; font-weight: 600; }
+
+.purpose { color: var(--muted); font-size: 12px; margin: 0 0 6px 0; font-style: italic; }
+.section { margin-top: 28px; padding-top: 16px; border-top: 1px solid #edf2f7; }
+.section:first-of-type { border-top: none; padding-top: 0; margin-top: 20px; }
+
+table.grid { border-collapse: collapse; width: 100%; font-size: 13px; }
+table.grid.tx-parties { font-size: 13px; }
+table.grid th, table.grid td { padding: 5px 8px; border-bottom: 1px solid var(--grid);
+                                text-align: left; vertical-align: top; }
+table.grid thead th { background: var(--head); font-weight: 600;
+                      font-size: 11px; color: var(--muted); text-transform: uppercase;
+                      letter-spacing: 0.04em; }
+table.grid td.num, table.grid th.num { text-align: right; font-variant-numeric: tabular-nums; }
+table.grid tbody tr:last-child td, table.grid tbody tr:last-child th { border-bottom: none; }
+table.kv { border-collapse: collapse; width: 100%; font-size: 13px; }
+table.kv th { text-align: left; font-weight: 500; color: var(--muted);
+              padding: 4px 12px 4px 0; width: 200px; }
+table.kv td { padding: 4px 0; font-variant-numeric: tabular-nums; }
+
+.rel-pos td.subj { font-weight: 600; }
+
+table.grid.cap-structure { table-layout: fixed; }
+table.grid.cap-structure th, table.grid.cap-structure td {
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+/* Extra gutter between WAL (right-aligned numeric) and Legal Final
+   (left-aligned date). With the default 8px left/right padding, the
+   right-edge WAL value visually touches the left-edge Legal Final date
+   at the column boundary — adding 12px to each side opens a clearer gap. */
+table.grid.cap-structure th:nth-child(6),
+table.grid.cap-structure td:nth-child(6) { padding-right: 20px; }
+table.grid.cap-structure th:nth-child(7),
+table.grid.cap-structure td:nth-child(7) { padding-left: 20px; }
+table.grid.comparison { table-layout: fixed; }
+table.grid.comparison th, table.grid.comparison td {
+    padding: 5px 6px; font-size: 12px; vertical-align: top;
+    text-align: center;
+    overflow-wrap: break-word;
+}
+table.grid.comparison tbody th { text-align: left; color: var(--muted); font-weight: 500; }
+table.grid.comparison thead th {
+    text-transform: none; font-size: 11px; letter-spacing: 0;
+    padding: 4px 6px; text-align: center; font-weight: 600;
+}
+table.grid.comparison thead th.col-subject { background: #f5f9ff; color: var(--fg); font-weight: 700; }
+table.grid.comparison td.col-subject { background: #f5f9ff; }
+table.grid.comparison td { font-variant-numeric: tabular-nums; }
+table.grid.comparison tr.section-hdr th {
+    background: var(--head); color: var(--muted);
+    text-transform: uppercase; font-size: 10px; letter-spacing: 0.08em;
+    text-align: left;
+    padding-top: 8px; padding-bottom: 3px;
+    border-top: 1px solid var(--grid);
+}
+table.grid.comparison .val-primary { display: inline-block; font-variant-numeric: tabular-nums; }
+table.grid.comparison .delta-compact {
+    display: inline-block; margin-left: 4px; padding: 0 3px;
+    font-size: 10px; font-weight: 600; border-radius: 2px; cursor: help;
+    vertical-align: middle;
+    font-variant-numeric: tabular-nums;
+}
+table.grid.comparison td.col-subject .delta-compact { background: rgba(0,0,0,0.04); }
+table.grid.comparison .unit { color: var(--muted); font-size: 10px; margin-left: 2px; }
+table.grid.comparison .geo-stack {
+    display: inline-block; line-height: 1.25; font-size: 11px;
+    color: var(--muted); text-align: center;
+}
+table.grid.comparison td.col-subject .geo-stack { color: var(--fg); }
+
+/* Source-of-record row-label coloring for comparison tables */
+.src-fwp     { color: var(--chip-fwp); }
+.src-424b5   { color: var(--chip-424b5); }
+.src-absee   { color: var(--chip-absee); }
+.src-derived { color: var(--chip-derived); }
+.src-notext  { color: var(--chip-notext); }
+.lg-swatch { font-weight: 600; margin-right: 6px; }
+
+@media (prefers-color-scheme: dark) {
+  table.grid.comparison thead th.col-subject,
+  table.grid.comparison td.col-subject { background: #2d3039; }
+}
+.rel-pos .range { color: var(--muted); font-weight: 400; font-size: 12px; }
+.rel-pos .sub { font-weight: 400; text-transform: none; letter-spacing: 0;
+                color: var(--muted); font-size: 11px; }
+
+.mark { font-weight: 700; margin-left: 3px; }
+.mark.fav { color: var(--fav); }
+.mark.unf { color: var(--unf); }
+
+.rank { display: inline-block; margin-left: 6px; padding: 1px 6px;
+        background: var(--head); color: var(--muted); border-radius: 3px;
+        font-size: 10px; font-weight: 500; font-variant-numeric: tabular-nums;
+        letter-spacing: 0.02em; }
+.delta-fav { margin-left: 4px; font-size: 11px; color: var(--fav); font-weight: 500; }
+.delta-unf { margin-left: 4px; font-size: 11px; color: var(--unf); font-weight: 500; }
+.delta-neutral { margin-left: 4px; font-size: 11px; color: var(--muted); font-weight: 500; }
+
+.criteria { font-size: 12px; color: var(--muted); margin: 0 0 4px 0; }
+.aaa-split-note { font-size: 12px; color: var(--muted); margin: 6px 0 0 0; line-height: 1.4; }
+.legend { font-size: 11px; color: var(--muted); margin: 6px 0 4px 0; }
+
+.peer-list { font-size: 12px; margin-top: 4px; color: var(--muted); }
+.peer-list summary { cursor: pointer; color: var(--accent); user-select: none; }
+.peer-list ul { margin: 4px 0 0 0; padding-left: 20px; }
+.peer-list li { padding: 1px 0; }
+.peer-name { color: var(--fg); }
+.peer-meta { color: var(--muted); font-size: 11px; }
+
+.caveat { font-size: 12px; color: var(--muted); margin: 0 0 8px 0;
+          padding: 6px 10px; background: var(--head); border-left: 3px solid var(--chip-derived);
+          border-radius: 2px; }
+.chart-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 8px 0; }
+.chart-row + .chart-row { margin-top: 24px; }
+.chart-cell { background: var(--bg); border: 1px solid var(--grid); border-radius: 3px;
+              padding: 4px; }
+.chart { display: block; width: 100%; height: auto; max-width: 100%; }
+.track-record .subject-row { background: #fffbea; }
+.track-record .bench-row { background: var(--head); font-size: 12px; color: var(--muted); }
+.track-record .bench-row .sub { font-weight: 400; }
+.ticker-note { font-size: 12px; color: var(--muted); margin: 6px 0 0 0; }
+.ticker-note code { background: var(--head); padding: 1px 4px; border-radius: 2px; }
+.ticker-note a { color: var(--accent); text-decoration: none; }
+.ticker-note a:hover { text-decoration: underline; }
+
+.chip { display: inline-block; padding: 0 5px; border-radius: 2px;
+        font-size: 9px; font-weight: 600; letter-spacing: 0.05em;
+        text-transform: uppercase; vertical-align: middle;
+        color: #fff; margin-left: 2px; cursor: help; }
+.chip-fwp       { background: var(--chip-fwp); }
+.chip-424b5     { background: var(--chip-424b5); }
+.chip-absee     { background: var(--chip-absee); }
+.chip-10d       { background: var(--chip-10d); }
+.chip-derived        { background: var(--chip-derived); }
+.chip-derived-approx { background: var(--chip-derived); outline: 1px dashed #fff;
+                       outline-offset: -2px; }
+.chip-notext         { background: var(--chip-notext); }
+.chip-sec            { background: var(--chip-sec); }
+
+footer { margin-top: 28px; padding-top: 14px; border-top: 1px solid var(--grid);
+         color: var(--muted); font-size: 11px; }
+footer strong { color: var(--fg); }
+footer p.methodology-prose { margin: 6px 0 0 0; line-height: 1.55; }
+footer .gen { margin-top: 12px; }
+footer a { color: var(--accent); text-decoration: none; }
+footer a:hover { text-decoration: underline; }
+
+p.empty, p.peer-empty { color: var(--muted); font-style: italic; font-size: 13px; }
+
+@media (prefers-color-scheme: dark) {
+  :root { --fg:#e2e8f0; --muted:#a0aec0; --bg:#1a202c; --grid:#2d3748;
+          --head:#2d3748; --accent:#63b3ed; --fav:#68d391; --unf:#fc8181; }
+  .track-record .subject-row { background: #2d3039; }
+  .badge { background: #2d3748; }
+  .badge.tier-prime      { background:#22543d; color:#c6f6d5; }
+  .badge.tier-near-prime { background:#744210; color:#feebc8; }
+  .badge.tier-subprime   { background:#742a2a; color:#fed7d7; }
+  .header-strip .meta code, .ticker-note code, footer ul.provenance code { background:#2d3748; }
+  .chart-cell { background:#1a202c; border-color:#2d3748; }
+}
+/* Portrait / narrow viewports: dense PSR tables become horizontally
+   scrollable instead of truncating values (cap-structure ellipsis) or
+   compressing columns into unreadable single-letter stacks (comparison).
+   Applies to all .grid tables; .kv key-value tables are left alone. */
+@media (max-width: 768px) {
+  table.grid {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  table.grid th, table.grid td {
+    white-space: nowrap;
+    overflow: visible;
+    text-overflow: clip;
+    overflow-wrap: normal;
+  }
+  /* Comparison-table section dividers ("Collateral (pool at cut-off)",
+     "Structure (at issuance)") read oversized on mobile relative to the
+     14px h2 above them. Shrink to 9px + tighter padding so the visual
+     hierarchy reads h2 (section) → section-hdr (sub-section) → cells. */
+  table.grid.comparison tr.section-hdr th {
+    font-size: 9px;
+    letter-spacing: 0.06em;
+    padding-top: 6px;
+    padding-bottom: 2px;
+  }
+  /* Lease PSR only: Transaction Parties table renders with long
+     underwriter syndicate strings + "white-space:nowrap" cells, so 13px
+     feels oversized in narrow viewports. Loan PSR parties are shorter
+     and look fine, so the override is scoped to body.lease. */
+  body.lease table.grid.tx-parties { font-size: 11px; }
+  body.lease table.grid.tx-parties th,
+  body.lease table.grid.tx-parties td { padding: 4px 6px; }
+}
+@media print {
+  body { padding: 10px; font-size: 11px; max-width: 100%; }
+  h2 { margin: 10px 0 4px 0; }
+  .section { margin-top: 8px; page-break-inside: avoid; }
+  .chart-pair { page-break-inside: avoid; }
+  .peer-list[open] summary { color: var(--muted); }
+}
+</style>
+<script>
+  window.CC_CHART_META    = { title: "Presale Report — Synchrony Card Issuance Trust", url: "https://2n3rdy4u.github.io/charts/abs/issuance/presale/synchrony-card-issuance-trust.html" };
+  window.CC_CHART_TARGETS = ".chart-cell";
+</script>
+<script src="../../../share/share.js"></script>
+  <script data-goatcounter="https://consumercreditmatters.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head><body><nav class="ba-nav" aria-label="Site">
+  <a class="ba-brand" href="https://www.consumercreditmatters.com/" aria-label="Consumer Credit Matters — home">
+    <img class="ba-logo" src="https://2n3rdy4u.github.io/charts/assets/brand/logo-horizontal-primary.png" alt="Consumer Credit Matters" height="36" />
+  </a>
+</nav>
+<div class="header-strip">
+  <button id="print-btn" onclick="window.print()" title="Print this credit summary"
+    aria-label="Print this credit summary">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+      <circle cx="12" cy="13" r="4"/>
+    </svg>
+  </button>
+  <div class="eyebrow">Presale Report &nbsp;·&nbsp; Data as of <strong>2024-03-18</strong></div>
+  <h1>Synchrony Card Issuance Trust
+    <span class="status">FINAL · CLOSED 2024-03-18</span>
+  </h1>
+  <div class="metric-strip"><div class="metric"><div class="metric-label">Series Notes</div><div class="metric-value">$500.0MM</div></div><div class="metric"><div class="metric-label">Trust Balance</div><div class="metric-value">$8,206.1MM</div></div><div class="metric"><div class="metric-label">Min Seller&rsquo;s Interest</div><div class="metric-value">5.0%</div></div><div class="metric"><div class="metric-label">Senior Class Min Sub</div><div class="metric-value">0.0%</div></div></div>
+  <div class="meta">
+    <strong>Sponsor:</strong> Synchrony Bank &nbsp;·&nbsp;
+    <strong>Servicer:</strong> Servicer’s Representations &nbsp;·&nbsp;
+    <strong>Trustee:</strong> Citibank, N.A
+  </div>
+</div>
+
+<div class="section">
+  <h2>Capital Structure</h2>
+  <table class="grid cap-structure"><colgroup><col style="width:18%"/><col style="width:11%"/><col style="width:10%"/><col style="width:10%"/><col style="width:14%"/><col style="width:8%"/><col style="width:11%"/><col style="width:11.00%"/><col style="width:11.00%"/></colgroup><thead><tr><th>Class</th><th class="num">Size ($MM)</th><th class="num">% of Notes</th><th class="num">Total CE</th><th class="num">CPN / Spread</th><th class="num">WAL</th><th>Legal Final</th><th>S&P</th><th>Fitch</th></tr></thead><tbody><tr><td>Class A(2024-1)</td><td class="num">500.0</td><td class="num">100.0%</td><td class="num">20.0%</td><td class="num">—</td><td class="num">—</td><td>2030-03-15</td><td>AAA</td><td>AAA</td></tr></tbody></table>
+</div>
+
+<div class="section">
+  <h2>Transaction Parties</h2>
+  <table class="grid tx-parties"><tbody><tr><th style="width:30%;text-align:left;font-weight:500;color:var(--muted);">Sponsor</th><td>Synchrony Bank</td></tr><tr><th style="width:30%;text-align:left;font-weight:500;color:var(--muted);">Servicer</th><td>Servicer’s Representations</td></tr><tr><th style="width:30%;text-align:left;font-weight:500;color:var(--muted);">Depositor / Transferor</th><td>Synchrony Card Funding, LLC</td></tr><tr><th style="width:30%;text-align:left;font-weight:500;color:var(--muted);">Indenture Trustee</th><td>Resignation or Removal of Indenture Trustee</td></tr><tr><th style="width:30%;text-align:left;font-weight:500;color:var(--muted);">Owner Trustee</th><td>Citibank, N.A</td></tr><tr><th style="width:30%;text-align:left;font-weight:500;color:var(--muted);">Asset Rep. Reviewer</th><td>Clayton</td></tr><tr><th style="width:30%;text-align:left;font-weight:500;color:var(--muted);">Underwriters</th><td>Wells Fargo Securities, Barclays Capital, J.P. Morgan Securities</td></tr></tbody></table>
+</div>
+
+<div class="section">
+  <h2>Issuer Track Record</h2>
+  <table class="grid"><thead><tr><th>Series</th><th class="num">Closed</th><th class="num">Size</th><th class="num">MPR at close</th><th class="num">Net CO at close</th><th class="num">Excess Spread at close</th></tr></thead><tbody><tr><td>Synchrony Card Issuance Trust</td><td class="num">2023-11-15</td><td class="num">$500.0MM</td><td class="num">23.5%</td><td class="num">4.62%</td><td class="num">17.9%</td></tr><tr><td>Synchrony Card Issuance Trust</td><td class="num">2023-08-09</td><td class="num">$500.0MM</td><td class="num">23.7%</td><td class="num">3.88%</td><td class="num">18.4%</td></tr><tr><td>Synchrony Card Issuance Trust</td><td class="num">2022-07-15</td><td class="num">$500.0MM</td><td class="num">25.9%</td><td class="num">2.42%</td><td class="num">13.8%</td></tr><tr><td>Synchrony Card Issuance Trust</td><td class="num">2022-04-18</td><td class="num">$500.0MM</td><td class="num">24.9%</td><td class="num">2.36%</td><td class="num">14.5%</td></tr></tbody></table>
+</div>
+
+<div class="section">
+  <h2>Peer Set</h2>
+  <table class="grid"><thead><tr><th>Trust</th><th class="num">Most-Recent</th><th class="num">Size</th><th class="num">Class A CPN/Spread</th><th class="num">Min Seller</th><th class="num">Class A Total CE</th><th class="num">Exp→Legal</th><th>Structure</th><th class="num">MPR</th><th class="num">Net CO</th><th class="num">Excess Spread</th></tr></thead><tbody><tr><td>Wells Fargo</td><td class="num">2024-03-01</td><td class="num">$1,250.0MM</td><td class="num">4.94% fxd</td><td class="num">5.0%</td><td class="num">20.0%</td><td class="num">24 mo</td><td>De-linked</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr><tr><td>Chase</td><td class="num">2024-01-31</td><td class="num">$500.0MM</td><td class="num">—</td><td class="num">5.0%</td><td class="num">14.0%</td><td class="num">24 mo</td><td>De-linked</td><td class="num">48.2%</td><td class="num">1.72%</td><td class="num">15.0%</td></tr><tr><td>BofA</td><td class="num">2023-12-14</td><td class="num">$1,500.0MM</td><td class="num">4.98% fxd</td><td class="num">4.0%</td><td class="num">29.5%</td><td class="num">24 mo</td><td>De-linked</td><td class="num">25.5%</td><td class="num">2.24%</td><td class="num">13.4%</td></tr><tr><td>Citi</td><td class="num">2023-12-11</td><td class="num">$750.0MM</td><td class="num">5.23% fxd</td><td class="num">—</td><td class="num">11.9%</td><td class="num">24 mo</td><td>De-linked</td><td class="num">36.5%</td><td class="num">2.21%</td><td class="num">12.7%</td></tr><tr><td>Barclays</td><td class="num">2023-11-20</td><td class="num">$750.0MM</td><td class="num">+90 bps SOFR</td><td class="num">6.0%</td><td class="num">18.0%</td><td class="num">34 mo</td><td>De-linked</td><td class="num">34.4%</td><td class="num">3.05%</td><td class="num">22.4%</td></tr></tbody></table>
+</div>
+
+<div class="section">
+  <h2>Trust Subordination Comps</h2>
+  <style>.subord-callout{background:#fefce8;border:1px solid #fde68a;color:#713f12;padding:10px 14px;border-radius:6px;font-size:12px;margin:6px 0 14px;line-height:1.5}.subord-callout strong{color:#854d0e}.struct-pill{display:inline-block;font-size:11px;font-weight:600;padding:1px 6px;border-radius:3px;letter-spacing:0.02em}.struct-D{background:#ecfdf5;color:#047857}.struct-L{background:#fef3c7;color:#92400e}.grp-sep{border-left:1px solid #e5e7eb}.grp-A{background:#fafcff}.grp-B{background:#fdfdff}.grp-C{background:#fdfdff}.grp-Ret{background:#fafafb}.grp-hdr{font-size:10.5px;text-transform:uppercase;letter-spacing:0.06em;text-align:center;color:#475569;font-weight:600;background:#f3f4f6;border-bottom:1px solid #e5e7eb;padding:6px 10px 5px}.grp-hdr.A{color:#1e3a8a}.grp-hdr.B{color:#2563eb}.grp-hdr.C{color:#6366f1}.grp-hdr.Ret{color:#64748b}.ret-name{color:#475569;font-size:11.5px;font-variant-numeric:normal}.ret-none{color:#cbd5e1;font-size:11.5px;font-variant-numeric:normal}</style><div class="subord-callout"><strong>How to read this for de-linked trusts.</strong> Most credit card master trusts are de-linked, meaning Class&nbsp;A, B and C don&rsquo;t need to be co-issued — they may have been issued in different series across multiple years, or held by the seller as required retained tranches. The figures below are the <strong>required minimum subordination</strong> the indenture mandates remain outstanding to support each class&rsquo;s rating, NOT the cap stack of the subject series&rsquo; new issuance.</div><table class="grid"><thead><tr><th rowspan="2">Trust</th><th rowspan="2">Structure</th><th colspan="2" class="grp-hdr A grp-sep">Class A</th><th colspan="2" class="grp-hdr B grp-sep">Class B</th><th colspan="2" class="grp-hdr C grp-sep">Class C</th><th colspan="2" class="grp-hdr Ret grp-sep">Retained First-Loss</th><th rowspan="2" class="num">Min Seller</th></tr><tr><th class="num grp-sep">Size</th><th class="num">CE</th><th class="num grp-sep">Size</th><th class="num">CE</th><th class="num grp-sep">Size</th><th class="num">CE</th><th class="num grp-sep">Size</th><th>Indenture Name</th></tr></thead><tbody><tr><td>AmEx</td><td><span class="struct-pill struct-L">Linked</span></td><td class="num grp-sep grp-A">87.50%</td><td class="num grp-A">12.50%</td><td class="num grp-sep grp-B">3.75%</td><td class="num grp-B">8.75%</td><td class="num grp-sep grp-C">—</td><td class="num grp-C">—</td><td class="num grp-sep grp-Ret">8.75%</td><td class="grp-Ret"><span class="ret-name">Collateral Interest</span></td><td class="num">7.0%</td></tr><tr><td>Barclays</td><td><span class="struct-pill struct-D">De-linked</span></td><td class="num grp-sep grp-A">82.00%</td><td class="num grp-A">18.00%</td><td class="num grp-sep grp-B">18.00%</td><td class="num grp-B">0.00%</td><td class="num grp-sep grp-C">—</td><td class="num grp-C">—</td><td class="num grp-sep grp-Ret">—</td><td class="grp-Ret"><span class="ret-none">none</span></td><td class="num">6.0%</td></tr><tr><td>BofA</td><td><span class="struct-pill struct-D">De-linked</span></td><td class="num grp-sep grp-A">70.48%</td><td class="num grp-A">29.52%</td><td class="num grp-sep grp-B">10.07%</td><td class="num grp-B">19.45%</td><td class="num grp-sep grp-C">8.95%</td><td class="num grp-C">10.50%</td><td class="num grp-sep grp-Ret">10.50%</td><td class="grp-Ret"><span class="ret-name">Class D Req’d Investor Interest</span></td><td class="num">4.0%</td></tr><tr><td>Cap One</td><td><span class="struct-pill struct-D">De-linked</span></td><td class="num grp-sep grp-A">79.01%</td><td class="num grp-A">20.99%</td><td class="num grp-sep grp-B">9.00%</td><td class="num grp-B">11.99%</td><td class="num grp-sep grp-C">8.99%</td><td class="num grp-C">3.00%</td><td class="num grp-sep grp-Ret">—</td><td class="grp-Ret"><span class="ret-none">none</span></td><td class="num">5.0%</td></tr><tr><td>Chase</td><td><span class="struct-pill struct-D">De-linked</span></td><td class="num grp-sep grp-A">86.00%</td><td class="num grp-A">14.00%</td><td class="num grp-sep grp-B">7.00%</td><td class="num grp-B">7.00%</td><td class="num grp-sep grp-C">7.00%</td><td class="num grp-C">0.00%</td><td class="num grp-sep grp-Ret">—</td><td class="grp-Ret"><span class="ret-none">none</span></td><td class="num">5.0%</td></tr><tr><td>Citi</td><td><span class="struct-pill struct-D">De-linked</span></td><td class="num grp-sep grp-A">88.10%</td><td class="num grp-A">11.90%</td><td class="num grp-sep grp-B">5.27%</td><td class="num grp-B">6.63%</td><td class="num grp-sep grp-C">6.63%</td><td class="num grp-C">0.00%</td><td class="num grp-sep grp-Ret">—</td><td class="grp-Ret"><span class="ret-none">none</span></td><td class="num">—</td></tr><tr><td>Comenity (WFN)</td><td><span class="struct-pill struct-D">De-linked</span></td><td class="num grp-sep grp-A">73.00%</td><td class="num grp-A">27.00%</td><td class="num grp-sep grp-B">6.50%</td><td class="num grp-B">20.50%</td><td class="num grp-sep grp-C">3.75%</td><td class="num grp-C">16.75%</td><td class="num grp-sep grp-Ret">16.75%</td><td class="grp-Ret"><span class="ret-name">Required Excess Collateral</span></td><td class="num">—</td></tr><tr><td>First Nat&#x27;l (Omaha)</td><td><span class="struct-pill struct-D">De-linked</span></td><td class="num grp-sep grp-A">78.00%</td><td class="num grp-A">22.00%</td><td class="num grp-sep grp-B">10.50%</td><td class="num grp-B">11.50%</td><td class="num grp-sep grp-C">11.50%</td><td class="num grp-C">0.00%</td><td class="num grp-sep grp-Ret">—</td><td class="grp-Ret"><span class="ret-none">none</span></td><td class="num">7.0%</td></tr><tr style="background:#f5f9ff;font-weight:600"><td><strong>Synchrony</strong></td><td><span class="struct-pill struct-D">De-linked</span></td><td class="num grp-sep grp-A">80.00%</td><td class="num grp-A">20.00%</td><td class="num grp-sep grp-B">6.00%</td><td class="num grp-B">14.00%</td><td class="num grp-sep grp-C">9.00%</td><td class="num grp-C">5.00%</td><td class="num grp-sep grp-Ret">—</td><td class="grp-Ret"><span class="ret-none">none</span></td><td class="num">5.0%</td></tr><tr><td>Wells Fargo</td><td><span class="struct-pill struct-D">De-linked</span></td><td class="num grp-sep grp-A">80.00%</td><td class="num grp-A">20.00%</td><td class="num grp-sep grp-B">10.00%</td><td class="num grp-B">10.00%</td><td class="num grp-sep grp-C">6.50%</td><td class="num grp-C">3.50%</td><td class="num grp-sep grp-Ret">—</td><td class="grp-Ret"><span class="ret-none">none</span></td><td class="num">5.0%</td></tr></tbody></table><p class="ticker-note">Size and CE both expressed as % of total invested amount. CE for each class equals the cumulative subordination + retained first-loss positioned below it. Class B / C reflect seniority position, so for trusts with non-standard naming (WFN A&nbsp;/&nbsp;M&nbsp;/&nbsp;B), the row maps the position to the column header. The <em>Retained First-Loss</em> column captures the unrated piece each trust requires the seller to hold — its indenture name varies and is shown alongside the size.</p>
+</div>
+
+<div class="section">
+  <h2>Trust Performance Comps</h2>
+  <div class="trust-perf-grid" style="display:flex; flex-direction:column; gap:8px; align-items:stretch;"><div class="chart-cell"><svg class="chart" width="1140" height="340" viewBox="0 0 1140 340" role="img" aria-label="Monthly Payment Rate"><text x="44" y="14" font-size="10" font-weight="600" fill="#1a202c">Monthly Payment Rate</text><rect x="44" y="24" width="1084" height="275" fill="none" stroke="#cbd5e0" stroke-width="0.5"/><line x1="44" y1="230.2" x2="1128" y2="230.2" stroke="#cbd5e0" stroke-width="0.4" stroke-dasharray="2,2"/><text x="40" y="233.2" text-anchor="end" font-size="9" fill="#a0aec0">14.7%</text><line x1="44" y1="161.5" x2="1128" y2="161.5" stroke="#cbd5e0" stroke-width="0.4" stroke-dasharray="2,2"/><text x="40" y="164.5" text-anchor="end" font-size="9" fill="#a0aec0">29.4%</text><line x1="44" y1="92.8" x2="1128" y2="92.8" stroke="#cbd5e0" stroke-width="0.4" stroke-dasharray="2,2"/><text x="40" y="95.8" text-anchor="end" font-size="9" fill="#a0aec0">44.1%</text><line x1="44" y1="24.0" x2="1128" y2="24.0" stroke="#cbd5e0" stroke-width="0.4" stroke-dasharray="2,2"/><text x="40" y="27.0" text-anchor="end" font-size="9" fill="#a0aec0">58.8%</text><text x="44.0" y="310" text-anchor="middle" font-size="9" fill="#a0aec0">2021-03</text><text x="395.2" y="310" text-anchor="middle" font-size="9" fill="#a0aec0">2022-02</text><text x="761.6" y="310" text-anchor="middle" font-size="9" fill="#a0aec0">2023-02</text><text x="1128.0" y="310" text-anchor="middle" font-size="9" fill="#a0aec0">2024-02</text><text x="10" y="161.5" text-anchor="middle" font-size="9" fill="#a0aec0" transform="rotate(-90 10 161.5)">MPR</text><polyline points="59.3,91.4 89.8,93.9 120.3,85.8 150.9,83.8 181.4,77.1 211.9,74.8 242.5,82.4 273.0,77.7 303.5,79.8 334.1,59.9 364.6,78.8 395.2,88.6 425.7,61.6 456.2,76.9 486.8,60.2 517.3,69.2 547.8,66.1 578.4,68.0 608.9,73.8 639.4,75.5 670.0,79.2 700.5,69.8 731.0,69.3 761.6,87.1 792.1,61.1 822.6,80.1 853.2,67.3 883.7,67.6 914.3,71.6 944.8,70.2 975.3,80.6 1005.9,70.2 1036.4,78.5 1066.9,67.2 1097.5,73.4 1128.0,83.7" fill="none" stroke="#319795" stroke-width="1.0" opacity="0.45"/><polyline points="59.3,178.2 89.8,185.7 120.3,180.7 150.9,178.3 181.4,172.3 211.9,176.2 242.5,177.1 273.0,175.9 303.5,175.0 334.1,163.5 364.6,175.2 395.2,182.8 425.7,165.4 456.2,172.3 486.8,169.3 517.3,168.3 547.8,170.1 578.4,167.8 608.9,173.3 639.4,175.7 670.0,177.4 700.5,168.8 731.0,174.3 761.6,183.5 792.1,167.9 822.6,181.2 853.2,169.3 883.7,171.9 914.3,174.1 944.8,173.5 975.3,177.3 1005.9,178.0 1036.4,179.6 1066.9,172.8 1097.5,166.3 1128.0,180.0" fill="none" stroke="#dd6b20" stroke-width="1.0" opacity="0.45"/><polyline points="44.0,140.4 74.5,142.9 105.1,146.3 135.6,128.2 166.1,129.4 196.7,133.7 227.2,129.5 257.7,139.6 288.3,134.2 318.8,112.0 349.4,138.2 379.9,140.2 410.4,111.9 441.0,136.4 471.5,123.6 502.0,115.8 532.6,129.2 563.1,120.0 593.6,126.9 624.2,134.2 654.7,131.8 685.2,122.6 715.8,127.9 746.3,140.4 776.8,109.8 807.4,143.5 837.9,120.1 868.5,119.4 899.0,129.6 929.5,113.7 960.1,139.9 990.6,128.2 1021.1,128.3 1051.7,132.2 1082.2,121.7 1112.7,133.6" fill="none" stroke="#805ad5" stroke-width="1.0" opacity="0.45"/><polyline points="59.3,145.9 89.8,150.8 120.3,145.8 150.9,142.0 181.4,142.3 211.9,139.4 242.5,145.8 273.0,144.1 303.5,146.2 334.1,133.0 364.6,145.1 395.2,151.4 425.7,132.3 456.2,141.5 486.8,130.8 517.3,136.3 547.8,138.4 578.4,138.0 608.9,143.3 639.4,145.3 670.0,148.3 700.5,144.1 731.0,141.1 761.6,152.6 792.1,123.4 822.6,139.0 853.2,129.8 883.7,132.3 914.3,136.8 944.8,135.2 975.3,144.9 1005.9,137.9 1036.4,144.8 1066.9,138.6 1097.5,140.8 1128.0,145.7" fill="none" stroke="#b7791f" stroke-width="1.0" opacity="0.45"/><polyline points="59.3,184.0 89.8,182.0 120.3,181.6 150.9,178.9 181.4,174.4 211.9,179.5 242.5,187.2 273.0,177.3 303.5,179.6 334.1,172.6 364.6,181.0 395.2,192.6 425.7,182.6 456.2,183.1 486.8,177.0 517.3,177.6 547.8,179.7 578.4,179.3 608.9,184.0 639.4,185.7 670.0,186.2 700.5,180.3 731.0,180.9 761.6,194.6 792.1,186.9 822.6,187.8 853.2,185.5 883.7,184.6 914.3,187.9 944.8,185.8 975.3,192.1 1005.9,188.8 1036.4,191.1 1066.9,180.6 1097.5,188.5 1128.0,196.8" fill="none" stroke="#c53030" stroke-width="2.6" opacity="0.95"/><line x1="44.0" y1="321" x2="58.0" y2="321" stroke="#c53030" stroke-width="2.6"/><text x="62.0" y="324" font-size="9" fill="#1a202c">Synchrony</text><line x1="260.8" y1="321" x2="274.8" y2="321" stroke="#319795" stroke-width="1.0"/><text x="278.8" y="324" font-size="9" fill="#1a202c">Chase</text><line x1="477.6" y1="321" x2="491.6" y2="321" stroke="#dd6b20" stroke-width="1.0"/><text x="495.6" y="324" font-size="9" fill="#1a202c">BofA</text><line x1="694.4" y1="321" x2="708.4" y2="321" stroke="#805ad5" stroke-width="1.0"/><text x="712.4" y="324" font-size="9" fill="#1a202c">Citi</text><line x1="911.2" y1="321" x2="925.2" y2="321" stroke="#b7791f" stroke-width="1.0"/><text x="929.2" y="324" font-size="9" fill="#1a202c">Barclays</text></svg></div><div class="chart-cell"><svg class="chart" width="1140" height="340" viewBox="0 0 1140 340" role="img" aria-label="Net Charge-Off Rate"><text x="44" y="14" font-size="10" font-weight="600" fill="#1a202c">Net Charge-Off Rate</text><rect x="44" y="24" width="1084" height="275" fill="none" stroke="#cbd5e0" stroke-width="0.5"/><line x1="44" y1="230.2" x2="1128" y2="230.2" stroke="#cbd5e0" stroke-width="0.4" stroke-dasharray="2,2"/><text x="40" y="233.2" text-anchor="end" font-size="9" fill="#a0aec0">1.4%</text><line x1="44" y1="161.5" x2="1128" y2="161.5" stroke="#cbd5e0" stroke-width="0.4" stroke-dasharray="2,2"/><text x="40" y="164.5" text-anchor="end" font-size="9" fill="#a0aec0">2.7%</text><line x1="44" y1="92.8" x2="1128" y2="92.8" stroke="#cbd5e0" stroke-width="0.4" stroke-dasharray="2,2"/><text x="40" y="95.8" text-anchor="end" font-size="9" fill="#a0aec0">4.1%</text><line x1="44" y1="24.0" x2="1128" y2="24.0" stroke="#cbd5e0" stroke-width="0.4" stroke-dasharray="2,2"/><text x="40" y="27.0" text-anchor="end" font-size="9" fill="#a0aec0">5.4%</text><text x="44.0" y="310" text-anchor="middle" font-size="9" fill="#a0aec0">2021-03</text><text x="395.2" y="310" text-anchor="middle" font-size="9" fill="#a0aec0">2022-02</text><text x="761.6" y="310" text-anchor="middle" font-size="9" fill="#a0aec0">2023-02</text><text x="1128.0" y="310" text-anchor="middle" font-size="9" fill="#a0aec0">2024-02</text><text x="10" y="161.5" text-anchor="middle" font-size="9" fill="#a0aec0" transform="rotate(-90 10 161.5)">Net CO</text><polyline points="59.3,196.4 89.8,199.5 120.3,209.6 150.9,233.3 181.4,241.4 211.9,235.8 242.5,251.5 273.0,248.5 303.5,245.9 334.1,249.0 364.6,247.5 395.2,246.5 425.7,243.9 456.2,236.3 486.8,234.8 517.3,239.4 547.8,247.5 578.4,240.9 608.9,240.9 639.4,238.9 670.0,232.8 700.5,236.3 731.0,239.9 761.6,231.8 792.1,217.1 822.6,219.2 853.2,218.2 883.7,218.2 914.3,220.7 944.8,214.1 975.3,218.2 1005.9,215.6 1036.4,210.6 1066.9,213.6 1097.5,212.1 1128.0,219.2" fill="none" stroke="#319795" stroke-width="1.0" opacity="0.45"/><polyline points="59.3,138.8 89.8,181.3 120.3,189.9 150.9,209.1 181.4,217.7 211.9,225.7 242.5,233.8 273.0,240.9 303.5,236.3 334.1,230.8 364.6,237.4 395.2,235.3 425.7,229.3 456.2,225.2 486.8,227.3 517.3,236.9 547.8,234.8 578.4,236.3 608.9,232.8 639.4,229.3 670.0,231.8 700.5,226.7 731.0,223.2 761.6,217.7 792.1,202.0 822.6,203.5 853.2,200.5 883.7,203.0 914.3,203.5 944.8,191.4 975.3,192.4 1005.9,194.9 1036.4,185.8 1066.9,184.3 1097.5,186.3 1128.0,195.4" fill="none" stroke="#dd6b20" stroke-width="1.0" opacity="0.45"/><polyline points="44.0,173.2 74.5,194.4 105.1,208.6 135.6,207.0 166.1,222.2 196.7,217.1 227.2,237.9 257.7,248.5 288.3,238.9 318.8,250.0 349.4,242.9 379.9,242.4 410.4,236.9 441.0,230.3 471.5,228.8 502.0,243.4 532.6,238.9 563.1,231.8 593.6,242.4 624.2,232.3 654.7,231.8 685.2,231.3 715.8,223.2 746.3,220.7 776.8,214.6 807.4,198.5 837.9,194.9 868.5,210.1 899.0,215.6 929.5,199.5 960.1,191.4 990.6,194.4 1021.1,187.3 1051.7,180.8 1082.2,165.1 1112.7,184.3" fill="none" stroke="#805ad5" stroke-width="1.0" opacity="0.45"/><polyline points="59.3,149.4 89.8,144.9 120.3,171.2 150.9,181.8 181.4,207.5 211.9,198.5 242.5,223.7 273.0,250.0 303.5,221.7 334.1,230.3 364.6,220.7 395.2,217.1 425.7,209.1 456.2,205.0 486.8,210.6 517.3,216.6 547.8,210.6 578.4,211.1 608.9,211.6 639.4,217.1 670.0,207.5 700.5,203.0 731.0,195.4 761.6,188.3 792.1,171.2 822.6,159.0 853.2,163.6 883.7,154.5 914.3,158.0 944.8,151.5 975.3,135.8 1005.9,144.9 1036.4,130.2 1066.9,118.1 1097.5,119.6 1128.0,108.5" fill="none" stroke="#b7791f" stroke-width="1.0" opacity="0.45"/><polyline points="59.3,70.6 89.8,92.3 120.3,94.8 150.9,125.4 181.4,162.4 211.9,168.6 242.5,196.2 273.0,195.3 303.5,205.9 334.1,206.1 364.6,205.5 395.2,199.6 425.7,179.9 456.2,180.2 486.8,157.2 517.3,176.5 547.8,173.6 578.4,162.3 608.9,177.7 639.4,161.9 670.0,157.3 700.5,163.0 731.0,152.0 761.6,150.2 792.1,130.6 822.6,130.1 853.2,109.9 883.7,120.7 914.3,102.9 944.8,95.7 975.3,104.3 1005.9,65.6 1036.4,73.4 1066.9,59.9 1097.5,88.4 1128.0,65.0" fill="none" stroke="#c53030" stroke-width="2.6" opacity="0.95"/><line x1="44.0" y1="321" x2="58.0" y2="321" stroke="#c53030" stroke-width="2.6"/><text x="62.0" y="324" font-size="9" fill="#1a202c">Synchrony</text><line x1="260.8" y1="321" x2="274.8" y2="321" stroke="#319795" stroke-width="1.0"/><text x="278.8" y="324" font-size="9" fill="#1a202c">Chase</text><line x1="477.6" y1="321" x2="491.6" y2="321" stroke="#dd6b20" stroke-width="1.0"/><text x="495.6" y="324" font-size="9" fill="#1a202c">BofA</text><line x1="694.4" y1="321" x2="708.4" y2="321" stroke="#805ad5" stroke-width="1.0"/><text x="712.4" y="324" font-size="9" fill="#1a202c">Citi</text><line x1="911.2" y1="321" x2="925.2" y2="321" stroke="#b7791f" stroke-width="1.0"/><text x="929.2" y="324" font-size="9" fill="#1a202c">Barclays</text></svg></div><div class="chart-cell"><svg class="chart" width="1140" height="340" viewBox="0 0 1140 340" role="img" aria-label="Portfolio Yield"><text x="44" y="14" font-size="10" font-weight="600" fill="#1a202c">Portfolio Yield</text><rect x="44" y="24" width="1084" height="275" fill="none" stroke="#cbd5e0" stroke-width="0.5"/><line x1="44" y1="230.2" x2="1128" y2="230.2" stroke="#cbd5e0" stroke-width="0.4" stroke-dasharray="2,2"/><text x="40" y="233.2" text-anchor="end" font-size="9" fill="#a0aec0">7.5%</text><line x1="44" y1="161.5" x2="1128" y2="161.5" stroke="#cbd5e0" stroke-width="0.4" stroke-dasharray="2,2"/><text x="40" y="164.5" text-anchor="end" font-size="9" fill="#a0aec0">14.9%</text><line x1="44" y1="92.8" x2="1128" y2="92.8" stroke="#cbd5e0" stroke-width="0.4" stroke-dasharray="2,2"/><text x="40" y="95.8" text-anchor="end" font-size="9" fill="#a0aec0">22.4%</text><line x1="44" y1="24.0" x2="1128" y2="24.0" stroke="#cbd5e0" stroke-width="0.4" stroke-dasharray="2,2"/><text x="40" y="27.0" text-anchor="end" font-size="9" fill="#a0aec0">29.8%</text><text x="44.0" y="310" text-anchor="middle" font-size="9" fill="#a0aec0">2021-03</text><text x="395.2" y="310" text-anchor="middle" font-size="9" fill="#a0aec0">2022-02</text><text x="761.6" y="310" text-anchor="middle" font-size="9" fill="#a0aec0">2023-02</text><text x="1128.0" y="310" text-anchor="middle" font-size="9" fill="#a0aec0">2024-02</text><text x="10" y="161.5" text-anchor="middle" font-size="9" fill="#a0aec0" transform="rotate(-90 10 161.5)">Yield</text><polyline points="59.3,114.2 89.8,119.9 120.3,115.2 150.9,112.1 181.4,116.6 211.9,113.4 242.5,114.0 273.0,107.4 303.5,104.4 334.1,105.2 364.6,132.6 395.2,106.7 425.7,96.8 456.2,113.5 486.8,104.5 517.3,105.2 547.8,105.7 578.4,107.8 608.9,103.5 639.4,100.6 670.0,92.8 700.5,96.8 731.0,104.9 761.6,88.6 792.1,81.4 822.6,92.8 853.2,92.9 883.7,85.0 914.3,94.0 944.8,92.7 975.3,95.8 1005.9,81.4 1036.4,79.1 1066.9,82.8 1097.5,104.3 1128.0,80.2" fill="none" stroke="#319795" stroke-width="1.0" opacity="0.45"/><polyline points="59.3,148.8 89.8,160.1 120.3,148.0 150.9,148.6 181.4,144.6 211.9,151.8 242.5,150.8 273.0,144.5 303.5,145.9 334.1,140.6 364.6,158.5 395.2,158.3 425.7,141.9 456.2,152.8 486.8,145.6 517.3,145.3 547.8,144.3 578.4,139.0 608.9,141.7 639.4,140.3 670.0,143.1 700.5,132.8 731.0,146.4 761.6,146.7 792.1,131.0 822.6,148.9 853.2,133.5 883.7,138.7 914.3,138.6 944.8,141.7 975.3,140.8 1005.9,140.5 1036.4,143.3 1066.9,141.4 1097.5,143.1 1128.0,141.9" fill="none" stroke="#dd6b20" stroke-width="1.0" opacity="0.45"/><polyline points="44.0,136.7 74.5,150.1 105.1,128.8 135.6,132.8 166.1,142.3 196.7,137.9 227.2,137.3 257.7,127.9 288.3,124.7 318.8,133.4 349.4,148.5 379.9,127.2 410.4,127.1 441.0,136.5 471.5,121.6 502.0,130.8 532.6,126.5 563.1,122.1 593.6,129.7 624.2,117.0 654.7,115.1 685.2,117.9 715.8,124.8 746.3,112.3 776.8,105.9 807.4,117.9 837.9,101.9 868.5,120.8 899.0,105.3 929.5,111.4 960.1,117.7 990.6,104.1 1021.1,125.7 1051.7,119.0 1082.2,135.2 1112.7,131.1" fill="none" stroke="#805ad5" stroke-width="1.0" opacity="0.45"/><polyline points="59.3,100.7 89.8,117.0 120.3,102.5 150.9,109.5 181.4,100.8 211.9,96.9 242.5,111.1 273.0,96.4 303.5,109.4 334.1,97.4 364.6,119.4 395.2,113.4 425.7,86.8 456.2,98.7 486.8,70.0 517.3,59.9 547.8,100.3 578.4,99.2 608.9,97.2 639.4,91.4 670.0,94.2 700.5,88.9 731.0,91.7 761.6,98.9 792.1,64.6 822.6,86.2 853.2,75.5 883.7,78.7 914.3,77.7 944.8,79.1 975.3,89.6 1005.9,69.2 1036.4,80.7 1066.9,73.6 1097.5,89.8 1128.0,86.2" fill="none" stroke="#b7791f" stroke-width="1.0" opacity="0.45"/><polyline points="59.3,98.5 89.8,102.4 120.3,103.3 150.9,101.1 181.4,114.6 211.9,121.4 242.5,122.1 273.0,82.5 303.5,84.2 334.1,84.0 364.6,110.8 395.2,134.9 425.7,139.0 456.2,121.1 486.8,135.7 517.3,139.5 547.8,96.9 578.4,91.4 608.9,84.5 639.4,83.3 670.0,82.6 700.5,88.7 731.0,81.1 761.6,79.0 792.1,79.8 822.6,77.1 853.2,85.9 883.7,79.1 914.3,86.2 944.8,90.6 975.3,87.2 1005.9,86.1 1036.4,91.1 1066.9,91.8 1097.5,95.7 1128.0,86.5" fill="none" stroke="#c53030" stroke-width="2.6" opacity="0.95"/><line x1="44.0" y1="321" x2="58.0" y2="321" stroke="#c53030" stroke-width="2.6"/><text x="62.0" y="324" font-size="9" fill="#1a202c">Synchrony</text><line x1="260.8" y1="321" x2="274.8" y2="321" stroke="#319795" stroke-width="1.0"/><text x="278.8" y="324" font-size="9" fill="#1a202c">Chase</text><line x1="477.6" y1="321" x2="491.6" y2="321" stroke="#dd6b20" stroke-width="1.0"/><text x="495.6" y="324" font-size="9" fill="#1a202c">BofA</text><line x1="694.4" y1="321" x2="708.4" y2="321" stroke="#805ad5" stroke-width="1.0"/><text x="712.4" y="324" font-size="9" fill="#1a202c">Citi</text><line x1="911.2" y1="321" x2="925.2" y2="321" stroke="#b7791f" stroke-width="1.0"/><text x="929.2" y="324" font-size="9" fill="#1a202c">Barclays</text></svg></div><div class="chart-cell"><svg class="chart" width="1140" height="340" viewBox="0 0 1140 340" role="img" aria-label="Excess Spread"><text x="44" y="14" font-size="10" font-weight="600" fill="#1a202c">Excess Spread</text><rect x="44" y="24" width="1084" height="275" fill="none" stroke="#cbd5e0" stroke-width="0.5"/><line x1="44" y1="230.2" x2="1128" y2="230.2" stroke="#cbd5e0" stroke-width="0.4" stroke-dasharray="2,2"/><text x="40" y="233.2" text-anchor="end" font-size="9" fill="#a0aec0">6.6%</text><line x1="44" y1="161.5" x2="1128" y2="161.5" stroke="#cbd5e0" stroke-width="0.4" stroke-dasharray="2,2"/><text x="40" y="164.5" text-anchor="end" font-size="9" fill="#a0aec0">13.2%</text><line x1="44" y1="92.8" x2="1128" y2="92.8" stroke="#cbd5e0" stroke-width="0.4" stroke-dasharray="2,2"/><text x="40" y="95.8" text-anchor="end" font-size="9" fill="#a0aec0">19.8%</text><line x1="44" y1="24.0" x2="1128" y2="24.0" stroke="#cbd5e0" stroke-width="0.4" stroke-dasharray="2,2"/><text x="40" y="27.0" text-anchor="end" font-size="9" fill="#a0aec0">26.3%</text><text x="44.0" y="310" text-anchor="middle" font-size="9" fill="#a0aec0">2021-03</text><text x="395.2" y="310" text-anchor="middle" font-size="9" fill="#a0aec0">2022-02</text><text x="761.6" y="310" text-anchor="middle" font-size="9" fill="#a0aec0">2023-02</text><text x="1128.0" y="310" text-anchor="middle" font-size="9" fill="#a0aec0">2024-02</text><text x="10" y="161.5" text-anchor="middle" font-size="9" fill="#a0aec0" transform="rotate(-90 10 161.5)">Excess Spread</text><polyline points="59.3,115.3 89.8,124.0 120.3,118.6 150.9,115.5 181.4,120.7 211.9,117.1 242.5,117.8 273.0,110.3 303.5,107.0 334.1,107.9 364.6,139.0 395.2,110.1 425.7,101.2 456.2,121.0 486.8,112.3 517.3,123.9 547.8,126.7 578.4,130.1 608.9,129.9 639.4,126.7 670.0,117.8 700.5,122.3 731.0,139.8 761.6,121.3 792.1,113.2 822.6,126.1 853.2,126.2 883.7,117.3 914.3,127.4 944.8,126.0 975.3,133.4 1005.9,117.0 1036.4,114.4 1066.9,118.7 1097.5,142.8 1128.0,115.4" fill="none" stroke="#319795" stroke-width="1.0" opacity="0.45"/><polyline points="59.3,159.1 89.8,169.3 120.3,155.3 150.9,156.0 181.4,148.2 211.9,156.4 242.5,155.2 273.0,148.1 303.5,149.7 334.1,143.6 364.6,164.0 395.2,163.7 425.7,145.2 456.2,157.5 486.8,149.4 517.3,152.0 547.8,151.0 578.4,143.4 608.9,146.4 639.4,144.9 670.0,153.4 700.5,141.8 731.0,157.2 761.6,159.8 792.1,141.9 822.6,162.2 853.2,144.8 883.7,154.3 914.3,154.2 944.8,157.6 975.3,156.7 1005.9,156.3 1036.4,159.5 1066.9,163.4 1097.5,165.2 1128.0,163.9" fill="none" stroke="#dd6b20" stroke-width="1.0" opacity="0.45"/><polyline points="44.0,134.2 74.5,149.5 105.1,125.3 135.6,128.9 166.1,139.8 196.7,134.7 227.2,134.0 257.7,123.4 288.3,119.4 318.8,129.7 349.4,147.3 379.9,123.5 410.4,125.0 441.0,136.7 471.5,122.7 502.0,136.6 532.6,136.4 563.1,134.8 593.6,146.8 624.2,136.1 654.7,137.7 685.2,145.3 715.8,154.2 746.3,141.2 776.8,135.1 807.4,149.8 837.9,135.8 868.5,157.7 899.0,141.2 929.5,149.0 960.1,157.1 990.6,141.8 1021.1,166.3 1051.7,160.4 1082.2,177.3 1112.7,172.5" fill="none" stroke="#805ad5" stroke-width="1.0" opacity="0.45"/><polyline points="59.3,99.0 89.8,117.8 120.3,100.8 150.9,108.6 181.4,99.1 211.9,94.5 242.5,123.8 273.0,107.3 303.5,122.0 334.1,108.4 364.6,133.4 395.2,126.5 425.7,96.4 456.2,109.9 486.8,77.4 517.3,65.8 547.8,100.2 578.4,99.1 608.9,96.8 639.4,90.3 670.0,93.4 700.5,87.4 731.0,90.5 761.6,98.6 792.1,59.9 822.6,84.3 853.2,72.2 883.7,75.8 914.3,74.7 944.8,76.3 975.3,88.1 1005.9,65.1 1036.4,78.0 1066.9,70.0 1097.5,88.5 1128.0,84.3" fill="none" stroke="#b7791f" stroke-width="1.0" opacity="0.45"/><polyline points="59.3,115.4 89.8,119.8 120.3,120.9 150.9,118.3 181.4,130.5 211.9,136.8 242.5,132.5 273.0,95.0 303.5,96.9 334.1,96.8 364.6,123.7 395.2,149.0 425.7,147.9 456.2,145.2 486.8,152.2 517.3,154.8 547.8,124.7 578.4,112.4 608.9,104.6 639.4,103.2 670.0,102.4 700.5,109.4 731.0,100.7 761.6,98.3 792.1,99.2 822.6,96.2 853.2,106.1 883.7,98.5 914.3,106.4 944.8,124.3 975.3,113.2 1005.9,112.1 1036.4,124.3 1066.9,121.0 1097.5,125.4 1128.0,115.0" fill="none" stroke="#c53030" stroke-width="2.6" opacity="0.95"/><line x1="44.0" y1="321" x2="58.0" y2="321" stroke="#c53030" stroke-width="2.6"/><text x="62.0" y="324" font-size="9" fill="#1a202c">Synchrony</text><line x1="260.8" y1="321" x2="274.8" y2="321" stroke="#319795" stroke-width="1.0"/><text x="278.8" y="324" font-size="9" fill="#1a202c">Chase</text><line x1="477.6" y1="321" x2="491.6" y2="321" stroke="#dd6b20" stroke-width="1.0"/><text x="495.6" y="324" font-size="9" fill="#1a202c">BofA</text><line x1="694.4" y1="321" x2="708.4" y2="321" stroke="#805ad5" stroke-width="1.0"/><text x="712.4" y="324" font-size="9" fill="#1a202c">Citi</text><line x1="911.2" y1="321" x2="925.2" y2="321" stroke="#b7791f" stroke-width="1.0"/><text x="929.2" y="324" font-size="9" fill="#1a202c">Barclays</text></svg></div><div class="chart-cell"><svg class="chart" width="1140" height="340" viewBox="0 0 1140 340" role="img" aria-label="30+ Delinquency"><text x="44" y="14" font-size="10" font-weight="600" fill="#1a202c">30+ Delinquency</text><rect x="44" y="24" width="1084" height="275" fill="none" stroke="#cbd5e0" stroke-width="0.5"/><line x1="44" y1="230.2" x2="1128" y2="230.2" stroke="#cbd5e0" stroke-width="0.4" stroke-dasharray="2,2"/><text x="40" y="233.2" text-anchor="end" font-size="9" fill="#a0aec0">0.9%</text><line x1="44" y1="161.5" x2="1128" y2="161.5" stroke="#cbd5e0" stroke-width="0.4" stroke-dasharray="2,2"/><text x="40" y="164.5" text-anchor="end" font-size="9" fill="#a0aec0">1.8%</text><line x1="44" y1="92.8" x2="1128" y2="92.8" stroke="#cbd5e0" stroke-width="0.4" stroke-dasharray="2,2"/><text x="40" y="95.8" text-anchor="end" font-size="9" fill="#a0aec0">2.7%</text><line x1="44" y1="24.0" x2="1128" y2="24.0" stroke="#cbd5e0" stroke-width="0.4" stroke-dasharray="2,2"/><text x="40" y="27.0" text-anchor="end" font-size="9" fill="#a0aec0">3.6%</text><text x="44.0" y="310" text-anchor="middle" font-size="9" fill="#a0aec0">2021-03</text><text x="395.2" y="310" text-anchor="middle" font-size="9" fill="#a0aec0">2022-02</text><text x="761.6" y="310" text-anchor="middle" font-size="9" fill="#a0aec0">2023-02</text><text x="1128.0" y="310" text-anchor="middle" font-size="9" fill="#a0aec0">2024-02</text><text x="10" y="161.5" text-anchor="middle" font-size="9" fill="#a0aec0" transform="rotate(-90 10 161.5)">30+ DQ</text><polyline points="59.3,230.6 89.8,239.1 120.3,246.0 150.9,247.5 181.4,249.8 211.9,251.4 242.5,249.8 273.0,249.1 303.5,248.3 334.1,248.3 364.6,245.2 395.2,243.7 425.7,244.5 456.2,245.2 486.8,247.5 517.3,248.3 547.8,248.3 578.4,248.3 608.9,246.0 639.4,242.9 670.0,242.9 700.5,240.6 731.0,235.2 761.6,231.4 792.1,231.4 822.6,232.2 853.2,233.7 883.7,231.4 914.3,230.6 944.8,229.9 975.3,226.0 1005.9,223.7 1036.4,222.9 1066.9,222.2 1097.5,216.8 1128.0,237.5" fill="none" stroke="#319795" stroke-width="1.0" opacity="0.45"/><polyline points="59.3,198.4 89.8,209.1 120.3,219.9 150.9,224.5 181.4,157.6 211.9,229.9 242.5,229.9 273.0,156.1 303.5,228.3 334.1,230.6 364.6,227.6 395.2,226.0 425.7,227.6 456.2,231.4 486.8,234.5 517.3,169.9 547.8,233.7 578.4,231.4 608.9,228.3 639.4,223.7 670.0,220.6 700.5,219.9 731.0,215.3 761.6,211.4 792.1,211.4 822.6,209.1 853.2,212.2 883.7,206.8 914.3,203.7 944.8,202.2 975.3,199.1 1005.9,193.8 1036.4,190.7 1066.9,189.9 1097.5,195.3 1128.0,192.2" fill="none" stroke="#dd6b20" stroke-width="1.0" opacity="0.45"/><polyline points="44.0,202.2 74.5,213.0 105.1,224.5 135.6,229.9 166.1,232.2 196.7,237.5 227.2,237.5 257.7,238.3 288.3,236.8 318.8,236.8 349.4,234.5 379.9,233.7 410.4,232.2 441.0,236.0 471.5,239.1 502.0,238.3 532.6,238.3 563.1,236.0 593.6,233.7 624.2,229.9 654.7,223.7 685.2,221.4 715.8,219.1 746.3,213.0 776.8,209.1 807.4,211.4 837.9,210.7 868.5,209.1 899.0,206.0 929.5,200.7 960.1,196.8 990.6,192.2 1021.1,186.1 1051.7,187.6 1082.2,183.0 1112.7,184.5" fill="none" stroke="#805ad5" stroke-width="1.0" opacity="0.45"/><polyline points="59.3,165.3 89.8,179.9 120.3,193.0 150.9,199.1 181.4,200.7 211.9,205.3 242.5,206.0 273.0,203.7 303.5,203.0 334.1,203.7 364.6,199.9 395.2,197.6 425.7,199.1 456.2,200.7 486.8,206.0 517.3,207.6 547.8,206.0 578.4,203.7 608.9,200.7 639.4,193.8 670.0,187.6 700.5,183.0 731.0,175.3 761.6,169.2 792.1,164.6 822.6,164.6 853.2,163.0 883.7,158.4 914.3,152.3 944.8,146.9 975.3,136.9 1005.9,127.7 1036.4,126.1 1066.9,122.3 1097.5,119.2 1128.0,117.7" fill="none" stroke="#b7791f" stroke-width="1.0" opacity="0.45"/><polyline points="59.3,131.4 89.8,150.8 120.3,169.9 150.9,178.7 181.4,196.0 211.9,195.1 242.5,188.8 273.0,196.5 303.5,190.0 334.1,182.8 364.6,170.2 395.2,161.6 425.7,161.5 456.2,162.1 486.8,168.0 517.3,165.0 547.8,159.7 578.4,153.3 608.9,142.9 639.4,135.4 670.0,131.7 700.5,139.8 731.0,128.3 761.6,117.9 792.1,116.4 822.6,114.9 853.2,111.1 883.7,102.9 914.3,94.3 944.8,87.1 975.3,68.6 1005.9,63.7 1036.4,59.9 1066.9,87.5 1097.5,71.3 1128.0,62.8" fill="none" stroke="#c53030" stroke-width="2.6" opacity="0.95"/><line x1="44.0" y1="321" x2="58.0" y2="321" stroke="#c53030" stroke-width="2.6"/><text x="62.0" y="324" font-size="9" fill="#1a202c">Synchrony</text><line x1="260.8" y1="321" x2="274.8" y2="321" stroke="#319795" stroke-width="1.0"/><text x="278.8" y="324" font-size="9" fill="#1a202c">Chase</text><line x1="477.6" y1="321" x2="491.6" y2="321" stroke="#dd6b20" stroke-width="1.0"/><text x="495.6" y="324" font-size="9" fill="#1a202c">BofA</text><line x1="694.4" y1="321" x2="708.4" y2="321" stroke="#805ad5" stroke-width="1.0"/><text x="712.4" y="324" font-size="9" fill="#1a202c">Citi</text><line x1="911.2" y1="321" x2="925.2" y2="321" stroke="#b7791f" stroke-width="1.0"/><text x="929.2" y="324" font-size="9" fill="#1a202c">Barclays</text></svg></div></div><p class="ticker-note">Synchrony master trust (red, bold) vs. peer master trusts. Window: 36 months ending 2024-03-18 — point-in-time view at the subject&rsquo;s issuance. For current trust performance, see the live <a href="https://data.consumercreditmatters.com/abs/credit-card/" target="_blank" rel="noopener">Credit Card ABS — Trust Performance</a> page.</p>
+</div>
+
+<footer>
+  <p class="about-blurb">
+    Presale Reports are compiled by <strong>Black Analytics</strong> from SEC EDGAR filings
+    (424B5, FWP) and trust-level 10-D distribution reports. Published the same day a deal&rsquo;s
+    first filing reaches EDGAR; capital structure and trust context reflects what was known
+    at the subject&rsquo;s issuance.
+    <em>Informational only &mdash; not a credit rating.</em>
+  </p>
+  <strong>Methodology &amp; Sources</strong>
+  <p class="methodology-prose">
+    Capital structure (class size, coupon / spread, WAL, ratings) is sourced from the issuer&rsquo;s
+    pricing FWP and 424B5 prospectus supplement on EDGAR. Trust-level performance (Monthly
+    Payment Rate, Net Charge-Off, Portfolio Yield, Excess Spread, delinquency) is computed from
+    the trust&rsquo;s monthly 10-D distribution reports. Subordination and AAA Sub are derived
+    from class principals against the series invested amount; CC master trusts have no fixed
+    pool balance, so all percentages in the Capital Structure are notes-basis. Peer cohorts
+    are sliced to the subject&rsquo;s closing date so the snapshot reflects what was knowable
+    at issuance.
+  </p>
+  <p class="gen">Generated 2026-07-20 08:34</p>
+</footer>
+</body></html>
