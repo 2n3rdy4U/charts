@@ -606,6 +606,29 @@ html, body {
   line-height: 1.55;
 }
 
+/* Newsletter freshness: a dated "Issue N · Mon D" line under the label (always
+   shown, so it never goes stale) + a time-decaying "New" corner pill. */
+.tile-meta {
+  font-size: 11.5px;
+  color: var(--color-muted);
+  letter-spacing: 0.01em;
+  margin-top: -5px;
+}
+.tile-pill {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: var(--color-badge-new);
+  color: #fff;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 999px;
+  line-height: 1.5;
+}
+
 /* External-link icon next to the tile label (Newsletter / Podcast) — small,
    muted, signals "opens in new tab" without needing a verb in the footer. */
 .tile-label .nav-item-link-icon {

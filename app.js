@@ -297,17 +297,35 @@
   // concrete topics (Auto Loan, Auto Lease, Credit Card, Issuance) directly
   // with no umbrella heading breaking the symmetry. Buttons are icon + label
   // only — uniform size, no descriptions.
-  function addButton({ icon, label, isLink, url, onClick }) {
+  // Freshness marker for content that publishes on a cadence (the weekly
+  // newsletter): a dated "Issue N · Mon D" line so it never goes stale, plus a
+  // "New" pill that appears only for the first few days after each issue — so
+  // the signal stays meaningful instead of reading "New" every week forever.
+  const FRESH_DAYS = 4;
+  function freshnessHTML(meta) {
+    if (!meta || !meta.date) return '';
+    const d = new Date(meta.date + 'T00:00:00');
+    if (isNaN(d.getTime())) return '';
+    const dateStr = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    const line = meta.number ? `Issue ${meta.number} · ${dateStr}` : `Latest · ${dateStr}`;
+    const ageDays = (Date.now() - d.getTime()) / 86400000;
+    const pill = (ageDays >= 0 && ageDays < FRESH_DAYS)
+      ? '<span class="tile-pill">New</span>' : '';
+    return `<div class="tile-meta">${line}</div>${pill}`;
+  }
+
+  function addButton({ icon, label, isLink, url, onClick, meta }) {
     const tile = isLink ? document.createElement('a') : document.createElement('div');
     tile.className = 'tile';
+    const extra = freshnessHTML(meta);
     if (isLink) {
       tile.href   = url || '#';
       tile.target = '_blank';
       tile.rel    = 'noopener';
       // The small ↗ is the only signal a button opens a new tab.
-      tile.innerHTML = `${tileSVG(icon)}<div class="tile-label">${label} ${externalIconSVG()}</div>`;
+      tile.innerHTML = `${tileSVG(icon)}<div class="tile-label">${label} ${externalIconSVG()}</div>${extra}`;
     } else {
-      tile.innerHTML = `${tileSVG(icon)}<div class="tile-label">${label}</div>`;
+      tile.innerHTML = `${tileSVG(icon)}<div class="tile-label">${label}</div>${extra}`;
       tile.addEventListener('click', () => onClick(tile));
     }
     tileGrid.appendChild(tile);
@@ -323,7 +341,7 @@
         });
       });
     } else if (section.type === 'link') {
-      addButton({ icon: section.icon, label: section.label, isLink: true, url: section.url });
+      addButton({ icon: section.icon, label: section.label, isLink: true, url: section.url, meta: section.latest_issue });
     } else {
       addButton({
         icon: section.icon,
