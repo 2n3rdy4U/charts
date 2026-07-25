@@ -1,2 +1,3 @@
 series,reporting_date,cum_returned,crr_basic,crr_with_fees,gl_pct_pool,gl_pct_resid,avg_gl_per_vehicle,vintage_month,period_realized,period_scheduled
 Porsche Innovative Lease Owner Trust 2026-1,2026-04-30,0,,,,,,0,0.0,0.0
+Porsche Innovative Lease Owner Trust 2026-1,2026-06-30,13,0.9365153721239267,0.9365153721239267,-3.535416848188983e-05,-0.06348462787607331,-3455.925384615378,2,662756.5700000001,707683.6
