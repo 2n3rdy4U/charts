@@ -816,7 +816,7 @@ if (window.self !== window.top) {
   };
 })();
 (function () {
-  const BUILD_ID   = "2026-08-17 12:00";
+  const BUILD_ID   = "2026-08-17 12:35";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNAN", "label": "Carvana N"}, {"code": "CRVNAP", "label": "Carvana P"}, {"code": "DRIVE", "label": "Santander (DRIVE)"}, {"code": "EART", "label": "Exeter"}, {"code": "EARTS", "label": "Exeter Select"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander (SDART)"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -1012,7 +1012,8 @@ if (window.self !== window.top) {
         if (selectAllCb.checked) selectedIssuers.add(cb.value);
         else selectedIssuers.delete(cb.value);
       }
-      updateIssuerBtn(); updateVehicleToggleState(); updateDataThroughForTS(); render();
+      updateIssuerBtn(); updateVehicleToggleState(); updateDataThroughForTS();
+      _saveExplorerState(); render();
     });
     lbl.appendChild(selectAllCb);
     lbl.appendChild(document.createTextNode(' Show All Issuers'));
@@ -1032,7 +1033,8 @@ if (window.self !== window.top) {
         showToast('Year Overlay supports one issuer or All avg — not both. Deselect the current issuer first.');
         return;
       }
-      showAllAvg = cb.checked; updateIssuerBtn(); updateVehicleToggleState(); updateDataThroughForTS(); render();
+      showAllAvg = cb.checked; updateIssuerBtn(); updateVehicleToggleState(); updateDataThroughForTS();
+      _saveExplorerState(); render();
     });
     lbl.appendChild(cb);
     lbl.appendChild(document.createTextNode(' All Issuers'));
@@ -1056,7 +1058,8 @@ if (window.self !== window.top) {
       }
       if (cb.checked) selectedIssuers.add(it.code);
       else selectedIssuers.delete(it.code);
-      syncSelectAll(); updateIssuerBtn(); updateVehicleToggleState(); updateDataThroughForTS(); render();
+      syncSelectAll(); updateIssuerBtn(); updateVehicleToggleState(); updateDataThroughForTS();
+      _saveExplorerState(); render();
     });
     lbl.appendChild(cb);
     lbl.appendChild(document.createTextNode(' ' + issuerLabel[it.code]));
@@ -2190,7 +2193,36 @@ if (window.self !== window.top) {
       else _u.searchParams.delete('dq');
       if (typeof vehicleType !== 'undefined' && vehicleType && vehicleType !== 'all') _u.searchParams.set('vehicle', vehicleType);
       else _u.searchParams.delete('vehicle');
-      if (_issuer) _u.searchParams.set('issuer', _issuer); else _u.searchParams.delete('issuer');
+      // Which issuer control is on screen decides what `issuer` means. Vintage
+      // and Losses use the single-select #issuerSel; Time Series uses the
+      // multi-select panel. Writing #issuerSel unconditionally meant a Time
+      // Series link carried the HIDDEN Vintage dropdown's value — its default,
+      // never something the sender chose — even while the panel read "All
+      // Issuers". Restore then force-selected that one issuer, so a link built
+      // over all 26 issuers opened as a single-issuer view for the recipient.
+      var _tsActive = (currentTab === 'delinquency' && currentSub === 'timeseries');
+      if (_tsActive) {
+        // The Issuers button reads "All Issuers" for two DIFFERENT views: the
+        // loan-count-weighted aggregate line (showAllAvg), and all 26 issuers
+        // plotted separately. They must encode distinctly or a link silently
+        // swaps one for the other. 'avg' = aggregate, 'all' = every issuer,
+        // and they can legitimately combine.
+        var _parts = [];
+        if (showAllAvg) _parts.push('avg');
+        if (selectedIssuers.size === ISSUERS.length) _parts.push('all');
+        else for (const _c of selectedIssuers) _parts.push(_c);
+        if (_parts.length === 1 && _parts[0] === 'avg') {
+          _u.searchParams.delete('issuer');   // this view's own default
+        } else if (_parts.length) {
+          _u.searchParams.set('issuer', _parts.join(','));
+        } else {
+          _u.searchParams.delete('issuer');
+        }
+      } else if (_issuer) {
+        _u.searchParams.set('issuer', _issuer);
+      } else {
+        _u.searchParams.delete('issuer');
+      }
 
       // View-shaping controls. Each is written only when it differs from its
       // default, so a link stays short and readable and the absence of a param
@@ -2665,6 +2697,13 @@ if (window.self !== window.top) {
   let _initDq     = _params.get('dq');
   let _initVeh    = _params.get('vehicle');
   let _initIssuer = _params.get('issuer');
+  // Only a URL-supplied issuer may drive the Time Series multi-select. The
+  // localStorage fallback below carries #issuerSel — the Vintage dropdown —
+  // and feeding that into the multi-select narrowed an all-issuers link down
+  // to whichever single issuer the visitor last used in Vintage. A shared
+  // link with no ?issuer= must mean "whatever this view's default is", not
+  // "the recipient's leftover Vintage selection".
+  const _issuerFromUrl = (_initIssuer != null && _initIssuer !== '');
   let _initBasis  = _params.get('basis');   // 'deal' | 'orig' (Losses → Vintage)
   let _initPool   = _params.get('pool');    // 'all' | 'seasoned' (DQ pool toggle)
   // View-shaping params (absent = default; see _saveExplorerState)
@@ -2736,17 +2775,31 @@ if (window.self !== window.top) {
   // When a newsletter deep-link arrives with ?issuer=X&sub=timeseries, pre-check
   // only that issuer so the chart lands on exactly the same view shown in the
   // newsletter card. Added 2026-05-26.
-  if (_initIssuer && _initSub === 'timeseries') {
-    showAllAvg = false;
-    selectedIssuers.clear();
-    const _allCb = issuerPanel.querySelector('input[value="__all__"]');
-    if (_allCb) _allCb.checked = false;
-    for (const cb of issuerCbs) {
-      cb.checked = (cb.value === _initIssuer);
-      if (cb.checked) selectedIssuers.add(cb.value);
+  if (_issuerFromUrl && _initIssuer && _initSub === 'timeseries') {
+    // `issuer` here is the multi-select panel, not the Vintage dropdown, and
+    // carries one of: 'all' (every issuer checked), a comma-separated subset,
+    // or a single code. Absent means the view's default aggregate line, in
+    // which case this block doesn't run at all.
+    const _tok = _initIssuer.split(',').map(s => s.trim()).filter(Boolean);
+    const _wantAvg = _tok.indexOf('avg') !== -1;
+    const _want = _tok.indexOf('all') !== -1
+      ? issuerCbs.map(cb => cb.value)
+      : _tok;
+    const _valid = new Set(_want.filter(c => issuerCbs.some(cb => cb.value === c)));
+    // A list matching nothing (retired or renamed shelf in an old link) would
+    // otherwise blank the chart; fall through to the default view instead.
+    if (_valid.size > 0 || _wantAvg) {
+      showAllAvg = _wantAvg;
+      selectedIssuers.clear();
+      const _allCb = issuerPanel.querySelector('input[value="__all__"]');
+      if (_allCb) _allCb.checked = _wantAvg;
+      for (const cb of issuerCbs) {
+        cb.checked = _valid.has(cb.value);
+        if (cb.checked) selectedIssuers.add(cb.value);
+      }
+      if (typeof syncSelectAll === 'function') syncSelectAll();
+      if (typeof updateIssuerBtn === 'function') updateIssuerBtn();
     }
-    if (typeof syncSelectAll === 'function') syncSelectAll();
-    if (typeof updateIssuerBtn === 'function') updateIssuerBtn();
   }
 
   // Newsletter DQ deep-links may carry ?pool=seasoned to land on the Seasoned
