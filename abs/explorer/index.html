@@ -816,7 +816,7 @@ if (window.self !== window.top) {
   };
 })();
 (function () {
-  const BUILD_ID   = "2026-08-15 12:32";
+  const BUILD_ID   = "2026-08-17 12:00";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNAN", "label": "Carvana N"}, {"code": "CRVNAP", "label": "Carvana P"}, {"code": "DRIVE", "label": "Santander (DRIVE)"}, {"code": "EART", "label": "Exeter"}, {"code": "EARTS", "label": "Exeter Select"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander (SDART)"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -2191,6 +2191,35 @@ if (window.self !== window.top) {
       if (typeof vehicleType !== 'undefined' && vehicleType && vehicleType !== 'all') _u.searchParams.set('vehicle', vehicleType);
       else _u.searchParams.delete('vehicle');
       if (_issuer) _u.searchParams.set('issuer', _issuer); else _u.searchParams.delete('issuer');
+
+      // View-shaping controls. Each is written only when it differs from its
+      // default, so a link stays short and readable and the absence of a param
+      // unambiguously means "default" on the restore side.
+      // Before this, Copy link captured only tab/sub/dq/vehicle/issuer, so a
+      // link built from e.g. the Table view silently reopened as a Chart for
+      // the recipient — with nothing in the URL to hint that it had.
+      var _setOrDrop = function (key, val, dflt) {
+        if (val != null && val !== dflt) _u.searchParams.set(key, String(val));
+        else _u.searchParams.delete(key);
+      };
+      _setOrDrop('display',  typeof displayMode    !== 'undefined' ? displayMode : null, 'chart');
+      _setOrDrop('transform',typeof transform      !== 'undefined' ? transform   : null, 'rate');
+      _setOrDrop('pool',     typeof poolMode       !== 'undefined' ? poolMode    : null, 'all');
+      // Heat map only shapes the Table view; omit it elsewhere so a Chart link
+      // doesn't carry a param that has no visible effect.
+      if (typeof displayMode !== 'undefined' && displayMode === 'table'
+          && typeof heatmapEnabled !== 'undefined' && heatmapEnabled === false) {
+        _u.searchParams.set('heatmap', '0');
+      } else {
+        _u.searchParams.delete('heatmap');
+      }
+      var _scoreEl = document.getElementById('scoreSel');
+      _setOrDrop('score', _scoreEl ? _scoreEl.value : null, 'all');
+      try {
+        var _rangeEl = document.getElementById(_activeRangeSel()[0]);
+        _setOrDrop('range', _rangeEl ? _rangeEl.value : null, 'all');
+      } catch (_re) { _u.searchParams.delete('range'); }
+
       history.replaceState({}, '', _u);
     } catch (_e) { /* file:// protocol blocks replaceState — fine */ }
   }
@@ -2288,12 +2317,20 @@ if (window.self !== window.top) {
   // Credit Score dropdown + optional custom range
   const scoreSel    = document.getElementById('scoreSel');
   const scoreCustom = document.getElementById('scoreCustom');
-  scoreSel.addEventListener('change', () => {
-    const p = scoreSel.value;
+  // Body extracted so a deep-linked view restores the band and the custom-range
+  // widget's visibility, not just the dropdown value.
+  function _applyScore(p) {
+    if (!Array.from(scoreSel.options).some(o => o.value === p)) return;
+    scoreSel.value = p;
     if (p === 'all')      { ficoMin=300; ficoMax=900; }
     if (p === 'subprime') { ficoMin=300; ficoMax=660; }
     if (p === 'prime')    { ficoMin=660; ficoMax=900; }
     scoreCustom.style.display = (p === 'custom') ? 'flex' : 'none';
+  }
+  scoreSel.addEventListener('change', () => {
+    const p = scoreSel.value;
+    _applyScore(p);
+    _saveExplorerState();
     if (p !== 'custom') render();
   });
 
@@ -2372,11 +2409,31 @@ if (window.self !== window.top) {
     if (!sel) return;
     sel.addEventListener('change', () => {
       _applyDateRangePreset(sel.value, fromSel, toSel);
+      _saveExplorerState();
       (onChange || render)();
     });
   }
   _wireRangeSelect('vintageRangeSel', dateFromSel, dateToSel, _onVintageRangeChange);
   _wireRangeSelect('tsRangeSel', tsDateFromSel, tsDateToSel);
+
+  // Each sub-view has its own range dropdown; only one is on screen at a time.
+  // Deep links carry a single `range` value and apply it to whichever is active,
+  // so a link built from the Time Series view restores there rather than
+  // silently setting the hidden Vintage control.
+  function _activeRangeSel() {
+    if (currentTab === 'repossessions') return ['repoRangeSel', null, null];
+    if (currentTab === 'delinquency' && currentSub === 'timeseries')
+      return ['tsRangeSel', tsDateFromSel, tsDateToSel];
+    return ['vintageRangeSel', dateFromSel, dateToSel];
+  }
+  function _applyRange(v) {
+    const [selId, fromSel, toSel] = _activeRangeSel();
+    const sel = document.getElementById(selId);
+    if (!sel || !Array.from(sel.options).some(o => o.value === v)) return;
+    sel.value = v;
+    // repoRangeSel drives its own from/to pair internally; skip preset math.
+    if (fromSel && toSel) _applyDateRangePreset(v, fromSel, toSel);
+  }
 
   const transformSel = document.getElementById('transformSel');
   if (transformSel) {
@@ -2384,20 +2441,31 @@ if (window.self !== window.top) {
       const opt = transformSel.options[transformSel.selectedIndex];
       transformSel.title = opt ? (opt.title || '') : '';
     }
-    transformSel.addEventListener('change', () => { transform = transformSel.value; syncTransformTitle(); render(); });
+    transformSel.addEventListener('change', () => {
+      transform = transformSel.value; syncTransformTitle(); _saveExplorerState(); render();
+    });
     syncTransformTitle();
+  }
+  // Restore helper: set both the variable and the widget. The dropdown's title
+  // is refreshed by _applyDisplayMode(), which restore always calls afterwards.
+  function _applyTransform(v) {
+    const tSel = document.getElementById('transformSel');
+    if (!tSel) return;
+    if (!Array.from(tSel.options).some(o => o.value === v)) return;
+    transform = v;
+    tSel.value = v;
   }
 
   // ── Heatmap toggle switch (in filter bar, visible only in Table view) ──
-  (function() {
-    const chk    = document.getElementById('heatmapToggle');
-    const lbl    = document.getElementById('hmLabel');
-    const ctrl   = document.getElementById('hmCtrl');
-    const sep    = document.getElementById('hmSep');
-    if (!chk) return;
-    chk.checked = heatmapEnabled;
-    chk.addEventListener('change', function() {
-      heatmapEnabled = this.checked;
+  // Extracted from the change handler so a deep-linked view can reproduce the
+  // toggle's full effect — switch position, label, legend and cell colours —
+  // rather than only flipping the variable.
+  function _applyHeatmap(on) {
+    heatmapEnabled = on;
+    const chk = document.getElementById('heatmapToggle');
+    const lbl = document.getElementById('hmLabel');
+    if (chk) chk.checked = on;
+    {
       if (lbl) lbl.textContent = heatmapEnabled ? 'On' : 'Off';
       const legend = document.getElementById('heatmapLegend');
       if (legend) legend.style.display = heatmapEnabled ? 'flex' : 'none';
@@ -2447,13 +2515,26 @@ if (window.self !== window.top) {
           });
         }
       }
+    }
+  }
+  (function() {
+    const chk = document.getElementById('heatmapToggle');
+    if (!chk) return;
+    chk.checked = heatmapEnabled;
+    chk.addEventListener('change', function() {
+      _applyHeatmap(this.checked);
+      _saveExplorerState();
     });
   })();
 
-  document.getElementById('displayGroup').addEventListener('click', e => {
-    const b = e.target.closest('button[data-display]');
-    if (!b) return;
-    displayMode = b.dataset.display;
+  // Switching display mode does far more than set the variable: it toggles the
+  // heat-map control, the Show-All row, the transform dropdown's enabled state,
+  // and the issuer selection. A deep-linked view has to reproduce all of that,
+  // not just `displayMode`, so the body lives in a function that both the click
+  // handler and the URL-restore path call. render() is deliberately left to the
+  // caller — restore renders once via setTab rather than mid-init.
+  function _applyDisplayMode(mode) {
+    displayMode = mode;
     // Show/hide heat map control in filter bar
     const ctrl = document.getElementById('hmCtrl');
     const sep  = document.getElementById('hmSep');
@@ -2502,6 +2583,13 @@ if (window.self !== window.top) {
     for (const btn of document.querySelectorAll('#displayGroup button'))
       btn.classList.toggle('active', btn.dataset.display === displayMode);
     updateVehicleToggleState();
+  }
+
+  document.getElementById('displayGroup').addEventListener('click', e => {
+    const b = e.target.closest('button[data-display]');
+    if (!b) return;
+    _applyDisplayMode(b.dataset.display);
+    _saveExplorerState();
     render();
   });
 
@@ -2544,6 +2632,7 @@ if (window.self !== window.top) {
       showMsg('Loading seasoned data…');
       await ensureSeasonedLoaded();
     }
+    _saveExplorerState();
     render();
   });
 
@@ -2578,6 +2667,12 @@ if (window.self !== window.top) {
   let _initIssuer = _params.get('issuer');
   let _initBasis  = _params.get('basis');   // 'deal' | 'orig' (Losses → Vintage)
   let _initPool   = _params.get('pool');    // 'all' | 'seasoned' (DQ pool toggle)
+  // View-shaping params (absent = default; see _saveExplorerState)
+  let _initDisplay = _params.get('display');    // 'chart' | 'table' | 'seasonal'
+  let _initTransf  = _params.get('transform');  // 'rate' | 'yoy-delta' | 'yoy-pct'
+  let _initHeat    = _params.get('heatmap');    // '0' only (default is on)
+  let _initScore   = _params.get('score');      // 'all' | 'subprime' | 'prime' | 'custom'
+  let _initRange   = _params.get('range');      // 'all' | '6m' | '1y' | '2y' | '3y' | '5y'
   const _legacyView = _params.get('view');
 
   // Load saved state. URL params win field-by-field.
@@ -2602,6 +2697,32 @@ if (window.self !== window.top) {
     for (const _b of document.querySelectorAll('#vehicleGroup button'))
       _b.classList.toggle('active', _b.dataset.vehicle === _initVeh);
   }
+
+  // ── View-shaping restore ──────────────────────────────────────────────
+  // Deliberately ahead of the two issuer blocks below: _applyDisplayMode()
+  // reassigns the issuer selection as a side effect (Table selects all
+  // issuers, Year Overlay resets to the All-issuers average), and an explicit
+  // ?issuer= is the more specific intent, so it must get the last word.
+  // currentTab/currentSub are set provisionally here only so _activeRangeSel()
+  // targets the dropdown the link was actually built from; setTab() below
+  // assigns them for real a few lines later.
+  if (_initTab) currentTab = _initTab;
+  if (_initSub) currentSub = _initSub;
+  // Transform before display: _applyDisplayMode() refreshes the dropdown's
+  // tooltip from its selected option, so the value has to be set already.
+  if (_initTransf) _applyTransform(_initTransf);
+  if (_initScore)  _applyScore(_initScore);
+  if (_initRange)  _applyRange(_initRange);
+  if (_initDisplay && ['chart','table','seasonal'].indexOf(_initDisplay) !== -1) {
+    _applyDisplayMode(_initDisplay);
+  }
+  // Heat map defaults on, so only an explicit '0' means anything. After the
+  // display mode, which shows/hides the control this toggle lives in.
+  if (_initHeat === '0') _applyHeatmap(false);
+  // Note: these are intentionally URL-only and not mirrored into
+  // localStorage. Filters (dq/vehicle/issuer) are worth remembering between
+  // visits; a view mode is not — following one Table link should not silently
+  // make Table the landing view for every later visit.
   // Loss view is fixed to per-series (10-D); no basis deep-link handling.
   // Sync the basis warning visibility to the resolved basis (after URL param +
   // saved state apply). Microtask defers until DOM is fully connected.
