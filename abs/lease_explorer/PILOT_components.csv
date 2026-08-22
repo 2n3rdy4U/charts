@@ -1,3 +1,4 @@
 series,reporting_date,n_returned,n_retained,n_chargeoff,n_other,scheduled_returned,realized_returned,excess_fees_returned,cum_n_returned,cum_n_retained,cum_n_chargeoff,cum_n_other,cum_scheduled_returned,cum_realized_returned,cum_excess_fees_returned,initial_pool_balance
 Porsche Innovative Lease Owner Trust 2026-1,2026-04-30,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1270770376.7099988
-Porsche Innovative Lease Owner Trust 2026-1,2026-06-30,13.0,205.0,2.0,3.0,707683.6,662756.5700000001,0.0,13.0,205.0,2.0,3.0,707683.6,662756.5700000001,0.0,1270770376.7099988
+Porsche Innovative Lease Owner Trust 2026-1,2026-06-30,13.0,205.0,2.0,3.0,707683.6,967623.5700000001,0.0,13.0,205.0,2.0,3.0,707683.6,967623.5700000001,0.0,1270770376.7099988
+Porsche Innovative Lease Owner Trust 2026-1,2026-07-31,10.0,95.0,1.0,1.0,435061.8,321500.0,0.0,23.0,300.0,3.0,4.0,1142745.4,1289123.57,0.0,1270770376.7099988
