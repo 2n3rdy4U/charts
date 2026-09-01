@@ -179,11 +179,17 @@
 .ccm-topbar-nav .ccm-cta{background:#4ade80;color:#0e1d2e;padding:8px 16px;
   border-radius:4px;font-weight:600;letter-spacing:0.02em;transition:background 0.15s}
 .ccm-topbar-nav .ccm-cta:hover{background:#65f08e}
+.ccm-topbar-nav a.ccm-back{color:#4ade80;font-weight:600}
+.ccm-topbar-nav a.ccm-back:hover{color:#65f08e}
 @media (max-width:640px){
   .ccm-topbar{padding:0 14px}
   .ccm-wordmark{height:26px}
   .ccm-topbar-nav{gap:14px;font-size:12px}
   .ccm-topbar-nav a:not(.ccm-cta){display:none}
+  /* The return link is the whole reason a newsletter reader is here, so it
+     stays when the other nav items collapse. Declared after the rule above:
+     equal specificity, so source order decides. */
+  .ccm-topbar-nav a.ccm-back{display:inline}
 }
 
 </style>
@@ -202,6 +208,7 @@
     <a class="ccm-cta" href="https://www.consumercreditmatters.com/subscribe">Subscribe</a>
   </nav>
 </header>
+
 <script>
 /* These data pages are normally shown inside the /charts/ shell, which has
    its own header — so this in-page bar would duplicate it. Hide it when we're
@@ -210,6 +217,30 @@ if (window.self !== window.top) {
   var _ccmBar = document.querySelector('.ccm-topbar');
   if (_ccmBar) _ccmBar.style.display = 'none';
 }
+/* A chart opened from a newsletter exhibit carries ?back=/newsletter/<date>/, so
+   the reader can return to the article rather than only to the site's front
+   door. The page's own URL rewriting preserves unknown params, so the link
+   survives filtering and tab changes.
+
+   The value is matched against a whitelist, not merely checked for bad input:
+   accepting an arbitrary URL here would make every chart page an open redirect
+   on this domain — attractive for phishing, since the hop begins somewhere
+   genuine. Only a path under /newsletter/ built from unreserved characters is
+   allowed, which excludes another host (protocol-relative //evil.example.com),
+   backslashes, and traversal. */
+(function () {
+  try {
+    var p = new URLSearchParams(window.location.search).get('back');
+    if (!p || !/^\/newsletter\/[A-Za-z0-9._~/-]*$/.test(p) || p.indexOf('..') !== -1) return;
+    var nav = document.querySelector('.ccm-topbar-nav');
+    if (!nav) return;
+    var a = document.createElement('a');
+    a.className = 'ccm-back';
+    a.href = p;
+    a.textContent = '\u2190 Back to the issue';
+    nav.insertBefore(a, nav.firstChild);
+  } catch (_e) { /* never let this break the bar */ }
+})();
 </script>
 
 <div class="wrap">
