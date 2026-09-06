@@ -199,6 +199,12 @@
     /* Losses tab: reuses vintage filter bar (issuer/dates), plus loss-specific Vintage Basis */
     body[data-tab="losses"] .vintage-only { display:flex; }
     body[data-tab="losses"] .loss-only { display:flex; }
+    /* `.ctrl { display:flex }` outranks the UA [hidden] rule (class beats the
+       user-agent stylesheet), so the hidden attribute alone does NOT hide these
+       — without this the Issuers/Pool controls sit on screen during the Loss
+       Curves view, with a panel that has nothing to do with that view. */
+    #lossIssuerCtrl[hidden], #lossPoolCtrl[hidden],
+    #lossIssuerSep[hidden], #lossPoolSep[hidden] { display:none !important; }
     /* Repossessions tab: own filter bar; sharedBar kept for Credit Score/Vehicle */
     body[data-tab="repossessions"] .repo-only { display:flex; }
     body[data-tab="repossessions"] #vintageBar { display:none !important; }
@@ -895,7 +901,7 @@ if (window.self !== window.top) {
   };
 })();
 (function () {
-  const BUILD_ID   = "2026-09-06 15:30";
+  const BUILD_ID   = "2026-09-06 15:59";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNAN", "label": "Carvana N"}, {"code": "CRVNAP", "label": "Carvana P"}, {"code": "DRIVE", "label": "Santander (DRIVE)"}, {"code": "EART", "label": "Exeter"}, {"code": "EARTS", "label": "Exeter Select"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander (SDART)"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const ANL_ISSUERS = ["AART", "AMCAR", "BLAST", "BMWOT", "CAOT", "CMXS", "COPAR", "CRVNAN", "CRVNAP", "DRIVE", "EART", "EARTS", "FCAOT", "FTAT", "HAROT", "HART", "MBART", "NAROT", "SDART", "TAOT", "VALET", "WOART", "WOSAT"];   // shelves with a published ANL series
   const DATA_BASE  = ".";
@@ -2689,6 +2695,11 @@ if (window.self !== window.top) {
       x.classList.toggle('active', x === b);
     if (anlSeries.size) renderAnlChart(); else loadAnlAndRender();
   });
+  // Populate the picker at init rather than lazily on first view switch —
+  // the button is reachable before that and an empty dropdown reads as
+  // "the feature is missing".
+  buildLossIssuerPanel();
+  updateLossIssuerBtn();
   _syncLossPoolVisibility();
 
   // DQ Status dropdown
