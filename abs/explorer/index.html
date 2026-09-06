@@ -473,17 +473,11 @@
 .ccm-topbar-nav .ccm-cta{background:#4ade80;color:#0e1d2e;padding:8px 16px;
   border-radius:4px;font-weight:600;letter-spacing:0.02em;transition:background 0.15s}
 .ccm-topbar-nav .ccm-cta:hover{background:#65f08e}
-.ccm-topbar-nav a.ccm-back{color:#4ade80;font-weight:600}
-.ccm-topbar-nav a.ccm-back:hover{color:#65f08e}
 @media (max-width:640px){
   .ccm-topbar{padding:0 14px}
   .ccm-wordmark{height:26px}
   .ccm-topbar-nav{gap:14px;font-size:12px}
   .ccm-topbar-nav a:not(.ccm-cta){display:none}
-  /* The return link is the whole reason a newsletter reader is here, so it
-     stays when the other nav items collapse. Declared after the rule above:
-     equal specificity, so source order decides. */
-  .ccm-topbar-nav a.ccm-back{display:inline}
 }
 
   </style>
@@ -520,7 +514,6 @@
     <a class="ccm-cta" href="https://www.consumercreditmatters.com/subscribe">Subscribe</a>
   </nav>
 </header>
-
 <script>
 /* These data pages are normally shown inside the /charts/ shell, which has
    its own header — so this in-page bar would duplicate it. Hide it when we're
@@ -529,30 +522,6 @@ if (window.self !== window.top) {
   var _ccmBar = document.querySelector('.ccm-topbar');
   if (_ccmBar) _ccmBar.style.display = 'none';
 }
-/* A chart opened from a newsletter exhibit carries ?back=/newsletter/<date>/, so
-   the reader can return to the article rather than only to the site's front
-   door. The page's own URL rewriting preserves unknown params, so the link
-   survives filtering and tab changes.
-
-   The value is matched against a whitelist, not merely checked for bad input:
-   accepting an arbitrary URL here would make every chart page an open redirect
-   on this domain — attractive for phishing, since the hop begins somewhere
-   genuine. Only a path under /newsletter/ built from unreserved characters is
-   allowed, which excludes another host (protocol-relative //evil.example.com),
-   backslashes, and traversal. */
-(function () {
-  try {
-    var p = new URLSearchParams(window.location.search).get('back');
-    if (!p || !/^\/newsletter\/[A-Za-z0-9._~/-]*$/.test(p) || p.indexOf('..') !== -1) return;
-    var nav = document.querySelector('.ccm-topbar-nav');
-    if (!nav) return;
-    var a = document.createElement('a');
-    a.className = 'ccm-back';
-    a.href = p;
-    a.textContent = '\u2190 Back to the issue';
-    nav.insertBefore(a, nav.firstChild);
-  } catch (_e) { /* never let this break the bar */ }
-})();
 </script>
 
 <div class="wrap">
@@ -575,6 +544,23 @@ if (window.self !== window.top) {
       <div class="btn-group" id="delSubViewGroup">
         <button data-subview="vintage" class="active">Vintage Curves</button>
         <button data-subview="timeseries">Time Series</button>
+      </div>
+    </div>
+  </div>
+  <div class="fbar loss-only" id="lossSubBar" style="padding-top:8px;padding-bottom:4px;">
+    <div class="ctrl">
+      <label class="lbl">View</label>
+      <div class="btn-group" id="lossViewGroup">
+        <button data-lossview="curves" class="active">Loss Curves</button>
+        <button data-lossview="timeseries">Time Series</button>
+      </div>
+    </div>
+    <div class="bar-sep" id="lossPoolSep" hidden></div>
+    <div class="ctrl" id="lossPoolCtrl" hidden>
+      <label class="lbl">Pool</label>
+      <div class="btn-group" id="lossPoolGroup">
+        <button data-losspool="all" class="active">All pools</button>
+        <button data-losspool="seasoned">Seasoned (&gt;6 mo)</button>
       </div>
     </div>
   </div>
@@ -901,7 +887,7 @@ if (window.self !== window.top) {
   };
 })();
 (function () {
-  const BUILD_ID   = "2026-09-06 11:13";
+  const BUILD_ID   = "2026-09-06 15:14";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNAN", "label": "Carvana N"}, {"code": "CRVNAP", "label": "Carvana P"}, {"code": "DRIVE", "label": "Santander (DRIVE)"}, {"code": "EART", "label": "Exeter"}, {"code": "EARTS", "label": "Exeter Select"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander (SDART)"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -967,6 +953,9 @@ if (window.self !== window.top) {
   let tsVehicleRows  = [];     // per-issuer rows for TS vehicle filter
   let lossRows       = [];     // per-issuer loss CSV rows
   let vintageBasis   = 'series'; // 'series' | 'vintage' (loss view; 10-D). Default per-deal.
+  let lossView       = 'curves'; // 'curves' | 'timeseries' (Losses tab view)
+  let lossPool       = 'all';    // 'all' | 'seasoned' (ANL pool basis)
+  let anlRows        = [];       // per-issuer annualised-net-loss rows
   let vintageView    = 'dq';   // 'dq' | 'loss'
 
   // ── Proportion labels inside New / Used buttons ──────────────────────
@@ -2112,6 +2101,109 @@ if (window.self !== window.top) {
   }
 
   // ── Loss Curves ──────────────────────────────────────────────────────
+  function parseAnlCSV(text) {
+    // The per-issuer _anl.csv — ANNUALISED net loss by calendar month, on
+    // both pool bases. Unlike the CNL curves (cumulative, indexed by loan age)
+    // this is a point-in-time flow rate, so it sits on a calendar axis the way
+    // the delinquency rate does. `recon_status` travels with the data so the
+    // chart can disclose when a shelf's figures are only provisionally clean.
+    const lines = text.trim().split('\n');
+    if (lines.length < 2) return [];
+    const header = lines[0].split(',').map(h => h.trim());
+    const idx = {};
+    header.forEach((h, i) => idx[h] = i);
+    return lines.slice(1).map(line => {
+      const vals = line.split(',');
+      if (vals.length < header.length) return null;
+      const seasoned = parseFloat(vals[idx.anl_seasoned]);
+      return {
+        month:    (vals[idx.month] ?? '').trim(),
+        all:      parseFloat(vals[idx.anl_all]),
+        seasoned: isNaN(seasoned) ? null : seasoned,
+        nAll:     parseInt(vals[idx.n_deals_all], 10),
+        status:   idx.recon_status != null ? (vals[idx.recon_status] ?? '').trim() : '',
+      };
+    }).filter(r => r && r.month && !isNaN(r.all));
+  }
+
+  function renderAnlChart() {
+    document.getElementById('tblWrap').style.display = 'none';
+    const vis = document.getElementById('vis');
+    vis.style.display = 'block';
+    vis.innerHTML = '';
+    if (!anlRows.length) { showMsg('No annualised loss data for this issuer.'); return; }
+    const code  = issuerSel.value;
+    const title = issuerLabel[code] || code;
+    const key   = (lossPool === 'seasoned') ? 'seasoned' : 'all';
+
+    // Calendar-time cut (these ARE calendar observations, unlike the curves).
+    const fromVal = dateFromSel.value || '';
+    const toVal   = dateToSel.value   || '';
+    const rows = anlRows.filter(r =>
+      r[key] !== null && !isNaN(r[key]) &&
+      (!fromVal || r.month >= fromVal.substring(0, 7) + '-01') &&
+      (!toVal   || r.month <= toVal.substring(0, 7)   + '-31')
+    );
+    if (!rows.length) { showMsg('No annualised loss data for selected filters.'); return; }
+
+    const data = rows.map(r => ({ month: r.month, rate: r[key], deals: r.nAll }));
+    const poolNote = (lossPool === 'seasoned')
+      ? 'seasoned pools (>6 mo)' : 'all pools';
+    // Losses swing hard with tax-refund season, so say so rather than let a
+    // reader read a seasonal trough as improving credit.
+    const sub = `Annualised net loss · ${poolNote} · compare year-over-year (auto losses are strongly seasonal)`;
+    const spec = {
+      "$schema":"https://vega.github.io/schema/vega-lite/v5.json",
+      "autosize":{"type":"fit","contains":"padding"},
+      "config":{
+        "axis":{"labelFontSize":13,"titleFontSize":14},
+        "title":{"anchor":"middle","fontSize":15,"subtitleFontSize":11},
+        "view":{"continuousHeight":300,"continuousWidth":300},
+        "tooltip":{},
+      },
+      "title":{"text":`${title} — Annualised Net Loss`,"subtitle":sub},
+      "width":"container","height":420,
+      "data":{"values":data},
+      "layer":[
+        {
+          "mark":{"type":"line","strokeWidth":2,"color":"#0034a5"},
+          "encoding":{
+            "x":{"field":"month","type":"temporal","title":"Month"},
+            "y":{"field":"rate","type":"quantitative","title":"Annualised Net Loss Rate",
+                 "axis":{"format":".2%"}},
+          },
+        },
+        {
+          // Zero line: below it the pool booked a net GAIN for the month —
+          // recoveries exceeded charge-offs. Prime shelves cross this often.
+          "mark":{"type":"rule","strokeDash":[4,3],"color":"#999"},
+          "encoding":{"y":{"datum":0}},
+        },
+        {
+          "mark":{"type":"point","size":38,"filled":true,"color":"#0034a5"},
+          "encoding":{
+            "x":{"field":"month","type":"temporal"},
+            "y":{"field":"rate","type":"quantitative"},
+            "tooltip":[
+              {"field":"month","type":"temporal","title":"Month","format":"%b %Y"},
+              {"field":"rate","type":"quantitative","title":"Annualised net loss","format":".2%"},
+              {"field":"deals","type":"quantitative","title":"Deals in pool"},
+            ],
+          },
+        },
+      ],
+    };
+    vegaEmbed('#vis', spec, {actions:false}).catch(e => showMsg(String(e), true));
+    const flagged = anlRows.length && anlRows[0].status && anlRows[0].status !== 'pass';
+    if (flagged) {
+      const note = document.createElement('div');
+      note.style.cssText = 'font-size:11.5px;color:#8a6d3b;padding:6px 0 0';
+      note.textContent = 'Note: this shelf is flagged — ' + anlRows[0].status +
+        ' — by the 10-D reconciliation check.';
+      vis.appendChild(note);
+    }
+  }
+
   function parseLossCSV(text) {
     // 10-D net-loss curve rows. Vintage file: vintage_year, months_seasoned,
     // cnl_ratio. Series file: series_label, vintage_year, months_seasoned,
@@ -2139,6 +2231,21 @@ if (window.self !== window.top) {
     if (!code) return;
     showMsg('Loading…');
     try {
+      if (lossView === 'timeseries') {
+        const resp = await fetch(csvUrl(`loss_cnl/${code}_anl.csv`), { cache: 'no-store' });
+        if (resp.status === 404) {
+          // A shelf withheld by the 10-D reconciliation gate has no ANL file.
+          // Say why rather than showing an empty chart.
+          showMsg('Annualised net loss is not published for this issuer — its '
+                + '10-D figures did not pass the reconciliation check.');
+          return;
+        }
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        anlRows = parseAnlCSV(await resp.text());
+        if (!anlRows.length) { showMsg('No annualised loss data for this issuer.'); return; }
+        renderAnlChart();
+        return;
+      }
       const filename = `loss_cnl/${code}_${vintageBasis}.csv`;
       const resp = await fetch(csvUrl(filename), { cache: 'no-store' });
       if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
@@ -2433,6 +2540,36 @@ if (window.self !== window.top) {
     setTab('delinquency', b.dataset.subview);
   });
 
+  // ── Losses tab: view + pool toggles ───────────────────────────────────────
+  // The Pool control only means anything for the annualised time series: a CNL
+  // curve is already indexed by loan age, so "seasoned" is not a distinction
+  // it can make. Hide it outside the time-series view rather than show a
+  // control that silently does nothing.
+  function _syncLossPoolVisibility() {
+    const on = (lossView === 'timeseries');
+    document.getElementById('lossPoolCtrl').hidden = !on;
+    document.getElementById('lossPoolSep').hidden  = !on;
+  }
+  document.getElementById('lossViewGroup').addEventListener('click', e => {
+    const b = e.target.closest('button[data-lossview]');
+    if (!b || b.dataset.lossview === lossView) return;
+    lossView = b.dataset.lossview;
+    for (const x of document.querySelectorAll('#lossViewGroup button'))
+      x.classList.toggle('active', x === b);
+    _syncLossPoolVisibility();
+    lossRows = []; anlRows = [];      // different shape — force a reload
+    loadLossAndRender();
+  });
+  document.getElementById('lossPoolGroup').addEventListener('click', e => {
+    const b = e.target.closest('button[data-losspool]');
+    if (!b || b.dataset.losspool === lossPool) return;
+    lossPool = b.dataset.losspool;
+    for (const x of document.querySelectorAll('#lossPoolGroup button'))
+      x.classList.toggle('active', x === b);
+    if (anlRows.length) renderAnlChart(); else loadLossAndRender();
+  });
+  _syncLossPoolVisibility();
+
   // DQ Status dropdown
   const dqSel = document.getElementById('dqSel');
   dqSel.value = dqFilter;
@@ -2488,7 +2625,9 @@ if (window.self !== window.top) {
   // Re-render the right chart based on currentTab/vintageView.
   const _onVintageRangeChange = () => {
     if (currentTab === 'losses') {
-      if (lossRows.length) renderLossChart(); else loadLossAndRender();
+      if (lossView === 'timeseries') {
+        if (anlRows.length) renderAnlChart(); else loadLossAndRender();
+      } else if (lossRows.length) { renderLossChart(); } else { loadLossAndRender(); }
     } else {
       render();
     }
