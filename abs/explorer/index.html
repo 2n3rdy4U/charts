@@ -555,6 +555,14 @@ if (window.self !== window.top) {
         <button data-lossview="timeseries">Time Series</button>
       </div>
     </div>
+    <div class="bar-sep" id="lossIssuerSep" hidden></div>
+    <div class="ctrl" id="lossIssuerCtrl" hidden>
+      <label class="lbl">Issuers <span class="meta-note">(multi-select)</span></label>
+      <div class="multi-sel" id="lossIssuerMulti">
+        <button class="multi-sel-btn" id="lossIssuerBtn" type="button">Select issuers &#9662;</button>
+        <div class="multi-sel-panel" id="lossIssuerPanel"></div>
+      </div>
+    </div>
     <div class="bar-sep" id="lossPoolSep" hidden></div>
     <div class="ctrl" id="lossPoolCtrl" hidden>
       <label class="lbl">Pool</label>
@@ -887,8 +895,9 @@ if (window.self !== window.top) {
   };
 })();
 (function () {
-  const BUILD_ID   = "2026-09-06 15:14";
+  const BUILD_ID   = "2026-09-06 15:30";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNAN", "label": "Carvana N"}, {"code": "CRVNAP", "label": "Carvana P"}, {"code": "DRIVE", "label": "Santander (DRIVE)"}, {"code": "EART", "label": "Exeter"}, {"code": "EARTS", "label": "Exeter Select"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander (SDART)"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
+  const ANL_ISSUERS = ["AART", "AMCAR", "BLAST", "BMWOT", "CAOT", "CMXS", "COPAR", "CRVNAN", "CRVNAP", "DRIVE", "EART", "EARTS", "FCAOT", "FTAT", "HAROT", "HART", "MBART", "NAROT", "SDART", "TAOT", "VALET", "WOART", "WOSAT"];   // shelves with a published ANL series
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
   const _MO_FULL = ['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -955,7 +964,8 @@ if (window.self !== window.top) {
   let vintageBasis   = 'series'; // 'series' | 'vintage' (loss view; 10-D). Default per-deal.
   let lossView       = 'curves'; // 'curves' | 'timeseries' (Losses tab view)
   let lossPool       = 'all';    // 'all' | 'seasoned' (ANL pool basis)
-  let anlRows        = [];       // per-issuer annualised-net-loss rows
+  let anlSeries      = new Map();   // issuer code -> annualised-net-loss rows
+  let lossIssuers    = new Set();   // issuers selected for the loss time series
   let vintageView    = 'dq';   // 'dq' | 'loss'
 
   // ── Proportion labels inside New / Used buttons ──────────────────────
@@ -2101,6 +2111,101 @@ if (window.self !== window.top) {
   }
 
   // ── Loss Curves ──────────────────────────────────────────────────────
+  // ── Loss time-series issuer multi-select ─────────────────────────────────
+  // A parallel control to the Delinquency picker rather than a shared one: the
+  // DQ panel is wired into DQ-only state (showAllAvg, Year Overlay, the vehicle
+  // toggle) and reusing it would drag that behaviour onto a tab where none of
+  // it applies. Same classes, so it looks and behaves identically.
+  const lossIssuerBtn   = document.getElementById('lossIssuerBtn');
+  const lossIssuerPanel = document.getElementById('lossIssuerPanel');
+  const lossIssuerCbs   = [];
+  let   lossSelectAllCb = null;
+
+  function syncLossSelectAll() {
+    if (!lossSelectAllCb) return;
+    if (lossIssuers.size === 0) {
+      lossSelectAllCb.checked = false; lossSelectAllCb.indeterminate = false;
+    } else if (lossIssuers.size === ANL_ISSUERS.length) {
+      lossSelectAllCb.checked = true;  lossSelectAllCb.indeterminate = false;
+    } else {
+      lossSelectAllCb.checked = false; lossSelectAllCb.indeterminate = true;
+    }
+  }
+
+  function updateLossIssuerBtn() {
+    const parts = [...lossIssuers].map(c => issuerLabel[c] || c);
+    if (lossIssuers.size === ANL_ISSUERS.length && ANL_ISSUERS.length) {
+      lossIssuerBtn.textContent = 'All Issuers ▾';
+    } else if (parts.length === 0) {
+      lossIssuerBtn.textContent = 'Select issuers ▾';
+    } else if (parts.length <= 2) {
+      lossIssuerBtn.textContent = parts.join(', ') + ' ▾';
+    } else {
+      lossIssuerBtn.textContent = parts[0] + ', +' + (parts.length - 1) + ' more ▾';
+    }
+  }
+
+  function buildLossIssuerPanel() {
+    if (!lossIssuerPanel || lossIssuerCbs.length) return;
+    const allLbl = document.createElement('label');
+    lossSelectAllCb = document.createElement('input');
+    lossSelectAllCb.type = 'checkbox';
+    lossSelectAllCb.addEventListener('change', () => {
+      for (const cb of lossIssuerCbs) {
+        cb.checked = lossSelectAllCb.checked;
+        if (cb.checked) lossIssuers.add(cb.value); else lossIssuers.delete(cb.value);
+      }
+      updateLossIssuerBtn(); loadAnlAndRender();
+    });
+    allLbl.appendChild(lossSelectAllCb);
+    allLbl.appendChild(document.createTextNode(' All issuers'));
+    lossIssuerPanel.appendChild(allLbl);
+    const sep = document.createElement('div'); sep.className = 'multi-sel-sep';
+    lossIssuerPanel.appendChild(sep);
+
+    for (const code of ANL_ISSUERS) {
+      const lbl = document.createElement('label');
+      const cb  = document.createElement('input');
+      cb.type = 'checkbox'; cb.value = code; cb.title = code;
+      cb.addEventListener('change', () => {
+        if (cb.checked) lossIssuers.add(code); else lossIssuers.delete(code);
+        syncLossSelectAll(); updateLossIssuerBtn(); loadAnlAndRender();
+      });
+      lossIssuerCbs.push(cb);
+      lbl.appendChild(cb);
+      lbl.appendChild(document.createTextNode(' ' + (issuerLabel[code] || code)));
+      lossIssuerPanel.appendChild(lbl);
+    }
+  }
+
+  if (lossIssuerBtn) {
+    lossIssuerBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      lossIssuerPanel.classList.toggle('is-open');
+    });
+    document.addEventListener('click', () => lossIssuerPanel.classList.remove('is-open'));
+    lossIssuerPanel.addEventListener('click', e => e.stopPropagation());
+  }
+
+  async function loadAnlAndRender() {
+    updateViewHeader();
+    buildLossIssuerPanel();
+    if (!lossIssuers.size) { showMsg('Select one or more issuers to compare.'); return; }
+    showMsg('Loading…');
+    const wanted = [...lossIssuers];
+    try {
+      await Promise.all(wanted.map(async code => {
+        if (anlSeries.has(code)) return;                 // already cached
+        const resp = await fetch(csvUrl(`loss_cnl/${code}_anl.csv`), { cache: 'no-store' });
+        if (!resp.ok) { anlSeries.set(code, []); return; }
+        anlSeries.set(code, parseAnlCSV(await resp.text()));
+      }));
+      renderAnlChart();
+    } catch (err) {
+      showMsg('Failed to load: ' + String(err), true);
+    }
+  }
+
   function parseAnlCSV(text) {
     // The per-issuer _anl.csv — ANNUALISED net loss by calendar month, on
     // both pool bases. Unlike the CNL curves (cumulative, indexed by loan age)
@@ -2131,27 +2236,38 @@ if (window.self !== window.top) {
     const vis = document.getElementById('vis');
     vis.style.display = 'block';
     vis.innerHTML = '';
-    if (!anlRows.length) { showMsg('No annualised loss data for this issuer.'); return; }
-    const code  = issuerSel.value;
-    const title = issuerLabel[code] || code;
-    const key   = (lossPool === 'seasoned') ? 'seasoned' : 'all';
-
-    // Calendar-time cut (these ARE calendar observations, unlike the curves).
+    const key = (lossPool === 'seasoned') ? 'seasoned' : 'all';
     const fromVal = dateFromSel.value || '';
     const toVal   = dateToSel.value   || '';
-    const rows = anlRows.filter(r =>
-      r[key] !== null && !isNaN(r[key]) &&
-      (!fromVal || r.month >= fromVal.substring(0, 7) + '-01') &&
-      (!toVal   || r.month <= toVal.substring(0, 7)   + '-31')
-    );
-    if (!rows.length) { showMsg('No annualised loss data for selected filters.'); return; }
 
-    const data = rows.map(r => ({ month: r.month, rate: r[key], deals: r.nAll }));
-    const poolNote = (lossPool === 'seasoned')
-      ? 'seasoned pools (>6 mo)' : 'all pools';
-    // Losses swing hard with tax-refund season, so say so rather than let a
-    // reader read a seasonal trough as improving credit.
+    const data = [], withheld = [], flagged = [];
+    for (const code of lossIssuers) {
+      const rows = anlSeries.get(code) || [];
+      if (!rows.length) { withheld.push(issuerLabel[code] || code); continue; }
+      if (rows[0].status && rows[0].status !== 'pass') flagged.push(issuerLabel[code] || code);
+      for (const r of rows) {
+        if (r[key] === null || isNaN(r[key])) continue;
+        if (fromVal && r.month < fromVal.substring(0, 7) + '-01') continue;
+        if (toVal   && r.month > toVal.substring(0, 7)   + '-31') continue;
+        data.push({ issuer: issuerLabel[code] || code, month: r.month,
+                    rate: r[key], deals: r.nAll });
+      }
+    }
+    if (!data.length) {
+      showMsg(withheld.length
+        ? 'No annualised loss series published for: ' + withheld.join(', ')
+        : 'No annualised loss data for selected filters.');
+      return;
+    }
+
+    const poolNote = (lossPool === 'seasoned') ? 'seasoned pools (>6 mo)' : 'all pools';
     const sub = `Annualised net loss · ${poolNote} · compare year-over-year (auto losses are strongly seasonal)`;
+    const nIss = new Set(data.map(d => d.issuer)).size;
+    const legend = (nIss > 1) ? {
+      "orient":"bottom","direction":"horizontal",
+      "columns":legendColumns(),"columnPadding":24,
+      "labelLimit":90,"symbolSize":110,"symbolLimit":1000,
+    } : null;
     const spec = {
       "$schema":"https://vega.github.io/schema/vega-lite/v5.json",
       "autosize":{"type":"fit","contains":"padding"},
@@ -2161,30 +2277,29 @@ if (window.self !== window.top) {
         "view":{"continuousHeight":300,"continuousWidth":300},
         "tooltip":{},
       },
-      "title":{"text":`${title} — Annualised Net Loss`,"subtitle":sub},
+      "title":{"text":"Annualised Net Loss","subtitle":sub},
       "width":"container","height":420,
       "data":{"values":data},
       "layer":[
         {
-          "mark":{"type":"line","strokeWidth":2,"color":"#0034a5"},
-          "encoding":{
-            "x":{"field":"month","type":"temporal","title":"Month"},
-            "y":{"field":"rate","type":"quantitative","title":"Annualised Net Loss Rate",
-                 "axis":{"format":".2%"}},
-          },
-        },
-        {
-          // Zero line: below it the pool booked a net GAIN for the month —
-          // recoveries exceeded charge-offs. Prime shelves cross this often.
+          // Zero rule: below it the pool booked a net GAIN for the month —
+          // recoveries exceeded charge-offs. Prime shelves cross it often.
           "mark":{"type":"rule","strokeDash":[4,3],"color":"#999"},
           "encoding":{"y":{"datum":0}},
         },
         {
-          "mark":{"type":"point","size":38,"filled":true,"color":"#0034a5"},
+          "mark":{"type":"line","strokeWidth":2,"point":{"size":30,"filled":true}},
           "encoding":{
-            "x":{"field":"month","type":"temporal"},
-            "y":{"field":"rate","type":"quantitative"},
+            "x":{"field":"month","type":"temporal","title":"Month"},
+            "y":{"field":"rate","type":"quantitative","title":"Annualised Net Loss Rate",
+                 "axis":{"format":".2%"}},
+            "color":{
+              "field":"issuer","type":"nominal","title":"Issuer",
+              "scale":{"scheme":"tableau10"},
+              "legend": legend,
+            },
             "tooltip":[
+              {"field":"issuer","type":"nominal","title":"Issuer"},
               {"field":"month","type":"temporal","title":"Month","format":"%b %Y"},
               {"field":"rate","type":"quantitative","title":"Annualised net loss","format":".2%"},
               {"field":"deals","type":"quantitative","title":"Deals in pool"},
@@ -2194,13 +2309,14 @@ if (window.self !== window.top) {
       ],
     };
     vegaEmbed('#vis', spec, {actions:false}).catch(e => showMsg(String(e), true));
-    const flagged = anlRows.length && anlRows[0].status && anlRows[0].status !== 'pass';
-    if (flagged) {
-      const note = document.createElement('div');
-      note.style.cssText = 'font-size:11.5px;color:#8a6d3b;padding:6px 0 0';
-      note.textContent = 'Note: this shelf is flagged — ' + anlRows[0].status +
-        ' — by the 10-D reconciliation check.';
-      vis.appendChild(note);
+    const notes = [];
+    if (flagged.length)  notes.push('Flagged by the 10-D reconciliation check: ' + flagged.join(', ') + '.');
+    if (withheld.length) notes.push('No series published for: ' + withheld.join(', ') + '.');
+    if (notes.length) {
+      const n = document.createElement('div');
+      n.style.cssText = 'font-size:11.5px;color:#8a6d3b;padding:6px 0 0';
+      n.textContent = notes.join(' ');
+      vis.appendChild(n);
     }
   }
 
@@ -2228,24 +2344,12 @@ if (window.self !== window.top) {
   async function loadLossAndRender() {
     updateViewHeader();
     const code = issuerSel.value;
-    if (!code) return;
+    // The time series is driven by the multi-select, not the Vintage dropdown,
+    // so an empty dropdown must not short-circuit it.
+    if (!code && lossView !== 'timeseries') return;
     showMsg('Loading…');
     try {
-      if (lossView === 'timeseries') {
-        const resp = await fetch(csvUrl(`loss_cnl/${code}_anl.csv`), { cache: 'no-store' });
-        if (resp.status === 404) {
-          // A shelf withheld by the 10-D reconciliation gate has no ANL file.
-          // Say why rather than showing an empty chart.
-          showMsg('Annualised net loss is not published for this issuer — its '
-                + '10-D figures did not pass the reconciliation check.');
-          return;
-        }
-        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-        anlRows = parseAnlCSV(await resp.text());
-        if (!anlRows.length) { showMsg('No annualised loss data for this issuer.'); return; }
-        renderAnlChart();
-        return;
-      }
+      if (lossView === 'timeseries') { await loadAnlAndRender(); return; }
       const filename = `loss_cnl/${code}_${vintageBasis}.csv`;
       const resp = await fetch(csvUrl(filename), { cache: 'no-store' });
       if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
@@ -2547,8 +2651,10 @@ if (window.self !== window.top) {
   // control that silently does nothing.
   function _syncLossPoolVisibility() {
     const on = (lossView === 'timeseries');
-    document.getElementById('lossPoolCtrl').hidden = !on;
-    document.getElementById('lossPoolSep').hidden  = !on;
+    document.getElementById('lossPoolCtrl').hidden   = !on;
+    document.getElementById('lossPoolSep').hidden    = !on;
+    document.getElementById('lossIssuerCtrl').hidden = !on;
+    document.getElementById('lossIssuerSep').hidden  = !on;
   }
   document.getElementById('lossViewGroup').addEventListener('click', e => {
     const b = e.target.closest('button[data-lossview]');
@@ -2557,7 +2663,22 @@ if (window.self !== window.top) {
     for (const x of document.querySelectorAll('#lossViewGroup button'))
       x.classList.toggle('active', x === b);
     _syncLossPoolVisibility();
-    lossRows = []; anlRows = [];      // different shape — force a reload
+    lossRows = [];                    // different shape — force a reload
+    if (lossView === 'timeseries') {
+      buildLossIssuerPanel();
+      // Seed from whatever the Vintage dropdown was showing, so switching views
+      // lands on a chart rather than an empty prompt.
+      if (!lossIssuers.size) {
+        const seed = issuerSel.value;
+        if (seed && ANL_ISSUERS.includes(seed)) lossIssuers.add(seed);
+        else if (ANL_ISSUERS.length) lossIssuers.add(ANL_ISSUERS[0]);
+        for (const cb of lossIssuerCbs) cb.checked = lossIssuers.has(cb.value);
+        syncLossSelectAll();
+      }
+      updateLossIssuerBtn();
+      loadAnlAndRender();
+      return;
+    }
     loadLossAndRender();
   });
   document.getElementById('lossPoolGroup').addEventListener('click', e => {
@@ -2566,7 +2687,7 @@ if (window.self !== window.top) {
     lossPool = b.dataset.losspool;
     for (const x of document.querySelectorAll('#lossPoolGroup button'))
       x.classList.toggle('active', x === b);
-    if (anlRows.length) renderAnlChart(); else loadLossAndRender();
+    if (anlSeries.size) renderAnlChart(); else loadAnlAndRender();
   });
   _syncLossPoolVisibility();
 
@@ -2626,7 +2747,7 @@ if (window.self !== window.top) {
   const _onVintageRangeChange = () => {
     if (currentTab === 'losses') {
       if (lossView === 'timeseries') {
-        if (anlRows.length) renderAnlChart(); else loadLossAndRender();
+        if (anlSeries.size) renderAnlChart(); else loadAnlAndRender();
       } else if (lossRows.length) { renderLossChart(); } else { loadLossAndRender(); }
     } else {
       render();
