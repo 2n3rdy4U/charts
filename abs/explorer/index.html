@@ -205,6 +205,16 @@
        Curves view, with a panel that has nothing to do with that view. */
     #lossIssuerCtrl[hidden], #lossPoolCtrl[hidden],
     #lossIssuerSep[hidden], #lossPoolSep[hidden] { display:none !important; }
+    /* The Losses tab also renders the vintage bar, so its single-select
+       "Issuer" dropdown sat next to the new "Issuers (multi-select)" picker —
+       two issuer controls, one of which lists issuers with no checkboxes.
+       That is the wrong control to reach for in this view, and it was reached
+       for. Hide it while the time series is showing; Date Range stays, since
+       the time series honours it. */
+    body[data-tab="losses"][data-lossview="timeseries"] #vintageIssuerCtrl,
+    body[data-tab="losses"][data-lossview="timeseries"] #vintageIssuerSep {
+      display:none !important;
+    }
     /* Repossessions tab: own filter bar; sharedBar kept for Credit Score/Vehicle */
     body[data-tab="repossessions"] .repo-only { display:flex; }
     body[data-tab="repossessions"] #vintageBar { display:none !important; }
@@ -581,11 +591,11 @@ if (window.self !== window.top) {
 
   <!-- ── Row 2a: vintage controls (issuer + date range) ── -->
   <div class="fbar vintage-only" id="vintageBar">
-    <div class="ctrl">
+    <div class="ctrl" id="vintageIssuerCtrl">
       <label class="lbl">Issuer</label>
       <select id="issuerSel"></select>
     </div>
-    <div class="bar-sep"></div>
+    <div class="bar-sep" id="vintageIssuerSep"></div>
     <div class="ctrl">
       <label class="lbl">Date Range</label>
       <select id="vintageRangeSel" style="min-width:150px;">
@@ -901,7 +911,7 @@ if (window.self !== window.top) {
   };
 })();
 (function () {
-  const BUILD_ID   = "2026-09-06 15:59";
+  const BUILD_ID   = "2026-09-06 17:04";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNAN", "label": "Carvana N"}, {"code": "CRVNAP", "label": "Carvana P"}, {"code": "DRIVE", "label": "Santander (DRIVE)"}, {"code": "EART", "label": "Exeter"}, {"code": "EARTS", "label": "Exeter Select"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander (SDART)"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const ANL_ISSUERS = ["AART", "AMCAR", "BLAST", "BMWOT", "CAOT", "CMXS", "COPAR", "CRVNAN", "CRVNAP", "DRIVE", "EART", "EARTS", "FCAOT", "FTAT", "HAROT", "HART", "MBART", "NAROT", "SDART", "TAOT", "VALET", "WOART", "WOSAT"];   // shelves with a published ANL series
   const DATA_BASE  = ".";
@@ -2657,6 +2667,7 @@ if (window.self !== window.top) {
   // control that silently does nothing.
   function _syncLossPoolVisibility() {
     const on = (lossView === 'timeseries');
+    document.body.dataset.lossview = lossView;
     document.getElementById('lossPoolCtrl').hidden   = !on;
     document.getElementById('lossPoolSep').hidden    = !on;
     document.getElementById('lossIssuerCtrl').hidden = !on;
