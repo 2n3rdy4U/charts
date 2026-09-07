@@ -911,7 +911,7 @@ if (window.self !== window.top) {
   };
 })();
 (function () {
-  const BUILD_ID   = "2026-09-07 14:44";
+  const BUILD_ID   = "2026-09-07 15:03";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNAN", "label": "Carvana N"}, {"code": "CRVNAP", "label": "Carvana P"}, {"code": "DRIVE", "label": "Santander (DRIVE)"}, {"code": "EART", "label": "Exeter"}, {"code": "EARTS", "label": "Exeter Select"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander (SDART)"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const ANL_ISSUERS = ["AART", "AMCAR", "BLAST", "BMWOT", "CAOT", "CMXS", "COPAR", "CRVNAN", "CRVNAP", "DRIVE", "EART", "EARTS", "FCAOT", "FTAT", "HAROT", "HART", "MBART", "NAROT", "SDART", "TAOT", "VALET", "WOART", "WOSAT"];   // shelves with a published ANL series
   const DATA_BASE  = ".";
@@ -1523,28 +1523,7 @@ if (window.self !== window.top) {
         }
       } catch (e) { _tsWindowMonths = 0; }
     }
-    let _tsAxis;
-    if (!isVintage && _tsWindowMonths > 0 && _tsWindowMonths <= 24) {
-      _tsAxis = {
-        tickCount: 6, format: "%b %Y",
-        labelAngle: _isNarrow ? -45 : 0,
-        labelFontSize: _isNarrow ? 10 : 12,
-        labelOverlap: false,
-      };
-    } else if (!isVintage && _tsWindowMonths > 72) {
-      _tsAxis = {
-        tickCount: {utcyear: 2}, format: "%Y",
-        labelAngle: _isNarrow ? -45 : 0,
-        labelFontSize: _isNarrow ? 10 : undefined,
-        labelOverlap: false,
-      };
-    } else {
-      _tsAxis = _isNarrow
-        ? { tickCount: {utcyear: 1}, format: "%Y", labelAngle: -45,
-             labelFontSize: 10, labelOverlap: false }
-        : { tickCount: {utcyear: 1}, format: "%Y", labelAngle: 0,
-             labelOverlap: false };
-    }
+    const _tsAxis = tsDateAxis(_tsWindowMonths, _isNarrow);
     const xEnc = isVintage
       ? { field:'vintage_month', type:'quantitative',
            title:'Months Since Issuance', axis:{ tickMinStep:1 } }
@@ -1888,6 +1867,16 @@ if (window.self !== window.top) {
       const code = (typeof issuerSel !== 'undefined' && issuerSel.value) ? issuerSel.value : '';
       const issuerTxt = code ? (issuerLabel[code] || code) : '';
       if (vintageView === 'loss') {
+        // The Losses tab has two views; the header must follow the active one
+        // or the page reads "Vintage Loss Curves" over an annualized series.
+        if (lossView === 'timeseries') {
+          title = issuerTxt ? `${issuerTxt} Annualized Net Loss`
+                            : 'Auto ABS Annualized Net Loss';
+          subParts = [(lossPool === 'seasoned' ? 'Seasoned pools (>6 mo)' : 'All pools')];
+          if (titleEl) titleEl.textContent = title;
+          if (subEl) subEl.textContent = subParts.filter(Boolean).join(' · ');
+          return;
+        }
         title = issuerTxt ? `${issuerTxt} Vintage Loss Curves` : 'Auto ABS Cumulative Net Loss';
         // 10-D is pool-level: no credit-score / vehicle segmentation. Show the
         // view only; the 10-D source is stated in the footer source bar.
@@ -2247,6 +2236,29 @@ if (window.self !== window.top) {
     }).filter(r => r && r.month && !isNaN(r.all));
   }
 
+  function tsDateAxis(windowMonths, isNarrow) {
+    // Shared by BOTH time-series charts so their x-axes read identically.
+    // Short windows get month+year; long ones get years only, because
+    // month labels collide. Without this the loss chart used Vega's default,
+    // which prints bare month names — "October ... April ..." with no year,
+    // unreadable across an eight-year series.
+    if (windowMonths > 0 && windowMonths <= 24) {
+      return { tickCount: 6, format: "%b %Y",
+               labelAngle: isNarrow ? -45 : 0,
+               labelFontSize: isNarrow ? 10 : 12, labelOverlap: false };
+    }
+    if (windowMonths > 72) {
+      return { tickCount: {utcyear: 2}, format: "%Y",
+               labelAngle: isNarrow ? -45 : 0,
+               labelFontSize: isNarrow ? 10 : undefined, labelOverlap: false };
+    }
+    return isNarrow
+      ? { tickCount: {utcyear: 1}, format: "%Y", labelAngle: -45,
+          labelFontSize: 10, labelOverlap: false }
+      : { tickCount: {utcyear: 1}, format: "%Y", labelAngle: 0,
+          labelOverlap: false };
+  }
+
   function renderAnlChart() {
     document.getElementById('tblWrap').style.display = 'none';
     const vis = document.getElementById('vis');
@@ -2276,8 +2288,22 @@ if (window.self !== window.top) {
       return;
     }
 
+    const _months = data.length
+      ? (new Date(data[data.length-1].month) - new Date(data[0].month)) / (1000*60*60*24*30.4375)
+      : 0;
+    const _anlAxis = tsDateAxis(_months, window.matchMedia('(max-width: 700px)').matches);
     const poolNote = (lossPool === 'seasoned') ? 'seasoned pools (>6 mo)' : 'all pools';
-    const sub = `Annualized net loss · ${poolNote} · compare year-over-year (auto losses are strongly seasonal)`;
+    // State the as-of month. Losses come from the 10-D servicer reports and
+    // delinquency from ABS-EE, and the two filings land on different clocks —
+    // a shelf's newest 10-D distribution can be a month behind its newest
+    // ABS-EE month-end. Nothing is truncated here; saying the date stops the
+    // gap reading as missing data.
+    const _last = data.length ? new Date(data[data.length-1].month) : null;
+    const _asOf = _last ? _last.toLocaleDateString('en-US',
+        {month:'short', year:'numeric', timeZone:'UTC'}) : '';
+    const sub = `Annualized net loss · ${poolNote}`
+      + (_asOf ? ` · through ${_asOf}` : '')
+      + ` · compare year-over-year (auto losses are strongly seasonal)`;
     const nIss = new Set(data.map(d => d.issuer)).size;
     const legend = (nIss > 1) ? {
       "orient":"bottom","direction":"horizontal",
@@ -2306,7 +2332,8 @@ if (window.self !== window.top) {
         {
           "mark":{"type":"line","strokeWidth":2,"point":{"size":30,"filled":true}},
           "encoding":{
-            "x":{"field":"month","type":"temporal","title":"Month"},
+            "x":{"field":"month","type":"temporal","timeUnit":"utcyearmonth",
+                 "title":"Reporting Date","axis":_anlAxis},
             "y":{"field":"rate","type":"quantitative","title":"Annualized Net Loss Rate",
                  "axis":{"format":".2%"}},
             "color":{
