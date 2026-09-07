@@ -911,8 +911,8 @@ if (window.self !== window.top) {
   };
 })();
 (function () {
-  const BUILD_ID   = "2026-09-07 10:54";
-  const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNAN", "label": "Carvana N"}, {"code": "CRVNAP", "label": "Carvana P"}, {"code": "DRIVE", "label": "Santander (DRIVE)"}, {"code": "EART", "label": "Exeter"}, {"code": "EARTS", "label": "Exeter Select"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander (SDART)"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
+  const BUILD_ID   = "2026-09-07 11:06";
+  const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNAN", "label": "Carvana N"}, {"code": "CRVNAP", "label": "Carvana P"}, {"code": "DRIVE", "label": "Santander (DRIVE)"}, {"code": "EART", "label": "Exeter"}, {"code": "EARTS", "label": "Exeter Select"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander (SDART)"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const ANL_ISSUERS = ["AART", "AMCAR", "BLAST", "BMWOT", "CAOT", "CMXS", "COPAR", "CRVNAN", "CRVNAP", "DRIVE", "EART", "EARTS", "FCAOT", "FTAT", "HAROT", "HART", "MBART", "NAROT", "SDART", "TAOT", "VALET", "WOART", "WOSAT"];   // shelves with a published ANL series
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -3194,29 +3194,13 @@ if (window.self !== window.top) {
       _b.classList.toggle('active', _b.dataset.pool === 'seasoned');
   }
 
-  // Legacy URL redirects (old ?view= param)
-  if (!_initTab && _legacyView) {
-    if (_legacyView === 'timeseries') { setTab('delinquency', 'timeseries'); }
-    else if (_legacyView === 'fico') { setTab('credit-score'); }
-    else if (_legacyView === 'coverage') { setTab('delinquency', 'vintage'); }
-    else { setTab('delinquency', 'vintage'); }
-  } else if (_initTab === 'losses') {
-    setTab('losses');
-  } else if (_initTab === 'repossessions') {
-    setTab('repossessions');
-  } else if (_initTab === 'credit-score') {
-    setTab('credit-score');
-  } else if (_initTab === 'delinquency') {
-    setTab('delinquency', _initSub === 'timeseries' ? 'timeseries' : 'vintage');
-  } else {
-    // Default: Delinquency / Vintage
-    setTab('delinquency', 'vintage');
-  }
-
-  // ?lossview=timeseries arrived: switch the Losses tab into the annualized
-  // time series, seed the issuer picker from ?issuers= (falling back to
-  // ?issuer=), apply ?losspool=, and render — so a linked card lands on the
-  // exact chart the number came from.
+  // Losses deep link. This MUST run before the tab dispatch below: setTab
+  // ('losses') kicks off loadLossAndRender(), and if lossView is still
+  // 'curves' at that moment it fetches the vintage CSV. Rendering the time
+  // series afterwards then raced that fetch — the vintage response landed
+  // last and painted over it, which is exactly the "says Time Series, shows
+  // Vintage Loss Curves" report. Set the state first and setTab loads the
+  // right chart the first time.
   if (_initTab === 'losses' && _initLossView === 'timeseries') {
     lossView = 'timeseries';
     for (const b of document.querySelectorAll('#lossViewGroup button'))
@@ -3235,7 +3219,25 @@ if (window.self !== window.top) {
     }
     updateLossIssuerBtn();
     _syncLossPoolVisibility();
-    loadAnlAndRender();
+  }
+
+  // Legacy URL redirects (old ?view= param)
+  if (!_initTab && _legacyView) {
+    if (_legacyView === 'timeseries') { setTab('delinquency', 'timeseries'); }
+    else if (_legacyView === 'fico') { setTab('credit-score'); }
+    else if (_legacyView === 'coverage') { setTab('delinquency', 'vintage'); }
+    else { setTab('delinquency', 'vintage'); }
+  } else if (_initTab === 'losses') {
+    setTab('losses');
+  } else if (_initTab === 'repossessions') {
+    setTab('repossessions');
+  } else if (_initTab === 'credit-score') {
+    setTab('credit-score');
+  } else if (_initTab === 'delinquency') {
+    setTab('delinquency', _initSub === 'timeseries' ? 'timeseries' : 'vintage');
+  } else {
+    // Default: Delinquency / Vintage
+    setTab('delinquency', 'vintage');
   }
 
   // ?pool=seasoned arrived: the first setTab above rendered before the seasoned
