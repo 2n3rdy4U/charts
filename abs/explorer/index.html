@@ -489,17 +489,11 @@
 .ccm-topbar-nav .ccm-cta{background:#4ade80;color:#0e1d2e;padding:8px 16px;
   border-radius:4px;font-weight:600;letter-spacing:0.02em;transition:background 0.15s}
 .ccm-topbar-nav .ccm-cta:hover{background:#65f08e}
-.ccm-topbar-nav a.ccm-back{color:#4ade80;font-weight:600}
-.ccm-topbar-nav a.ccm-back:hover{color:#65f08e}
 @media (max-width:640px){
   .ccm-topbar{padding:0 14px}
   .ccm-wordmark{height:26px}
   .ccm-topbar-nav{gap:14px;font-size:12px}
   .ccm-topbar-nav a:not(.ccm-cta){display:none}
-  /* The return link is the whole reason a newsletter reader is here, so it
-     stays when the other nav items collapse. Declared after the rule above:
-     equal specificity, so source order decides. */
-  .ccm-topbar-nav a.ccm-back{display:inline}
 }
 
   </style>
@@ -536,7 +530,6 @@
     <a class="ccm-cta" href="https://www.consumercreditmatters.com/subscribe">Subscribe</a>
   </nav>
 </header>
-
 <script>
 /* These data pages are normally shown inside the /charts/ shell, which has
    its own header — so this in-page bar would duplicate it. Hide it when we're
@@ -545,30 +538,6 @@ if (window.self !== window.top) {
   var _ccmBar = document.querySelector('.ccm-topbar');
   if (_ccmBar) _ccmBar.style.display = 'none';
 }
-/* A chart opened from a newsletter exhibit carries ?back=/newsletter/<date>/, so
-   the reader can return to the article rather than only to the site's front
-   door. The page's own URL rewriting preserves unknown params, so the link
-   survives filtering and tab changes.
-
-   The value is matched against a whitelist, not merely checked for bad input:
-   accepting an arbitrary URL here would make every chart page an open redirect
-   on this domain — attractive for phishing, since the hop begins somewhere
-   genuine. Only a path under /newsletter/ built from unreserved characters is
-   allowed, which excludes another host (protocol-relative //evil.example.com),
-   backslashes, and traversal. */
-(function () {
-  try {
-    var p = new URLSearchParams(window.location.search).get('back');
-    if (!p || !/^\/newsletter\/[A-Za-z0-9._~/-]*$/.test(p) || p.indexOf('..') !== -1) return;
-    var nav = document.querySelector('.ccm-topbar-nav');
-    if (!nav) return;
-    var a = document.createElement('a');
-    a.className = 'ccm-back';
-    a.href = p;
-    a.textContent = '\u2190 Back to the issue';
-    nav.insertBefore(a, nav.firstChild);
-  } catch (_e) { /* never let this break the bar */ }
-})();
 </script>
 
 <div class="wrap">
@@ -942,7 +911,7 @@ if (window.self !== window.top) {
   };
 })();
 (function () {
-  const BUILD_ID   = "2026-09-07 11:38";
+  const BUILD_ID   = "2026-09-07 14:44";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNAN", "label": "Carvana N"}, {"code": "CRVNAP", "label": "Carvana P"}, {"code": "DRIVE", "label": "Santander (DRIVE)"}, {"code": "EART", "label": "Exeter"}, {"code": "EARTS", "label": "Exeter Select"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander (SDART)"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const ANL_ISSUERS = ["AART", "AMCAR", "BLAST", "BMWOT", "CAOT", "CMXS", "COPAR", "CRVNAN", "CRVNAP", "DRIVE", "EART", "EARTS", "FCAOT", "FTAT", "HAROT", "HART", "MBART", "NAROT", "SDART", "TAOT", "VALET", "WOART", "WOSAT"];   // shelves with a published ANL series
   const DATA_BASE  = ".";
@@ -3252,6 +3221,12 @@ if (window.self !== window.top) {
     _syncLossPoolVisibility();
   }
 
+  // Wrapped so a ?pool=seasoned deep link can await its data BEFORE the first
+  // paint. Previously the tab dispatch ran immediately and the seasoned summary
+  // was fetched afterwards, so the page painted once against whatever was
+  // loaded and swapped a beat later — the toggle read "Seasoned" over a chart
+  // that was not yet seasoned. One paint, already correct.
+  function _dispatchInitialTab() {
   // Legacy URL redirects (old ?view= param)
   if (!_initTab && _legacyView) {
     if (_legacyView === 'timeseries') { setTab('delinquency', 'timeseries'); }
@@ -3271,11 +3246,13 @@ if (window.self !== window.top) {
     setTab('delinquency', 'vintage');
   }
 
-  // ?pool=seasoned arrived: the first setTab above rendered before the seasoned
-  // summary finished loading, so fetch it and re-render the current view.
+  }   // end _dispatchInitialTab
+
   if (_wantSeasoned) {
     showMsg('Loading seasoned data…');
-    ensureSeasonedLoaded().then(() => setTab(currentTab, currentSub));
+    ensureSeasonedLoaded().then(_dispatchInitialTab).catch(_dispatchInitialTab);
+  } else {
+    _dispatchInitialTab();
   }
 
   // Re-run the current tab's renderer on orientation change so Vega-Lite
