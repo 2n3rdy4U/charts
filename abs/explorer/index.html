@@ -942,7 +942,7 @@ if (window.self !== window.top) {
   };
 })();
 (function () {
-  const BUILD_ID   = "2026-09-06 23:14";
+  const BUILD_ID   = "2026-09-06 23:51";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNAN", "label": "Carvana N"}, {"code": "CRVNAP", "label": "Carvana P"}, {"code": "DRIVE", "label": "Santander (DRIVE)"}, {"code": "EART", "label": "Exeter"}, {"code": "EARTS", "label": "Exeter Select"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander (SDART)"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const ANL_ISSUERS = ["AART", "AMCAR", "BLAST", "BMWOT", "CAOT", "CMXS", "COPAR", "CRVNAN", "CRVNAP", "DRIVE", "EART", "EARTS", "FCAOT", "FTAT", "HAROT", "HART", "MBART", "NAROT", "SDART", "TAOT", "VALET", "WOART", "WOSAT"];   // shelves with a published ANL series
   const DATA_BASE  = ".";
@@ -3111,6 +3111,12 @@ if (window.self !== window.top) {
   const _issuerFromUrl = (_initIssuer != null && _initIssuer !== '');
   let _initBasis  = _params.get('basis');   // 'deal' | 'orig' (Losses → Vintage)
   let _initPool   = _params.get('pool');    // 'all' | 'seasoned' (DQ pool toggle)
+  // Losses → Time Series deep-link params. A newsletter pulse card links the
+  // exact view its number came from, so the reader can tap through and see the
+  // stat rather than take it on trust.
+  let _initLossView = _params.get('lossview');   // 'curves' | 'timeseries'
+  let _initLossPool = _params.get('losspool');   // 'all' | 'seasoned'
+  let _initIssuers  = (_params.get('issuers') || '').split(',').map(x => x.trim()).filter(Boolean);
   // View-shaping params (absent = default; see _saveExplorerState)
   let _initDisplay = _params.get('display');    // 'chart' | 'table' | 'seasonal'
   let _initTransf  = _params.get('transform');  // 'rate' | 'yoy-delta' | 'yoy-pct'
@@ -3236,6 +3242,31 @@ if (window.self !== window.top) {
   } else {
     // Default: Delinquency / Vintage
     setTab('delinquency', 'vintage');
+  }
+
+  // ?lossview=timeseries arrived: switch the Losses tab into the annualised
+  // time series, seed the issuer picker from ?issuers= (falling back to
+  // ?issuer=), apply ?losspool=, and render — so a linked card lands on the
+  // exact chart the number came from.
+  if (_initTab === 'losses' && _initLossView === 'timeseries') {
+    lossView = 'timeseries';
+    for (const b of document.querySelectorAll('#lossViewGroup button'))
+      b.classList.toggle('active', b.dataset.lossview === 'timeseries');
+    if (_initLossPool === 'seasoned' || _initLossPool === 'all') {
+      lossPool = _initLossPool;
+      for (const b of document.querySelectorAll('#lossPoolGroup button'))
+        b.classList.toggle('active', b.dataset.losspool === lossPool);
+    }
+    const seeds = (_initIssuers.length ? _initIssuers : (_initIssuer ? [_initIssuer] : []))
+      .filter(c => ANL_ISSUERS.includes(c));
+    if (seeds.length) {
+      lossIssuers = new Set(seeds);
+      for (const cb of lossIssuerCbs) cb.checked = lossIssuers.has(cb.value);
+      syncLossSelectAll();
+    }
+    updateLossIssuerBtn();
+    _syncLossPoolVisibility();
+    loadAnlAndRender();
   }
 
   // ?pool=seasoned arrived: the first setTab above rendered before the seasoned
