@@ -210,7 +210,7 @@
        two issuer controls, one of which lists issuers with no checkboxes.
        That is the wrong control to reach for in this view, and it was reached
        for. Hide it while the time series is showing; Date Range stays, since
-       the time series honours it. */
+       the time series honors it. */
     body[data-tab="losses"][data-lossview="timeseries"] #vintageIssuerCtrl,
     body[data-tab="losses"][data-lossview="timeseries"] #vintageIssuerSep {
       display:none !important;
@@ -489,17 +489,11 @@
 .ccm-topbar-nav .ccm-cta{background:#4ade80;color:#0e1d2e;padding:8px 16px;
   border-radius:4px;font-weight:600;letter-spacing:0.02em;transition:background 0.15s}
 .ccm-topbar-nav .ccm-cta:hover{background:#65f08e}
-.ccm-topbar-nav a.ccm-back{color:#4ade80;font-weight:600}
-.ccm-topbar-nav a.ccm-back:hover{color:#65f08e}
 @media (max-width:640px){
   .ccm-topbar{padding:0 14px}
   .ccm-wordmark{height:26px}
   .ccm-topbar-nav{gap:14px;font-size:12px}
   .ccm-topbar-nav a:not(.ccm-cta){display:none}
-  /* The return link is the whole reason a newsletter reader is here, so it
-     stays when the other nav items collapse. Declared after the rule above:
-     equal specificity, so source order decides. */
-  .ccm-topbar-nav a.ccm-back{display:inline}
 }
 
   </style>
@@ -536,7 +530,6 @@
     <a class="ccm-cta" href="https://www.consumercreditmatters.com/subscribe">Subscribe</a>
   </nav>
 </header>
-
 <script>
 /* These data pages are normally shown inside the /charts/ shell, which has
    its own header — so this in-page bar would duplicate it. Hide it when we're
@@ -545,30 +538,6 @@ if (window.self !== window.top) {
   var _ccmBar = document.querySelector('.ccm-topbar');
   if (_ccmBar) _ccmBar.style.display = 'none';
 }
-/* A chart opened from a newsletter exhibit carries ?back=/newsletter/<date>/, so
-   the reader can return to the article rather than only to the site's front
-   door. The page's own URL rewriting preserves unknown params, so the link
-   survives filtering and tab changes.
-
-   The value is matched against a whitelist, not merely checked for bad input:
-   accepting an arbitrary URL here would make every chart page an open redirect
-   on this domain — attractive for phishing, since the hop begins somewhere
-   genuine. Only a path under /newsletter/ built from unreserved characters is
-   allowed, which excludes another host (protocol-relative //evil.example.com),
-   backslashes, and traversal. */
-(function () {
-  try {
-    var p = new URLSearchParams(window.location.search).get('back');
-    if (!p || !/^\/newsletter\/[A-Za-z0-9._~/-]*$/.test(p) || p.indexOf('..') !== -1) return;
-    var nav = document.querySelector('.ccm-topbar-nav');
-    if (!nav) return;
-    var a = document.createElement('a');
-    a.className = 'ccm-back';
-    a.href = p;
-    a.textContent = '\u2190 Back to the issue';
-    nav.insertBefore(a, nav.firstChild);
-  } catch (_e) { /* never let this break the bar */ }
-})();
 </script>
 
 <div class="wrap">
@@ -874,7 +843,7 @@ if (window.self !== window.top) {
 // call we strip .chart-visible on the target so the transition resets; after
 // the promise resolves we re-add it and the 500 ms fade plays. This gives
 // every chart render (filter change, issuer swap, tab switch) the same
-// entrance behaviour as the FRED dashboard.
+// entrance behavior as the FRED dashboard.
 //
 // The wrapper also guards the zero-height render. #vis is `flex:1; min-height:0`
 // and the specs use autosize `fit`, so if Vega measures the container before the
@@ -942,8 +911,8 @@ if (window.self !== window.top) {
   };
 })();
 (function () {
-  const BUILD_ID   = "2026-09-06 23:51";
-  const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNAN", "label": "Carvana N"}, {"code": "CRVNAP", "label": "Carvana P"}, {"code": "DRIVE", "label": "Santander (DRIVE)"}, {"code": "EART", "label": "Exeter"}, {"code": "EARTS", "label": "Exeter Select"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander (SDART)"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
+  const BUILD_ID   = "2026-09-07 10:54";
+  const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNAN", "label": "Carvana N"}, {"code": "CRVNAP", "label": "Carvana P"}, {"code": "DRIVE", "label": "Santander (DRIVE)"}, {"code": "EART", "label": "Exeter"}, {"code": "EARTS", "label": "Exeter Select"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander (SDART)"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const ANL_ISSUERS = ["AART", "AMCAR", "BLAST", "BMWOT", "CAOT", "CMXS", "COPAR", "CRVNAN", "CRVNAP", "DRIVE", "EART", "EARTS", "FCAOT", "FTAT", "HAROT", "HART", "MBART", "NAROT", "SDART", "TAOT", "VALET", "WOART", "WOSAT"];   // shelves with a published ANL series
   const DATA_BASE  = ".";
   const DEFAULT_ISSUER = 'AART';
@@ -1011,7 +980,7 @@ if (window.self !== window.top) {
   let vintageBasis   = 'series'; // 'series' | 'vintage' (loss view; 10-D). Default per-deal.
   let lossView       = 'curves'; // 'curves' | 'timeseries' (Losses tab view)
   let lossPool       = 'all';    // 'all' | 'seasoned' (ANL pool basis)
-  let anlSeries      = new Map();   // issuer code -> annualised-net-loss rows
+  let anlSeries      = new Map();   // issuer code -> annualized-net-loss rows
   let lossIssuers    = new Set();   // issuers selected for the loss time series
   let vintageView    = 'dq';   // 'dq' | 'loss'
 
@@ -1399,7 +1368,7 @@ if (window.self !== window.top) {
     }).filter(Boolean);
   }
 
-  // Normalise an ISO date string to the first day of its month (YYYY-MM-01).
+  // Normalize an ISO date string to the first day of its month (YYYY-MM-01).
   // This aligns issuers that report on different days of the same month.
   function toMonthStart(dateStr) {
     return dateStr ? dateStr.substring(0, 7) + '-01' : dateStr;
@@ -1433,7 +1402,7 @@ if (window.self !== window.top) {
       );
     });
 
-    // Group by (issuer_code, month) — normalise date so all issuers in the
+    // Group by (issuer_code, month) — normalize date so all issuers in the
     // same calendar month share the same x-axis position.
     const grouped = new Map();
     for (const r of filtered) {
@@ -1469,7 +1438,7 @@ if (window.self !== window.top) {
       });
     }
 
-    // All-issuers weighted average (already month-normalised via grouped keys)
+    // All-issuers weighted average (already month-normalized via grouped keys)
     if (showAllAvg) {
       const byDate = new Map();
       for (const g of grouped.values()) {
@@ -1507,7 +1476,7 @@ if (window.self !== window.top) {
 
   // Strip issuer prefix from series name for legend display.
   // Handles: "AART 2017-1" → "2017-1", "Honda Auto ... 2017-1 Owner Trust" → "2017-1",
-  //          "ALLY ... 2025- 1" → "2025-1" (normalises mid-token spaces).
+  //          "ALLY ... 2025- 1" → "2025-1" (normalizes mid-token spaces).
   function shortSeries(s) {
     const m = s.match(/\d{4}-\s*[A-Za-z0-9]+/);
     return m ? m[0].replace(/\s/g, '') : s;
@@ -1796,7 +1765,7 @@ if (window.self !== window.top) {
       colMax[yr] = Math.max(...vals);
     }
 
-    // Heat-map colour helper
+    // Heat-map color helper
     function cellBg(val, yr) {
       if (!heatmapEnabled) return '';
       if (val == null) return '';
@@ -2161,7 +2130,7 @@ if (window.self !== window.top) {
   // ── Loss time-series issuer multi-select ─────────────────────────────────
   // A parallel control to the Delinquency picker rather than a shared one: the
   // DQ panel is wired into DQ-only state (showAllAvg, Year Overlay, the vehicle
-  // toggle) and reusing it would drag that behaviour onto a tab where none of
+  // toggle) and reusing it would drag that behavior onto a tab where none of
   // it applies. Same classes, so it looks and behaves identically.
   const lossIssuerBtn   = document.getElementById('lossIssuerBtn');
   const lossIssuerPanel = document.getElementById('lossIssuerPanel');
@@ -2254,7 +2223,7 @@ if (window.self !== window.top) {
   }
 
   function parseAnlCSV(text) {
-    // The per-issuer _anl.csv — ANNUALISED net loss by calendar month, on
+    // The per-issuer _anl.csv — ANNUALIZED net loss by calendar month, on
     // both pool bases. Unlike the CNL curves (cumulative, indexed by loan age)
     // this is a point-in-time flow rate, so it sits on a calendar axis the way
     // the delinquency rate does. `recon_status` travels with the data so the
@@ -2302,13 +2271,13 @@ if (window.self !== window.top) {
     }
     if (!data.length) {
       showMsg(withheld.length
-        ? 'No annualised loss series published for: ' + withheld.join(', ')
-        : 'No annualised loss data for selected filters.');
+        ? 'No annualized loss series published for: ' + withheld.join(', ')
+        : 'No annualized loss data for selected filters.');
       return;
     }
 
     const poolNote = (lossPool === 'seasoned') ? 'seasoned pools (>6 mo)' : 'all pools';
-    const sub = `Annualised net loss · ${poolNote} · compare year-over-year (auto losses are strongly seasonal)`;
+    const sub = `Annualized net loss · ${poolNote} · compare year-over-year (auto losses are strongly seasonal)`;
     const nIss = new Set(data.map(d => d.issuer)).size;
     const legend = (nIss > 1) ? {
       "orient":"bottom","direction":"horizontal",
@@ -2324,7 +2293,7 @@ if (window.self !== window.top) {
         "view":{"continuousHeight":300,"continuousWidth":300},
         "tooltip":{},
       },
-      "title":{"text":"Annualised Net Loss","subtitle":sub},
+      "title":{"text":"Annualized Net Loss","subtitle":sub},
       "width":"container","height":420,
       "data":{"values":data},
       "layer":[
@@ -2338,7 +2307,7 @@ if (window.self !== window.top) {
           "mark":{"type":"line","strokeWidth":2,"point":{"size":30,"filled":true}},
           "encoding":{
             "x":{"field":"month","type":"temporal","title":"Month"},
-            "y":{"field":"rate","type":"quantitative","title":"Annualised Net Loss Rate",
+            "y":{"field":"rate","type":"quantitative","title":"Annualized Net Loss Rate",
                  "axis":{"format":".2%"}},
             "color":{
               "field":"issuer","type":"nominal","title":"Issuer",
@@ -2348,7 +2317,7 @@ if (window.self !== window.top) {
             "tooltip":[
               {"field":"issuer","type":"nominal","title":"Issuer"},
               {"field":"month","type":"temporal","title":"Month","format":"%b %Y"},
-              {"field":"rate","type":"quantitative","title":"Annualised net loss","format":".2%"},
+              {"field":"rate","type":"quantitative","title":"Annualized net loss","format":".2%"},
               {"field":"deals","type":"quantitative","title":"Deals in pool"},
             ],
           },
@@ -2692,7 +2661,7 @@ if (window.self !== window.top) {
   });
 
   // ── Losses tab: view + pool toggles ───────────────────────────────────────
-  // The Pool control only means anything for the annualised time series: a CNL
+  // The Pool control only means anything for the annualized time series: a CNL
   // curve is already indexed by loan age, so "seasoned" is not a distinction
   // it can make. Hide it outside the time-series view rather than show a
   // control that silently does nothing.
@@ -2895,7 +2864,7 @@ if (window.self !== window.top) {
 
   // ── Heatmap toggle switch (in filter bar, visible only in Table view) ──
   // Extracted from the change handler so a deep-linked view can reproduce the
-  // toggle's full effect — switch position, label, legend and cell colours —
+  // toggle's full effect — switch position, label, legend and cell colors —
   // rather than only flipping the variable.
   function _applyHeatmap(on) {
     heatmapEnabled = on;
@@ -2906,7 +2875,7 @@ if (window.self !== window.top) {
       if (lbl) lbl.textContent = heatmapEnabled ? 'On' : 'Off';
       const legend = document.getElementById('heatmapLegend');
       if (legend) legend.style.display = heatmapEnabled ? 'flex' : 'none';
-      // Re-colour cells without full re-render
+      // Re-color cells without full re-render
       if (_lastTableArgs) {
         const tbl = document.querySelector('#tblWrap table');
         if (tbl) {
@@ -3244,7 +3213,7 @@ if (window.self !== window.top) {
     setTab('delinquency', 'vintage');
   }
 
-  // ?lossview=timeseries arrived: switch the Losses tab into the annualised
+  // ?lossview=timeseries arrived: switch the Losses tab into the annualized
   // time series, seed the issuer picker from ?issuers= (falling back to
   // ?issuer=), apply ?losspool=, and render — so a linked card lands on the
   // exact chart the number came from.
