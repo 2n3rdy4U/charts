@@ -911,7 +911,7 @@ if (window.self !== window.top) {
   };
 })();
 (function () {
-  const BUILD_ID   = "2026-09-07 15:03";
+  const BUILD_ID   = "2026-09-07 15:34";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNAN", "label": "Carvana N"}, {"code": "CRVNAP", "label": "Carvana P"}, {"code": "DRIVE", "label": "Santander (DRIVE)"}, {"code": "EART", "label": "Exeter"}, {"code": "EARTS", "label": "Exeter Select"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander (SDART)"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const ANL_ISSUERS = ["AART", "AMCAR", "BLAST", "BMWOT", "CAOT", "CMXS", "COPAR", "CRVNAN", "CRVNAP", "DRIVE", "EART", "EARTS", "FCAOT", "FTAT", "HAROT", "HART", "MBART", "NAROT", "SDART", "TAOT", "VALET", "WOART", "WOSAT"];   // shelves with a published ANL series
   const DATA_BASE  = ".";
@@ -932,6 +932,12 @@ if (window.self !== window.top) {
     return 9;                  // desktop (bumped 8→9)
   }
   function updateDataThrough(rows) {
+    // The loss time series sets this label from its OWN data (10-D, which runs
+    // a month behind ABS-EE). The summary CSV resolves asynchronously and its
+    // handler calls this, landing AFTER the chart has rendered — which stamped
+    // an ABS-EE July date under a 10-D series that ends in June.
+    if (typeof currentTab !== 'undefined' && currentTab === 'losses'
+        && typeof lossView !== 'undefined' && lossView === 'timeseries') return;
     if (!rows || !rows.length) return;
     // For the active issuer selection, find the modal (most common) latest month
     const latestByIssuer = new Map();
@@ -1869,18 +1875,20 @@ if (window.self !== window.top) {
       if (vintageView === 'loss') {
         // The Losses tab has two views; the header must follow the active one
         // or the page reads "Vintage Loss Curves" over an annualized series.
+        // Set title/subParts and FALL THROUGH — the footer source label and
+        // the exported-PNG attribution are set at the bottom of this function,
+        // so returning early here left both stamped "SEC ABS-EE filings" on a
+        // 10-D chart until some later call corrected them.
         if (lossView === 'timeseries') {
           title = issuerTxt ? `${issuerTxt} Annualized Net Loss`
                             : 'Auto ABS Annualized Net Loss';
           subParts = [(lossPool === 'seasoned' ? 'Seasoned pools (>6 mo)' : 'All pools')];
-          if (titleEl) titleEl.textContent = title;
-          if (subEl) subEl.textContent = subParts.filter(Boolean).join(' · ');
-          return;
-        }
+        } else {
         title = issuerTxt ? `${issuerTxt} Vintage Loss Curves` : 'Auto ABS Cumulative Net Loss';
         // 10-D is pool-level: no credit-score / vehicle segmentation. Show the
         // view only; the 10-D source is stated in the footer source bar.
         subParts = [(vintageBasis === 'series' ? 'By series (individual deals)' : 'By vintage (issuance-year cohort)')];
+        }
       } else {
         title = issuerTxt ? `${issuerTxt} Vintage` : 'Auto ABS Vintage';
         subParts = [dqLabel, scoreTxt, vehTxt];
@@ -2291,7 +2299,10 @@ if (window.self !== window.top) {
     const _months = data.length
       ? (new Date(data[data.length-1].month) - new Date(data[0].month)) / (1000*60*60*24*30.4375)
       : 0;
-    const _anlAxis = tsDateAxis(_months, window.matchMedia('(max-width: 700px)').matches);
+    // Same narrow test the delinquency chart uses. matchMedia is not present
+    // in every context, and calling it unguarded threw — taking the whole
+    // render down rather than degrading a label.
+    const _anlAxis = tsDateAxis(_months, (window.innerWidth || 1024) <= 640);
     const poolNote = (lossPool === 'seasoned') ? 'seasoned pools (>6 mo)' : 'all pools';
     // State the as-of month. Losses come from the 10-D servicer reports and
     // delinquency from ABS-EE, and the two filings land on different clocks —
@@ -2351,6 +2362,12 @@ if (window.self !== window.top) {
         },
       ],
     };
+    // Stamp the footer BEFORE handing off to Vega: if the embed rejects, the
+    // page should still say which month it is showing.
+    if (_last) {
+      const _lu = document.getElementById('lastUpdated');
+      if (_lu) _lu.textContent = 'Most recent data: ' + _asOf;
+    }
     vegaEmbed('#vis', spec, {actions:false}).catch(e => showMsg(String(e), true));
     const notes = [];
     if (flagged.length)  notes.push('Flagged by the 10-D reconciliation check: ' + flagged.join(', ') + '.');
