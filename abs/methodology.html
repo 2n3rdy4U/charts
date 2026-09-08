@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Methodology &amp; Data Quality | Auto ABS Data Explorers</title>
+<style>
+  :root {
+    --text:#111827; --muted:#6b7280; --border:#e5e7eb; --bg:#fafafa;
+    --accent:#1e40af; --code-bg:#f3f4f6;
+  }
+  * { box-sizing: border-box; }
+  body { font-family: Georgia, "Times New Roman", serif;
+         margin:0; background:var(--bg); color:var(--text); line-height:1.55; }
+  header { background:#fff; border-bottom:1px solid var(--border);
+           padding:18px 32px; display:flex; align-items:baseline; gap:16px; flex-wrap:wrap; }
+  header h1 { margin:0; font-size:22px; color:var(--accent); }
+  header .sub { color:var(--muted); font-size:13px; }
+  .back { margin-left:auto; font-size:13px; }
+  .back a { color:var(--accent); text-decoration:none; }
+  .back a:hover { text-decoration:underline; }
+  main { max-width:880px; margin:0 auto; padding:32px 36px 80px; background:#fff;
+         border-left:1px solid var(--border); border-right:1px solid var(--border); }
+  h2 { color:var(--accent); font-size:19px; margin:34px 0 8px;
+       border-bottom:1px solid var(--border); padding-bottom:6px; }
+  h3 { font-size:15px; margin:20px 0 6px; color:var(--text);
+       font-family:-apple-system,BlinkMacSystemFont,sans-serif; font-weight:600; }
+  p, li { font-size:14.5px; }
+  code { background:var(--code-bg); padding:1px 5px; border-radius:3px;
+         font-size:12.5px; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; }
+  ul { margin:8px 0 8px 20px; padding:0; }
+  li { margin:5px 0; }
+  table { border-collapse:collapse; margin:10px 0; font-size:13.5px; }
+  th, td { border:1px solid var(--border); padding:5px 10px; text-align:left; }
+  th { background:var(--code-bg); font-weight:600; }
+  td.num, th.num { text-align:right; font-variant-numeric:tabular-nums; }
+  .meta { color:var(--muted); font-size:12.5px; margin-top:36px;
+          border-top:1px solid var(--border); padding-top:12px; }
+  /* Asset-class badges. A section without one applies to BOTH explorers —
+     that is the default, and the point of merging the two pages. */
+  .tag { font-family:-apple-system,BlinkMacSystemFont,sans-serif; font-size:10.5px;
+         font-weight:700; letter-spacing:0.06em; text-transform:uppercase;
+         padding:2px 7px; border-radius:3px; vertical-align:middle;
+         margin-left:8px; white-space:nowrap; }
+  .tag-loan  { background:#e8efff; color:#1e40af; border:1px solid #c7d7fb; }
+  .tag-lease { background:#e9f6ee; color:#1f7a4d; border:1px solid #c2e4d1; }
+  .applies { font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+             font-size:12.5px; color:var(--muted); margin:0 0 14px; }
+  .callout { background:#fbfcfe; border:1px solid var(--border);
+             border-left:3px solid var(--accent); padding:10px 14px;
+             margin:12px 0; font-size:13.5px; }
+</style>
+  <script data-goatcounter="https://consumercreditmatters.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+<header>
+  <h1>Methodology &amp; Data Quality</h1>
+  <span class="sub">Auto Loan &amp; Auto Lease ABS Data Explorers</span>
+  <span class="back"><a href="explorer/">&larr; Loan Explorer</a> &nbsp;&middot;&nbsp;
+    <a href="lease_explorer/">&larr; Lease Explorer</a></span>
+</header>
+<main>
+
+<p style="font-size:15px;">
+This page documents the data sources, definitions, and quality considerations
+behind every chart and table in the Auto Loan and Auto Lease ABS Data
+Explorers. It is written for practitioners who need to evaluate whether the
+numbers meet their standard of care before citing them.
+</p>
+<p class="applies">
+Sections tagged <span class="tag tag-loan">Auto Loan</span> or <span class="tag tag-lease">Auto Lease</span> apply to that explorer only. Everything
+else applies to both.
+</p>
+
+<h2>1. Data Source</h2>
+<p>
+All content is derived from <strong>SEC ABS-EE asset-level filings</strong>
+submitted to EDGAR under Regulation AB II. Securitization trusts are legally
+required to file these monthly XML disclosures on a defined schedule. Our
+pipeline fetches the XML, parses it into per-issuer DuckDB files, deduplicates
+across filings, and aggregates the results served here. Typical latency from a
+new SEC filing to the explorer is under 24 hours.
+</p>
+
+<h3>Auto Loan coverage <span class="tag tag-loan">Auto Loan</span></h3>
+<p>Approximately 100 fields per loan per reporting period.</p>
+<ul>
+  <li><strong>Issuers covered:</strong> 24 active auto-loan securitizers (Ally,
+    Ameri&shy;Credit, Bridgecrest, BMW, CarMax, Capital One Prime,
+    Carvana&nbsp;(P), Carvana&nbsp;(N), Exeter, Fifth Third, Ford, GM Financial,
+    Honda, Hyundai, Mercedes&#8209;Benz, Nissan, Santander&nbsp;(SDART),
+    Santander&nbsp;(DRIVE), Toyota, Volkswagen, World Omni, and
+    CarMax&nbsp;Select, Exeter&nbsp;Select, World&nbsp;Omni&nbsp;Select).
+    Carvana&rsquo;s single shelf is shown as two programs &mdash; P (prime) and
+    N (non-prime) &mdash; which carry distinct collateral and report on
+    different days of the month; blending them would distort both. Retired
+    trusts (California Republic, USAA) remain available for historical
+    access.</li>
+  <li><strong>Time coverage:</strong> Issuance vintages begin in 2017, though
+    individual loans in seasoned pools can extend back to ~2010.</li>
+</ul>
+
+<h3>Auto Lease coverage <span class="tag tag-lease">Auto Lease</span></h3>
+<p>Approximately 70 fields per lease per reporting period.</p>
+<ul>
+  <li><strong>Issuers covered (SEC-registered, public ABS-EE filers):</strong>
+    BMW Vehicle Lease (BMWLT), Ford Credit (FCALT), GM Financial (GMALT),
+    Mercedes-Benz (MBALT), Nissan (NALT), Porsche (PILOT), Volkswagen (VWALT),
+    World Omni (WOALT).</li>
+  <li><strong>Excluded:</strong> Toyota Lease (TMCLT), American Honda (AHALT),
+    and Hyundai (HALST) &mdash; no ongoing public ABS-EE (Rule 144A private
+    placements; Hyundai filed a single public deal in 2021).</li>
+</ul>
+
+<h2>2. Active Pool &amp; Delinquency</h2>
+<p>
+Both explorers report <strong>count-weighted, mutually exclusive</strong> DPD
+buckets: the 30&ndash;59 bucket, the 60+ bucket and the current (&lt;30) bucket
+sum to the total active count and do not overlap.
+</p>
+<ul>
+  <li><strong>60+ DPD rate:</strong> active assets with
+    <code>currentDelinquencyStatus &ge; 60</code>, divided by total active
+    assets.</li>
+  <li><strong>30&ndash;59 DPD rate:</strong> active assets with
+    <code>30 &le; currentDelinquencyStatus &le; 59</code>, same
+    denominator.</li>
+  <li><strong>30+ DPD rate:</strong> the two combined.</li>
+  <li><strong>Current rate:</strong> active assets with <code>dpd &lt; 30</code>
+    (or null).</li>
+</ul>
+
+<h3>What counts as &ldquo;active&rdquo;</h3>
+<p>The two explorers apply different active tests, and this is the main place
+their definitions diverge:</p>
+<ul>
+  <li><span class="tag tag-loan">Auto Loan</span> balance &gt; $10.</li>
+  <li><span class="tag tag-lease">Auto Lease</span> <code>reportingPeriodEndingActualBalanceAmount &gt; $10</code>
+    <strong>and</strong> <code>zeroBalanceCode</code> is not an ABS-EE
+    termination code (<code>1</code>=prepaid/matured, <code>2</code>=liquidated,
+    <code>3</code>=charged-off, <code>4</code>=servicer repurchase,
+    <code>5</code>=substituted, <code>6</code>=defaulted). Most filers leave
+    <code>zeroBalanceCode</code> empty for active leases; BMW uses
+    <code>'99'</code> as their active marker, so excluding only the termination
+    codes accommodates both conventions.</li>
+</ul>
+<p>
+<span class="tag tag-loan">Auto Loan</span> DPD values are capped at 999 in the pipeline. Some issuers use sentinel
+values (SDART uses 2577, DRIVE uses 1699) for already-charged-off loans; these
+are excluded from the DPD bucket counts.
+</p>
+
+<h2>3. Reconciliation Against Issuer Filings <span class="tag tag-lease">Auto Lease</span></h2>
+<p>
+The lease active-pool definition was validated against Ford Credit Auto Lease
+Trust 2023-A&rsquo;s Monthly Investor Report (Form 10-D) for the December 2024
+collection period. The 10-D&rsquo;s reported end-of-period pool count and
+securitization value reproduce exactly under our definition:
+</p>
+<table>
+  <thead><tr><th>Metric</th><th class="num">Our value</th><th class="num">Ford 10-D</th></tr></thead>
+  <tbody>
+    <tr><td>Active lease count (EOP)</td><td class="num">21,649</td><td class="num">21,649</td></tr>
+    <tr><td>EOP securitization value</td><td class="num">$660,433,746</td><td class="num">$660,433,746</td></tr>
+  </tbody>
+</table>
+
+<h3>Where the lease numerator diverges from issuer reports</h3>
+<p>
+Even with matched denominators, our 30+ DPD count typically runs
+<strong>10&ndash;20% above</strong> the corresponding figure in monthly investor
+reports. Two structural reasons:
+</p>
+<ul>
+  <li><strong>Payment extensions.</strong> When a lessee receives a payment
+    extension during a collection period, the issuer treats the lease as cured
+    for reporting purposes. Our ABS-EE snapshot still carries the lease at its
+    pre-extension DPD until the following month&rsquo;s filing.</li>
+  <li><strong>Charge-off-pending exclusions.</strong> Issuers typically remove
+    leases flagged for default/repossession (ABS-EE
+    <code>terminationIndicator = '3'</code>) from the delinquency table and
+    report them separately. Our snapshot still includes those leases in the 60+
+    bucket while they retain a non-zero balance.</li>
+</ul>
+<p>
+Trends and relative comparisons across issuers remain meaningful. For
+deal-level absolute counts, consult the issuer&rsquo;s Form 10-D.
+</p>
+
+<h2>4. Loss Metrics <span class="tag tag-loan">Auto Loan</span></h2>
+<p>
+Loss figures come from <strong>monthly 10-D servicer distribution reports</strong>
+(EDGAR), not from the ABS-EE loan tape. The servicer states each deal&rsquo;s
+losses directly, which is the authoritative pool-level figure. The Losses tab
+offers two views of that data.
+</p>
+
+<h3>Cumulative Net Loss, by vintage or series</h3>
+<ul>
+  <li><strong>Cumulative Net Loss Rate:</strong> cumulative net losses
+    (charge&#8209;offs net of recoveries, per the servicer) &divide; original
+    pool balance, indexed by <em>months since issuance</em>.</li>
+  <li><strong>View:</strong> selectable &mdash; <em>By Vintage</em>
+    (pool&#8209;weighted across deals of the same issuance year) or
+    <em>By Series</em> (individual deals).</li>
+</ul>
+
+<h3>Annualized Net Loss, by calendar month</h3>
+<p>
+CNL is cumulative and indexed by loan age, so it cannot be placed on a calendar
+axis: averaging it across an issuer&rsquo;s deals in a given month produces a
+figure driven by pool age mix rather than credit. The annualized net loss rate
+is a point-in-time flow, so it can be aggregated per issuer over calendar time
+the way the delinquency rate is.
+</p>
+<ul>
+  <li><strong>Formula:</strong> 12 &times; net losses for the period &divide;
+    average outstanding pool balance (the mean of beginning and ending
+    balance), summed across an issuer&rsquo;s deals in each distribution
+    month.</li>
+  <li><strong>Basis:</strong> the <em>All pools</em> / <em>Seasoned (&gt;6 mo)</em>
+    toggle mirrors the Delinquency tab. A young deal books almost no losses, so
+    an issuer writing new deals looks better than it is on the all-pools
+    basis.</li>
+  <li><strong>Below zero is a net gain, not a negative loss.</strong> The 10-D
+    line item is literally &ldquo;Principal Net Loss / (Gain)&rdquo;: a month
+    whose recoveries on previously charged-off receivables exceed its gross
+    charge-offs books a gain, which the filings print in accounting
+    parentheses. Prime shelves cross below zero routinely.</li>
+</ul>
+<div class="callout">
+  <strong>Compare year-over-year, not month-over-month.</strong> Auto losses
+  swing hard with tax-refund season &mdash; one subprime shelf averages 6.63% in
+  January against 4.03% in May. A month-over-month move is usually the calendar,
+  not the credit.
+</div>
+<p>
+Because the two tabs read different filings, their as-of dates differ: ABS-EE
+delinquency data is a month-end snapshot, while 10-D loss data follows each
+deal&rsquo;s mid-month distribution calendar. A shelf&rsquo;s newest loss month
+can therefore sit one month behind its newest delinquency month. The loss chart
+states its as-of month in the subtitle. A shelf whose 10-D figures fail our
+internal reconciliation check is withheld from the annualized series rather than
+published unverified.
+</p>
+
+<h2>5. Repossessions (1st-Time Repo Rate) <span class="tag tag-loan">Auto Loan</span></h2>
+<p>
+<strong>1st-time repossession</strong> = the first reporting period in which a
+loan&rsquo;s <code>repossessedIndicator</code> transitions to <code>TRUE</code>.
+Each loan is counted at most once, at its first-ever repo period.
+</p>
+<ul>
+  <li><strong>Numerator:</strong> count of loans whose first-ever repo period is
+    the current reporting period, within the selected (issuer &times;
+    credit-score band &times; new/used) filter.</li>
+  <li><strong>Denominator:</strong> count of all loans active in the current
+    reporting period in the same filter bucket.</li>
+  <li><strong>Why 1st-time only:</strong> the raw
+    <code>repossessedIndicator</code> can flip from TRUE back to FALSE
+    (borrower redemption) and then to TRUE again. Counting every transition
+    would double-count these edge cases; industry convention uses 1st-time
+    only.</li>
+</ul>
+
+<h2>6. Credit Score Methodology <span class="tag tag-loan">Auto Loan</span></h2>
+<p>
+Analysis uses the consumer credit bureau score reported in SEC ABS-EE filings,
+filtered to the 300&ndash;900 range. Seven of twenty-five issuers explicitly
+identify this as a FICO score; the remaining eighteen report a generic
+&ldquo;bureau score&rdquo; label. Industry practice strongly favors FICO Auto
+Score for auto lending decisions, but we cannot independently verify the score
+model for all issuers. Loans without a reported score (~0&ndash;15% by issuer)
+are excluded from the analysis.
+</p>
+<p>
+Commercial / dealer bureau scores
+(<code>obligorCreditScoreType LIKE '%commercial%'</code>) are excluded because
+they use a different scoring scale than consumer scores and would contaminate
+the low-score bands of prime issuers.
+</p>
+
+<h3>Credit Score vs Default (Kaplan-Meier survival analysis)</h3>
+<ul>
+  <li><strong>Event:</strong> loan charge-off (<code>zeroBalanceCode = '4'</code>).</li>
+  <li><strong>Censoring:</strong> loans that paid off
+    (<code>zeroBalanceCode = '1'</code>) or remain active are treated as
+    right-censored at their most recent observation.</li>
+  <li><strong>Duration:</strong> months between <code>originationDate</code> and
+    event (or censor) date.</li>
+  <li><strong>Output:</strong> Kaplan-Meier cumulative default probability as a
+    function of months-on-book, per credit score band.</li>
+</ul>
+
+<h2>7. Vintage Curves vs Time Series</h2>
+<ul>
+  <li><strong>Vintage Curves</strong> plot the metric as a function of months
+    since deal issuance, one line per deal series. Useful for comparing the
+    seasoning behavior of different vintages within the same issuer.</li>
+  <li><strong>Time Series</strong> aggregates each issuer&rsquo;s deals into a
+    single calendar-time curve, one line per issuer. Useful for cross-issuer
+    trend comparisons.</li>
+</ul>
+
+<h2>8. Scope &amp; Boundary Notes</h2>
+<p style="font-size:13.5px;color:#374151;">
+<span class="tag tag-loan">Auto Loan</span> <strong>Issuers with commercial-auto exposure:</strong> for issuers that
+securitize both consumer and commercial auto loans (Ford, Ally), we exclude
+commercial-bureau-scored loans from our &ldquo;Below Prime&rdquo; bucket.
+Commercial bureau scores use a different scale than consumer FICO (typically
+0&ndash;100), and including them would mix fleet and small-business loans with
+subprime consumer loans. For a consumer credit analysis, the stricter exclusion
+is more defensible. The SQL filter is:
+<code>LOWER(obligorCreditScoreType) NOT LIKE '%commercial%'</code>.
+</p>
+<p style="margin-top:8px;font-size:13.5px;color:#374151;">
+<span class="tag tag-loan">Auto Loan</span> <strong>Score boundary:</strong> our &ldquo;Below Prime&rdquo; bucket is
+scores 300&ndash;659 inclusive, reflecting 10-point score bucketing. Definitions
+that treat 660 as below prime will show slightly higher counts; the difference
+is typically small (&sim;1&ndash;4% for small-volume issuers where a repo happens
+to land on exactly 660).
+</p>
+<p style="margin-top:8px;font-size:13.5px;color:#374151;">
+<span class="tag tag-lease">Auto Lease</span> <strong>Delinquency only (MVP):</strong> residual-value realization,
+disposition mix, and cumulative net loss metrics are computed by the pipeline
+but are not yet surfaced, pending independent corroboration.
+</p>
+
+<h2>9. Known Limitations</h2>
+<ul>
+  <li><span class="tag tag-loan">Auto Loan</span> <strong>Repo indicator reporting lag:</strong> some issuers
+    (notably Exeter during 2023&ndash;2024) updated
+    <code>repossessedIndicator</code> with delay, producing apparent anomalies
+    in monthly rates. The cumulative count is still correct; monthly timing may
+    be shifted.</li>
+  <li><span class="tag tag-loan">Auto Loan</span> <strong>Score model ambiguity:</strong> 18 of 25 issuers use a
+    generic &ldquo;bureau&rdquo; label instead of explicitly naming FICO. A
+    Vantage&shy;Score 640 may not be risk-equivalent to a FICO 640.</li>
+  <li><span class="tag tag-loan">Auto Loan</span> <strong>Vehicle valuation varies by issuer:</strong>
+    <code>vehicleValueAmount</code> may reflect wholesale, retail, dealer
+    purchase price, or another basis depending on the issuer&rsquo;s servicing
+    system. Cross-issuer LTV comparisons should be treated as directional, not
+    precise.</li>
+  <li><span class="tag tag-loan">Auto Loan</span> <strong>Commercial purpose loans:</strong> some
+    consumer-bureau-scored loans may have commercial use (e.g., sole proprietors
+    financing work vehicles). The loan tape does not distinguish these, but
+    visible evidence of distortion is minimal.</li>
+  <li><span class="tag tag-lease">Auto Lease</span> <strong>Entity-name aliasing:</strong> a handful of issuers
+    (notably Ford) file under both their trust name and depositor name (e.g.,
+    &ldquo;Ford Credit Auto Lease Two LLC&rdquo;); these may appear as separate
+    series in the legend with identical numbers.</li>
+  <li><span class="tag tag-lease">Auto Lease</span> <strong>No deal-specific triggers:</strong> pool-level
+    performance against deal-specific covenants (delinquency triggers, residual
+    loss triggers) requires prospectus-level data not included in ABS-EE.</li>
+  <li><strong>Non-disclosed fields:</strong> SEC ABS-EE does not require
+    disclosure of down payment amount, borrower income (only payment-to-income),
+    employment status, housing, or dealer identity. These variables affect
+    default risk but cannot be analyzed from this dataset.</li>
+</ul>
+
+<h2>10. Update Schedule &amp; Audit Trail</h2>
+<ul>
+  <li><strong>Daily pipeline:</strong> runs twice daily (6 AM and 6 PM ET).</li>
+  <li><strong>Weekend behavior:</strong> the pipeline does not run on weekends;
+    data is stable Saturday&ndash;Sunday.</li>
+  <li><strong>Build identifier:</strong> each generated page includes a build
+    timestamp in its header (<code>BUILD_ID</code>).</li>
+</ul>
+
+<p class="meta">
+This methodology page is regenerated with every pipeline run and is always in
+sync with the data currently served on both explorers.
+</p>
+
+</main>
+</body>
+</html>
