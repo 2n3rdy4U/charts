@@ -942,7 +942,7 @@ if (window.self !== window.top) {
   };
 })();
 (function () {
-  const BUILD_ID   = "2026-09-08 23:33";
+  const BUILD_ID   = "2026-09-09 10:11";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNAN", "label": "Carvana N"}, {"code": "CRVNAP", "label": "Carvana P"}, {"code": "DRIVE", "label": "Santander (DRIVE)"}, {"code": "EART", "label": "Exeter"}, {"code": "EARTS", "label": "Exeter Select"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander (SDART)"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const ANL_ISSUERS = ["AART", "AMCAR", "BLAST", "BMWOT", "CAOT", "CMXS", "COPAR", "CRVNAN", "CRVNAP", "DRIVE", "EART", "EARTS", "FCAOT", "FTAT", "GMCAR", "HAROT", "HART", "MBART", "NAROT", "SDART", "TAOT", "VALET", "WOART", "WOSAT"];   // shelves with a published ANL series
   const DATA_BASE  = ".";
@@ -2049,10 +2049,14 @@ if (window.self !== window.top) {
     document.getElementById('tblWrap').style.display = 'none';
     document.getElementById('vis').style.display = 'block';
     document.getElementById('vis').innerHTML = '';
-    const yLabel = dqFilter === '60+'    ? '60+ DPD Rate'
-                 : dqFilter === '30-59'  ? '30–59 DPD Rate'
-                 : dqFilter === 'any-dq' ? '30+ DPD Rate'
-                 :                        '< 30 DPD (Current) Rate';
+    // The denominator belongs on the axis, not in a footnote: it defines the
+    // quantity, and it survives a screenshot. Delinquency is count-weighted
+    // (share of borrowers); the loss charts are balance-weighted (share of
+    // dollars) and say so on their own axes.
+    const yLabel = dqFilter === '60+'    ? '60+ DPD (% of active loans)'
+                 : dqFilter === '30-59'  ? '30–59 DPD (% of active loans)'
+                 : dqFilter === 'any-dq' ? '30+ DPD (% of active loans)'
+                 :                        '< 30 DPD, current (% of active loans)';
     const poolLabel = poolMode === 'seasoned' ? 'Seasoned pools (>6 mo)' : 'All pools';
     const clrSeasonal = {"field":"year","type":"ordinal","scale":{"scheme":"tableau10"}};
     const clrSeasonalNoLeg = {...clrSeasonal, "legend":null};
@@ -2376,7 +2380,7 @@ if (window.self !== window.top) {
           "encoding":{
             "x":{"field":"month","type":"temporal","timeUnit":"utcyearmonth",
                  "title":"Reporting Date","axis":_anlAxis},
-            "y":{"field":"rate","type":"quantitative","title":"Annualized Net Loss Rate",
+            "y":{"field":"rate","type":"quantitative","title":"Annualized Net Loss (% of average pool balance)",
                  "axis":{"format":".2%"}},
             "color":{
               "field":"issuer","type":"nominal","title":"Issuer",
@@ -2499,7 +2503,7 @@ if (window.self !== window.top) {
       "axis":{"tickMinStep":6},
     };
     const yEnc = {
-      "field":"rate","type":"quantitative","title":"Cumulative Net Loss Rate",
+      "field":"rate","type":"quantitative","title":"Cumulative Net Loss (% of original pool balance)",
       "axis":{"format":".2%"},
     };
     const spec = {
