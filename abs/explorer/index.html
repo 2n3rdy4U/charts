@@ -942,7 +942,7 @@ if (window.self !== window.top) {
   };
 })();
 (function () {
-  const BUILD_ID   = "2026-09-09 10:11";
+  const BUILD_ID   = "2026-09-09 10:28";
   const ISSUERS    = [{"code": "AART", "label": "Ally"}, {"code": "AMCAR", "label": "AmeriCredit"}, {"code": "BLAST", "label": "Bridgecrest"}, {"code": "BMWOT", "label": "BMW"}, {"code": "CAOT", "label": "CarMax"}, {"code": "CMXS", "label": "CarMax Select"}, {"code": "COPAR", "label": "Capital One Prime"}, {"code": "CRART", "label": "California Republic"}, {"code": "CRVNAN", "label": "Carvana N"}, {"code": "CRVNAP", "label": "Carvana P"}, {"code": "DRIVE", "label": "Santander (DRIVE)"}, {"code": "EART", "label": "Exeter"}, {"code": "EARTS", "label": "Exeter Select"}, {"code": "FCAOT", "label": "Ford"}, {"code": "FTAT", "label": "Fifth Third"}, {"code": "GMCAR", "label": "GM Financial"}, {"code": "HAROT", "label": "Honda"}, {"code": "HART", "label": "Hyundai"}, {"code": "MBART", "label": "Mercedes-Benz"}, {"code": "NAROT", "label": "Nissan"}, {"code": "SDART", "label": "Santander (SDART)"}, {"code": "TAOT", "label": "Toyota"}, {"code": "USAOT", "label": "USAA"}, {"code": "VALET", "label": "Volkswagen"}, {"code": "WOART", "label": "World Omni"}, {"code": "WOSAT", "label": "World Omni Select"}];
   const ANL_ISSUERS = ["AART", "AMCAR", "BLAST", "BMWOT", "CAOT", "CMXS", "COPAR", "CRVNAN", "CRVNAP", "DRIVE", "EART", "EARTS", "FCAOT", "FTAT", "GMCAR", "HAROT", "HART", "MBART", "NAROT", "SDART", "TAOT", "VALET", "WOART", "WOSAT"];   // shelves with a published ANL series
   const DATA_BASE  = ".";
@@ -1526,13 +1526,22 @@ if (window.self !== window.top) {
 
     // Y-axis: label and format depend on DQ filter and (for TS) transform
     let yLabel = {
-      '60+':'60+ DPD Rate', '30-59':'30–59 DPD Rate',
-      'any-dq':'30+ DPD Rate', 'current':'< 30 DPD (Current) Rate',
+      '60+':'60+ DPD', '30-59':'30–59 DPD',
+      'any-dq':'30+ DPD', 'current':'< 30 DPD (Current)',
     }[dqFilter] || 'Rate';
     let yFmt = '.2%';
+    // The denominator goes on a SECOND LINE of the axis title so it reads as a
+    // qualifier rather than competing with the metric name. Vega-Lite has no
+    // per-line styling for axis titles, so position is the only lever — the
+    // two lines share a font size.
+    let yAxisTitle = [yLabel, '(% of active loans)'];
     if (!isVintage) {
-      if (transform === 'yoy-delta') { yLabel = 'YOY Δ (percentage points)'; yFmt = '+.2%'; }
-      else if (transform === 'yoy-pct') { yLabel = 'YOY % Change'; yFmt = '+.1%'; }
+      // A YoY transform is a change, not a share of anything — no denominator.
+      if (transform === 'yoy-delta') {
+        yLabel = 'YOY Δ (percentage points)'; yAxisTitle = yLabel; yFmt = '+.2%';
+      } else if (transform === 'yoy-pct') {
+        yLabel = 'YOY % Change'; yAxisTitle = yLabel; yFmt = '+.1%';
+      }
     }
 
     // X-axis: vintage uses months; time series uses formatted calendar dates.
@@ -1582,7 +1591,7 @@ if (window.self !== window.top) {
     };
     const colorEncNoLegend = {"field":"series","type":"nominal","legend":null};
     const yEnc = {
-      "field":"dq_rate","type":"quantitative","title":yLabel,
+      "field":"dq_rate","type":"quantitative","title":yAxisTitle,
       "axis":{"format":yFmt},
     };
     const tooltipEnc = [
@@ -2053,10 +2062,11 @@ if (window.self !== window.top) {
     // quantity, and it survives a screenshot. Delinquency is count-weighted
     // (share of borrowers); the loss charts are balance-weighted (share of
     // dollars) and say so on their own axes.
-    const yLabel = dqFilter === '60+'    ? '60+ DPD (% of active loans)'
-                 : dqFilter === '30-59'  ? '30–59 DPD (% of active loans)'
-                 : dqFilter === 'any-dq' ? '30+ DPD (% of active loans)'
-                 :                        '< 30 DPD, current (% of active loans)';
+    const yLabel = dqFilter === '60+'    ? '60+ DPD'
+                 : dqFilter === '30-59'  ? '30–59 DPD'
+                 : dqFilter === 'any-dq' ? '30+ DPD'
+                 :                        '< 30 DPD, current';
+    const yAxisTitle = [yLabel, '(% of active loans)'];
     const poolLabel = poolMode === 'seasoned' ? 'Seasoned pools (>6 mo)' : 'All pools';
     const clrSeasonal = {"field":"year","type":"ordinal","scale":{"scheme":"tableau10"}};
     const clrSeasonalNoLeg = {...clrSeasonal, "legend":null};
@@ -2066,7 +2076,7 @@ if (window.self !== window.top) {
                "labelAngle":0},
     };
     const xSeasonalNoAxis = {"field":"month_num","type":"ordinal"};
-    const ySeasonal = {"field":"dq_rate","type":"quantitative","title":yLabel,"axis":{"format":".2%"}};
+    const ySeasonal = {"field":"dq_rate","type":"quantitative","title":yAxisTitle,"axis":{"format":".2%"}};
     const ySeasonalNoAxis = {"field":"dq_rate","type":"quantitative"};
     const spec = {
       "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
@@ -2380,7 +2390,7 @@ if (window.self !== window.top) {
           "encoding":{
             "x":{"field":"month","type":"temporal","timeUnit":"utcyearmonth",
                  "title":"Reporting Date","axis":_anlAxis},
-            "y":{"field":"rate","type":"quantitative","title":"Annualized Net Loss (% of average pool balance)",
+            "y":{"field":"rate","type":"quantitative","title":["Annualized Net Loss","(% of average pool balance)"],
                  "axis":{"format":".2%"}},
             "color":{
               "field":"issuer","type":"nominal","title":"Issuer",
@@ -2503,7 +2513,7 @@ if (window.self !== window.top) {
       "axis":{"tickMinStep":6},
     };
     const yEnc = {
-      "field":"rate","type":"quantitative","title":"Cumulative Net Loss (% of original pool balance)",
+      "field":"rate","type":"quantitative","title":["Cumulative Net Loss","(% of original pool balance)"],
       "axis":{"format":".2%"},
     };
     const spec = {
@@ -3907,7 +3917,8 @@ async function renderRepoTab() {
         mark: {type: 'line', color: '#1e40af', strokeWidth: 2.5, interpolate: 'monotone'},
         encoding: {
           y: {
-            field: 'repo_rate', type: 'quantitative', title: '1st-Time Repo Rate',
+            field: 'repo_rate', type: 'quantitative',
+            title: ['1st-Time Repo', '(% of active loans)'],
             axis: {orient: 'left', labelFontSize: 11, titleFontSize: 12, titleColor: '#1e40af', format: '.2%'}
           }
         }
