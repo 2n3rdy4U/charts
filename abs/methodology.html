@@ -130,6 +130,22 @@ sum to the total active count and do not overlap.
     (or null).</li>
 </ul>
 
+<h3>A note on weighting</h3>
+<p>
+Delinquency is <strong>count-weighted</strong>: every active loan or lease
+counts once, regardless of size, so the rate answers <em>what share of
+borrowers are behind</em>. Loss is <strong>balance-weighted</strong>: it is a
+ratio of dollars, so it answers <em>what share of the pool&rsquo;s money was
+lost</em>. Both are ratios of sums rather than averages of deal-level rates, so
+a small deal with an extreme rate cannot distort the issuer figure.
+</p>
+<p>
+The two conventions are standard for their respective metrics, but they are not
+the same question &mdash; on a book where large loans behave differently from
+small ones, delinquency and loss will diverge for reasons of construction
+alone. Each chart names its denominator on the y-axis.
+</p>
+
 <h3>What counts as &ldquo;active&rdquo;</h3>
 <p>The two explorers apply different active tests, and this is the main place
 their definitions diverge:</p>
@@ -198,8 +214,11 @@ offers two views of that data.
 <h3>Cumulative Net Loss, by vintage or series</h3>
 <ul>
   <li><strong>Cumulative Net Loss Rate:</strong> cumulative net losses
-    (charge&#8209;offs net of recoveries, per the servicer) &divide; original
-    pool balance, indexed by <em>months since issuance</em>.</li>
+    (charge&#8209;offs net of recoveries, per the servicer) &divide;
+    <strong>original</strong> pool balance, indexed by <em>months since
+    issuance</em>. Note this denominator differs from the annualized measure
+    below, which divides by the <strong>average outstanding</strong>
+    balance.</li>
   <li><strong>View:</strong> selectable &mdash; <em>By Vintage</em>
     (pool&#8209;weighted across deals of the same issuance year) or
     <em>By Series</em> (individual deals).</li>
