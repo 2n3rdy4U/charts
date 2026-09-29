@@ -74,12 +74,13 @@ else applies to both.
 
 <h2>1. Data Source</h2>
 <p>
-All content is derived from <strong>SEC ABS-EE asset-level filings</strong>
-submitted to EDGAR under Regulation AB II. Securitization trusts are legally
-required to file these monthly XML disclosures on a defined schedule. Our
-pipeline fetches the XML, parses it into per-issuer DuckDB files, deduplicates
-across filings, and aggregates the results served here. Typical latency from a
-new SEC filing to the explorer is under 24 hours.
+Delinquency, repossession and credit-score figures are derived from
+<strong>SEC ABS-EE asset-level filings</strong> submitted to EDGAR under
+Regulation AB II, which securitization trusts are required to file monthly.
+Loss figures come from the trusts&rsquo; monthly <strong>Form 10-D servicer
+reports</strong> (section 4). We fetch, parse, deduplicate and aggregate these
+filings to produce the figures shown. Typical latency from a new SEC filing to
+the explorer is under 24 hours.
 </p>
 
 <h3>Auto Loan coverage <span class="tag tag-loan">Auto Loan</span></h3>
@@ -119,15 +120,13 @@ buckets: the 30&ndash;59 bucket, the 60+ bucket and the current (&lt;30) bucket
 sum to the total active count and do not overlap.
 </p>
 <ul>
-  <li><strong>60+ DPD rate:</strong> active assets with
-    <code>currentDelinquencyStatus &ge; 60</code>, divided by total active
-    assets.</li>
-  <li><strong>30&ndash;59 DPD rate:</strong> active assets with
-    <code>30 &le; currentDelinquencyStatus &le; 59</code>, same
-    denominator.</li>
+  <li><strong>60+ DPD rate:</strong> active assets 60 or more days past due,
+    divided by total active assets.</li>
+  <li><strong>30&ndash;59 DPD rate:</strong> active assets 30 to 59 days past due,
+    same denominator.</li>
   <li><strong>30+ DPD rate:</strong> the two combined.</li>
-  <li><strong>Current rate:</strong> active assets with <code>dpd &lt; 30</code>
-    (or null).</li>
+  <li><strong>Current rate:</strong> active assets less than 30 days past
+    due.</li>
 </ul>
 
 <h3>A note on weighting</h3>
@@ -147,39 +146,31 @@ alone. Each chart names its denominator on the y-axis.
 </p>
 
 <h3>What counts as &ldquo;active&rdquo;</h3>
-<p>The two explorers apply different active tests, and this is the main place
-their definitions diverge:</p>
+<p>
+Loan and lease filings report the end of an asset&rsquo;s life differently, so
+the two explorers apply slightly different tests:
+</p>
 <ul>
-  <li><span class="tag tag-loan">Auto Loan</span> balance &gt; $10.</li>
-  <li><span class="tag tag-lease">Auto Lease</span> <code>reportingPeriodEndingActualBalanceAmount &gt; $10</code>
-    <strong>and</strong> <code>zeroBalanceCode</code> is not an ABS-EE
-    termination code (<code>1</code>=prepaid/matured, <code>2</code>=liquidated,
-    <code>3</code>=charged-off, <code>4</code>=servicer repurchase,
-    <code>5</code>=substituted, <code>6</code>=defaulted). Most filers leave
-    <code>zeroBalanceCode</code> empty for active leases; BMW uses
-    <code>'99'</code> as their active marker, so excluding only the termination
-    codes accommodates both conventions.</li>
+  <li><span class="tag tag-loan">Auto Loan</span> a loan is active while it carries an outstanding balance (above a
+    nominal $10).</li>
+  <li><span class="tag tag-lease">Auto Lease</span> a lease is active while it carries a balance <em>and</em> has not
+    been reported as terminated. Lease filings mark ended leases explicitly, and
+    issuers differ in how they mark active ones, so the test relies on the
+    termination status rather than on any single issuer&rsquo;s convention.</li>
 </ul>
 <p>
-<span class="tag tag-loan">Auto Loan</span> DPD values are capped at 999 in the pipeline. Some issuers use sentinel
-values (SDART uses 2577, DRIVE uses 1699) for already-charged-off loans; these
-are excluded from the DPD bucket counts.
+<span class="tag tag-loan">Auto Loan</span> Some issuers report placeholder days-past-due values for loans that have
+already been charged off; those loans are excluded from the delinquency
+buckets.
 </p>
 
 <h2>3. Reconciliation Against Issuer Filings <span class="tag tag-lease">Auto Lease</span></h2>
 <p>
-The lease active-pool definition was validated against Ford Credit Auto Lease
-Trust 2023-A&rsquo;s Monthly Investor Report (Form 10-D) for the December 2024
-collection period. The 10-D&rsquo;s reported end-of-period pool count and
-securitization value reproduce exactly under our definition:
+We validate the lease active-pool definition against issuers&rsquo; own monthly
+investor reports (Form 10-D). Checked against a sample deal&rsquo;s report, the
+end-of-period pool count and securitization value reproduce exactly under our
+definition.
 </p>
-<table>
-  <thead><tr><th>Metric</th><th class="num">Our value</th><th class="num">Ford 10-D</th></tr></thead>
-  <tbody>
-    <tr><td>Active lease count (EOP)</td><td class="num">21,649</td><td class="num">21,649</td></tr>
-    <tr><td>EOP securitization value</td><td class="num">$660,433,746</td><td class="num">$660,433,746</td></tr>
-  </tbody>
-</table>
 
 <h3>Where the lease numerator diverges from issuer reports</h3>
 <p>
@@ -193,10 +184,9 @@ reports. Two structural reasons:
     for reporting purposes. Our ABS-EE snapshot still carries the lease at its
     pre-extension DPD until the following month&rsquo;s filing.</li>
   <li><strong>Charge-off-pending exclusions.</strong> Issuers typically remove
-    leases flagged for default/repossession (ABS-EE
-    <code>terminationIndicator = '3'</code>) from the delinquency table and
+    leases flagged for default or repossession from the delinquency table and
     report them separately. Our snapshot still includes those leases in the 60+
-    bucket while they retain a non-zero balance.</li>
+    bucket while they retain a balance.</li>
 </ul>
 <p>
 Trends and relative comparisons across issuers remain meaningful. For
@@ -235,8 +225,10 @@ the way the delinquency rate is.
 <ul>
   <li><strong>Formula:</strong> 12 &times; net losses for the period &divide;
     average outstanding pool balance (the mean of beginning and ending
-    balance), summed across an issuer&rsquo;s deals in each distribution
-    month.</li>
+    balance), summed across an issuer&rsquo;s deals in each
+    <strong>collection month</strong> &mdash; the month the figures describe (a
+    September servicer report covers August collections). Each month stands
+    alone: the rate is not smoothed or averaged across months.</li>
   <li><strong>Basis:</strong> the <em>All pools</em> / <em>Seasoned (&gt;6 mo)</em>
     toggle mirrors the Delinquency tab. A young deal books almost no losses, so
     an issuer writing new deals looks better than it is on the all-pools
@@ -247,40 +239,85 @@ the way the delinquency rate is.
     charge-offs books a gain, which the filings print in accounting
     parentheses. Prime shelves cross below zero routinely.</li>
 </ul>
-<div class="callout">
-  <strong>Compare year-over-year, not month-over-month.</strong> Auto losses
-  swing hard with tax-refund season &mdash; one subprime shelf averages 6.63% in
-  January against 4.03% in May. A month-over-month move is usually the calendar,
-  not the credit.
-</div>
 <p>
-Because the two tabs read different filings, their as-of dates differ: ABS-EE
-delinquency data is a month-end snapshot, while 10-D loss data follows each
-deal&rsquo;s mid-month distribution calendar. A shelf&rsquo;s newest loss month
-can therefore sit one month behind its newest delinquency month. The loss chart
-states its as-of month in the subtitle. A shelf whose 10-D figures fail our
+Because the two tabs read different filings, their as-of dates can differ. Both
+are dated by the month the figures describe, but servicer reports are filed
+around the middle of the following month, so a shelf&rsquo;s newest loss month
+can sit one month behind its newest delinquency month. The loss chart states
+its as-of month in the subtitle. A shelf whose 10-D figures fail our
 internal reconciliation check is withheld from the annualized series rather than
 published unverified.
 </p>
 
-<h2>5. Repossessions (1st-Time Repo Rate) <span class="tag tag-loan">Auto Loan</span></h2>
+<h2>5. Repossessions (First-Time Repossession Rate) <span class="tag tag-loan">Auto Loan</span></h2>
 <p>
-<strong>1st-time repossession</strong> = the first reporting period in which a
-loan&rsquo;s <code>repossessedIndicator</code> transitions to <code>TRUE</code>.
-Each loan is counted at most once, at its first-ever repo period.
+The monthly rate at which loans are repossessed for the first time, from the
+repossession flag in the loan-level filings.
 </p>
 <ul>
-  <li><strong>Numerator:</strong> count of loans whose first-ever repo period is
-    the current reporting period, within the selected (issuer &times;
-    credit-score band &times; new/used) filter.</li>
-  <li><strong>Denominator:</strong> count of all loans active in the current
-    reporting period in the same filter bucket.</li>
-  <li><strong>Why 1st-time only:</strong> the raw
-    <code>repossessedIndicator</code> can flip from TRUE back to FALSE
-    (borrower redemption) and then to TRUE again. Counting every transition
-    would double-count these edge cases; industry convention uses 1st-time
-    only.</li>
+  <li><strong>Event:</strong> a loan&rsquo;s first repossession &mdash; the first
+    month its repossession flag is set. A loan counts once, ever.
+    If the vehicle is later redeemed and the loan reinstated, the repossession
+    still counts: it happened.</li>
+  <li><strong>Numerator:</strong> first repossessions in the month among loans
+    reported at the start of it, <em>whatever their status then</em> &mdash;
+    including repossessions of loans already charged off, which some servicers
+    carry out routinely after charge-off.</li>
+  <li><strong>Denominator:</strong> loans outstanding at the <strong>start</strong>
+    of the month: a balance above $10, not yet repossessed and not charged off.
+    Loans already paid off or charged off do not count as outstanding.</li>
+  <li><strong>Not a repossession:</strong> a flag on a loan that was current at
+    the start of the month and paid in full during it. That is a payoff recorded
+    in the wrong field. A borrower who is current but surrenders the vehicle is
+    still counted, as is a delinquent borrower who redeems it by paying the loan
+    off.</li>
+  <li><strong>First month in our data:</strong> a flag already set when a deal
+    first appears in our records is not counted &mdash; that repossession
+    happened before our history of the deal begins.</li>
+  <li><strong>Universe:</strong> loans with a consumer credit score of
+    300&ndash;900, as for delinquency; loans without a score, and
+    commercial-scored loans, are excluded.</li>
+  <li><strong>Filters:</strong> the credit-score range and new/used filters apply
+    together, on 10-point score bands.</li>
 </ul>
+
+<h3>How the loan-level count compares with the servicer&rsquo;s</h3>
+<p>
+Seven servicers print the number of vehicles repossessed each month in their
+10-D reports. We compare it with the loan-level count every day; a shelf whose
+ratio moves is flagged for review.
+</p>
+<table>
+  <thead><tr><th>Shelf</th><th class="num">Loan-level &divide; servicer</th><th>Reading</th></tr></thead>
+  <tbody>
+    <tr><td>Capital One, Ford, Hyundai, Toyota</td><td class="num">&asymp; 1.0</td>
+        <td>Agree within a few percent; single months can differ by a month of timing.</td></tr>
+    <tr><td>Honda</td><td class="num">&asymp; 1.10</td>
+        <td>The difference matches the share of repossessions later reversed, which
+            Honda&rsquo;s report excludes and this site counts.</td></tr>
+    <tr><td>Santander (SDART, DRIVE)</td><td class="num">&asymp; 0.86</td>
+        <td>The loan-level file flags fewer repossessions than the servicer reports,
+            steadily since 2017; the cause cannot be determined from public data.</td></tr>
+  </tbody>
+</table>
+
+<h3>Known breaks in the repossession flag</h3>
+<ul>
+  <li><strong>Exeter, from November 2022:</strong> the loan-level file largely
+    stops setting the flag &mdash; first-time repossessions fall from 3,826 in
+    October 2022 to 66 in November while charge-offs without a repossession rise
+    in step. Exeter&rsquo;s series ends at October 2022.</li>
+  <li><strong>Ally, January&ndash;July 2020:</strong> the loan-level file flagged
+    loan payoffs as repossessions (about 12,000 a month against about 450
+    normally). Within that window no flag on a loan paid in full that month is
+    counted. Corrected, Ally&rsquo;s 2020 rate is consistent with the 1.53%
+    whole-portfolio repossession rate Ally published for 2020 (Ally Auto
+    Receivables Trust 2022-1 prospectus).</li>
+</ul>
+<p>
+A daily check flags any shelf whose repossession rate suddenly collapses or
+spikes, so a new break of this kind is caught in the month it appears.
+</p>
 
 <h2>6. Credit Score Methodology <span class="tag tag-loan">Auto Loan</span></h2>
 <p>
@@ -293,23 +330,21 @@ model for all issuers. Loans without a reported score (~0&ndash;15% by issuer)
 are excluded from the analysis.
 </p>
 <p>
-Commercial / dealer bureau scores
-(<code>obligorCreditScoreType LIKE '%commercial%'</code>) are excluded because
-they use a different scoring scale than consumer scores and would contaminate
-the low-score bands of prime issuers.
+Commercial / dealer bureau scores are excluded because they use a different
+scoring scale than consumer scores and would contaminate the low-score bands of
+prime issuers.
 </p>
 
-<h3>Credit Score vs Default (Kaplan-Meier survival analysis)</h3>
-<ul>
-  <li><strong>Event:</strong> loan charge-off (<code>zeroBalanceCode = '4'</code>).</li>
-  <li><strong>Censoring:</strong> loans that paid off
-    (<code>zeroBalanceCode = '1'</code>) or remain active are treated as
-    right-censored at their most recent observation.</li>
-  <li><strong>Duration:</strong> months between <code>originationDate</code> and
-    event (or censor) date.</li>
-  <li><strong>Output:</strong> Kaplan-Meier cumulative default probability as a
-    function of months-on-book, per credit score band.</li>
-</ul>
+<p>
+Scores are used <strong>as reported, on one scale</strong>. The site does not
+convert between score models, so a 640 from one issuer is not necessarily
+risk-equivalent to a 640 from another (see Known Limitations).
+</p>
+<p>
+<strong>Carvana, 2026 deals:</strong> Carvana reports both a VantageScore and a
+FICO for most loans in its 2026 deals. The FICO is used where both are given, and
+the VantageScore where it is the only score; both are retained in our data.
+</p>
 
 <h2>7. Vintage Curves vs Time Series</h2>
 <ul>
@@ -329,8 +364,7 @@ commercial-bureau-scored loans from our &ldquo;Below Prime&rdquo; bucket.
 Commercial bureau scores use a different scale than consumer FICO (typically
 0&ndash;100), and including them would mix fleet and small-business loans with
 subprime consumer loans. For a consumer credit analysis, the stricter exclusion
-is more defensible. The SQL filter is:
-<code>LOWER(obligorCreditScoreType) NOT LIKE '%commercial%'</code>.
+is more defensible.
 </p>
 <p style="margin-top:8px;font-size:13.5px;color:#374151;">
 <span class="tag tag-loan">Auto Loan</span> <strong>Score boundary:</strong> our &ldquo;Below Prime&rdquo; bucket is
@@ -347,16 +381,16 @@ but are not yet surfaced, pending independent corroboration.
 
 <h2>9. Known Limitations</h2>
 <ul>
-  <li><span class="tag tag-loan">Auto Loan</span> <strong>Repo indicator reporting lag:</strong> some issuers
-    (notably Exeter during 2023&ndash;2024) updated
-    <code>repossessedIndicator</code> with delay, producing apparent anomalies
-    in monthly rates. The cumulative count is still correct; monthly timing may
-    be shifted.</li>
+  <li><span class="tag tag-loan">Auto Loan</span> <strong>Repossession flag quality varies by issuer:</strong>
+    the flag is only as good as each issuer&rsquo;s file. Known breaks (Exeter
+    from November 2022; Ally, January&ndash;July 2020) and how each
+    shelf&rsquo;s count compares with its servicer&rsquo;s are set out in
+    section 5.</li>
   <li><span class="tag tag-loan">Auto Loan</span> <strong>Score model ambiguity:</strong> 18 of 25 issuers use a
     generic &ldquo;bureau&rdquo; label instead of explicitly naming FICO. A
     Vantage&shy;Score 640 may not be risk-equivalent to a FICO 640.</li>
   <li><span class="tag tag-loan">Auto Loan</span> <strong>Vehicle valuation varies by issuer:</strong>
-    <code>vehicleValueAmount</code> may reflect wholesale, retail, dealer
+    the reported vehicle value may reflect wholesale, retail, dealer
     purchase price, or another basis depending on the issuer&rsquo;s servicing
     system. Cross-issuer LTV comparisons should be treated as directional, not
     precise.</li>
@@ -379,11 +413,10 @@ but are not yet surfaced, pending independent corroboration.
 
 <h2>10. Update Schedule &amp; Audit Trail</h2>
 <ul>
-  <li><strong>Daily pipeline:</strong> runs twice daily (6 AM and 6 PM ET).</li>
-  <li><strong>Weekend behavior:</strong> the pipeline does not run on weekends;
-    data is stable Saturday&ndash;Sunday.</li>
-  <li><strong>Build identifier:</strong> each generated page includes a build
-    timestamp in its header (<code>BUILD_ID</code>).</li>
+  <li><strong>Daily pipeline:</strong> runs twice a day, every day of the week
+    (6 AM and 6 PM ET). Figures change only when an issuer files new data.</li>
+  <li><strong>Build identifier:</strong> each generated page carries a build
+    timestamp.</li>
 </ul>
 
 <p class="meta">
