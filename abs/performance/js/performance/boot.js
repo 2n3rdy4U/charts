@@ -1,7 +1,7 @@
 // Build B · Performance page — deep links, analytics and start-up. Plain scripts sharing one scope,
 // loaded in order by index.html; see web/README.md.
 /* ---------- deep-link + analytics (mirrors live macro CC_CHART_SHARE_URL convention) ---------- */
-const METRIC_SHORT={dq_60plus_pct:'dq60',dq_31_60_pct:'dq3059',dq_30plus_pct:'dq30',cnl_ratio:'loss',repo_rate:'repo'};
+const METRIC_SHORT={dq_60plus_pct:'dq60',dq_31_60_pct:'dq3059',dq_30plus_pct:'dq30',cnl_ratio:'loss',repo_rate:'repo',rv_gl_cum_ratio:'resid'};
 function serializeState(){
   const p=new URLSearchParams();
   p.set('ac',assetClass); p.set('sel',selected.join(','));
@@ -25,6 +25,8 @@ function applyState(){   // restore a shared view from ?params on load
   const sel=(q.get('sel')||'').split(',').map(s=>s.trim()).filter(inClass);
   if(sel.length)selected=sel; else if(!inClass(selected[0]))selected=[CLASS_DEFAULT[assetClass]];
   const m=q.get('m'); if(m&&(METRIC_META[m]||m==='deals'))metric=m;
+  if(metric==='repo_rate'&&assetClass==='lease') metric='dq_60plus_pct';       // a tab of the other asset class
+  if(metric==='rv_gl_cum_ratio'&&assetClass==='loan') metric='dq_60plus_pct';
   if(metric==='deals'&&selected.length>1)selected=[selected[0]];   // Deals describes one shelf
   const v=q.get('view'); if(v==='vintage'||v==='calendar')mode=v;
   const o=q.get('out'); if(o==='table'||o==='seasonal'||o==='chart')output=o;
@@ -51,7 +53,7 @@ fetch('data/shelves.json?t='+Date.now()).then(r=>r.json()).then(shelves=>{
   AVAIL.push(...shelves);
   if(window.BB_PRESET){ assetClass=window.BB_PRESET.ac; selected=[window.BB_PRESET.sel];
     if(window.BB_PRESET.static){ const dt=document.querySelector('.mtabs button[data-metric="deals"]'); if(dt) dt.hidden=true; } }
-  applyState();
+  applyState(); syncTabs();
   // Macro overlay list: fetched after the deep link is applied, so a shared
   // ?macro= view selects its series whichever script loads first.
   fetch('data/macro.json?t='+Date.now()).then(r=>r.json()).then(m=>{ MACRO=m;

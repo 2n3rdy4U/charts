@@ -263,6 +263,8 @@ function renderChart(){
     const rs=((SHELVES[selected[0]]||{}).pool_snapshot||{}).loss_recon_status;
     box.innerHTML = (isRepo() && assetClass==='lease')
       ? '<div class="chartph">Repossessions are not yet published for lease shelves.</div>'
+      : (isResid() && mode==='calendar')
+      ? '<div class="chartph">Residual value gain (loss) is cumulative — see the vintage view.</div>'
       : (metric==='cnl_ratio' && !isVin && rs==='withheld')
       ? '<div class="chartph">Loss series withheld: this shelf\'s monthly and cumulative loss figures do not reconcile, so it is not published until they do.</div>'
       : '<div class="chartph">no curve data wired for this view yet</div>';

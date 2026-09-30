@@ -40,20 +40,23 @@ const calOf=sh=>{
   if(useAbsee()&&hasAbsee(sh)) return (seas?P.absee_calendar_seasoned:P.absee_calendar)||[];
   return (seas?P.calendar_seasoned:P.calendar)||[];
 };
-const metricLabel=()=>isRepo()?'first-time repossessions':(metric==='cnl_ratio'&&mode==='calendar')?'annualized net loss':(isDQ()?`${DQ_LAB[metric]} delinquency`:(metric==='cnl_ratio'?'cumulative net loss':'this metric'));
+const lossWord=()=>assetClass==='lease'?'net credit loss':'net loss';
+const metricLabel=()=>isRepo()?'first-time repossessions':isResid()?'cumulative residual value gain (loss)':(metric==='cnl_ratio'&&mode==='calendar')?`annualized ${lossWord()}`:(isDQ()?`${DQ_LAB[metric]} delinquency`:(metric==='cnl_ratio'?`cumulative ${lossWord()}`:'this metric'));
 // Denominator on a SECOND LINE of the axis title, as the live charts do — an
 // axis that says "delinquency" without saying "of what" is not self-describing.
 const metricAxis=()=>{
   const lab=metricLabel().replace(/^./,c=>c.toUpperCase());
   if(isDQ())                            return [lab, useAbsee()?'(% of loans)':'(% of pool balance)'];
   if(isRepo())                          return [lab,'(% of loans at start of month)'];
+  const poolWord=assetClass==='lease'?'securitization value':'pool balance';
+  if(isResid())                         return [lab,`(% of original ${poolWord})`];
   if(metric==='cnl_ratio')              return mode==='calendar'
-      ? [lab,'(% of average pool balance, annualized)']
-      : [lab,'(% of original pool balance)'];
+      ? [lab,`(% of average ${poolWord}, annualized)`]
+      : [lab,`(% of original ${poolWord})`];
   return [lab];
 };
 const lab=t=>(AVAIL.find(a=>a.t===t)||{}).label||t;
-const metricTitle=()=>isRepo()?'First-Time Repossession Rate':metric==='cnl_ratio'?(mode==='calendar'?'Annualized Net Loss Rate':'Cumulative Net Loss'):(isDQ()?`${DQ_LAB[metric]} Day Delinquency Rate`:metricLabel());
+const metricTitle=()=>isRepo()?'First-Time Repossession Rate':isResid()?'Cumulative Residual Value Gain (Loss)':metric==='cnl_ratio'?(mode==='calendar'?(assetClass==='lease'?'Annualized Net Credit Loss Rate':'Annualized Net Loss Rate'):(assetClass==='lease'?'Cumulative Net Credit Loss':'Cumulative Net Loss')):(isDQ()?`${DQ_LAB[metric]} Day Delinquency Rate`:metricLabel());
 function sourceFor(){
   // Says which source the chart on screen is actually drawn from: the loan
   // tape for loan delinquencies, the servicer reports for everything else.
@@ -76,7 +79,9 @@ function titleFor(){
   return `${lab(selected[0])} · ${metricTitle()}`;
 }
 const mkey=()=>(metric==='cnl_ratio'&&mode==='calendar')?'anl_pct':metric;  // losses on calendar = annualized flow, not cumulative
-const METRIC_META={dq_60plus_pct:{mode:'vintage',dq:true},dq_31_60_pct:{mode:'vintage',dq:true},dq_30plus_pct:{mode:'vintage',dq:true},cnl_ratio:{mode:'vintage',dq:false},repo_rate:{mode:'calendar',dq:false}};  // sensible default axis + whether DQ buckets apply (CNL has none)
+const METRIC_META={dq_60plus_pct:{mode:'vintage',dq:true},dq_31_60_pct:{mode:'vintage',dq:true},dq_30plus_pct:{mode:'vintage',dq:true},cnl_ratio:{mode:'vintage',dq:false},repo_rate:{mode:'calendar',dq:false},rv_gl_cum_ratio:{mode:'vintage',dq:false}};
+// Residual value gain/loss: lease shelves only, cumulative, so vintage only.
+const isResid=()=>metric==='rv_gl_cum_ratio';  // sensible default axis + whether DQ buckets apply (CNL has none)
 function setMode(m){mode=m;document.querySelectorAll('#modeseg button').forEach(b=>b.classList.toggle('on',b.dataset.mode===m));}
 
 async function ensure(tks){ for(const t of tks){ if(!SHELVES[t]){ const r=await fetch(`data/${t}.json?t=`+Date.now()); SHELVES[t]=await r.json(); } } }

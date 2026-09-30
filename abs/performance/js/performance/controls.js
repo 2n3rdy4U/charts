@@ -73,10 +73,14 @@ window.unsel=t=>{ if(selected.length<2)return; selected=selected.filter(x=>x!==t
 window.makeSubject=t=>{ selected=[t,...selected.filter(x=>x!==t)]; buildIssPanel(); refresh(); };
 el('issbtn').onclick=e=>{ e.stopPropagation(); buildIssPanel(); el('isspanel').classList.toggle('open'); };
 document.addEventListener('click',e=>{ if(!e.target.closest('#isswrap')) closeAdd(); });
+// Tabs that belong to one asset class (Repossessions: loan; Residuals: lease).
+function syncTabs(){ document.querySelectorAll('.mtabs button[data-asset]').forEach(b=>{ b.hidden=b.dataset.asset!==assetClass; }); }
 document.querySelectorAll('#assetseg button').forEach(b=>b.onclick=()=>{
   if(b.dataset.asset===assetClass)return;
   document.querySelectorAll('#assetseg button').forEach(x=>x.classList.remove('on'));b.classList.add('on');
-  assetClass=b.dataset.asset; selected=[CLASS_DEFAULT[assetClass]]; closeAdd(); buildIssPanel(); refresh(); countView();
+  assetClass=b.dataset.asset; selected=[CLASS_DEFAULT[assetClass]]; syncTabs();
+  const cur=document.querySelector('.mtabs button.on'); if(cur&&cur.hidden){ document.querySelector('.mtabs button[data-metric="dq_60plus_pct"]').click(); }
+  closeAdd(); buildIssPanel(); refresh(); countView();
 });
 
 document.querySelectorAll('.mtabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.mtabs button').forEach(x=>x.classList.remove('on'));b.classList.add('on');metric=b.dataset.metric;
