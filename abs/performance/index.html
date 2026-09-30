@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Performance — live resolver data (Build B)</title>
+<!-- Self-hosted, same copies the rest of the site uses. The CDN's bare
+     vega@5 / vega-embed@6 URLs are unpinned — they float to whatever is
+     newest at page load, which is how the Safari render broke once before. -->
+<script src="/assets/vendor/vega.min.js"></script>
+<script src="/assets/vendor/vega-lite.min.js"></script>
+<script src="/assets/vendor/vega-embed.min.js"></script>
+<script>
+  // Share/export wiring — same shared library and conventions as the Explorer,
+  // so a chart exported from here matches one exported from there.
+  window.CC_CHART_META             = { title: "Auto ABS Performance",
+                                       url: "https://data.consumercreditmatters.com/abs/performance/" };
+  window.CC_CHART_SOURCE           = "SEC Form 10-D servicer distribution reports";
+  // Anchor: the control rail, so the button belongs to the panel rather than
+  // floating over the corner of the window. CC_CHART_TARGETS also suppresses
+  // share.js's floating fallback.
+  window.CC_CHART_TARGETS          = ".chartrail";
+  // Capture only the active view, so the PNG is tight — chart or table.
+  window.CC_CHART_CAPTURE_SELECTOR = ["#chart"];
+  // The exported PNG's header is built from these. They are written by the
+  // same code that draws the chart, so the caption cannot describe something
+  // other than what is pictured.
+  window.CC_CHART_DYNAMIC_TITLE_SELECTOR    = "#viewTitle";
+  window.CC_CHART_DYNAMIC_SUBTITLE_SELECTOR = "#chartcap";
+</script>
+<script src="../../share/share.js"></script>
+<link rel="stylesheet" href="css/performance.css">
+  <script data-goatcounter="https://consumercreditmatters.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+<div class="live"><b>LIVE DATA · Vega-Lite chart</b> — hover for detail · click a legend entry to highlight a cohort/issuer. 1 issuer = per-deal/pooled · 2+ = compare (calendar). Build B.</div>
+<header class="top">
+  <div class="brand">Consumer Credit Matters</div>
+  <nav><a href="#">Auto ABS ▾</a><a href="#">Credit Card ▾</a><a href="#">Macro ▾</a><a href="#">Issuance</a><a href="#">Data Calendar</a><a href="#">Newsletter</a></nav>
+  <input class="search" placeholder="Search issuers, deals, series…">
+</header>
+
+<div class="wrap">
+  <div class="selector">
+    <div class="seg" id="assetseg"><button class="on" data-asset="loan">Loans</button><button data-asset="lease">Leases</button></div>
+    <span class="sellabel">Issuers:</span>
+    <div class="multi-sel" id="isswrap">
+      <button class="multi-sel-btn" id="issbtn" type="button">Select issuers ▾</button>
+      <div class="multi-sel-panel" id="isspanel"></div>
+    </div>
+      </div>
+  <div class="ctxline" id="ctxline"></div>
+
+  <div class="mtabs">
+    <button class="on" data-metric="dq_60plus_pct">Delinquencies</button>
+    <button data-metric="cnl_ratio">Losses</button>
+    <button data-metric="repo_rate">Repossessions</button>
+    <button data-metric="deals">Deals</button>
+  </div>
+
+  <div class="layout">
+    <div class="main">
+      <div class="panel" id="perfPanel">
+        <div class="chartwrap">
+          <div class="chartmain" id="export-region">
+            <div class="chart-title" id="viewTitle"></div>
+            <div class="chart-cap" id="chartcap"></div>
+            <div id="chart"></div>
+            <div class="chart-src" id="chartsrc"></div>
+          </div>
+          <div class="chartrail">
+            <div class="cgroup" id="seriesgroup"><div class="cglabel">Series</div><div class="serieschips" id="serieschips"></div></div>
+            <div class="cgroup"><div class="cglabel">Basis</div><div class="seg" id="modeseg"><button class="on" data-mode="vintage">Vintage curves</button><button data-mode="calendar">Time series</button></div></div>
+            <div class="cgroup" id="dqctl"><div class="cglabel">DQ bucket</div><div class="seg" id="dqseg"><button class="on" data-dq="dq_60plus_pct">60+</button><button data-dq="dq_31_60_pct">30–59</button><button data-dq="dq_30plus_pct">30+</button></div></div>
+            <div class="cgroup"><div class="cglabel">Display</div><div class="seg" id="outseg"><button class="on" data-out="chart">Chart</button><button data-out="table">Table</button><button id="seasbtn" data-out="seasonal">Year overlay</button></div></div>
+            <div class="cgroup" id="poolctl" hidden><div class="cglabel">Pools</div><div class="seg" id="poolseg"><button class="on" data-pools="all">All pools</button><button data-pools="seasoned">Seasoned (6+ mo)</button></div></div>
+            <div class="cgroup" id="rowsctl" hidden><div class="cglabel">Table rows</div><div class="seg" id="rowseg"><button class="on" data-rows="6">Every 6 months</button><button data-rows="1">Every month</button></div></div>
+            <div class="cgroup"><div class="cglabel">Macro overlay</div><select id="macrosel" class="ovsel"><option value="">＋ overlay</option></select></div>
+            <div class="cgroup" id="rangegroup"><div class="cglabel">Range</div><div class="rangebar" id="rangebar"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" id="dealsPanel" hidden>
+        <h2>Deals on this shelf · <span id="ndeals"></span> <span style="text-transform:none;font-weight:400;color:var(--muted)" id="dealsubj"></span>
+</h2>
+        <div id="dealsbody"></div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<script src="js/format.js"></script>
+<script src="js/performance/state.js"></script>
+<script src="js/performance/chart.js"></script>
+<script src="js/performance/deals.js"></script>
+<script src="js/performance/controls.js"></script>
+<script src="js/performance/boot.js"></script>
+</body>
+</html>

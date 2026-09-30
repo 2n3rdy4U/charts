@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="description" content="Carvana P&#x27;s auto loan ABS shelf (CRVNAP): delinquency, net loss and repossession performance across 18 SEC-registered deals, from monthly 10-D servicer reports and ABS-EE loan-level data, updated daily.">
+<link rel="canonical" href="https://data.consumercreditmatters.com/abs/performance/CRVNAP/">
+<base href="../">
+<script>window.BB_PRESET={ac:"loan",sel:"CRVNAP",static:true};</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Dataset", "name": "Carvana P auto loan ABS performance · CRVNAP", "description": "Carvana P's auto loan ABS shelf (CRVNAP): delinquency, net loss and repossession performance across 18 SEC-registered deals, from monthly 10-D servicer reports and ABS-EE loan-level data, updated daily.", "url": "https://data.consumercreditmatters.com/abs/performance/CRVNAP/", "creator": {"@type": "Organization", "name": "Consumer Credit Matters"}, "isBasedOn": ["SEC Form 10-D servicer distribution reports", "SEC Form ABS-EE loan-level data"], "temporalCoverage": "2017-01/2026-09", "license": "https://data.consumercreditmatters.com/", "keywords": ["Carvana P", "CRVNAP", "auto ABS", "delinquency", "net loss", "securitization"], "distribution": [{"@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://data.consumercreditmatters.com/abs/performance/data/CRVNAP.json"}]}</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Carvana P auto loan ABS performance · CRVNAP</title>
+<!-- Self-hosted, same copies the rest of the site uses. The CDN's bare
+     vega@5 / vega-embed@6 URLs are unpinned — they float to whatever is
+     newest at page load, which is how the Safari render broke once before. -->
+<script src="/assets/vendor/vega.min.js"></script>
+<script src="/assets/vendor/vega-lite.min.js"></script>
+<script src="/assets/vendor/vega-embed.min.js"></script>
+<script>
+  // Share/export wiring — same shared library and conventions as the Explorer,
+  // so a chart exported from here matches one exported from there.
+  window.CC_CHART_META             = { title: "Auto ABS Performance",
+                                       url: "https://data.consumercreditmatters.com/abs/performance/" };
+  window.CC_CHART_SOURCE           = "SEC Form 10-D servicer distribution reports";
+  // Anchor: the control rail, so the button belongs to the panel rather than
+  // floating over the corner of the window. CC_CHART_TARGETS also suppresses
+  // share.js's floating fallback.
+  window.CC_CHART_TARGETS          = ".chartrail";
+  // Capture only the active view, so the PNG is tight — chart or table.
+  window.CC_CHART_CAPTURE_SELECTOR = ["#chart"];
+  // The exported PNG's header is built from these. They are written by the
+  // same code that draws the chart, so the caption cannot describe something
+  // other than what is pictured.
+  window.CC_CHART_DYNAMIC_TITLE_SELECTOR    = "#viewTitle";
+  window.CC_CHART_DYNAMIC_SUBTITLE_SELECTOR = "#chartcap";
+</script>
+<script src="../../share/share.js"></script>
+<link rel="stylesheet" href="css/performance.css">
+  <script data-goatcounter="https://consumercreditmatters.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+<div class="live"><b>LIVE DATA · Vega-Lite chart</b> — hover for detail · click a legend entry to highlight a cohort/issuer. 1 issuer = per-deal/pooled · 2+ = compare (calendar). Build B.</div>
+<header class="top">
+  <div class="brand">Consumer Credit Matters</div>
+  <nav><a href="#">Auto ABS ▾</a><a href="#">Credit Card ▾</a><a href="#">Macro ▾</a><a href="#">Issuance</a><a href="#">Data Calendar</a><a href="#">Newsletter</a></nav>
+  <input class="search" placeholder="Search issuers, deals, series…">
+</header>
+
+<div class="wrap">
+<section class="shelf-intro"><h1>Carvana P <span class="ticker">CRVNAP</span></h1><ul class="shelf-summary"><li><b>60+ day delinquency</b> 1.07% of loans, Aug 2026</li><li><b>Annualized net loss</b> 0.84% of average pool balance, Aug 2026</li><li><b>First-time repossessions</b> 0.10% of loans, Aug 2026</li><li><b>Deals</b> 12 active · 6 wound down · data through Aug 2026</li></ul><p class="shelf-caveats">Carvana&#x27;s 2026 deals report both a VantageScore and a FICO for most loans; the FICO is used where both are given, the VantageScore where it is the only score. Loans without a consumer credit score are excluded.</p></section>
+  <div class="selector">
+    <div class="seg" id="assetseg"><button class="on" data-asset="loan">Loans</button><button data-asset="lease">Leases</button></div>
+    <span class="sellabel">Issuers:</span>
+    <div class="multi-sel" id="isswrap">
+      <button class="multi-sel-btn" id="issbtn" type="button">Select issuers ▾</button>
+      <div class="multi-sel-panel" id="isspanel"></div>
+    </div>
+      </div>
+  <div class="ctxline" id="ctxline"></div>
+
+  <div class="mtabs">
+    <button class="on" data-metric="dq_60plus_pct">Delinquencies</button>
+    <button data-metric="cnl_ratio">Losses</button>
+    <button data-metric="repo_rate">Repossessions</button>
+    <button data-metric="deals">Deals</button>
+  </div>
+
+  <div class="layout">
+    <div class="main">
+      <div class="panel" id="perfPanel">
+        <div class="chartwrap">
+          <div class="chartmain" id="export-region">
+            <div class="chart-title" id="viewTitle"></div>
+            <div class="chart-cap" id="chartcap"></div>
+            <div id="chart"></div>
+            <div class="chart-src" id="chartsrc"></div>
+          </div>
+          <div class="chartrail">
+            <div class="cgroup" id="seriesgroup"><div class="cglabel">Series</div><div class="serieschips" id="serieschips"></div></div>
+            <div class="cgroup"><div class="cglabel">Basis</div><div class="seg" id="modeseg"><button class="on" data-mode="vintage">Vintage curves</button><button data-mode="calendar">Time series</button></div></div>
+            <div class="cgroup" id="dqctl"><div class="cglabel">DQ bucket</div><div class="seg" id="dqseg"><button class="on" data-dq="dq_60plus_pct">60+</button><button data-dq="dq_31_60_pct">30–59</button><button data-dq="dq_30plus_pct">30+</button></div></div>
+            <div class="cgroup"><div class="cglabel">Display</div><div class="seg" id="outseg"><button class="on" data-out="chart">Chart</button><button data-out="table">Table</button><button id="seasbtn" data-out="seasonal">Year overlay</button></div></div>
+            <div class="cgroup" id="poolctl" hidden><div class="cglabel">Pools</div><div class="seg" id="poolseg"><button class="on" data-pools="all">All pools</button><button data-pools="seasoned">Seasoned (6+ mo)</button></div></div>
+            <div class="cgroup" id="rowsctl" hidden><div class="cglabel">Table rows</div><div class="seg" id="rowseg"><button class="on" data-rows="6">Every 6 months</button><button data-rows="1">Every month</button></div></div>
+            <div class="cgroup"><div class="cglabel">Macro overlay</div><select id="macrosel" class="ovsel"><option value="">＋ overlay</option></select></div>
+            <div class="cgroup" id="rangegroup"><div class="cglabel">Range</div><div class="rangebar" id="rangebar"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" id="dealsPanel">
+        <h2>Deals on this shelf · <span id="ndeals"></span> <span style="text-transform:none;font-weight:400;color:var(--muted)" id="dealsubj"></span>
+</h2>
+        <div id="dealsbody"><div class="deals-block" data-ndeals="12 active · 6 wound-down"><table class="deals"><thead><tr class="grp"><th colspan="2"></th><th colspan="2" class="gsep">At pricing</th><th colspan="4" class="gsep">Hard CE at pricing · % of pool</th><th colspan="3" class="gsep">Latest reported · Sep 2026</th></tr><tr><th class=""><span class="lbl">Deal</span></th><th class=""><span class="lbl">Closed</span></th><th class="num gsep"><span class="lbl">Size</span></th><th class="num"><span class="lbl">Credit Score</span><span class="basis">WA</span></th><th class="num gsep"><span class="lbl">Sub</span><span class="basis">below AAA</span></th><th class="num"><span class="lbl">Reserve</span></th><th class="num"><span class="lbl">OC</span><span class="basis">initial</span></th><th class="num tot"><span class="lbl">Hard CE</span><span class="basis">total</span></th><th class="num gsep"><span class="lbl">60+ DQ</span><span class="basis">% of loans</span></th><th class="num"><span class="lbl">CNL</span><span class="basis">% of orig. pool</span></th><th class="num"><span class="lbl">Pool Factor</span></th></tr></thead><tbody><tr><td><a class="deal" href="../issuance/presale/carvana-auto-receivables-trust-2026-p3.html">2026-P3<span class="tag">PSR</span></a></td><td>Aug 25, 2026</td><td class="num gsep">$1.55B</td><td class="num">702</td><td class="num gsep">10.70%</td><td class="num">0.50%</td><td class="num">0.00%</td><td class="num tot">11.20%</td><td class="num gsep">0.00%</td><td class="num">0.00%</td><td class="num">0.971</td></tr><tr><td><a class="deal" href="../issuance/presale/carvana-auto-receivables-trust-2026-p2.html">2026-P2<span class="tag">PSR</span></a></td><td>May 27, 2026</td><td class="num gsep">$1.10B</td><td class="num">708</td><td class="num gsep">10.70%</td><td class="num">0.50%</td><td class="num">0.00%</td><td class="num tot">11.20%</td><td class="num gsep">0.13%</td><td class="num">0.03%</td><td class="num">0.893</td></tr><tr><td><a class="deal" href="../issuance/presale/carvana-auto-receivables-trust-2026-p1.html">2026-P1<span class="tag">PSR</span></a></td><td>Mar 17, 2026</td><td class="num gsep">$1.05B</td><td class="num">713</td><td class="num gsep">10.70%</td><td class="num">0.50%</td><td class="num">0.00%</td><td class="num tot">11.20%</td><td class="num gsep">0.23%</td><td class="num">0.09%</td><td class="num">0.829</td></tr><tr><td><a class="deal" href="../issuance/presale/carvana-auto-receivables-trust-2025-p4.html">2025-P4<span class="tag">PSR</span></a></td><td>Nov 25, 2025</td><td class="num gsep">$935M</td><td class="num">708</td><td class="num gsep">10.20%</td><td class="num">0.50%</td><td class="num">0.00%</td><td class="num tot">10.70%</td><td class="num gsep">0.44%</td><td class="num">0.23%</td><td class="num">0.749</td></tr><tr><td><a class="deal" href="../issuance/presale/carvana-auto-receivables-trust-2025-p3.html">2025-P3<span class="tag">PSR</span></a></td><td>Sep 23, 2025</td><td class="num gsep">$1.01B</td><td class="num">702</td><td class="num gsep">9.40%</td><td class="num">0.50%</td><td class="num">0.00%</td><td class="num tot">9.90%</td><td class="num gsep">0.73%</td><td class="num">0.46%</td><td class="num">0.693</td></tr><tr><td><a class="deal" href="../issuance/presale/carvana-auto-receivables-trust-2025-p2.html">2025-P2<span class="tag">PSR</span></a></td><td>Jun 17, 2025</td><td class="num gsep">$650M</td><td class="num">701</td><td class="num gsep">10.15%</td><td class="num">0.50%</td><td class="num">0.00%</td><td class="num tot">10.65%</td><td class="num gsep">1.00%</td><td class="num">0.77%</td><td class="num">0.621</td></tr><tr><td><a class="deal" href="../issuance/presale/carvana-auto-receivables-trust-2025-p1.html">2025-P1<span class="tag">PSR</span></a></td><td>Mar 17, 2025</td><td class="num gsep">$603M</td><td class="num">702</td><td class="num gsep">6.50%</td><td class="num">0.50%</td><td class="num">0.00%</td><td class="num tot">7.00%</td><td class="num gsep">1.35%</td><td class="num">1.06%</td><td class="num">0.526</td></tr><tr><td><a class="deal" href="../issuance/presale/carvana-auto-receivables-trust-2024-p4.html">2024-P4<span class="tag">PSR</span></a></td><td>Dec 17, 2024</td><td class="num gsep">$625M</td><td class="num">701</td><td class="num gsep">7.50%</td><td class="num">0.50%</td><td class="num">0.00%</td><td class="num tot">8.00%</td><td class="num gsep">1.30%</td><td class="num">1.27%</td><td class="num">0.491</td></tr><tr><td><a class="deal" href="../issuance/presale/carvana-auto-receivables-trust-2024-p3.html">2024-P3<span class="tag">PSR</span></a></td><td>Sep 17, 2024</td><td class="num gsep">$639M</td><td class="num">701</td><td class="num gsep">7.50%</td><td class="num">0.50%</td><td class="num">0.00%</td><td class="num tot">8.00%</td><td class="num gsep">1.54%</td><td class="num">1.51%</td><td class="num">0.435</td></tr><tr><td><a class="deal" href="../issuance/presale/carvana-auto-receivables-trust-2024-p2.html">2024-P2<span class="tag">PSR</span></a></td><td>Jun 12, 2024</td><td class="num gsep">$507M</td><td class="num">702</td><td class="num gsep">6.95%</td><td class="num">0.50%</td><td class="num">0.00%</td><td class="num tot">7.45%</td><td class="num gsep">1.68%</td><td class="num">1.69%</td><td class="num">0.389</td></tr><tr><td><span class="deal">2022-P3</span></td><td>Sep 8, 2022</td><td class="num gsep">$364M</td><td class="num">704</td><td class="num gsep">9.15%</td><td class="num">0.50%</td><td class="num">0.00%</td><td class="num tot">9.65%</td><td class="num gsep">2.80%</td><td class="num">3.67%</td><td class="num">0.164</td></tr><tr><td><span class="deal">2022-P2</span></td><td>May 25, 2022</td><td class="num gsep">$605M</td><td class="num">704</td><td class="num gsep">9.00%</td><td class="num">0.65%</td><td class="num">0.00%</td><td class="num tot">9.65%</td><td class="num gsep">2.87%</td><td class="num">3.25%</td><td class="num">0.123</td></tr><tr class="woundtoggle"><td colspan="11"><a href="#" class="sw">Show 6 wound-down ▾</a></td></tr><tr class="wound woundrow" style="display:none"><td><span class="deal">2022-P1</span></td><td>Mar 30, 2022</td><td class="num gsep">$1.03B</td><td class="num">704</td><td class="num gsep">8.55%</td><td class="num">0.60%</td><td class="num">0.70%</td><td class="num tot">9.85%</td><td class="num gsep">2.89%</td><td class="num">2.79%</td><td class="num">0.106</td></tr><tr class="wound woundrow" style="display:none"><td><span class="deal">2021-P4</span></td><td>Dec 29, 2021</td><td class="num gsep">$1.05B</td><td class="num">704</td><td class="num gsep">7.75%</td><td class="num">0.50%</td><td class="num">0.00%</td><td class="num tot">8.25%</td><td class="num gsep">3.10%</td><td class="num">2.66%</td><td class="num">0.078</td></tr><tr class="wound woundrow" style="display:none"><td><span class="deal">2021-P3</span></td><td>Sep 29, 2021</td><td class="num gsep">$1.03B</td><td class="num">705</td><td class="num gsep">7.65%</td><td class="num">0.50%</td><td class="num">0.00%</td><td class="num tot">8.15%</td><td class="num gsep">3.01%</td><td class="num">2.43%</td><td class="num">0.059</td></tr><tr class="wound woundrow" style="display:none"><td><span class="deal">2021-P2</span></td><td>Jun 24, 2021</td><td class="num gsep">$775M</td><td class="num">706</td><td class="num gsep">9.20%</td><td class="num">0.50%</td><td class="num">0.00%</td><td class="num tot">9.70%</td><td class="num gsep">3.21%</td><td class="num">1.81%</td><td class="num">0.037</td></tr><tr class="wound woundrow" style="display:none"><td><span class="deal">2021-P1</span></td><td>Mar 18, 2021</td><td class="num gsep">$415M</td><td class="num">707</td><td class="num gsep">8.92%</td><td class="num">0.50%</td><td class="num">0.00%</td><td class="num tot">9.42%</td><td class="num gsep">2.32%</td><td class="num">1.53%</td><td class="num">0.048</td></tr><tr class="wound woundrow" style="display:none"><td><span class="deal">2020-P1</span></td><td>—</td><td class="num gsep">—</td><td class="num">—</td><td class="num gsep">—</td><td class="num">—</td><td class="num">—</td><td class="num tot">—</td><td class="num gsep">2.30%</td><td class="num">1.54%</td><td class="num">0.045</td></tr></tbody></table><div class="cmpfoot"><div><b>At pricing</b> — terms from the deal's prospectus and pricing supplement; they do not update.</div><div><b>Credit Score</b> — weighted-average obligor credit score of the pool at cut-off, as stated in the prospectus.</div><div><b>Hard CE</b> — initial hard credit enhancement for the senior notes, the total the rating agencies quote: <b>Sub</b> (all rated classes below the AAA notes; an unrated residual Class N is not subordination) + <b>Reserve</b> (the reserve fund at closing) + <b>OC</b> (initial overcollateralization, net of any yield supplement), each as a % of the initial pool balance. Excess spread is not included. The total is blank where a part is not known.</div><div><b>Latest reported</b> — from the most recent monthly servicer report (SEC Form 10-D). <b>60+ DQ</b> is the share of loans 60+ days past due in the ABS-EE loan tape at its latest period; <b>CNL</b> is cumulative net loss as a % of the original pool balance; <b>Pool Factor</b> is the current pool balance ÷ original.</div><div><b>PSR</b> marks a deal with a presale report (2024 deals onward); it opens from the deal name.</div></div></div>
+</div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<script src="js/format.js"></script>
+<script src="js/performance/state.js"></script>
+<script src="js/performance/chart.js"></script>
+<script src="js/performance/deals.js"></script>
+<script src="js/performance/controls.js"></script>
+<script src="js/performance/boot.js"></script>
+</body>
+</html>

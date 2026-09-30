@@ -1,0 +1,157 @@
+[
+ {
+  "t": "TAOT",
+  "label": "Toyota",
+  "asset": "loan"
+ },
+ {
+  "t": "HAROT",
+  "label": "Honda",
+  "asset": "loan"
+ },
+ {
+  "t": "NAROT",
+  "label": "Nissan",
+  "asset": "loan"
+ },
+ {
+  "t": "GMCAR",
+  "label": "GM Financial",
+  "asset": "loan"
+ },
+ {
+  "t": "FCAOT",
+  "label": "Ford",
+  "asset": "loan"
+ },
+ {
+  "t": "HART",
+  "label": "Hyundai",
+  "asset": "loan"
+ },
+ {
+  "t": "AART",
+  "label": "Ally",
+  "asset": "loan"
+ },
+ {
+  "t": "COPAR",
+  "label": "Capital One Prime",
+  "asset": "loan"
+ },
+ {
+  "t": "WOART",
+  "label": "World Omni",
+  "asset": "loan"
+ },
+ {
+  "t": "CAOT",
+  "label": "CarMax",
+  "asset": "loan"
+ },
+ {
+  "t": "MBART",
+  "label": "Mercedes-Benz",
+  "asset": "loan"
+ },
+ {
+  "t": "BMWOT",
+  "label": "BMW",
+  "asset": "loan"
+ },
+ {
+  "t": "VALET",
+  "label": "Volkswagen",
+  "asset": "loan"
+ },
+ {
+  "t": "FTAT",
+  "label": "Fifth Third",
+  "asset": "loan"
+ },
+ {
+  "t": "AMCAR",
+  "label": "AmeriCredit",
+  "asset": "loan"
+ },
+ {
+  "t": "SDART",
+  "label": "Santander (SDART)",
+  "asset": "loan"
+ },
+ {
+  "t": "DRIVE",
+  "label": "Santander (DRIVE)",
+  "asset": "loan"
+ },
+ {
+  "t": "EART",
+  "label": "Exeter",
+  "asset": "loan"
+ },
+ {
+  "t": "EARTS",
+  "label": "Exeter Select",
+  "asset": "loan"
+ },
+ {
+  "t": "CMXS",
+  "label": "CarMax Select",
+  "asset": "loan"
+ },
+ {
+  "t": "WOSAT",
+  "label": "World Omni Select",
+  "asset": "loan"
+ },
+ {
+  "t": "BLAST",
+  "label": "Bridgecrest",
+  "asset": "loan"
+ },
+ {
+  "t": "CRVNAP",
+  "label": "Carvana P",
+  "asset": "loan"
+ },
+ {
+  "t": "CRVNAN",
+  "label": "Carvana N",
+  "asset": "loan"
+ },
+ {
+  "t": "FCALT",
+  "label": "Ford",
+  "asset": "lease"
+ },
+ {
+  "t": "GMALT",
+  "label": "GM Financial",
+  "asset": "lease"
+ },
+ {
+  "t": "BMWLT",
+  "label": "BMW",
+  "asset": "lease"
+ },
+ {
+  "t": "MBALT",
+  "label": "Mercedes-Benz",
+  "asset": "lease"
+ },
+ {
+  "t": "NALT",
+  "label": "Nissan",
+  "asset": "lease"
+ },
+ {
+  "t": "VWALT",
+  "label": "Volkswagen",
+  "asset": "lease"
+ },
+ {
+  "t": "WOALT",
+  "label": "World Omni",
+  "asset": "lease"
+ }
+]

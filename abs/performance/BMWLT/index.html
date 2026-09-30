@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="description" content="BMW&#x27;s auto lease ABS shelf (BMWLT): delinquency and net loss performance across 14 SEC-registered deals, from monthly 10-D servicer reports and ABS-EE loan-level data, updated daily.">
+<link rel="canonical" href="https://data.consumercreditmatters.com/abs/performance/BMWLT/">
+<base href="../">
+<script>window.BB_PRESET={ac:"lease",sel:"BMWLT",static:true};</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Dataset", "name": "BMW auto lease ABS performance · BMWLT", "description": "BMW's auto lease ABS shelf (BMWLT): delinquency and net loss performance across 14 SEC-registered deals, from monthly 10-D servicer reports and ABS-EE loan-level data, updated daily.", "url": "https://data.consumercreditmatters.com/abs/performance/BMWLT/", "creator": {"@type": "Organization", "name": "Consumer Credit Matters"}, "isBasedOn": ["SEC Form 10-D servicer distribution reports", "SEC Form ABS-EE loan-level data"], "temporalCoverage": "2017-01/2026-09", "license": "https://data.consumercreditmatters.com/", "keywords": ["BMW", "BMWLT", "auto ABS", "delinquency", "net loss", "securitization"], "distribution": [{"@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://data.consumercreditmatters.com/abs/performance/data/BMWLT.json"}]}</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BMW auto lease ABS performance · BMWLT</title>
+<!-- Self-hosted, same copies the rest of the site uses. The CDN's bare
+     vega@5 / vega-embed@6 URLs are unpinned — they float to whatever is
+     newest at page load, which is how the Safari render broke once before. -->
+<script src="/assets/vendor/vega.min.js"></script>
+<script src="/assets/vendor/vega-lite.min.js"></script>
+<script src="/assets/vendor/vega-embed.min.js"></script>
+<script>
+  // Share/export wiring — same shared library and conventions as the Explorer,
+  // so a chart exported from here matches one exported from there.
+  window.CC_CHART_META             = { title: "Auto ABS Performance",
+                                       url: "https://data.consumercreditmatters.com/abs/performance/" };
+  window.CC_CHART_SOURCE           = "SEC Form 10-D servicer distribution reports";
+  // Anchor: the control rail, so the button belongs to the panel rather than
+  // floating over the corner of the window. CC_CHART_TARGETS also suppresses
+  // share.js's floating fallback.
+  window.CC_CHART_TARGETS          = ".chartrail";
+  // Capture only the active view, so the PNG is tight — chart or table.
+  window.CC_CHART_CAPTURE_SELECTOR = ["#chart"];
+  // The exported PNG's header is built from these. They are written by the
+  // same code that draws the chart, so the caption cannot describe something
+  // other than what is pictured.
+  window.CC_CHART_DYNAMIC_TITLE_SELECTOR    = "#viewTitle";
+  window.CC_CHART_DYNAMIC_SUBTITLE_SELECTOR = "#chartcap";
+</script>
+<script src="../../share/share.js"></script>
+<link rel="stylesheet" href="css/performance.css">
+  <script data-goatcounter="https://consumercreditmatters.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+<div class="live"><b>LIVE DATA · Vega-Lite chart</b> — hover for detail · click a legend entry to highlight a cohort/issuer. 1 issuer = per-deal/pooled · 2+ = compare (calendar). Build B.</div>
+<header class="top">
+  <div class="brand">Consumer Credit Matters</div>
+  <nav><a href="#">Auto ABS ▾</a><a href="#">Credit Card ▾</a><a href="#">Macro ▾</a><a href="#">Issuance</a><a href="#">Data Calendar</a><a href="#">Newsletter</a></nav>
+  <input class="search" placeholder="Search issuers, deals, series…">
+</header>
+
+<div class="wrap">
+<section class="shelf-intro"><h1>BMW <span class="ticker">BMWLT</span></h1><ul class="shelf-summary"><li><b>60+ day delinquency</b> 0.20% of pool balance, Jul 2026</li><li><b>Deals</b> 4 active · 10 wound down · data through Jul 2026</li></ul></section>
+  <div class="selector">
+    <div class="seg" id="assetseg"><button class="on" data-asset="loan">Loans</button><button data-asset="lease">Leases</button></div>
+    <span class="sellabel">Issuers:</span>
+    <div class="multi-sel" id="isswrap">
+      <button class="multi-sel-btn" id="issbtn" type="button">Select issuers ▾</button>
+      <div class="multi-sel-panel" id="isspanel"></div>
+    </div>
+      </div>
+  <div class="ctxline" id="ctxline"></div>
+
+  <div class="mtabs">
+    <button class="on" data-metric="dq_60plus_pct">Delinquencies</button>
+    <button data-metric="cnl_ratio">Losses</button>
+    <button data-metric="repo_rate">Repossessions</button>
+    <button data-metric="deals">Deals</button>
+  </div>
+
+  <div class="layout">
+    <div class="main">
+      <div class="panel" id="perfPanel">
+        <div class="chartwrap">
+          <div class="chartmain" id="export-region">
+            <div class="chart-title" id="viewTitle"></div>
+            <div class="chart-cap" id="chartcap"></div>
+            <div id="chart"></div>
+            <div class="chart-src" id="chartsrc"></div>
+          </div>
+          <div class="chartrail">
+            <div class="cgroup" id="seriesgroup"><div class="cglabel">Series</div><div class="serieschips" id="serieschips"></div></div>
+            <div class="cgroup"><div class="cglabel">Basis</div><div class="seg" id="modeseg"><button class="on" data-mode="vintage">Vintage curves</button><button data-mode="calendar">Time series</button></div></div>
+            <div class="cgroup" id="dqctl"><div class="cglabel">DQ bucket</div><div class="seg" id="dqseg"><button class="on" data-dq="dq_60plus_pct">60+</button><button data-dq="dq_31_60_pct">30–59</button><button data-dq="dq_30plus_pct">30+</button></div></div>
+            <div class="cgroup"><div class="cglabel">Display</div><div class="seg" id="outseg"><button class="on" data-out="chart">Chart</button><button data-out="table">Table</button><button id="seasbtn" data-out="seasonal">Year overlay</button></div></div>
+            <div class="cgroup" id="poolctl" hidden><div class="cglabel">Pools</div><div class="seg" id="poolseg"><button class="on" data-pools="all">All pools</button><button data-pools="seasoned">Seasoned (6+ mo)</button></div></div>
+            <div class="cgroup" id="rowsctl" hidden><div class="cglabel">Table rows</div><div class="seg" id="rowseg"><button class="on" data-rows="6">Every 6 months</button><button data-rows="1">Every month</button></div></div>
+            <div class="cgroup"><div class="cglabel">Macro overlay</div><select id="macrosel" class="ovsel"><option value="">＋ overlay</option></select></div>
+            <div class="cgroup" id="rangegroup"><div class="cglabel">Range</div><div class="rangebar" id="rangebar"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" id="dealsPanel">
+        <h2>Deals on this shelf · <span id="ndeals"></span> <span style="text-transform:none;font-weight:400;color:var(--muted)" id="dealsubj"></span>
+</h2>
+        <div id="dealsbody"><div class="deals-block" data-ndeals="4 active · 10 wound-down"><table class="deals"><thead><tr class="grp"><th colspan="2"></th><th colspan="2" class="gsep">At pricing</th><th colspan="4" class="gsep">Hard CE at pricing · % of pool</th><th colspan="3" class="gsep">Latest reported · Aug 2026</th></tr><tr><th class=""><span class="lbl">Deal</span></th><th class=""><span class="lbl">Closed</span></th><th class="num gsep"><span class="lbl">Size</span></th><th class="num"><span class="lbl">Credit Score</span><span class="basis">WA</span></th><th class="num gsep"><span class="lbl">Sub</span><span class="basis">below AAA</span></th><th class="num"><span class="lbl">Reserve</span></th><th class="num"><span class="lbl">OC</span><span class="basis">initial</span></th><th class="num tot"><span class="lbl">Hard CE</span><span class="basis">total</span></th><th class="num gsep"><span class="lbl">60+ DQ</span><span class="basis">% of pool bal.</span></th><th class="num"><span class="lbl">CNL</span><span class="basis">% of orig. pool</span></th><th class="num"><span class="lbl">Pool Factor</span></th></tr></thead><tbody><tr><td><span class="deal">2026-1</span></td><td>Apr 22, 2026</td><td class="num gsep">$1.50B</td><td class="num">792</td><td class="num gsep">0.00%</td><td class="num">0.25%</td><td class="num">13.15%</td><td class="num tot">13.40%</td><td class="num gsep">0.15%</td><td class="num">—</td><td class="num">0.902</td></tr><tr><td><span class="deal">2025-2</span></td><td>Oct 15, 2025</td><td class="num gsep">$1.25B</td><td class="num">792</td><td class="num gsep">0.00%</td><td class="num">0.25%</td><td class="num">13.15%</td><td class="num tot">13.40%</td><td class="num gsep">0.21%</td><td class="num">—</td><td class="num">0.714</td></tr><tr><td><a class="deal" href="../lease_explorer/lease_psr_bmw-vehicle-lease-trust-2025-1.html">2025-1<span class="tag">PSR</span></a></td><td>Jun 10, 2025</td><td class="num gsep">$1.35B</td><td class="num">792</td><td class="num gsep">0.00%</td><td class="num">0.25%</td><td class="num">13.15%</td><td class="num tot">13.40%</td><td class="num gsep">0.17%</td><td class="num">—</td><td class="num">0.654</td></tr><tr><td><span class="deal">2024-2</span></td><td>Oct 7, 2024</td><td class="num gsep">$1.25B</td><td class="num">789</td><td class="num gsep">0.00%</td><td class="num">0.25%</td><td class="num">14.90%</td><td class="num tot">15.15%</td><td class="num gsep">0.34%</td><td class="num">—</td><td class="num">0.436</td></tr><tr class="woundtoggle"><td colspan="11"><a href="#" class="sw">Show 10 wound-down ▾</a></td></tr><tr class="wound woundrow" style="display:none"><td><span class="deal">2024-1</span></td><td>—</td><td class="num gsep">—</td><td class="num">—</td><td class="num gsep">—</td><td class="num">—</td><td class="num">—</td><td class="num tot">—</td><td class="num gsep">—</td><td class="num">—</td><td class="num">—</td></tr><tr class="wound woundrow" style="display:none"><td><span class="deal">2023-2</span></td><td>—</td><td class="num gsep">—</td><td class="num">—</td><td class="num gsep">—</td><td class="num">—</td><td class="num">—</td><td class="num tot">—</td><td class="num gsep">—</td><td class="num">—</td><td class="num">0.000</td></tr><tr class="wound woundrow" style="display:none"><td><span class="deal">2023-1</span></td><td>—</td><td class="num gsep">—</td><td class="num">—</td><td class="num gsep">—</td><td class="num">—</td><td class="num">—</td><td class="num tot">—</td><td class="num gsep">—</td><td class="num">—</td><td class="num">0.000</td></tr><tr class="wound woundrow" style="display:none"><td><span class="deal">2022-1</span></td><td>—</td><td class="num gsep">—</td><td class="num">—</td><td class="num gsep">—</td><td class="num">—</td><td class="num">—</td><td class="num tot">—</td><td class="num gsep">—</td><td class="num">—</td><td class="num">0.000</td></tr><tr class="wound woundrow" style="display:none"><td><span class="deal">2021-2</span></td><td>—</td><td class="num gsep">—</td><td class="num">—</td><td class="num gsep">—</td><td class="num">—</td><td class="num">—</td><td class="num tot">—</td><td class="num gsep">—</td><td class="num">—</td><td class="num">0.000</td></tr><tr class="wound woundrow" style="display:none"><td><span class="deal">2021-1</span></td><td>—</td><td class="num gsep">—</td><td class="num">—</td><td class="num gsep">—</td><td class="num">—</td><td class="num">—</td><td class="num tot">—</td><td class="num gsep">—</td><td class="num">—</td><td class="num">0.000</td></tr><tr class="wound woundrow" style="display:none"><td><span class="deal">2019-1</span></td><td>—</td><td class="num gsep">—</td><td class="num">—</td><td class="num gsep">—</td><td class="num">—</td><td class="num">—</td><td class="num tot">—</td><td class="num gsep">—</td><td class="num">—</td><td class="num">0.000</td></tr><tr class="wound woundrow" style="display:none"><td><span class="deal">2018-1</span></td><td>—</td><td class="num gsep">—</td><td class="num">—</td><td class="num gsep">—</td><td class="num">—</td><td class="num">—</td><td class="num tot">—</td><td class="num gsep">—</td><td class="num">—</td><td class="num">0.000</td></tr><tr class="wound woundrow" style="display:none"><td><span class="deal">2017-2</span></td><td>—</td><td class="num gsep">—</td><td class="num">—</td><td class="num gsep">—</td><td class="num">—</td><td class="num">—</td><td class="num tot">—</td><td class="num gsep">—</td><td class="num">—</td><td class="num">0.000</td></tr><tr class="wound woundrow" style="display:none"><td><span class="deal">2017-1</span></td><td>—</td><td class="num gsep">—</td><td class="num">—</td><td class="num gsep">—</td><td class="num">—</td><td class="num">—</td><td class="num tot">—</td><td class="num gsep">—</td><td class="num">—</td><td class="num">0.000</td></tr></tbody></table><div class="cmpfoot"><div><b>At pricing</b> — terms from the deal's prospectus and pricing supplement; they do not update.</div><div><b>Credit Score</b> — weighted-average obligor credit score of the pool at cut-off, as stated in the prospectus.</div><div><b>Hard CE</b> — initial hard credit enhancement for the senior notes, the total the rating agencies quote: <b>Sub</b> (all rated classes below the AAA notes; an unrated residual Class N is not subordination) + <b>Reserve</b> (the reserve fund at closing) + <b>OC</b> (initial overcollateralization, net of any yield supplement), each as a % of the initial pool balance. Excess spread is not included. The total is blank where a part is not known.</div><div><b>Latest reported</b> — from the most recent monthly servicer report (SEC Form 10-D). <b>60+ DQ</b> is the balance 60+ days past due as a % of the pool balance; <b>CNL</b> is cumulative net loss as a % of the original pool balance; <b>Pool Factor</b> is the current pool balance ÷ original.</div><div><b>PSR</b> marks a deal with a presale report (2024 deals onward); it opens from the deal name.</div></div></div>
+</div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<script src="js/format.js"></script>
+<script src="js/performance/state.js"></script>
+<script src="js/performance/chart.js"></script>
+<script src="js/performance/deals.js"></script>
+<script src="js/performance/controls.js"></script>
+<script src="js/performance/boot.js"></script>
+</body>
+</html>
