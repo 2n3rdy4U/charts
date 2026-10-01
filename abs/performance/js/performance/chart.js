@@ -179,11 +179,18 @@ window.setRange=v=>{ range = v==='all'?'all':parseInt(v); renderChart(); };
 const CHART_CFG={axis:{labelFontSize:13,titleFontSize:14},
   title:{anchor:"middle",fontSize:15,subtitleFontSize:11},
   view:{continuousHeight:300,continuousWidth:300}};
-const isPhone=()=>window.matchMedia('(max-width:640px)').matches;
+// A phone either way up: portrait (narrow) or landscape (short). Both get the
+// phone layout; landscape additionally sizes the chart to the screen.
+const isPhone=()=>window.matchMedia('(max-width:640px), (orientation:landscape) and (max-height:500px)').matches;
+const isLandscapePhone=()=>window.matchMedia('(orientation:landscape) and (max-height:500px)').matches;
 // Legend under the plot, columns by screen width — the Explorer's legendColumns().
-const legendCols=()=>window.matchMedia('(max-width:640px)').matches?4:window.matchMedia('(max-width:1024px)').matches?6:9;
+const legendCols=()=>isPhone()?4:window.matchMedia('(max-width:1024px)').matches?6:9;
 // Issuer names ("Santander (SDART)") are long: fewer, wider columns on a phone.
-const legendCfg=(long)=>({orient:"bottom",direction:"horizontal",columns:long&&isPhone()?2:legendCols(),columnPadding:isPhone()?10:24,labelLimit:long?170:90,symbolSize:110,symbolLimit:1000,symbolType:"stroke",symbolStrokeWidth:2});
+// Landscape phone: height is the scarce dimension, so the legend goes to the
+// right of the plot instead of under it.
+const legendCfg=(long)=>isLandscapePhone()
+  ? {orient:"right",direction:"vertical",columns:long?1:2,columnPadding:8,labelLimit:long?150:70,labelFontSize:10.5,symbolSize:80,symbolLimit:1000,symbolType:"stroke",symbolStrokeWidth:2,title:null,rowPadding:2}
+  : ({orient:"bottom",direction:"horizontal",columns:long&&isPhone()?2:legendCols(),columnPadding:isPhone()?10:24,labelLimit:long?170:90,symbolSize:110,symbolLimit:1000,symbolType:"stroke",symbolStrokeWidth:2});
 // Calendar x-axis — the Explorer's tsDateAxis(): month labels on a short
 // window, years otherwise, angled on a phone.
 function dateAxis(nMonths){
@@ -191,7 +198,7 @@ function dateAxis(nMonths){
           : (nMonths && nMonths>72) ? {tickCount:{interval:"year",step:2},format:"%Y"}
           : {tickCount:"year",format:"%Y"};
   a.labelOverlap=false;
-  if(isPhone()){ a.labelAngle=-45; a.labelFontSize=10; }
+  if(isPhone() && !isLandscapePhone()){ a.labelAngle=-45; a.labelFontSize=10; }   // narrow portrait only
   return a;
 }
 // The Explorer's hover: a large invisible target that snaps to the nearest
@@ -242,7 +249,13 @@ function renderSeriesChips(list, showAxis){   // each chart series: [swatch] nam
   }).join('');
 }
 function chartHeight(nEntries, nCols){
-  if(isPhone()) return 280;   // a phone scrolls; the chart keeps a readable fixed height (the Explorer's #vis)
+  if(isLandscapePhone()){
+    // Title, plot, axis and source line together fill the screen: the reader
+    // sees the whole chart without scrolling; the controls are a scroll away.
+    const head = el('viewTitle').offsetHeight + el('chartcap').offsetHeight;
+    return Math.max(140, Math.round(window.innerHeight - head - 46 - 26 - 14));
+  }
+  if(isPhone()) return 280;   // portrait: the chart keeps a readable fixed height (the Explorer's #vis)
   nEntries = nEntries || 1; nCols = nCols || 6;
   // Whatever remains below the chart's top edge, less room for the source
   // line and the panel's own padding. Floored so it never collapses to a
@@ -258,6 +271,17 @@ function chartHeight(nEntries, nCols){
   const chrome = 46 + (legendRows*22) + BOTTOM_RESERVE;
   return Math.max(260, Math.round(window.innerHeight - top - chrome));
 }
+// Landscape phone: after loading, rotating, or any tab/control change, settle
+// the page on the chart so it fills the screen and the result is in view.
+// (Only on a phone held sideways, and only in a top-level window — inside the
+// site frame the parent page does the scrolling.)
+let _focusNext = true;
+function focusChart(){
+  if(!isLandscapePhone() || window.self!==window.top) return;
+  const r = el('export-region'); if(r) r.scrollIntoView({block:'start', behavior:'smooth'});
+}
+document.addEventListener('click', e=>{ if(e.target.closest('.mtabs, .chartrail, #assetseg, #isspanel')) _focusNext=true; }, true);
+addEventListener('orientationchange', ()=>{ _focusNext=true; });
 function renderChart(){
   updateModeAvail(); updateOutputAvail(); setCap(); renderRangeBar();
   // One title, set here so every view below it (chart / table / year overlay /
@@ -266,6 +290,7 @@ function renderChart(){
   // cannot go out describing something other than what it pictures.
   el('viewTitle').textContent = titleFor();
   renderCtx();
+  if(_focusNext){ _focusNext=false; requestAnimationFrame(focusChart); }
   // Same call site as the title, for the same reason: share.js reads this when
   // it composes the PNG footer, so the image states its own provenance.
   const _src = sourceFor(), _notes = notesFor();

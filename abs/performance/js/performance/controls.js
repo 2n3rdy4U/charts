@@ -110,8 +110,14 @@ document.querySelectorAll('#modeseg button').forEach(b=>b.onclick=()=>{
   setMode(b.dataset.mode); refresh(); countView();});
 document.querySelectorAll('#outseg button').forEach(b=>b.onclick=()=>setOutput(b.dataset.out));
 document.querySelectorAll('#poolseg button').forEach(b=>b.onclick=()=>{ pools=b.dataset.pools; renderChart(); });
-let _rz; addEventListener('resize',()=>{ clearTimeout(_rz); _rz=setTimeout(()=>{
-  if(!el('perfPanel').hidden) renderChart();   // height is derived from the window
+// Redraw on resize — height is derived from the window. On a phone, Safari's
+// address bar showing and hiding while scrolling resizes the window's HEIGHT
+// only; redrawing then made the chart jump, so a phone redraws only when the
+// width changes (rotation).
+let _rz, _rzW=window.innerWidth; addEventListener('resize',()=>{ clearTimeout(_rz); _rz=setTimeout(()=>{
+  if(isPhone() && window.innerWidth===_rzW) return;
+  _rzW=window.innerWidth;
+  if(!el('perfPanel').hidden) renderChart();
 }, 180); });
 el('macrosel').onchange=e=>{ if(multiIssuer()){ e.target.value=''; toast('Macro overlay is for one issuer at a time — select a single issuer to use it.'); return; }
   macroId=e.target.value||null; el('macrosel').classList.toggle('on',!!macroId); renderChart(); };

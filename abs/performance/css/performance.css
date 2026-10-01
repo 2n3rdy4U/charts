@@ -177,7 +177,7 @@ tr.woundtoggle td{background:#fafcff;text-align:center;padding:7px} tr.woundtogg
 
 /* Phone (portrait): the Explorer's arrangement — tabs slide sideways, the
    controls sit ABOVE the chart as compact rows, the chart keeps a fixed height. */
-@media (max-width:640px){
+@media (max-width:640px), (orientation:landscape) and (max-height:500px){
   .wrap{padding:8px 12px 20px}
   .selector{margin:6px 0 4px;gap:8px;flex-wrap:nowrap}
   .sellabel{display:none}
@@ -240,4 +240,14 @@ tr.woundtoggle td{background:#fafcff;text-align:center;padding:7px} tr.woundtogg
   /* The Deals table is wider than a phone: it scrolls inside its panel, not the page. */
   #dealsPanel{overflow-x:auto;-webkit-overflow-scrolling:touch}
   #dealsPanel>h2{display:block;padding:10px 0;font-size:12px;line-height:1.5}
+}
+
+/* Landscape phone: the same phone styling, but the chart comes first and fills
+   the screen; the controls sit BELOW it (a scroll away), and the sideways-room
+   lets the legend sit beside the plot (set in chart.js). */
+@media (orientation:landscape) and (max-height:500px){
+  .chartrail{order:0;border-bottom:none;border-top:1px solid var(--line);padding:8px 0 0}
+  .chart-title{margin:2px 0 0;font-size:13.5px}
+  .chart-cap{font-size:10.5px}
+  .chart-src{margin-top:2px}
 }
