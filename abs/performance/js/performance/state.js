@@ -15,10 +15,9 @@ window.setSeriesAxis=(k,s)=>{ axisBy[k]=s; renderChart(); };
 let MACRO=null;   // curated FRED overlay series (macro.json)
 const DQ_LAB={dq_60plus_pct:'60+',dq_31_60_pct:'30–59',dq_30plus_pct:'30+'};
 const isDQ=()=>metric in DQ_LAB;
-// Axis tick format. ".1%" repeated labels whenever ticks fell between tenths
-// (a 0.3%-max lease chart read 0.1%, 0.1%, 0.1%); ".2~%" keeps two decimals
-// and trims trailing zeros, so 0.05% / 0.1% / 1% / 7.5% all read as written.
-const AXFMT=".2~%";
+// Axis tick format: two decimals on every tick, as the Explorer prints them
+// (3.00%, 2.50%, 0.05%). Trimming trailing zeros gave a ragged axis.
+const AXFMT=".2%";
 // Delinquency on loan shelves comes from the ABS-EE loan tape — the same
 // numbers as the live Explorer, by COUNT of loans. Losses, and everything on
 // lease shelves, come from the 10-D servicer reports, by balance. The two are
@@ -42,20 +41,31 @@ const calOf=sh=>{
 };
 const lossWord=()=>assetClass==='lease'?'net credit loss':'net loss';
 const metricLabel=()=>isRepo()?'first-time repossessions':isResid()?'cumulative residual value gain (loss)':(metric==='cnl_ratio'&&mode==='calendar')?`annualized ${lossWord()}`:(isDQ()?`${DQ_LAB[metric]} delinquency`:(metric==='cnl_ratio'?`cumulative ${lossWord()}`:'this metric'));
-// Denominator on a SECOND LINE of the axis title, as the live charts do — an
-// axis that says "delinquency" without saying "of what" is not self-describing.
+// Axis titles in the Explorer's words: the measure on the first line, its
+// denominator on the second — an axis that says "delinquency" without saying
+// "of what" is not self-describing.
+const DPD=()=>`${DQ_LAB[metric]} DPD`;
+const lossName=()=>assetClass==='lease'?'Net Credit Loss':'Net Loss';
 const metricAxis=()=>{
-  const lab=metricLabel().replace(/^./,c=>c.toUpperCase());
-  if(isDQ())                            return [lab, useAbsee()?'(% of loans)':'(% of pool balance)'];
-  if(isRepo())                          return [lab,'(% of loans at start of month)'];
   const poolWord=assetClass==='lease'?'securitization value':'pool balance';
-  if(isResid())                         return [lab,`(% of original ${poolWord})`];
+  if(isDQ())                            return [DPD(), useAbsee()?'(% of active loans)':'(% of pool balance)'];
+  if(isRepo())                          return ['1st-Time Repo','(% of loans at start of month)'];
+  if(isResid())                         return ['Cumulative Residual Gain (Loss)',`(% of original ${poolWord})`];
   if(metric==='cnl_ratio')              return mode==='calendar'
-      ? [lab,`(% of average ${poolWord}, annualized)`]
-      : [lab,`(% of original ${poolWord})`];
-  return [lab];
+      ? [`Annualized ${lossName()}`,`(% of average ${poolWord})`]
+      : [`Cumulative ${lossName()}`,`(% of original ${poolWord})`];
+  return [metricLabel()];
+};
+// Tooltip rows, as the Explorer labels them for the same view.
+const tipLabels=()=>{
+  if(mode==='vintage' && (metric==='cnl_ratio'||isResid()))
+    return {series:'Vintage', x:'Months', y: isResid()?'Cum. Residual G/(L)':'Cum. Loss Rate'};
+  if(isRepo())               return {series:'Issuer', x:'Month', y:'Rate'};
+  if(metric==='cnl_ratio')   return {series:'Issuer', x:'Month', y:`Annualized ${lossName().toLowerCase()}`};
+  return {series:'Series', x:'Date', y:DPD()};
 };
 const lab=t=>(AVAIL.find(a=>a.t===t)||{}).label||t;
+const labCode=t=>{ const l=lab(t); return l.includes(`(${t})`)?l:`${l} (${t})`; };   // the Explorer's issuer label: "Name (CODE)"
 const metricTitle=()=>isRepo()?'First-Time Repossession Rate':isResid()?'Cumulative Residual Value Gain (Loss)':metric==='cnl_ratio'?(mode==='calendar'?(assetClass==='lease'?'Annualized Net Credit Loss Rate':'Annualized Net Loss Rate'):(assetClass==='lease'?'Cumulative Net Credit Loss':'Cumulative Net Loss')):(isDQ()?`${DQ_LAB[metric]} Day Delinquency Rate`:metricLabel());
 function sourceFor(){
   // Says which source the chart on screen is actually drawn from: the loan
@@ -73,10 +83,37 @@ function notesFor(){
     if(isRepo()||useAbsee()){ specific.push(...(n.score||[])); general.push(...(n.universe||[])); } });
   return [...new Set(specific), ...new Set(general)];   // shelf caveats first, the universe once
 }
+/* Chart title and sub-head, by the Explorer's rules (updateViewHeader in
+   generate_sec_explorer_data.py): the title names the issuer and the measure;
+   the sub-head lists the settings in force, joined by " · ". Build B has no
+   credit-score or vehicle filter, so on the loan tape the sub-head states the
+   whole book, as the Explorer's does with those filters at their defaults. */
+const AUTO=()=>assetClass==='lease'?'Auto Lease ABS':'Auto ABS';
 function titleFor(){
-  if(macroId){ const m=MACRO&&MACRO.find(x=>x.id===macroId); return `${lab(selected[0])} · ${metricTitle()} vs ${m?m.name:'macro'}`; }
-  if(selected.length>1) return `${metricTitle()} — ${selected.length} issuers`;
-  return `${lab(selected[0])} · ${metricTitle()}`;
+  const one=selected.length===1, who=labCode(selected[0]);
+  if(macroId){ const m=MACRO&&MACRO.find(x=>x.id===macroId); return `${who} vs ${m?m.name:'macro'}`; }
+  if(isRepo())                 return `${one?who:AUTO()} — 1st-Time Repossessions`;
+  if(mode==='vintage'){
+    if(metric==='cnl_ratio')   return `${who} Vintage Loss Curves`;
+    if(isResid())              return `${who} Vintage Residual Value Gain (Loss)`;
+    return `${who} Vintage`;
+  }
+  if(output==='table' && !one) return `${AUTO()} Issuer Comparison`;
+  if(metric==='cnl_ratio')     return `${one?who:AUTO()} Annualized ${lossName()}`;
+  return `${one?who:AUTO()} DQ ${DPD()}`;
+}
+function subtitleFor(){
+  const book = useAbsee() ? ['All Credit Scores','New & Used'] : [];
+  const poolTxt = pools==='seasoned' ? 'Seasoned pools (>6 mo)' : 'All pools';
+  const n = selected.length>1 ? [`${selected.length} issuers`] : [];
+  let parts;
+  if(macroId)                          parts=[metricAxis()[0], poolTxt];
+  else if(mode==='vintage' && isDQ())  parts=[DPD(), ...book];
+  else if(mode==='vintage')            parts=['By series (individual deals)'];
+  else if(isDQ() && useAbsee())        parts=[...book, pools==='seasoned'?'Seasoned (>6mo)':''];   // exactly the Explorer's DQ time series
+  else                                 parts=[poolTxt, ...n];
+  if(output==='seasonal') parts.push('Year overlay');
+  return parts.filter(Boolean).join(' · ');
 }
 const mkey=()=>(metric==='cnl_ratio'&&mode==='calendar')?'anl_pct':metric;  // losses on calendar = annualized flow, not cumulative
 const METRIC_META={dq_60plus_pct:{mode:'vintage',dq:true},dq_31_60_pct:{mode:'vintage',dq:true},dq_30plus_pct:{mode:'vintage',dq:true},cnl_ratio:{mode:'vintage',dq:false},repo_rate:{mode:'calendar',dq:false},rv_gl_cum_ratio:{mode:'vintage',dq:false}};

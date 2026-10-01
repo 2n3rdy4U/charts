@@ -13,9 +13,21 @@ function classAvail(){ return AVAIL.filter(a=>a.asset===assetClass); }
    So the panel marks the subject with a star and lets a checked issuer be
    promoted, rather than treating every selection as equal.
 
-   Single vs multiple is decided by the lens: Deals describes one shelf, so
-   checking there replaces the selection instead of adding to it. */
-const issMulti = () => metric !== 'deals';
+   Single vs multiple is decided by the view, as on the Explorer: Deals and
+   vintage curves describe one shelf, so there the picker takes one issuer
+   (checking replaces the selection); time series compares several. */
+const issMulti = () => metric !== 'deals' && mode !== 'vintage';
+// Going to a one-issuer view keeps the subject and sets the others aside;
+// coming back to time series restores them, so a comparison is not lost by
+// glancing at one shelf's vintages.
+let _setAside = null;
+function fitSelectionToView(){
+  if(!issMulti() && selected.length>1){ _setAside = selected.slice(1); selected = [selected[0]]; }
+  else if(issMulti() && _setAside && selected.length===1){
+    selected = [selected[0], ..._setAside.filter(t=>t!==selected[0] && AVAIL.some(a=>a.t===t && a.asset===assetClass))];
+    _setAside = null;
+  }
+}
 
 function updateIssBtn(){
   const parts = selected.map(t=>(AVAIL.find(x=>x.t===t)||{label:t}).label);
@@ -31,7 +43,8 @@ function buildIssPanel(){
   panel.innerHTML = '';
   if(!issMulti()){
     const h=document.createElement('div'); h.className='mss-hint';
-    h.textContent='Deals describes one shelf at a time';
+    h.textContent = metric==='deals' ? 'Deals describes one shelf at a time'
+                                     : 'Vintage curves show one issuer — use Time series to compare';
     panel.appendChild(h);
   }
   for(const a of opts){
@@ -66,7 +79,7 @@ function buildIssPanel(){
 }
 function closeAdd(){ el('isspanel').classList.remove('open'); }
 
-async function refresh(){ await ensure(selected); enforceSingleIssuerViews(); updateIssBtn(); renderSubject(); renderChart();
+async function refresh(){ fitSelectionToView(); await ensure(selected); enforceSingleIssuerViews(); updateIssBtn(); renderSubject(); renderChart();
 }
 window.sel=t=>{ if(!selected.includes(t))selected.push(t); buildIssPanel(); refresh(); countView(); };
 window.unsel=t=>{ if(selected.length<2)return; selected=selected.filter(x=>x!==t); buildIssPanel(); refresh(); };
@@ -87,15 +100,14 @@ document.querySelectorAll('.mtabs button').forEach(b=>b.onclick=()=>{document.qu
   // Deals describes one shelf, the charts can compare several — the picker
   // changes between radio and checkbox with the lens, so it offers only what
   // the current view can actually use.
-  if(metric==='deals'){ if(selected.length>1) selected=[selected[0]];
-                        buildIssPanel(); updateIssBtn(); showLens('deals'); return; }
-  buildIssPanel(); showLens('chart');
-  const m=METRIC_META[metric]; if(m)setMode(m.mode); el('dqctl').style.display=(m&&m.dq)?'':'none'; syncDqSeg(); renderChart(); countView();});
+  if(metric==='deals'){ fitSelectionToView(); buildIssPanel(); updateIssBtn(); showLens('deals'); return; }
+  const m=METRIC_META[metric]; if(m)setMode(m.mode); el('dqctl').style.display=(m&&m.dq)?'':'none'; syncDqSeg();
+  fitSelectionToView(); buildIssPanel(); updateIssBtn(); renderSubject(); showLens('chart'); countView();});
 function syncDqSeg(){ document.querySelectorAll('#dqseg button').forEach(x=>x.classList.toggle('on', x.dataset.dq===metric)); }
 document.querySelectorAll('#dqseg button').forEach(b=>b.onclick=()=>{ metric=b.dataset.dq; syncDqSeg(); renderChart(); });
 document.querySelectorAll('#modeseg button').forEach(b=>b.onclick=()=>{
-  if(b.dataset.mode==='vintage'&&(selected.length>=2||isRepo()))return;   // vintage is single-issuer; cross-issuer = calendar (cohort comparison deferred to Losses tab)
-  document.querySelectorAll('#modeseg button').forEach(x=>x.classList.remove('on'));b.classList.add('on');mode=b.dataset.mode;renderChart();});
+  if(b.dataset.mode==='vintage'&&isRepo())return;   // repossessions are a calendar rate; no vintage curve
+  setMode(b.dataset.mode); refresh(); countView();});
 document.querySelectorAll('#outseg button').forEach(b=>b.onclick=()=>setOutput(b.dataset.out));
 document.querySelectorAll('#poolseg button').forEach(b=>b.onclick=()=>{ pools=b.dataset.pools; renderChart(); });
 let _rz; addEventListener('resize',()=>{ clearTimeout(_rz); _rz=setTimeout(()=>{

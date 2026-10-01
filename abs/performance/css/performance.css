@@ -9,12 +9,7 @@ body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--bg);font
      height:100vh;overflow:hidden}
 @media(max-height:640px),(max-width:900px){ body{height:auto;overflow:auto} }
 a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
-.live{background:#eaf6ef;border-bottom:1px solid #bfe0cd;color:#1f6b43;font-size:12px;padding:7px 24px;text-align:center}
-.live b{font-weight:600} .mono{font-family:var(--mono)}
-header.top{background:var(--ink);color:#fff;padding:0 24px;height:54px;display:flex;align-items:center;gap:22px}
-header.top .brand{font-weight:600}
-header.top nav{display:flex;gap:20px;font-size:13px} header.top nav a{color:#cdd6e4}
-header.top .search{margin-left:auto;background:#2a3445;border:1px solid #3a4658;border-radius:6px;padding:6px 12px;color:#9aa6b8;font-size:13px;width:200px}
+.mono{font-family:var(--mono)}
 .wrap{max-width:1280px;margin:0 auto;padding:16px 24px 28px}
 
 .selector{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:10px 0 6px}
@@ -37,7 +32,7 @@ header.top .search{margin-left:auto;background:#2a3445;border:1px solid #3a4658;
 .btn{border:1px solid var(--line);background:#fff;border-radius:6px;padding:7px 13px;font-size:12.5px;color:var(--ink);cursor:pointer}
 .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
 .subjtag{font-size:11.5px;color:var(--muted);margin:2px 0 8px}.subjtag b{color:var(--accent)}
-.chart-title{font-size:15px;font-weight:650;color:var(--ink);margin:10px 0 2px;text-align:center}
+.chart-title{font-size:16px;font-weight:600;color:var(--ink);margin:10px 0 2px;text-align:center}
 /* The table is wider than the panel on purpose — many deals. It scrolled
    already, but macOS overlay scrollbars only appear mid-gesture, so it read
    as cut off. Persistent bar + sticky label column + edge shade. */
@@ -72,7 +67,7 @@ header.top .search{margin-left:auto;background:#2a3445;border:1px solid #3a4658;
 .mss-star{margin-left:auto;font-size:10.5px;color:var(--muted);padding:0 2px;cursor:pointer}
 .mss-star.on{color:var(--accent)}
 .mss-hint{padding:4px 12px 6px;font-size:11px;color:var(--muted)}
-.mtabs button:last-child{margin-left:10px}
+
 /* Vega tooltip — same treatment as the live Explorer, which styles
    #vg-tooltip-element in the site stylesheet and passes
    tooltip:{disableDefaultStyle:true}. Build B keeps its own stylesheet, so
@@ -93,12 +88,15 @@ header.top .search{margin-left:auto;background:#2a3445;border:1px solid #3a4658;
 .ctxline{font-size:11.5px;color:var(--muted);margin:2px 0 10px}
 .ctxline b{color:var(--ink);font-weight:600}
 
-.layout{display:grid;grid-template-columns:1fr;gap:22px;align-items:start}
+.layout{display:grid;grid-template-columns:minmax(0,1fr);gap:22px;align-items:start}
 .panel{background:#fff;border:1px solid var(--line);border-radius:10px}
 .panel>h2{font-size:13px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:0;padding:13px 16px;border-bottom:1px solid var(--line);font-weight:600;display:flex;align-items:center;gap:10px}
-.mtabs{display:flex;gap:4px;padding:12px 14px 0}
-.mtabs button{border:1px solid var(--line);border-bottom:none;background:#fff;border-radius:7px 7px 0 0;padding:8px 15px;font-size:12.5px;color:var(--muted);cursor:pointer;position:relative;top:1px}
-.mtabs button.on{color:var(--ink);font-weight:600;background:#fbfcfe}
+/* Tabs: the Explorer's (.mode-tabs) — underlined, not boxed. */
+.mtabs{display:flex;border-bottom:2px solid var(--line);margin:4px 0 0}
+.mtabs button{border:none;border-bottom:2px solid transparent;margin-bottom:-2px;background:none;padding:8px 16px 7px;
+  font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;white-space:nowrap;font-family:inherit}
+.mtabs button:hover{color:var(--ink)}
+.mtabs button.on{color:#1e40af;border-bottom-color:#1e40af;font-weight:600}
 .chartwrap{display:grid;grid-template-columns:1fr 240px;gap:20px;align-items:stretch;padding:8px 16px 16px}
 .chartmain{min-width:0}
 .chartrail{display:flex;flex-direction:column;gap:15px;border-left:1px solid var(--line);padding:4px 0 0 18px}
@@ -116,7 +114,7 @@ header.top .search{margin-left:auto;background:#2a3445;border:1px solid #3a4658;
 .ctrllabel{font-size:10px;text-transform:uppercase;letter-spacing:.3px;color:var(--muted);font-weight:600;margin-right:2px}
 .ovsel{border:1px solid var(--line);border-radius:6px;padding:5px 22px 5px 9px;font-size:12px;background:#fff;color:var(--ink);cursor:pointer;appearance:none}
 .ovsel.on{border-color:#9c4fb5;background:#f5eefb;color:#9c4fb5;font-weight:600}
-.chart-cap{padding:0 0 6px;font-size:12.5px;color:var(--muted);text-align:center} .chart-cap b{color:var(--ink)}
+.chart-cap{padding:0 0 6px;font-size:11.5px;color:var(--muted);text-align:center} .chart-cap b{color:var(--ink)}
 #chart{padding:4px 0 6px;min-height:380px}
 .rangebar{display:flex;align-items:center;gap:6px;padding:0 16px 12px;flex-wrap:wrap}
 .rangebar .rlab{font-size:10px;text-transform:uppercase;letter-spacing:.3px;color:var(--muted);font-weight:600;margin-right:4px}
@@ -170,3 +168,45 @@ tr.woundtoggle td{background:#fafcff;text-align:center;padding:7px} tr.woundtogg
 .shelf-intro .ticker{font-size:12px;font-weight:600;color:var(--muted);margin-left:8px;letter-spacing:.4px}
 .shelf-summary{list-style:none;padding:0;margin:0 0 4px;display:flex;flex-wrap:wrap;gap:6px 22px;font-size:13px}
 .shelf-caveats{font-size:12px;color:var(--muted);margin:4px 0 0;max-width:80ch}
+
+/* Source line: full on desktop; on a phone, one tappable "Source & notes". */
+.src-toggle{display:none;border:none;background:none;padding:0;font:inherit;color:var(--muted);text-decoration:underline;cursor:pointer}
+/* Touch screens have no hover: the Explorer hides the tooltip there rather
+   than leave one stuck on screen after a tap. */
+@media (hover:none){ #vg-tooltip-element{display:none !important} }
+
+/* Phone (portrait): the Explorer's arrangement — tabs slide sideways, the
+   controls sit ABOVE the chart as compact rows, the chart keeps a fixed height. */
+@media (max-width:640px){
+  .wrap{padding:8px 12px 20px}
+  .selector{margin:6px 0 4px;gap:8px;flex-wrap:nowrap}
+  .sellabel{display:none}
+  #isswrap{flex:1;min-width:0} .multi-sel-btn{min-width:0;width:100%;max-width:none}
+  .multi-sel-panel{min-width:0;width:100%}
+  .ctxline{margin:2px 0 6px}
+  .mtabs{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .mtabs::-webkit-scrollbar{display:none}
+  .mtabs button{flex-shrink:0;min-height:36px;padding:7px 10px;font-size:12.5px}
+  .panel{border:none;border-radius:0;background:transparent}
+  .chartwrap{display:flex;flex-direction:column;padding:6px 0 0;gap:8px}
+  .chartrail{order:-1;flex-direction:row;flex-wrap:wrap;gap:6px 10px;border:none;border-bottom:1px solid var(--line);padding:0 0 8px}
+  .cgroup{flex-direction:row;align-items:center;gap:5px}
+  .cglabel{font-size:10px;letter-spacing:.2px}
+  #seriesgroup{display:none !important}
+  .seg button{padding:5px 8px;font-size:12px}
+  .rpill{padding:3px 9px}
+  .chartrail .ovsel{width:auto;padding:4px 20px 4px 8px}
+  .chartrail .cc-share-btn{margin:0 0 0 auto}
+  .chart-title{font-size:15px;margin:6px 0 1px}
+  .chart-cap{font-size:11.5px;padding:0 0 2px}
+  #chart{min-height:0}
+  .chart-src{text-align:center}
+  .chart-src .src-toggle{display:inline}
+  .chart-src .src-full{display:none}
+  .chart-src.open .src-full{display:block;text-align:left;margin-top:4px}
+  .shelf-intro h1{font-size:19px}
+  .shelf-summary{font-size:12px;gap:4px 14px}
+  /* The Deals table is wider than a phone: it scrolls inside its panel, not the page. */
+  #dealsPanel{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  #dealsPanel>h2{display:block;padding:10px 0;font-size:12px;line-height:1.5}
+}

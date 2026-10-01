@@ -9,35 +9,22 @@ function buildSeries(){
     if(mode==='vintage'){
       if(useAbsee()){   // loan tape: starts at the first full performance month, as the Explorer draws it
         (subj.deals||[]).filter(d=>d.curve_absee&&d.curve_absee.length).forEach(d=>{const yr=(d.series||'').slice(0,4);
-          S.push({series:d.series, grp:yr, color:yearColor(yr), pts:d.curve_absee.filter(p=>p[K]!=null).map(p=>[p.m,p[K],'M'+p.m])});});
+          S.push({series:d.series, grp:yr, color:yearColor(yr), pts:d.curve_absee.filter(p=>p[K]!=null).map(p=>[p.m,p[K],fmtMonth(p.date)])});});
       } else {
         (subj.deals||[]).filter(d=>d.has_tend_curve&&d.curve&&d.curve.length).forEach(d=>{const yr=(d.series||'').slice(0,4);
-          S.push({series:d.series, grp:yr, color:yearColor(yr), pts:[[0,0,'M0']].concat(d.curve.filter(p=>p[K]!=null).map(p=>[p.m,p[K],'M'+p.m]))});});  // anchor at month-0 origin (cutoff)
+          S.push({series:d.series, grp:yr, color:yearColor(yr), pts:[[0,0,'']].concat(d.curve.filter(p=>p[K]!=null).map(p=>[p.m,p[K],fmtMonth(p.date)]))});});  // anchor at month-0 origin (cutoff)
       }
     } else {
       const c=calOf(subj).filter(p=>p[K]!=null);
-      S.push({series:subj.ticker, grp:subj.ticker, color:ISSCOLOR[0], pts:c.map(p=>[p.date,p[K],fmtMonth(p.date)])});
+      S.push({series:labCode(subj.ticker), grp:labCode(subj.ticker), color:ISSCOLOR[0], pts:c.map(p=>[p.date,p[K],fmtMonth(p.date)])});
     }
   } else { // 2+ : calendar only (aggregate vintage dropped; cross-issuer vintage = cohort picker, next)
     selected.forEach((tk,i)=>{const sh=SHELVES[tk];const arr=calOf(sh).filter(p=>p[K]!=null);
-      S.push({series:AVAIL.find(a=>a.t===tk).label, grp:AVAIL.find(a=>a.t===tk).label, color:ISSCOLOR[i%ISSCOLOR.length], pts:arr.map(p=>[p.date,p[K],fmtMonth(p.date)])});});
+      S.push({series:labCode(tk), grp:labCode(tk), color:ISSCOLOR[i%ISSCOLOR.length], pts:arr.map(p=>[p.date,p[K],fmtMonth(p.date)])});});
   }
   return S;
 }
-const seasLabel=()=>isRepo()?'first-time repossessions':metric==='cnl_ratio'?'annualized net loss':(isDQ()?`${DQ_LAB[metric]} delinquency`:'this metric');
-function setCap(){   // title carries the "what"; caption is just the read-hint
-  if(output==='seasonal'){ el('chartcap').innerHTML='Year overlay — one line per calendar year'
-      + (pools==='seasoned'?' · deals 6+ months old':''); return; }
-  if(output==='table'){ el('chartcap').innerHTML = mode==='vintage'
-      ? 'Value at deal age · shaded <b>across each row</b>, so vintages compare at the same age'
-      : 'Annual average of monthly readings · shaded globally (darker = higher)'; return; }
-  const tk = selected.length===1 ? `<b>${esc(selected[0])}</b> &middot; ` : '';   // a comparison names no single issuer
-  const basis = pools==='seasoned' ? 'deals 6+ months old' : 'all deals reporting';
-  el('chartcap').innerHTML = selected.length===1
-    ? tk + (mode==='vintage'? 'one line per deal — click a deal in the legend to highlight it'
-                            : `pooled across ${basis}, by calendar month`)
-    : tk + `${selected.length} issuers, each pooled across ${basis} — calendar comparison`;
-}
+function setCap(){ el('chartcap').textContent = subtitleFor(); }   // the Explorer's sub-head: settings in force
 function updateOutputAvail(){
   document.querySelectorAll('#outseg button').forEach(b=>b.classList.toggle('on',b.dataset.out===output));
   // Row density applies to the age-indexed vintage table only — the calendar
@@ -95,7 +82,8 @@ function renderVintageTable(box,S){  // rows = age, cols = deals/vintages; shade
   const th=`<th>Age</th>`+cols.map(c=>`<th class="num">${esc(c)}</th>`).join('');
   const body=xs.map(x=>{const row=maps.map(m=>m.get(x)), rv=row.filter(v=>v!=null), lo=Math.min(...rv), hi=Math.max(...rv);
     return `<tr><td><b>M${x}</b></td>`+row.map(v=>`<td class="num" style="${heatBG(v,lo,hi)}">${v==null?'·':pct(v,2)}</td>`).join('')+'</tr>';}).join('');
-  box.innerHTML=`<div class="otscroll"><table class="otable"><thead><tr>${th}</tr></thead><tbody>${body||'<tr><td>no data</td></tr>'}</tbody></table></div>`;
+  box.innerHTML=`<div class="otscroll"><table class="otable"><thead><tr>${th}</tr></thead><tbody>${body||'<tr><td>no data</td></tr>'}</tbody></table></div>
+    <div class="otnote">Value at deal age · shaded across each row, so vintages compare at the same age.</div>`;
 }
 function renderCalendarTable(box,S){  // rows = issuer(s), cols = calendar years; cell = annual avg of monthly readings; global heat
   const rows=S.map(s=>{const by={}; s.pts.forEach(([x,y])=>{const yr=String(x).slice(0,4); (by[yr]=by[yr]||[]).push(y);});
@@ -119,23 +107,22 @@ function renderSeasonal(box){
     mark:{type:"line",strokeWidth:2,point:{size:22,filled:true},interpolate:"monotone"},
     encoding:{
       x:{field:"mn",type:"quantitative",title:null,scale:{domain:[1,12],nice:false},
-         axis:{values:[1,2,3,4,5,6,7,8,9,10,11,12],labelExpr:"['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][datum.value]",grid:false}},
-      y:{field:"y",type:"quantitative",title:metricAxis(),axis:{format:AXFMT,grid:true},scale:{zero:true}},
-      color:{field:"year",type:"nominal",title:null,scale:{scheme:"viridis"},legend:{orient:"bottom"}},
-      opacity:{condition:{param:"hl",value:1},value:0.18},
-      tooltip:[{field:"year",title:"Year"},{field:"mn",title:"Month"},{field:"y",title:seasLabel(),format:".2%"}]
+         axis:{values:[1,2,3,4,5,6,7,8,9,10,11,12],labelExpr:"['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][datum.value]",labelAngle:0}},
+      y:{field:"y",type:"quantitative",title:metricAxis(),axis:{format:AXFMT},scale:{zero:true}},
+      color:{field:"year",type:"nominal",title:"Year",scale:{scheme:"tableau10"},legend:legendCfg()},
+      opacity:{condition:{param:"hl",value:1},value:0.2},
+      tooltip:[{field:"year",title:"Year"},{field:"mn",title:"Month"},{field:"y",title:metricAxis()[0],format:".2%"}]
     },
-    config:{view:{stroke:null},font:"-apple-system,Segoe UI,Roboto,sans-serif",
-      axis:{labelColor:"#6b7585",titleColor:"#6b7585",domainColor:"#e4e8ef",gridColor:"#eef1f6",titleFontWeight:"normal",labelFontSize:11,titleFontSize:11.5},
-      legend:{labelColor:"#33414f",labelFontSize:11.5,symbolStrokeWidth:3}}
+    config:CHART_CFG
   };
   vegaEmbed(box,spec,VEGA_OPTS).then(()=>fitChart(box,spec)).catch(e=>{box.innerHTML='<div class="chartph">chart error: '+esc(e.message)+'</div>';});
 }
 function updateModeAvail(){
-  const vin=document.querySelector('#modeseg button[data-mode="vintage"]'), multi=selected.length>=2, noVin=multi||isRepo();
+  // Vintage curves describe one issuer: there the picker takes one (as the
+  // Explorer's does), so a second issuer never pushes the view to time series.
+  const vin=document.querySelector('#modeseg button[data-mode="vintage"]'), noVin=isRepo();
   vin.style.opacity=noVin?0.4:1;
-  vin.title=isRepo()?'Repossessions are a monthly rate by calendar month; there is no per-deal vintage curve.'
-          :multi?'Vintage curves are single-issuer; cross-issuer comparison is calendar (pooled). Drop to one issuer for per-deal vintage.':'';
+  vin.title=isRepo()?'Repossessions are a monthly rate by calendar month; there is no per-deal vintage curve.':'';
   if(noVin && mode==='vintage'){ mode='calendar'; document.querySelectorAll('#modeseg button').forEach(b=>b.classList.toggle('on',b.dataset.mode==='calendar')); }
 }
 function renderOverlay(box){
@@ -156,17 +143,16 @@ function renderOverlay(box){
   // a level index (CPI, sentiment, sales) gets a non-zero baseline so its shape shows; a rate axis stays zero-based
   const macScale = mMk==='bar' ? {zero:false,nice:true} : {zero:false,nice:true};
   embed(box,{ $schema:"https://vega.github.io/schema/vega-lite/v5.json", width:"container", height:chartHeight(selected.length,6), background:null,
-    encoding:{x:{field:"date",type:"temporal",title:null,axis:{format:"%Y",tickCount:"year",grid:false}}},
+    encoding:{x:{field:"date",type:"temporal",title:"Reporting Date",axis:dateAxis()}},
     layer:[
       {data:{values:macA},mark:macMk,
        encoding:{y:{field:"v",type:"quantitative",title:m.name,scale:macScale,axis:{orient:mAx,grid:false,titleColor:"#9c4fb5",labelColor:"#9c4fb5"}},
          tooltip:[{field:"date",type:"temporal",title:"Date",format:"%b %Y"},{field:"v",title:m.name}]}},
       {data:{values:absA},mark:absMk,
        encoding:{y:{field:"y",type:"quantitative",title:mlab,scale:{zero:true},axis:{orient:aAx,format:AXFMT,grid:aAx==='left',titleColor:"#2f6db5",labelColor:"#2f6db5"}},
-         tooltip:[{field:"date",type:"temporal",title:"Date",format:"%b %Y"},{field:"y",title:mlab,format:".2%"}]}}
+         tooltip:[{field:"date",type:"temporal",title:"Date",format:"%b %Y"},{field:"y",title:metricAxis()[0],format:".2%"}]}}
     ],
     resolve:{scale:{y:"independent"}}, config:CHART_CFG });
-  el('chartcap').innerHTML='';   // title + chips already say what this is
 }
 function applyRange(S,isVin){   // vintage: cap age <= range months; calendar: trailing `range` years from latest
   if(range==='all') return S;
@@ -187,9 +173,41 @@ function renderRangeBar(){
   bar.innerHTML=opts.map(([v,l])=>`<button class="rpill ${String(range)===v?'on':''}" onclick="setRange('${v}')">${l}</button>`).join('');
 }
 window.setRange=v=>{ range = v==='all'?'all':parseInt(v); renderChart(); };
-const CHART_CFG={view:{stroke:null},font:"-apple-system,Segoe UI,Roboto,sans-serif",
-  axis:{labelColor:"#6b7585",titleColor:"#6b7585",domainColor:"#e4e8ef",gridColor:"#eef1f6",titleFontWeight:"normal",labelFontSize:13,titleFontSize:14,titlePadding:14},
-  legend:{labelColor:"#33414f",labelFontSize:11.5,symbolStrokeWidth:3}};
+// The Explorer's chart settings (generate_sec_explorer_data.py), so the two
+// pages draw alike: Vega's default font, bold axis titles, gridlines in both
+// directions, the default plot border. Only sizes are set, as there.
+const CHART_CFG={axis:{labelFontSize:13,titleFontSize:14},
+  title:{anchor:"middle",fontSize:15,subtitleFontSize:11},
+  view:{continuousHeight:300,continuousWidth:300}};
+const isPhone=()=>window.matchMedia('(max-width:640px)').matches;
+// Legend under the plot, columns by screen width — the Explorer's legendColumns().
+const legendCols=()=>window.matchMedia('(max-width:640px)').matches?4:window.matchMedia('(max-width:1024px)').matches?6:9;
+// Issuer names ("Santander (SDART)") are long: fewer, wider columns on a phone.
+const legendCfg=(long)=>({orient:"bottom",direction:"horizontal",columns:long&&isPhone()?2:legendCols(),columnPadding:isPhone()?10:24,labelLimit:long?170:90,symbolSize:110,symbolLimit:1000,symbolType:"stroke",symbolStrokeWidth:2});
+// Calendar x-axis — the Explorer's tsDateAxis(): month labels on a short
+// window, years otherwise, angled on a phone.
+function dateAxis(nMonths){
+  const a = (nMonths && nMonths<=24) ? {tickCount:6,format:"%b %Y"}
+          : (nMonths && nMonths>72) ? {tickCount:{interval:"year",step:2},format:"%Y"}
+          : {tickCount:"year",format:"%Y"};
+  a.labelOverlap=false;
+  if(isPhone()){ a.labelAngle=-45; a.labelFontSize=10; }
+  return a;
+}
+// The Explorer's hover: a large invisible target that snaps to the nearest
+// point, a dot on the point, and a dashed guide line down to the axis. The
+// tooltip rides on the dot, so the reader never has to land on a 1.5px line.
+function hoverLayers(data, x, y, tooltip, name){
+  return [
+    {data:{values:data}, params:[{name, select:{type:"point",nearest:true,on:"mouseover",clear:"mouseout"}}],
+     mark:{type:"circle",opacity:0,size:900}, encoding:{x, y}},
+    {data:{values:data}, mark:{type:"point",filled:true,size:90,strokeWidth:1.5},
+     encoding:{x, y, color:tooltip.color,
+       opacity:{condition:{param:name,empty:false,value:1},value:0}, tooltip:tooltip.rows}},
+    {data:{values:data}, transform:[{filter:{param:name,empty:false}}],
+     mark:{type:"rule",color:"#94a3b8",strokeWidth:1,strokeDash:[3,3]}, encoding:{x}}
+  ];
+}
 const VEGA_OPTS={actions:false,renderer:'svg',tooltip:{disableDefaultStyle:true}};
 // Space kept clear beneath the plot: the source line (~15px), its gap, and
 // deliberate breathing room so nothing sits flush against the window edge.
@@ -201,7 +219,7 @@ function fitChart(box,spec){
   // One corrective pass. The plot box is the only part Vega sizes to order;
   // axis, axis title and legend are added on top, so the rendered SVG is the
   // only honest measure of what the chart actually occupies.
-  const svg=box.querySelector('svg'); if(!svg||typeof spec.height!=='number') return;
+  const svg=box.querySelector('svg'); if(!svg||typeof spec.height!=='number'||isPhone()) return;
   const avail=window.innerHeight-box.getBoundingClientRect().top-BOTTOM_RESERVE;
   const over=svg.getBoundingClientRect().height-avail;
   if(over>4 && spec.height-over>=200){
@@ -224,6 +242,7 @@ function renderSeriesChips(list, showAxis){   // each chart series: [swatch] nam
   }).join('');
 }
 function chartHeight(nEntries, nCols){
+  if(isPhone()) return 280;   // a phone scrolls; the chart keeps a readable fixed height (the Explorer's #vis)
   nEntries = nEntries || 1; nCols = nCols || 6;
   // Whatever remains below the chart's top edge, less room for the source
   // line and the panel's own padding. Floored so it never collapses to a
@@ -250,9 +269,12 @@ function renderChart(){
   // Same call site as the title, for the same reason: share.js reads this when
   // it composes the PNG footer, so the image states its own provenance.
   const _src = sourceFor(), _notes = notesFor();
-  el('chartsrc').innerHTML = 'Source: ' + esc(_src)
+  // On a phone the full line (source + every disclosure) would run several
+  // lines under the chart, so it collapses to one tappable "Source & notes".
+  el('chartsrc').innerHTML = '<button type="button" class="src-toggle" onclick="this.parentNode.classList.toggle(\'open\')">Source &amp; notes ›</button>'
+    + '<span class="src-full">Source: ' + esc(_src)
     + (_notes.length ? ' &middot; ' + esc(_notes.join(' ')) : '')
-    + ' &middot; <a href="../methodology.html">Methodology &amp; Data Quality</a>';
+    + ' &middot; <a href="../methodology.html">Methodology &amp; Data Quality</a></span>';
   window.CC_CHART_SOURCE = _src + (_notes.length ? '. ' + _notes.join(' ') : '');
   const box=el('chart');
   if(!metric){ box.innerHTML='<div class="chartph">This metric is coming soon.</div>'; return; }
@@ -275,19 +297,22 @@ function renderChart(){
   if(isVin){   // VINTAGE: per-deal/issuer lines — Vega legend + click-highlight, no per-series chips
     hideChips();
     const data=[]; S.forEach(s=>s.pts.forEach(([x,y,xl])=>data.push({x,y,series:s.series,grp:s.grp,xl})));
-    const perDeal=selected.length===1, colorField=perDeal?'series':'grp', sw=perDeal?1.5:2.6;
-    // Legend size drives how much room the plot can have, so work it out once
-    // and hand it to chartHeight rather than letting the two disagree.
-    const _legN=perDeal?new Set(S.map(x=>x.series)).size:grps.length;
-    const _legCols=perDeal?(S.length>8?6:4):(grps.length>6?6:null);
-    return embed(box,{ $schema:"https://vega.github.io/schema/vega-lite/v5.json", width:"container", height:chartHeight(selected.length,6), background:null,
-      data:{values:data}, params:[{name:"hl",select:{type:"point",fields:[colorField]},bind:"legend"}],
-      mark:{type:"line",strokeWidth:sw,interpolate:"monotone"},
-      encoding:{ x:{field:"x",type:"quantitative",title:"Months since deal close",scale:{zero:true,nice:false},axis:{format:"d",tickMinStep:3,grid:false}},
-        y:{field:"y",type:"quantitative",title:metricAxis(),axis:{format:AXFMT,grid:true},scale:{zero:true}},
-        color:{field:colorField,type:"nominal",title:null,scale:perDeal?{scheme:"tableau20"}:{domain:grps,range:grps.map(col)},legend:{orient:"bottom",columns:_legCols}},
-        detail:{field:"series"}, opacity:{condition:{param:"hl",value:1},value:0.16},
-        tooltip:[{field:"series",title:"Series"},{field:"xl",title:"Age"},{field:"y",title:metricAxis(),format:".2%"}] }, config:CHART_CFG });
+    const T=tipLabels(), isLoss=(metric==='cnl_ratio'||isResid());
+    const X={field:"x",type:"quantitative",title:"Months Since Issuance",scale:{zero:true,nice:false},axis:{format:"d",tickMinStep:isLoss?6:1}};
+    const Y={field:"y",type:"quantitative",title:metricAxis(),axis:{format:AXFMT},scale:{zero:true}};
+    const C={field:"series",type:"nominal",title:"Series",scale:{scheme:"tableau10"},legend:legendCfg()};
+    const rows=[{field:"series",type:"nominal",title:T.series},
+      isLoss?{field:"x",type:"quantitative",title:T.x}:{field:"xl",type:"nominal",title:T.x},
+      {field:"y",type:"quantitative",title:T.y,format:".2%"}];
+    return embed(box,{ $schema:"https://vega.github.io/schema/vega-lite/v5.json", width:"container", height:chartHeight(new Set(S.map(x=>x.series)).size,legendCols()), background:null,
+      layer:[
+        {data:{values:data}, params:[{name:"hl",select:{type:"point",fields:["series"],toggle:true,clear:false},bind:"legend"}],
+         mark:{type:"line",interpolate:"monotone"},
+         encoding:{x:X, y:Y, color:C, detail:{field:"series"},
+           opacity:{condition:{param:"hl",value:1},value:0.25},
+           strokeWidth:{condition:{param:"hl",empty:false,value:3},value:1.5}}},
+        ...hoverLayers(data.filter(d=>isLoss||d.xl), X, Y, {color:C, rows}, "hover")
+      ], config:CHART_CFG });
   }
   // CALENDAR: per-series chips (line/bar + L/R axis) → dual-axis via yL/yR fields
   renderSeriesChips(grps.map(g=>({key:g,name:g,color:col(g)})), grps.length>1);
@@ -296,12 +321,18 @@ function renderChart(){
     return {data:{values:data.filter(d=>gs.includes(d.grp))},
       mark: mk==='bar'?{type:"bar",opacity:0.75}:{type:"line",strokeWidth:2.6,interpolate:"monotone"},
       encoding:{ y:{field:yf,type:"quantitative",title:metricAxis(),scale:{zero:true},axis:{format:AXFMT,grid:side==='left',orient:side}},
-        detail:{field:"series"}, tooltip:[{field:"series",title:"Series"},{field:"xl",title:"Date"},{field:yf,title:metricAxis(),format:".2%"}] }}; };
-  const layers=[lay('left','line','yL'),lay('left','bar','yL'),lay('right','line','yR'),lay('right','bar','yR')].filter(Boolean);
+        detail:{field:"series"} }}; };
+  const nMonths=new Set(data.map(d=>String(d.x).slice(0,7))).size;
+  const X={field:"x",type:"temporal",title:"Reporting Date",axis:dateAxis(nMonths)};
+  const C={field:"grp",type:"nominal",title:"Series",scale:{domain:grps,range:grps.map(col)}};
+  const T=tipLabels();
+  const hov=side=>{ const yf=side==='left'?'yL':'yR', d=data.filter(r=>r[yf]!=null); if(!d.length) return [];
+    return hoverLayers(d, X, {field:yf,type:"quantitative",scale:{zero:true}},
+      {color:C, rows:[{field:"series",type:"nominal",title:T.series},{field:"xl",type:"nominal",title:T.x},{field:yf,type:"quantitative",title:T.y,format:".2%"}]}, "hover"+side); };
+  const layers=[lay('left','line','yL'),lay('left','bar','yL'),lay('right','line','yR'),lay('right','bar','yR')].filter(Boolean)
+    .concat(hov('left'), hov('right'));
   return embed(box,{ $schema:"https://vega.github.io/schema/vega-lite/v5.json", width:"container", height:chartHeight(selected.length,6), background:null,
-    encoding:{ x:{field:"x",type:"temporal",title:null,axis:{format:"%Y",tickCount:"year",grid:false}},
-      color:{field:"grp",type:"nominal",title:null,scale:{domain:grps,range:grps.map(col)},
-             legend: grps.length>1 ? {orient:"bottom",direction:"horizontal",symbolType:"stroke",symbolStrokeWidth:3,labelFontSize:12.5} : null} },
+    encoding:{ x:X, color:{...C, legend: grps.length>1 ? legendCfg(true) : null} },
     layer:layers, config:CHART_CFG });
 }
 

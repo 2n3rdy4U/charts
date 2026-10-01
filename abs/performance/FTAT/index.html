@@ -35,15 +35,83 @@
 </script>
 <script src="../../share/share.js"></script>
 <link rel="stylesheet" href="css/performance.css">
+<style>
+/* CCM data-subdomain top bar — shared across explorer / macro / issuance */
+.ccm-topbar{display:flex;align-items:center;justify-content:space-between;
+  height:56px;padding:0 24px;background:#0e1d2e;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  position:relative;z-index:100;box-sizing:border-box}
+.ccm-topbar a{text-decoration:none;border:none}
+.ccm-topbar-brand{display:flex;align-items:center;color:#fafafa}
+.ccm-wordmark{display:block;height:32px;width:auto}
+.ccm-topbar-nav{display:flex;align-items:center;gap:24px;font-size:13.5px}
+.ccm-topbar-nav a:not(.ccm-cta){color:#a8b5c4;font-weight:500;letter-spacing:0.02em;
+  transition:color 0.15s}
+.ccm-topbar-nav a:not(.ccm-cta):hover{color:#fafafa}
+.ccm-topbar-nav .ccm-cta{background:#4ade80;color:#0e1d2e;padding:8px 16px;
+  border-radius:4px;font-weight:600;letter-spacing:0.02em;transition:background 0.15s}
+.ccm-topbar-nav .ccm-cta:hover{background:#65f08e}
+.ccm-topbar-nav a.ccm-back{color:#4ade80;font-weight:600}
+.ccm-topbar-nav a.ccm-back:hover{color:#65f08e}
+@media (max-width:640px){
+  .ccm-topbar{padding:0 14px}
+  .ccm-wordmark{height:26px}
+  .ccm-topbar-nav{gap:14px;font-size:12px}
+  .ccm-topbar-nav a:not(.ccm-cta){display:none}
+  /* The return link is the whole reason a newsletter reader is here, so it
+     stays when the other nav items collapse. Declared after the rule above:
+     equal specificity, so source order decides. */
+  .ccm-topbar-nav a.ccm-back{display:inline}
+}
+</style>
   <script data-goatcounter="https://consumercreditmatters.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
-<div class="live"><b>LIVE DATA · Vega-Lite chart</b> — hover for detail · click a legend entry to highlight a cohort/issuer. 1 issuer = per-deal/pooled · 2+ = compare (calendar). Build B.</div>
-<header class="top">
-  <div class="brand">Consumer Credit Matters</div>
-  <nav><a href="#">Auto ABS ▾</a><a href="#">Credit Card ▾</a><a href="#">Macro ▾</a><a href="#">Issuance</a><a href="#">Data Calendar</a><a href="#">Newsletter</a></nav>
-  <input class="search" placeholder="Search issuers, deals, series…">
+<header class="ccm-topbar" role="banner">
+  <a class="ccm-topbar-brand" href="https://www.consumercreditmatters.com/" aria-label="Consumer Credit Matters home">
+    <img src="https://data.consumercreditmatters.com/assets/brand/logo-horizontal-white.png" alt="Consumer Credit Matters" class="ccm-wordmark">
+  </a>
+  <nav class="ccm-topbar-nav" aria-label="Site navigation">
+    <a href="https://www.consumercreditmatters.com/">Home</a>
+    <a href="https://www.consumercreditmatters.com/newsletter">Newsletter</a>
+    <a href="https://www.consumercreditmatters.com/podcasts">Podcast</a>
+    <a class="ccm-cta" href="https://www.consumercreditmatters.com/subscribe">Subscribe</a>
+  </nav>
 </header>
+
+<script>
+/* These data pages are normally shown inside the /charts/ shell, which has
+   its own header — so this in-page bar would duplicate it. Hide it when we're
+   embedded in an iframe; keep it when the page is opened standalone. */
+if (window.self !== window.top) {
+  var _ccmBar = document.querySelector('.ccm-topbar');
+  if (_ccmBar) _ccmBar.style.display = 'none';
+}
+/* A chart opened from a newsletter exhibit carries ?back=/newsletter/<date>/, so
+   the reader can return to the article rather than only to the site's front
+   door. The page's own URL rewriting preserves unknown params, so the link
+   survives filtering and tab changes.
+
+   The value is matched against a whitelist, not merely checked for bad input:
+   accepting an arbitrary URL here would make every chart page an open redirect
+   on this domain — attractive for phishing, since the hop begins somewhere
+   genuine. Only a path under /newsletter/ built from unreserved characters is
+   allowed, which excludes another host (protocol-relative //evil.example.com),
+   backslashes, and traversal. */
+(function () {
+  try {
+    var p = new URLSearchParams(window.location.search).get('back');
+    if (!p || !/^\/newsletter\/[A-Za-z0-9._~/-]*$/.test(p) || p.indexOf('..') !== -1) return;
+    var nav = document.querySelector('.ccm-topbar-nav');
+    if (!nav) return;
+    var a = document.createElement('a');
+    a.className = 'ccm-back';
+    a.href = p;
+    a.textContent = '\u2190 Back to the issue';
+    nav.insertBefore(a, nav.firstChild);
+  } catch (_e) { /* never let this break the bar */ }
+})();
+</script>
 
 <div class="wrap">
 <section class="shelf-intro"><h1>Fifth Third <span class="ticker">FTAT</span></h1><ul class="shelf-summary"><li><b>60+ day delinquency</b> 0.34% of loans, Aug 2026</li><li><b>Annualized net loss</b> 0.62% of average pool balance, Aug 2026</li><li><b>First-time repossessions</b> 0.05% of loans, Aug 2026</li><li><b>Deals</b> 1 active · 2 wound down · data through Aug 2026</li></ul><p class="shelf-caveats">Loans without a consumer credit score are excluded.</p></section>
