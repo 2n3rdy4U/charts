@@ -207,15 +207,22 @@ tr.woundtoggle td{background:#fafcff;text-align:center;padding:7px} tr.woundtogg
   .shelf-intro h1{font-size:19px}
   /* Compact phone chrome: the first screen should hold the controls AND the chart. */
   /* body-qualified: the bar's own stylesheet is inserted after this one */
-  body .ccm-topbar{height:44px;padding:0 12px}
-  body .ccm-wordmark{height:22px}
-  body .ccm-topbar-nav .ccm-cta{padding:5px 11px;font-size:12px}
+  body .ccm-topbar{height:40px;padding:0 12px}
+  body .ccm-wordmark{height:28px}
+  body .ccm-topbar-nav .ccm-cta{padding:4px 10px;font-size:12px}
   .selector{margin:4px 0 2px}
   .seg button{padding:4px 7px;font-size:11.5px}
   #assetseg button{padding:5px 9px}
   .multi-sel-btn{padding:4px 9px;font-size:12.5px}
   .ctxline{font-size:11px;margin:1px 0 2px}
-  .mtabs button{min-height:32px;padding:5px 9px;font-size:12.5px}
+  /* Folder tabs on a phone: outlined, rounded tops; the open one is white and
+     joins the controls area beneath it (which turns white to match). */
+  .mtabs{gap:3px;border-bottom:1px solid #cfd6e2;margin-top:6px}
+  .mtabs button{min-height:32px;padding:6px 10px;font-size:12.5px;font-weight:500;color:#55617a;
+    background:#e9edf3;border:1px solid #cfd6e2;border-bottom:none;border-radius:7px 7px 0 0;margin-bottom:-1px}
+  .mtabs button.on{background:#fff;color:#1e40af;font-weight:600;border-color:#cfd6e2;
+    box-shadow:inset 0 2px 0 #1e40af}
+  .layout{background:#fff;border:1px solid #cfd6e2;border-top:none;border-radius:0 0 8px 8px;padding:0 10px 8px}
   .chartwrap{padding:4px 0 0;gap:4px}
   .chartrail{gap:5px 8px;padding:0 0 6px}
   /* Buttons that name themselves need no label; DQ and Macro keep a short one. */
