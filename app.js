@@ -536,7 +536,7 @@
     // explicitly — Chrome does not reliably inherit it for dynamically-created
     // iframes (NotAllowedError on navigator.clipboard.write otherwise).
     iframe.allow = 'clipboard-write';
-    iframe.addEventListener('load', () => panelLoading.classList.remove('visible'));
+    iframe.addEventListener('load', () => { panelLoading.classList.remove('visible'); sendViewport(); });
     panelContent.appendChild(iframe);
   }
 
@@ -585,5 +585,52 @@
       f.style.height = e.data.height + 'px';
     });
   });
+
+  // ── Screen size and scrolling for the embedded page ───────────
+  // On a phone this frame grows the embedded page to its full height (above),
+  // so the page can no longer tell from its own size which way up the phone
+  // is, or how much of it is on screen. The frame tells it ('ccm-viewport':
+  // the screen's width and height, and the height of the area that scrolls),
+  // on request, when a page loads, and on rotation/resize. And because it is
+  // the frame that scrolls, a page that wants to settle on its chart asks
+  // ('ccm-child-scroll', y = offset within the page) and the frame scrolls
+  // there. Pages that do not use these messages are unaffected.
+  function isLandscapeShell() {
+    return window.matchMedia('(orientation: landscape) and (max-height: 500px)').matches;
+  }
+  function isPhoneShell() {
+    return window.matchMedia('(max-width: 768px)').matches || isLandscapeShell();
+  }
+  // Which element scrolls: #main in landscape (see style.css), the page otherwise.
+  function shellScroller() {
+    return isLandscapeShell() ? document.getElementById('main')
+                              : (document.scrollingElement || document.documentElement);
+  }
+  function sendViewport() {
+    var f = document.querySelector('#panel-content iframe');
+    if (!f || !f.contentWindow) return;
+    var sc = shellScroller();
+    var visible = isLandscapeShell() ? sc.clientHeight : window.innerHeight;
+    try {
+      f.contentWindow.postMessage({ type: 'ccm-viewport', phone: isPhoneShell(),
+        vw: window.innerWidth, vh: window.innerHeight, visible: visible }, '*');
+    } catch (err) {}
+  }
+  window.addEventListener('message', function(e) {
+    if (e.origin !== location.origin && CHART_ORIGINS.indexOf(e.origin) === -1) return;
+    if (!e.data) return;
+    var f = document.querySelector('#panel-content iframe');
+    if (!f || e.source !== f.contentWindow) return;
+    if (e.data.type === 'ccm-viewport-request') { sendViewport(); return; }
+    if (e.data.type === 'ccm-child-scroll' && typeof e.data.y === 'number' && isPhoneShell()) {
+      var sc = shellScroller();
+      var base = (sc === document.getElementById('main')) ? sc.getBoundingClientRect().top : 0;
+      var top = f.getBoundingClientRect().top - base + sc.scrollTop + e.data.y;
+      sc.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+    }
+  });
+  var _vpT;
+  window.addEventListener('resize', function() { clearTimeout(_vpT); _vpT = setTimeout(sendViewport, 150); });
+  window.addEventListener('orientationchange', function() { setTimeout(sendViewport, 300); });
 
 })();
