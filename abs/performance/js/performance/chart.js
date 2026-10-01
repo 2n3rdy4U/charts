@@ -108,7 +108,7 @@ function renderSeasonal(box){
     encoding:{
       x:{field:"mn",type:"quantitative",title:null,scale:{domain:[1,12],nice:false},
          axis:{values:[1,2,3,4,5,6,7,8,9,10,11,12],labelExpr:"['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][datum.value]",labelAngle:0}},
-      y:{field:"y",type:"quantitative",title:metricAxis(),axis:{format:AXFMT},scale:{zero:true}},
+      y:{field:"y",type:"quantitative",title:metricAxis(),axis:{format:axFmt(data.map(d=>d.y))},scale:{zero:true}},
       color:{field:"year",type:"nominal",title:"Year",scale:{scheme:"tableau10"},legend:legendCfg()},
       opacity:{condition:{param:"hl",value:1},value:0.2},
       tooltip:[{field:"year",title:"Year"},{field:"mn",title:"Month"},{field:"y",title:metricAxis()[0],format:".2%"}]
@@ -149,7 +149,7 @@ function renderOverlay(box){
        encoding:{y:{field:"v",type:"quantitative",title:m.name,scale:macScale,axis:{orient:mAx,grid:false,titleColor:"#9c4fb5",labelColor:"#9c4fb5"}},
          tooltip:[{field:"date",type:"temporal",title:"Date",format:"%b %Y"},{field:"v",title:m.name}]}},
       {data:{values:absA},mark:absMk,
-       encoding:{y:{field:"y",type:"quantitative",title:mlab,scale:{zero:true},axis:{orient:aAx,format:AXFMT,grid:aAx==='left',titleColor:"#2f6db5",labelColor:"#2f6db5"}},
+       encoding:{y:{field:"y",type:"quantitative",title:mlab,scale:{zero:true},axis:{orient:aAx,format:axFmt(absA.map(d=>d.y)),grid:aAx==='left',titleColor:"#2f6db5",labelColor:"#2f6db5"}},
          tooltip:[{field:"date",type:"temporal",title:"Date",format:"%b %Y"},{field:"y",title:metricAxis()[0],format:".2%"}]}}
     ],
     resolve:{scale:{y:"independent"}}, config:CHART_CFG });
@@ -324,7 +324,7 @@ function renderChart(){
     const data=[]; S.forEach(s=>s.pts.forEach(([x,y,xl])=>data.push({x,y,series:s.series,grp:s.grp,xl})));
     const T=tipLabels(), isLoss=(metric==='cnl_ratio'||isResid());
     const X={field:"x",type:"quantitative",title:"Months Since Issuance",scale:{zero:true,nice:false},axis:{format:"d",tickMinStep:isLoss?6:1}};
-    const Y={field:"y",type:"quantitative",title:metricAxis(),axis:{format:AXFMT},scale:{zero:true}};
+    const Y={field:"y",type:"quantitative",title:metricAxis(),axis:{format:axFmt(data.map(d=>d.y))},scale:{zero:true}};
     const C={field:"series",type:"nominal",title:"Series",scale:{scheme:"tableau10"},legend:legendCfg()};
     const rows=[{field:"series",type:"nominal",title:T.series},
       isLoss?{field:"x",type:"quantitative",title:T.x}:{field:"xl",type:"nominal",title:T.x},
@@ -342,22 +342,36 @@ function renderChart(){
   // CALENDAR: per-series chips (line/bar + L/R axis) → dual-axis via yL/yR fields
   renderSeriesChips(grps.map(g=>({key:g,name:g,color:col(g)})), grps.length>1);
   const data=[]; S.forEach(s=>{ const ax=seriesAxis(s.grp); s.pts.forEach(([x,y,xl])=>data.push({x,xl,series:s.series,grp:s.grp, yL:ax==='left'?y:null, yR:ax==='right'?y:null})); });
-  const lay=(side,mk,yf)=>{ const gs=grps.filter(g=>seriesAxis(g)===side&&seriesMark(g)===mk); if(!gs.length) return null;
-    return {data:{values:data.filter(d=>gs.includes(d.grp))},
-      mark: mk==='bar'?{type:"bar",opacity:0.75}:{type:"line",strokeWidth:2.6,interpolate:"monotone"},
-      encoding:{ y:{field:yf,type:"quantitative",title:metricAxis(),scale:{zero:true},axis:{format:AXFMT,grid:side==='left',orient:side}},
-        detail:{field:"series"} }}; };
   const nMonths=new Set(data.map(d=>String(d.x).slice(0,7))).size;
   const X={field:"x",type:"temporal",title:"Reporting Date",axis:dateAxis(nMonths)};
   const C={field:"grp",type:"nominal",title:"Series",scale:{domain:grps,range:grps.map(col)}};
   const T=tipLabels();
-  const hov=side=>{ const yf=side==='left'?'yL':'yR', d=data.filter(r=>r[yf]!=null); if(!d.length) return [];
-    return hoverLayers(d, X, {field:yf,type:"quantitative",scale:{zero:true}},
-      {color:C, rows:[{field:"series",type:"nominal",title:T.series},{field:"xl",type:"nominal",title:T.x},{field:yf,type:"quantitative",title:T.y,format:".2%"}]}, "hover"+side); };
-  const layers=[lay('left','line','yL'),lay('left','bar','yL'),lay('right','line','yR'),lay('right','bar','yR')].filter(Boolean)
-    .concat(hov('left'), hov('right'));
+  const dual = grps.some(g=>seriesAxis(g)==='right') && grps.some(g=>seriesAxis(g)==='left');
+  // One group per axis side: that side's lines/bars AND its hover layers share
+  // one y encoding — one scale, one axis. (A hover layer with a y of its own
+  // made Vega draw a second default axis on each side, two scales printed on
+  // top of each other.) With series on both sides, the two groups get
+  // independent scales: the point of putting a series on the right axis.
+  const side=(sd)=>{
+    const yf = sd==='left'?'yL':'yR', gs=grps.filter(g=>seriesAxis(g)===sd);
+    if(!gs.length) return null;
+    // When both axes are in use, colour each axis like its series (one series)
+    // so the reader can tell which line reads against which scale.
+    const ac = dual && gs.length===1 ? {titleColor:col(gs[0]),labelColor:col(gs[0])} : {};
+    const Y={field:yf,type:"quantitative",title:metricAxis(),scale:{zero:true},
+             axis:{format:axFmt(data.map(r=>r[yf])),grid:sd==='left'||!dual,orient:sd,...ac}};
+    const d=data.filter(r=>r[yf]!=null);
+    const marks=['line','bar'].map(mk=>{ const ms=gs.filter(g=>seriesMark(g)===mk); if(!ms.length) return null;
+      return {data:{values:d.filter(r=>ms.includes(r.grp))},
+        mark: mk==='bar'?{type:"bar",opacity:0.75}:{type:"line",strokeWidth:2.6,interpolate:"monotone"},
+        encoding:{y:Y, detail:{field:"series"}}}; }).filter(Boolean);
+    return {layer: marks.concat(hoverLayers(d, X, Y,
+      {color:C, rows:[{field:"series",type:"nominal",title:T.series},{field:"xl",type:"nominal",title:T.x},{field:yf,type:"quantitative",title:T.y,format:".2%"}]}, "hover"+sd))};
+  };
+  const groups=[side('left'),side('right')].filter(Boolean);
   return embed(box,{ $schema:"https://vega.github.io/schema/vega-lite/v5.json", width:"container", height:chartHeight(selected.length,6), background:null,
     encoding:{ x:X, color:{...C, legend: grps.length>1 ? legendCfg(true) : null} },
-    layer:layers, config:CHART_CFG });
+    layer: groups.length>1 ? groups : groups[0].layer,
+    ...(groups.length>1 ? {resolve:{scale:{y:"independent"}}} : {}), config:CHART_CFG });
 }
 

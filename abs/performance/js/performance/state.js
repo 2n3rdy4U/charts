@@ -18,6 +18,10 @@ const isDQ=()=>metric in DQ_LAB;
 // Axis tick format: two decimals on every tick, as the Explorer prints them
 // (3.00%, 2.50%, 0.05%). Trimming trailing zeros gave a ragged axis.
 const AXFMT=".2%";
+// ...except an axis whose values stay under 0.2% (a prime shelf's monthly
+// repossession rate, ~0.04%): its ticks fall at 0.005% steps, and two decimals
+// printed them twice each (0.04%, 0.04%, 0.03%...). Three decimals there.
+const axFmt=vals=>{ const m=Math.max(0,...vals.filter(v=>v!=null).map(Math.abs)); return m>0 && m<0.002 ? ".3%" : AXFMT; };
 // Delinquency on loan shelves comes from the ABS-EE loan tape — the same
 // numbers as the live Explorer, by COUNT of loans. Losses, and everything on
 // lease shelves, come from the 10-D servicer reports, by balance. The two are
