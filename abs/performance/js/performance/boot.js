@@ -53,7 +53,7 @@ fetch('data/shelves.json?t='+Date.now()).then(r=>r.json()).then(shelves=>{
   AVAIL.push(...shelves);
   if(window.BB_PRESET){ assetClass=window.BB_PRESET.ac; selected=[window.BB_PRESET.sel];
     if(window.BB_PRESET.static){ const dt=document.querySelector('.mtabs button[data-metric="deals"]'); if(dt) dt.hidden=true; } }
-  applyState(); syncTabs();
+  applyState(); syncTabs(); tellFrameAsset();   // a deep link may open the other asset class
   // Macro overlay list: fetched after the deep link is applied, so a shared
   // ?macro= view selects its series whichever script loads first.
   fetch('data/macro.json?t='+Date.now()).then(r=>r.json()).then(m=>{ MACRO=m;

@@ -7,6 +7,14 @@
 <!-- Self-hosted, same copies the rest of the site uses. The CDN's bare
      vega@5 / vega-embed@6 URLs are unpinned — they float to whatever is
      newest at page load, which is how the Safari render broke once before. -->
+<script>
+  // Phone layout classes, set before the page paints (css/performance.css keys
+  // its phone rules to them). From this window's own size; when embedded in the
+  // site frame, chart.js corrects them from the frame's screen size.
+  (function(){ var w=innerWidth, h=innerHeight, c=document.documentElement.classList,
+                   land = w>h && h<=500;
+               c.toggle('bb-land', land); c.toggle('bb-phone', land || w<=640); })();
+</script>
 <script src="/assets/vendor/vega.min.js"></script>
 <script src="/assets/vendor/vega-lite.min.js"></script>
 <script src="/assets/vendor/vega-embed.min.js"></script>

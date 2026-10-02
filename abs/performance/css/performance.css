@@ -176,78 +176,82 @@ tr.woundtoggle td{background:#fafcff;text-align:center;padding:7px} tr.woundtogg
 @media (hover:none){ #vg-tooltip-element{display:none !important} }
 
 /* Phone (portrait): the Explorer's arrangement — tabs slide sideways, the
-   controls sit ABOVE the chart as compact rows, the chart keeps a fixed height. */
-@media (max-width:640px), (orientation:landscape) and (max-height:500px){
-  .wrap{padding:8px 12px 20px}
-  .selector{margin:6px 0 4px;gap:8px;flex-wrap:nowrap}
-  .sellabel{display:none}
-  #isswrap{flex:1;min-width:0} .multi-sel-btn{min-width:0;width:100%;max-width:none}
-  .multi-sel-panel{min-width:0;width:100%}
-  .ctxline{margin:2px 0 6px}
-  .mtabs{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-  .mtabs::-webkit-scrollbar{display:none}
-  .mtabs button{flex-shrink:0;min-height:36px;padding:7px 10px;font-size:12.5px}
-  .panel{border:none;border-radius:0;background:transparent}
-  .chartwrap{display:flex;flex-direction:column;padding:6px 0 0;gap:8px}
-  .chartrail{order:-1;flex-direction:row;flex-wrap:wrap;gap:6px 10px;border:none;border-bottom:1px solid var(--line);padding:0 0 8px}
-  .cgroup{flex-direction:row;align-items:center;gap:5px}
-  .cglabel{font-size:10px;letter-spacing:.2px}
-  #seriesgroup{display:none !important}
-  .seg button{padding:5px 8px;font-size:12px}
-  .rpill{padding:3px 9px}
-  .chartrail .ovsel{width:auto;padding:4px 20px 4px 8px}
-  .chartrail .cc-share-btn{margin:0 0 0 auto}
-  .chart-title{font-size:15px;margin:6px 0 1px}
-  .chart-cap{font-size:11.5px;padding:0 0 2px}
-  #chart{min-height:0}
-  .chart-src{text-align:center}
-  .chart-src .src-toggle{display:inline}
-  .chart-src .src-full{display:none}
-  .chart-src.open .src-full{display:block;text-align:left;margin-top:4px}
-  .shelf-intro h1{font-size:19px}
+   controls sit ABOVE the chart as compact rows, the chart keeps a fixed height.
+   Phone layout, keyed to classes rather than a media query: Build B sets
+   html.bb-phone / html.bb-land from the screen — its own when opened on its
+   own, the site frame's when embedded (inside the frame the page is grown to
+   its full height, so its own size no longer says which way up the phone is). */
+  html.bb-phone .wrap{padding:8px 12px 20px}
+  html.bb-phone .selector{margin:6px 0 4px;gap:8px;flex-wrap:nowrap}
+  html.bb-phone .sellabel{display:none}
+  html.bb-phone #isswrap{flex:1;min-width:0}
+  html.bb-phone .multi-sel-btn{min-width:0;width:100%;max-width:none}
+  html.bb-phone .multi-sel-panel{min-width:0;width:100%}
+  html.bb-phone .ctxline{margin:2px 0 6px}
+  html.bb-phone .mtabs{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  html.bb-phone .mtabs::-webkit-scrollbar{display:none}
+  html.bb-phone .mtabs button{flex-shrink:0;min-height:36px;padding:7px 10px;font-size:12.5px}
+  html.bb-phone .panel{border:none;border-radius:0;background:transparent}
+  html.bb-phone .chartwrap{display:flex;flex-direction:column;padding:6px 0 0;gap:8px}
+  html.bb-phone .chartrail{order:-1;flex-direction:row;flex-wrap:wrap;gap:6px 10px;border:none;border-bottom:1px solid var(--line);padding:0 0 8px}
+  html.bb-phone .cgroup{flex-direction:row;align-items:center;gap:5px}
+  html.bb-phone .cglabel{font-size:10px;letter-spacing:.2px}
+  html.bb-phone #seriesgroup{display:none !important}
+  html.bb-phone .seg button{padding:5px 8px;font-size:12px}
+  html.bb-phone .rpill{padding:3px 9px}
+  html.bb-phone .chartrail .ovsel{width:auto;padding:4px 20px 4px 8px}
+  html.bb-phone .chartrail .cc-share-btn{margin:0 0 0 auto}
+  html.bb-phone .chart-title{font-size:15px;margin:6px 0 1px}
+  html.bb-phone .chart-cap{font-size:11.5px;padding:0 0 2px}
+  html.bb-phone #chart{min-height:0}
+  html.bb-phone .chart-src{text-align:center}
+  html.bb-phone .chart-src .src-toggle{display:inline}
+  html.bb-phone .chart-src .src-full{display:none}
+  html.bb-phone .chart-src.open .src-full{display:block;text-align:left;margin-top:4px}
+  html.bb-phone .shelf-intro h1{font-size:19px}
   /* Compact phone chrome: the first screen should hold the controls AND the chart. */
   /* body-qualified: the bar's own stylesheet is inserted after this one */
-  body .ccm-topbar{height:40px;padding:0 12px}
-  body .ccm-wordmark{height:28px}
-  body .ccm-topbar-nav .ccm-cta{padding:4px 10px;font-size:12px}
-  .selector{margin:4px 0 2px}
-  .seg button{padding:4px 7px;font-size:11.5px}
-  #assetseg button{padding:5px 9px}
-  .multi-sel-btn{padding:4px 9px;font-size:12.5px}
-  .ctxline{font-size:11px;margin:1px 0 2px}
+  html.bb-phone body .ccm-topbar{height:40px;padding:0 12px}
+  html.bb-phone body .ccm-wordmark{height:28px}
+  html.bb-phone body .ccm-topbar-nav .ccm-cta{padding:4px 10px;font-size:12px}
+  html.bb-phone .selector{margin:4px 0 2px}
+  html.bb-phone .seg button{padding:4px 7px;font-size:11.5px}
+  html.bb-phone #assetseg button{padding:5px 9px}
+  html.bb-phone .multi-sel-btn{padding:4px 9px;font-size:12.5px}
+  html.bb-phone .ctxline{font-size:11px;margin:1px 0 2px}
   /* Folder tabs on a phone: outlined, rounded tops; the open one is white and
      joins the controls area beneath it (which turns white to match). */
-  .mtabs{gap:3px;border-bottom:1px solid #cfd6e2;margin-top:6px}
-  .mtabs button{min-height:32px;padding:6px 10px;font-size:12.5px;font-weight:500;color:#55617a;
+  html.bb-phone .mtabs{gap:3px;border-bottom:1px solid #cfd6e2;margin-top:6px}
+  html.bb-phone .mtabs button{min-height:32px;padding:6px 10px;font-size:12.5px;font-weight:500;color:#55617a;
     background:#e9edf3;border:1px solid #cfd6e2;border-bottom:none;border-radius:7px 7px 0 0;margin-bottom:-1px}
-  .mtabs button.on{background:#fff;color:#1e40af;font-weight:600;border-color:#cfd6e2;
+  html.bb-phone .mtabs button.on{background:#fff;color:#1e40af;font-weight:600;border-color:#cfd6e2;
     box-shadow:inset 0 2px 0 #1e40af}
-  .layout{background:#fff;border:1px solid #cfd6e2;border-top:none;border-radius:0 0 8px 8px;padding:0 10px 8px}
-  .chartwrap{padding:4px 0 0;gap:4px}
-  .chartrail{gap:5px 8px;padding:0 0 6px}
+  html.bb-phone .layout{background:#fff;border:1px solid #cfd6e2;border-top:none;border-radius:0 0 8px 8px;padding:0 10px 8px}
+  html.bb-phone .chartwrap{padding:4px 0 0;gap:4px}
+  html.bb-phone .chartrail{gap:5px 8px;padding:0 0 6px}
   /* Buttons that name themselves need no label; DQ and Macro keep a short one. */
-  #modeseg,#outseg,#poolseg,#rangebar{margin:0}
-  .cgroup:has(#modeseg)>.cglabel,.cgroup:has(#outseg)>.cglabel,
-  #poolctl>.cglabel,#rangegroup>.cglabel{display:none}
-  #dqctl>.cglabel{font-size:0} #dqctl>.cglabel::after{content:"DQ";font-size:10px}
-  .cgroup:has(#macrosel)>.cglabel{font-size:0} .cgroup:has(#macrosel)>.cglabel::after{content:"Macro";font-size:10px}
-  .rpill{padding:2px 8px;font-size:11.5px}
-  .chartrail .ovsel{padding:3px 18px 3px 7px;font-size:11.5px;width:auto;max-width:112px}
-  .chartrail .cc-share-btn{transform:scale(.85);transform-origin:right center}
-  .chart-title{font-size:14px;margin:4px 0 0}
-  .chart-cap{font-size:11px;padding:0}
-  .shelf-summary{font-size:12px;gap:4px 14px}
+  html.bb-phone #modeseg,html.bb-phone #outseg,html.bb-phone #poolseg,html.bb-phone #rangebar{margin:0}
+  html.bb-phone .cgroup:has(#modeseg)>.cglabel,html.bb-phone .cgroup:has(#outseg)>.cglabel,html.bb-phone #poolctl>.cglabel,html.bb-phone #rangegroup>.cglabel{display:none}
+  html.bb-phone #dqctl>.cglabel{font-size:0}
+  html.bb-phone #dqctl>.cglabel::after{content:"DQ";font-size:10px}
+  html.bb-phone .cgroup:has(#macrosel)>.cglabel{font-size:0}
+  html.bb-phone .cgroup:has(#macrosel)>.cglabel::after{content:"Macro";font-size:10px}
+  html.bb-phone .rpill{padding:2px 8px;font-size:11.5px}
+  html.bb-phone .chartrail .ovsel{padding:3px 18px 3px 7px;font-size:11.5px;width:auto;max-width:112px}
+  html.bb-phone .chartrail .cc-share-btn{transform:scale(.85);transform-origin:right center}
+  html.bb-phone .chart-title{font-size:14px;margin:4px 0 0}
+  html.bb-phone .chart-cap{font-size:11px;padding:0}
+  html.bb-phone .shelf-summary{font-size:12px;gap:4px 14px}
   /* The Deals table is wider than a phone: it scrolls inside its panel, not the page. */
-  #dealsPanel{overflow-x:auto;-webkit-overflow-scrolling:touch}
-  #dealsPanel>h2{display:block;padding:10px 0;font-size:12px;line-height:1.5}
-}
+  html.bb-phone #dealsPanel{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  html.bb-phone #dealsPanel>h2{display:block;padding:10px 0;font-size:12px;line-height:1.5}
+
 
 /* Landscape phone: the same phone styling, but the chart comes first and fills
    the screen; the controls sit BELOW it (a scroll away), and the sideways-room
    lets the legend sit beside the plot (set in chart.js). */
-@media (orientation:landscape) and (max-height:500px){
-  .chartrail{order:0;border-bottom:none;border-top:1px solid var(--line);padding:8px 0 0}
-  .chart-title{margin:2px 0 0;font-size:13.5px}
-  .chart-cap{font-size:10.5px}
-  .chart-src{margin-top:2px}
-}
+  html.bb-land .chartrail{order:0;border-bottom:none;border-top:1px solid var(--line);padding:8px 0 0}
+  html.bb-land .chart-title{margin:2px 0 0;font-size:13.5px}
+  html.bb-land .chart-cap{font-size:10.5px}
+  html.bb-land .chart-src{margin-top:2px}
+
