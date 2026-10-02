@@ -595,6 +595,14 @@
   // the frame that scrolls, a page that wants to settle on its chart asks
   // ('ccm-child-scroll', y = offset within the page) and the frame scrolls
   // there. Pages that do not use these messages are unaffected.
+  function findItem(id) {
+    var found = null;
+    config.sections.forEach(function(sec) {
+      if (sec.id === id) found = { item: sec, section: sec };
+      (sec.items || []).forEach(function(it) { if (it.id === id) found = { item: it, section: sec }; });
+    });
+    return found;
+  }
   function isLandscapeShell() {
     return window.matchMedia('(orientation: landscape) and (max-height: 500px)').matches;
   }
@@ -622,6 +630,28 @@
     var f = document.querySelector('#panel-content iframe');
     if (!f || e.source !== f.contentWindow) return;
     if (e.data.type === 'ccm-viewport-request') { sendViewport(); return; }
+    // The page switched what it shows between items that load the SAME page
+    // (Auto Loan / Auto Lease both open Build B, which has its own Loans |
+    // Leases toggle): move the highlight and the breadcrumb to the matching
+    // item without reloading the frame.
+    if (e.data.type === 'ccm-asset' && typeof e.data.asset === 'string') {
+      var cur = findItem(activeItemId);
+      if (!cur || !cur.item.url) return;
+      var page = cur.item.url.split('?')[0];
+      var want = null;
+      config.sections.forEach(function(sec) {
+        (sec.items || []).forEach(function(it) {
+          if (it.url && it.url.split('?')[0] === page && it.url.indexOf('ac=' + e.data.asset) !== -1) want = { item: it, section: sec };
+        });
+      });
+      if (!want || want.item.id === activeItemId) return;
+      activeItemId = want.item.id;
+      document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.toggle('active', n.dataset.id === want.item.id); });
+      document.querySelectorAll('.mobile-nav-sub').forEach(function(b) { b.classList.toggle('active', b.dataset.itemId === want.item.id); });
+      panelSection.textContent = want.section.label;
+      panelTitle.textContent = want.item.label;
+      return;
+    }
     if (e.data.type === 'ccm-child-scroll' && typeof e.data.y === 'number' && isPhoneShell()) {
       var sc = shellScroller();
       var base = (sc === document.getElementById('main')) ? sc.getBoundingClientRect().top : 0;
