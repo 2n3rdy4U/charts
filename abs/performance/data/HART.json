@@ -12,7 +12,7 @@
   ],
   "freshness": {
     "latest_reporting_date": "2026-08-01",
-    "months_behind_current": 1,
+    "months_behind_current": 2,
     "lag_cycles": 0,
     "result": "fresh",
     "severity": "ok"

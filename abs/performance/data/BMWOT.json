@@ -12,18 +12,18 @@
   ],
   "freshness": {
     "latest_reporting_date": "2026-07-01",
-    "months_behind_current": 2,
+    "months_behind_current": 3,
     "lag_cycles": 1,
     "result": "lagging",
     "severity": "warn"
   },
   "pool_snapshot": {
-    "n_active_deals": 2,
-    "n_new_deals": 1,
+    "n_active_deals": 3,
+    "n_new_deals": 0,
     "n_wound_down": 5,
-    "as_of": "2026-08-25",
-    "data_through": "2026-07-31",
-    "absee_through": "2026-07-31",
+    "as_of": "2026-09-25",
+    "data_through": "2026-08-31",
+    "absee_through": "2026-08-31",
     "loss_recon_status": "pass"
   },
   "n_deals_total": 8,
@@ -852,6 +852,14 @@
         "dq_30plus_pct": 0.013709570464630503,
         "pool_factor": 0.2764503625253069,
         "n_deals": 3.0
+      },
+      {
+        "date": "2026-08-15",
+        "dq_60plus_pct": 0.002434936628869566,
+        "dq_31_60_pct": 0.005053707838808427,
+        "dq_30plus_pct": 0.007488644467677994,
+        "pool_factor": 0.432610648816825,
+        "n_deals": 4.0
       }
     ],
     "calendar_seasoned": [
@@ -1638,6 +1646,14 @@
         "dq_30plus_pct": 0.013709570464630503,
         "pool_factor": 0.2764503625253069,
         "n_deals": 3.0
+      },
+      {
+        "date": "2026-08-15",
+        "dq_60plus_pct": 0.004938556521476314,
+        "dq_31_60_pct": 0.009177542179725271,
+        "dq_30plus_pct": 0.014116098701201585,
+        "pool_factor": 0.26065291721314376,
+        "n_deals": 3.0
       }
     ],
     "loss_calendar": [
@@ -2155,6 +2171,11 @@
         "date": "2026-07-15",
         "anl_pct": 0.0038876834705720825,
         "n_deals": 3.0
+      },
+      {
+        "date": "2026-08-15",
+        "anl_pct": 0.0009972119037968748,
+        "n_deals": 4.0
       }
     ],
     "loss_calendar_seasoned": [
@@ -2646,6 +2667,11 @@
       {
         "date": "2026-07-15",
         "anl_pct": 0.0038876834705720825,
+        "n_deals": 3.0
+      },
+      {
+        "date": "2026-08-15",
+        "anl_pct": 0.0022769535025561967,
         "n_deals": 3.0
       }
     ],
@@ -3363,6 +3389,13 @@
         "repos": 31,
         "at_risk": 69654,
         "reversed_share": 0.0
+      },
+      {
+        "date": "2026-08-15",
+        "repo_rate": 0.00023275800329442098,
+        "repos": 26,
+        "at_risk": 111704,
+        "reversed_share": 0.0
       }
     ],
     "repo_calendar_seasoned": [
@@ -4050,6 +4083,13 @@
         "repo_rate": 0.0004450569960088437,
         "repos": 31,
         "at_risk": 69654,
+        "reversed_share": 0.0
+      },
+      {
+        "date": "2026-08-15",
+        "repo_rate": 0.0002985653932852643,
+        "repos": 20,
+        "at_risk": 66987,
         "reversed_share": 0.0
       }
     ],
@@ -4877,6 +4917,14 @@
         "dq_60plus_pct": 0.004026,
         "dq_31_60_pct": 0.007934,
         "dq_30plus_pct": 0.01196
+      },
+      {
+        "date": "2026-08-15",
+        "m": null,
+        "n_loans": 107901,
+        "dq_60plus_pct": 0.002817,
+        "dq_31_60_pct": 0.005292,
+        "dq_30plus_pct": 0.008109
       }
     ],
     "absee_calendar_seasoned": [
@@ -5671,16 +5719,24 @@
         "dq_60plus_pct": 0.004026,
         "dq_31_60_pct": 0.007934,
         "dq_30plus_pct": 0.01196
+      },
+      {
+        "date": "2026-08-15",
+        "m": null,
+        "n_loans": 64751,
+        "dq_60plus_pct": 0.004479,
+        "dq_31_60_pct": 0.007861,
+        "dq_30plus_pct": 0.01234
       }
     ],
     "absee_vintage": [
       {
         "date": null,
         "m": 2,
-        "n_loans": 325862,
-        "dq_60plus_pct": 0.000227,
-        "dq_31_60_pct": 0.001172,
-        "dq_30plus_pct": 0.001399
+        "n_loans": 369012,
+        "dq_60plus_pct": 0.000238,
+        "dq_31_60_pct": 0.001203,
+        "dq_30plus_pct": 0.001442
       },
       {
         "date": null,
@@ -5821,10 +5877,10 @@
       {
         "date": null,
         "m": 20,
-        "n_loans": 185244,
-        "dq_60plus_pct": 0.002413,
-        "dq_31_60_pct": 0.004006,
-        "dq_30plus_pct": 0.006419
+        "n_loans": 214099,
+        "dq_60plus_pct": 0.002555,
+        "dq_31_60_pct": 0.004255,
+        "dq_30plus_pct": 0.00681
       },
       {
         "date": null,
@@ -5885,10 +5941,10 @@
       {
         "date": null,
         "m": 28,
-        "n_loans": 122412,
-        "dq_60plus_pct": 0.002916,
-        "dq_31_60_pct": 0.004934,
-        "dq_30plus_pct": 0.007851
+        "n_loans": 144945,
+        "dq_60plus_pct": 0.003132,
+        "dq_31_60_pct": 0.005292,
+        "dq_30plus_pct": 0.008424
       },
       {
         "date": null,
@@ -5973,10 +6029,10 @@
       {
         "date": null,
         "m": 39,
-        "n_loans": 66410,
-        "dq_60plus_pct": 0.003478,
-        "dq_31_60_pct": 0.005767,
-        "dq_30plus_pct": 0.009246
+        "n_loans": 79773,
+        "dq_60plus_pct": 0.004062,
+        "dq_31_60_pct": 0.00702,
+        "dq_30plus_pct": 0.011081
       },
       {
         "date": null,
@@ -6066,11 +6122,18 @@
       "deal_name": "BMW Vehicle Owner Trust 2026-A",
       "series": "2026-A",
       "sources": [
+        "10-D",
         "prospectus",
         "ABS-EE"
       ],
-      "state": "new",
-      "snapshot": null,
+      "state": "active",
+      "snapshot": {
+        "as_of": "2026-09-25",
+        "data_through": "2026-08-31",
+        "pool_factor": 0.92952472763751,
+        "dq_60plus_pct": 0.0004061815033534531,
+        "cnl_ratio": 0.0
+      },
       "terms": {
         "closing_date": "2026-08-19",
         "status": "final",
@@ -6222,8 +6285,18 @@
           }
         ]
       },
-      "curve": [],
-      "has_tend_curve": false,
+      "curve": [
+        {
+          "date": "2026-09-25",
+          "m": 1,
+          "pool_factor": 0.92952472763751,
+          "dq_60plus_pct": 0.0004061815033534531,
+          "dq_31_60_pct": 0.0017120463986592435,
+          "dq_30plus_pct": 0.0021,
+          "cnl_ratio": 0.0
+        }
+      ],
+      "has_tend_curve": true,
       "curve_absee": [
         {
           "date": "2026-06-30",
@@ -6232,12 +6305,20 @@
           "dq_60plus_pct": 0.0,
           "dq_31_60_pct": 0.0,
           "dq_30plus_pct": 0.0
+        },
+        {
+          "date": "2026-08-31",
+          "m": 2,
+          "n_loans": 43150,
+          "dq_60plus_pct": 0.000324,
+          "dq_31_60_pct": 0.001437,
+          "dq_30plus_pct": 0.001761
         }
       ],
       "absee_latest": {
-        "as_of": "2026-06-30",
-        "n_loans": 44717,
-        "dq_60plus_pct": 0.0
+        "as_of": "2026-08-31",
+        "n_loans": 43150,
+        "dq_60plus_pct": 0.000324
       }
     },
     {
@@ -6252,11 +6333,11 @@
       ],
       "state": "active",
       "snapshot": {
-        "as_of": "2026-08-25",
-        "data_through": "2026-07-31",
-        "pool_factor": 0.43078671012821096,
-        "dq_60plus_pct": 0.0033669997843883957,
-        "cnl_ratio": 0.0011916365427636097
+        "as_of": "2026-09-25",
+        "data_through": "2026-08-31",
+        "pool_factor": 0.4094866423620689,
+        "dq_60plus_pct": 0.004346819832588677,
+        "cnl_ratio": 0.0012112467208213297
       },
       "terms": {
         "closing_date": "2025-02-12",
@@ -6571,6 +6652,15 @@
           "dq_31_60_pct": 0.007180268246814699,
           "dq_30plus_pct": 0.0105,
           "cnl_ratio": 0.0011916365427636097
+        },
+        {
+          "date": "2026-09-25",
+          "m": 19,
+          "pool_factor": 0.4094866423620689,
+          "dq_60plus_pct": 0.004346819832588677,
+          "dq_31_60_pct": 0.007071752539892755,
+          "dq_30plus_pct": 0.0114,
+          "cnl_ratio": 0.0012112467208213297
         }
       ],
       "has_tend_curve": true,
@@ -6726,12 +6816,20 @@
           "dq_60plus_pct": 0.002863,
           "dq_31_60_pct": 0.005759,
           "dq_30plus_pct": 0.008622
+        },
+        {
+          "date": "2026-08-31",
+          "m": 20,
+          "n_loans": 28855,
+          "dq_60plus_pct": 0.003466,
+          "dq_31_60_pct": 0.005857,
+          "dq_30plus_pct": 0.009322
         }
       ],
       "absee_latest": {
-        "as_of": "2026-07-31",
-        "n_loans": 29691,
-        "dq_60plus_pct": 0.002863
+        "as_of": "2026-08-31",
+        "n_loans": 28855,
+        "dq_60plus_pct": 0.003466
       }
     },
     {
@@ -6746,11 +6844,11 @@
       ],
       "state": "active",
       "snapshot": {
-        "as_of": "2026-08-25",
-        "data_through": "2026-07-31",
-        "pool_factor": 0.26089707139000573,
-        "dq_60plus_pct": 0.003792551456493202,
-        "cnl_ratio": 0.0014520862852959132
+        "as_of": "2026-09-25",
+        "data_through": "2026-08-31",
+        "pool_factor": 0.24522941231293052,
+        "dq_60plus_pct": 0.004865691151912427,
+        "cnl_ratio": 0.0015316972604103895
       },
       "terms": {
         "closing_date": "2024-06-11",
@@ -7137,6 +7235,15 @@
           "dq_31_60_pct": 0.010370506714942584,
           "dq_30plus_pct": 0.0142,
           "cnl_ratio": 0.0014520862852959132
+        },
+        {
+          "date": "2026-09-25",
+          "m": 27,
+          "pool_factor": 0.24522941231293052,
+          "dq_60plus_pct": 0.004865691151912427,
+          "dq_31_60_pct": 0.009202853254783856,
+          "dq_30plus_pct": 0.0141,
+          "cnl_ratio": 0.0015316972604103895
         }
       ],
       "has_tend_curve": true,
@@ -7356,12 +7463,20 @@
           "dq_60plus_pct": 0.003815,
           "dq_31_60_pct": 0.00793,
           "dq_30plus_pct": 0.011745
+        },
+        {
+          "date": "2026-08-31",
+          "m": 28,
+          "n_loans": 22533,
+          "dq_60plus_pct": 0.004305,
+          "dq_31_60_pct": 0.007234,
+          "dq_30plus_pct": 0.011539
         }
       ],
       "absee_latest": {
-        "as_of": "2026-07-31",
-        "n_loans": 23329,
-        "dq_60plus_pct": 0.003815
+        "as_of": "2026-08-31",
+        "n_loans": 22533,
+        "dq_60plus_pct": 0.004305
       }
     },
     {
@@ -7376,11 +7491,11 @@
       ],
       "state": "wound",
       "snapshot": {
-        "as_of": "2026-08-25",
-        "data_through": "2026-07-31",
-        "pool_factor": 0.11889901542013208,
-        "dq_60plus_pct": 0.009121695024323029,
-        "cnl_ratio": 0.0019033954144346702
+        "as_of": "2026-09-25",
+        "data_through": "2026-08-31",
+        "pool_factor": 0.10920457250357454,
+        "dq_60plus_pct": 0.007646479822503458,
+        "cnl_ratio": 0.001957193812488701
       },
       "terms": {
         "closing_date": "2023-07-18",
@@ -7866,6 +7981,15 @@
           "dq_31_60_pct": 0.01646645125657331,
           "dq_30plus_pct": 0.0256,
           "cnl_ratio": 0.0019033954144346702
+        },
+        {
+          "date": "2026-09-25",
+          "m": 38,
+          "pool_factor": 0.10920457250357454,
+          "dq_60plus_pct": 0.007646479822503458,
+          "dq_31_60_pct": 0.018083184331843978,
+          "dq_30plus_pct": 0.0257,
+          "cnl_ratio": 0.001957193812488701
         }
       ],
       "has_tend_curve": true,
@@ -8173,12 +8297,20 @@
           "dq_60plus_pct": 0.00684,
           "dq_31_60_pct": 0.012539,
           "dq_30plus_pct": 0.019379
+        },
+        {
+          "date": "2026-08-31",
+          "m": 39,
+          "n_loans": 13363,
+          "dq_60plus_pct": 0.00696,
+          "dq_31_60_pct": 0.013246,
+          "dq_30plus_pct": 0.020205
         }
       ],
       "absee_latest": {
-        "as_of": "2026-07-31",
-        "n_loans": 14036,
-        "dq_60plus_pct": 0.00684
+        "as_of": "2026-08-31",
+        "n_loans": 13363,
+        "dq_60plus_pct": 0.00696
       }
     },
     {
