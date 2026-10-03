@@ -20,13 +20,13 @@
   "pool_snapshot": {
     "n_active_deals": 14,
     "n_new_deals": 0,
-    "n_wound_down": 25,
+    "n_wound_down": 26,
     "as_of": "2026-09-15",
     "data_through": "2026-08-31",
     "absee_through": "2026-08-31",
     "loss_recon_status": "pass"
   },
-  "n_deals_total": 39,
+  "n_deals_total": 40,
   "pooled": {
     "calendar": [
       {
@@ -6730,6 +6730,37 @@
     ]
   },
   "deals": [
+    {
+      "psr_url": null,
+      "cik": null,
+      "deal_name": "Toyota Auto Receivables 2026-D Owner Trust",
+      "series": "2026-D",
+      "sources": [
+        "ABS-EE"
+      ],
+      "state": "wound",
+      "snapshot": null,
+      "terms": {},
+      "filings": null,
+      "capital": null,
+      "curve": [],
+      "has_tend_curve": false,
+      "curve_absee": [
+        {
+          "date": "2026-08-31",
+          "m": 0,
+          "n_loans": 68742,
+          "dq_60plus_pct": 0.0,
+          "dq_31_60_pct": 0.0,
+          "dq_30plus_pct": 0.0
+        }
+      ],
+      "absee_latest": {
+        "as_of": "2026-08-31",
+        "n_loans": 68742,
+        "dq_60plus_pct": 0.0
+      }
+    },
     {
       "psr_url": "../issuance/presale/toyota-auto-receivables-2026-c-owner-trust.html",
       "cik": "0002099541",

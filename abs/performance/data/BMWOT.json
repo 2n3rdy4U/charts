@@ -11,11 +11,11 @@
     "prospectus"
   ],
   "freshness": {
-    "latest_reporting_date": "2026-07-01",
-    "months_behind_current": 3,
-    "lag_cycles": 1,
-    "result": "lagging",
-    "severity": "warn"
+    "latest_reporting_date": "2026-08-01",
+    "months_behind_current": 2,
+    "lag_cycles": 0,
+    "result": "fresh",
+    "severity": "ok"
   },
   "pool_snapshot": {
     "n_active_deals": 3,
