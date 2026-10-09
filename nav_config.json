@@ -1,0 +1,85 @@
+{
+  "sections": [
+    {
+      "id": "abs-data",
+      "label": "ABS Data",
+      "short_label": "ABS",
+      "description": "Loan-level performance, delinquency trends, and new issuance data across auto and credit card ABS trusts.",
+      "icon": "chart-bar",
+      "badge": null,
+      "type": "accordion",
+      "items": [
+        {
+          "id": "abs-auto",
+          "label": "Auto Loan",
+          "icon": "auto-loan",
+          "type": "panel",
+          "url": "abs/performance/index.html?ac=loan",
+          "badge": null
+        },
+        {
+          "id": "abs-auto-lease",
+          "label": "Auto Lease",
+          "icon": "auto-lease",
+          "type": "panel",
+          "url": "abs/performance/index.html?ac=lease",
+          "badge": null
+        },
+        {
+          "id": "abs-credit-card",
+          "label": "Credit Card",
+          "icon": "credit-card",
+          "type": "panel",
+          "url": "cc/index.html",
+          "badge": null
+        },
+        {
+          "id": "abs-issuance",
+          "label": "Issuance",
+          "icon": "stack",
+          "type": "panel",
+          "url": "abs/issuance/index.html",
+          "badge": null
+        }
+      ]
+    },
+    {
+      "id": "macro-data",
+      "label": "Macro",
+      "short_label": "Macro",
+      "description": "Key economic indicators from FRED — employment, inflation, consumer spending, and credit conditions.",
+      "icon": "globe",
+      "badge": null,
+      "type": "panel",
+      "url": "macro/index.html"
+    },
+    {
+      "id": "data-calendar",
+      "label": "Data Calendar",
+      "short_label": "Calendar",
+      "description": "Upcoming macro data releases and ABS filing dates across all tracked trusts.",
+      "icon": "calendar",
+      "badge": null,
+      "type": "panel",
+      "url": "abs/schedule/Data_Cal_Calendar.html"
+    },
+    {
+      "id": "newsletter",
+      "label": "Weekly Newsletter",
+      "description": "The week in U.S. consumer-credit securitization, data, and policy. Independent, data-first, no paywall.",
+      "icon": "document",
+      "type": "link",
+      "url": "https://www.consumercreditmatters.com/newsletter",
+      "latest_issue": { "number": 3, "date": "2026-06-15" }
+    },
+    {
+      "id": "podcast",
+      "label": "Podcast",
+      "description": "Conversations on consumer credit, securitization, and the broader macroeconomic landscape.",
+      "icon": "microphone",
+      "badge": null,
+      "type": "link",
+      "url": "https://www.consumercreditmatters.com/podcasts"
+    }
+  ]
+}

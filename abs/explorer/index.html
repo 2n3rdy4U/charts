@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Moved &mdash; Auto ABS Performance</title>
+<link rel="canonical" href="/abs/performance/index.html?ac=loan">
+<meta name="robots" content="noindex">
+<meta http-equiv="refresh" content="2; url=/abs/performance/index.html?ac=loan">
+<style>
+ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;margin:0;background:#f6f8fb;color:#1a2230;line-height:1.6}
+ main{max-width:560px;margin:0 auto;padding:56px 24px}
+ a{color:#1e40af}
+</style>
+<script>
+(function () {
+  var SHELVES = {"AART": "loan", "ALL": "loan", "AMCAR": "loan", "BLAST": "loan", "BMWLT": "lease", "BMWOT": "loan", "CAOT": "loan", "CMXS": "loan", "COPAR": "loan", "CRART": "loan", "CRVNAN": "loan", "CRVNAP": "loan", "DRIVE": "loan", "EART": "loan", "EARTS": "loan", "FCALT": "lease", "FCAOT": "loan", "FTAT": "loan", "GMALT": "lease", "GMCAR": "loan", "HAROT": "loan", "HART": "loan", "MBALT": "lease", "MBART": "loan", "NALT": "lease", "NAROT": "loan", "PILOT": "lease", "SDART": "loan", "TAOT": "loan", "USAOT": "loan", "VALET": "loan", "VWALT": "lease", "WOALT": "lease", "WOART": "loan", "WOSAT": "loan"}, SPLITS = {"CRVNA": ["CRVNAP", "CRVNAN"]}, KIND = "loan";
+  var q = new URLSearchParams(location.search);
+  // --- which shelves ---
+  var raw = (q.get("issuers") || q.get("issuer") || q.get("ticker") || "").split(",");
+  var codes = [];
+  raw.forEach(function (c) {
+    c = c.trim().toUpperCase();
+    if (!c) return;
+    if (c === "__ALL__") { codes.push("ALL"); return; }
+    (SPLITS[c] || [c]).forEach(function (s) { if (SHELVES[s] && codes.indexOf(s) < 0) codes.push(s); });
+  });
+  // one asset class per view: the page's own, unless every code says otherwise
+  var ac = KIND;
+  var assets = codes.filter(function (c) { return c !== "ALL"; }).map(function (c) { return SHELVES[c]; });
+  if (assets.length && assets.every(function (a) { return a === assets[0]; })) ac = assets[0];
+  codes = codes.filter(function (c) { return c === "ALL" ? ac === "loan" : SHELVES[c] === ac; });
+  // --- which view ---
+  var p = {};
+  var tab = q.get("tab") || "", sub = q.get("sub") || q.get("mode") || q.get("view") || "";
+  var calendar = sub === "timeseries" || codes.length > 1 || codes.indexOf("ALL") >= 0;
+  if (tab === "losses") {
+    p.m = "cnl_ratio";
+    p.view = (q.get("lossview") === "timeseries") ? "calendar" : "vintage";
+    if (q.get("losspool") === "seasoned") p.pools = "seasoned";
+  } else if (tab === "repossessions") {
+    p.m = "repo_rate"; p.view = "calendar";
+  } else {
+    p.m = ({"60+": "dq_60plus_pct", "30-59": "dq_31_60_pct", "any-dq": "dq_30plus_pct"})[q.get("dq") || ""] || "dq_60plus_pct";
+    p.view = calendar ? "calendar" : "vintage";
+    if (q.get("pool") === "seasoned") p.pools = "seasoned";
+    var t = q.get("transform"); if (t === "yoy-delta" || t === "yoy-pct") p.transform = t;
+  }
+  var d = q.get("display"); if (d === "table" || d === "seasonal") p.out = d;
+  var r = q.get("range") || "";
+  if (r && r !== "all") {
+    p.range = (p.view === "vintage") ? ({"6m": "12", "1y": "12", "2y": "24", "3y": "36", "5y": "48"})[r]
+                                     : ({"6m": "1", "1y": "1", "2y": "3", "3y": "3", "5y": "5"})[r];
+    if (!p.range) delete p.range;
+  }
+  // --- the address ---
+  var target;
+  if (codes.length === 1 && codes[0] !== "ALL") {
+    target = "/abs/performance/" + codes[0] + "/";                 // the shelf's own page
+  } else {
+    p = Object.assign({ac: ac}, codes.length ? {sel: codes.join(",")} : {}, p);
+    target = "/abs/performance/index.html";
+  }
+  var qs = Object.keys(p).map(function (k) { return k + "=" + encodeURIComponent(p[k]).replace(/%2C/g, ","); }).join("&");
+  location.replace(target + (qs ? "?" + qs : ""));
+})();
+</script>
+  <script data-goatcounter="https://consumercreditmatters.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+<main>
+<p>The Auto Loan ABS Data Explorer has moved to the <a href="/abs/performance/index.html?ac=loan">Auto ABS Performance pages</a>.
+You are being taken there now; if not, follow the link.</p>
+</main>
+</body>
+</html>

@@ -1,0 +1,54 @@
+# Consumer Credit Matters — data site
+
+> Performance and issuance data on SEC-registered U.S. auto and credit card ABS, built daily from
+> SEC Form 10-D servicer reports, Form ABS-EE loan-level data and prospectuses (424B, FWP).
+
+## Auto ABS performance (one page per issuer shelf)
+
+- [Toyota (TAOT)](https://data.consumercreditmatters.com/abs/performance/TAOT/): delinquency, net loss, repossessions — data https://data.consumercreditmatters.com/abs/performance/data/TAOT.json
+- [Honda (HAROT)](https://data.consumercreditmatters.com/abs/performance/HAROT/): delinquency, net loss, repossessions — data https://data.consumercreditmatters.com/abs/performance/data/HAROT.json
+- [Nissan (NAROT)](https://data.consumercreditmatters.com/abs/performance/NAROT/): delinquency, net loss, repossessions — data https://data.consumercreditmatters.com/abs/performance/data/NAROT.json
+- [GM Financial (GMCAR)](https://data.consumercreditmatters.com/abs/performance/GMCAR/): delinquency, net loss, repossessions — data https://data.consumercreditmatters.com/abs/performance/data/GMCAR.json
+- [Ford (FCAOT)](https://data.consumercreditmatters.com/abs/performance/FCAOT/): delinquency, net loss, repossessions — data https://data.consumercreditmatters.com/abs/performance/data/FCAOT.json
+- [Hyundai (HART)](https://data.consumercreditmatters.com/abs/performance/HART/): delinquency, net loss, repossessions — data https://data.consumercreditmatters.com/abs/performance/data/HART.json
+- [Ally (AART)](https://data.consumercreditmatters.com/abs/performance/AART/): delinquency, net loss, repossessions — data https://data.consumercreditmatters.com/abs/performance/data/AART.json
+- [Capital One Prime (COPAR)](https://data.consumercreditmatters.com/abs/performance/COPAR/): delinquency, net loss, repossessions — data https://data.consumercreditmatters.com/abs/performance/data/COPAR.json
+- [World Omni (WOART)](https://data.consumercreditmatters.com/abs/performance/WOART/): delinquency, net loss, repossessions — data https://data.consumercreditmatters.com/abs/performance/data/WOART.json
+- [CarMax (CAOT)](https://data.consumercreditmatters.com/abs/performance/CAOT/): delinquency, net loss, repossessions — data https://data.consumercreditmatters.com/abs/performance/data/CAOT.json
+- [Mercedes-Benz (MBART)](https://data.consumercreditmatters.com/abs/performance/MBART/): delinquency, net loss, repossessions — data https://data.consumercreditmatters.com/abs/performance/data/MBART.json
+- [BMW (BMWOT)](https://data.consumercreditmatters.com/abs/performance/BMWOT/): delinquency, net loss, repossessions — data https://data.consumercreditmatters.com/abs/performance/data/BMWOT.json
+- [Volkswagen (VALET)](https://data.consumercreditmatters.com/abs/performance/VALET/): delinquency, net loss, repossessions — data https://data.consumercreditmatters.com/abs/performance/data/VALET.json
+- [Fifth Third (FTAT)](https://data.consumercreditmatters.com/abs/performance/FTAT/): delinquency, net loss, repossessions — data https://data.consumercreditmatters.com/abs/performance/data/FTAT.json
+- [AmeriCredit (AMCAR)](https://data.consumercreditmatters.com/abs/performance/AMCAR/): delinquency, net loss, repossessions — data https://data.consumercreditmatters.com/abs/performance/data/AMCAR.json
+- [Santander (SDART) (SDART)](https://data.consumercreditmatters.com/abs/performance/SDART/): delinquency, net loss, repossessions — data https://data.consumercreditmatters.com/abs/performance/data/SDART.json
+- [Santander (DRIVE) (DRIVE)](https://data.consumercreditmatters.com/abs/performance/DRIVE/): delinquency, net loss, repossessions — data https://data.consumercreditmatters.com/abs/performance/data/DRIVE.json
+- [Exeter (EART)](https://data.consumercreditmatters.com/abs/performance/EART/): delinquency, net loss, repossessions — data https://data.consumercreditmatters.com/abs/performance/data/EART.json
+- [Exeter Select (EARTS)](https://data.consumercreditmatters.com/abs/performance/EARTS/): delinquency, net loss, repossessions — data https://data.consumercreditmatters.com/abs/performance/data/EARTS.json
+- [CarMax Select (CMXS)](https://data.consumercreditmatters.com/abs/performance/CMXS/): delinquency, net loss, repossessions — data https://data.consumercreditmatters.com/abs/performance/data/CMXS.json
+- [World Omni Select (WOSAT)](https://data.consumercreditmatters.com/abs/performance/WOSAT/): delinquency, net loss, repossessions — data https://data.consumercreditmatters.com/abs/performance/data/WOSAT.json
+- [Bridgecrest (BLAST)](https://data.consumercreditmatters.com/abs/performance/BLAST/): delinquency, net loss, repossessions — data https://data.consumercreditmatters.com/abs/performance/data/BLAST.json
+- [Carvana P (CRVNAP)](https://data.consumercreditmatters.com/abs/performance/CRVNAP/): delinquency, net loss, repossessions — data https://data.consumercreditmatters.com/abs/performance/data/CRVNAP.json
+- [Carvana N (CRVNAN)](https://data.consumercreditmatters.com/abs/performance/CRVNAN/): delinquency, net loss, repossessions — data https://data.consumercreditmatters.com/abs/performance/data/CRVNAN.json
+- [California Republic (CRART)](https://data.consumercreditmatters.com/abs/performance/CRART/): delinquency, net loss, repossessions — data https://data.consumercreditmatters.com/abs/performance/data/CRART.json
+- [USAA (USAOT)](https://data.consumercreditmatters.com/abs/performance/USAOT/): delinquency, net loss, repossessions — data https://data.consumercreditmatters.com/abs/performance/data/USAOT.json
+- [Ford (FCALT)](https://data.consumercreditmatters.com/abs/performance/FCALT/): delinquency, net loss — data https://data.consumercreditmatters.com/abs/performance/data/FCALT.json
+- [GM Financial (GMALT)](https://data.consumercreditmatters.com/abs/performance/GMALT/): delinquency, net loss — data https://data.consumercreditmatters.com/abs/performance/data/GMALT.json
+- [BMW (BMWLT)](https://data.consumercreditmatters.com/abs/performance/BMWLT/): delinquency, net loss — data https://data.consumercreditmatters.com/abs/performance/data/BMWLT.json
+- [Mercedes-Benz (MBALT)](https://data.consumercreditmatters.com/abs/performance/MBALT/): delinquency, net loss — data https://data.consumercreditmatters.com/abs/performance/data/MBALT.json
+- [Nissan (NALT)](https://data.consumercreditmatters.com/abs/performance/NALT/): delinquency, net loss — data https://data.consumercreditmatters.com/abs/performance/data/NALT.json
+- [Volkswagen (VWALT)](https://data.consumercreditmatters.com/abs/performance/VWALT/): delinquency, net loss — data https://data.consumercreditmatters.com/abs/performance/data/VWALT.json
+- [World Omni (WOALT)](https://data.consumercreditmatters.com/abs/performance/WOALT/): delinquency, net loss — data https://data.consumercreditmatters.com/abs/performance/data/WOALT.json
+- [Porsche (PILOT)](https://data.consumercreditmatters.com/abs/performance/PILOT/): delinquency, net loss — data https://data.consumercreditmatters.com/abs/performance/data/PILOT.json
+- [All Issuers (ALL)](https://data.consumercreditmatters.com/abs/performance/ALL/): delinquency, net loss, repossessions — data https://data.consumercreditmatters.com/abs/performance/data/ALL.json
+
+## Other pages
+
+- [Methodology](https://data.consumercreditmatters.com/abs/methodology.html): how each figure is defined
+- [Issuance and presale reports](https://data.consumercreditmatters.com/abs/issuance/): one report per deal from 2024
+- [Newsletter](https://data.consumercreditmatters.com/newsletter/): weekly briefings
+
+## Data files
+
+- `https://data.consumercreditmatters.com/abs/performance/data/<TICKER>.json` — a shelf's deals, latest reports, pooled monthly series and definitions
+- `https://data.consumercreditmatters.com/abs/performance/data/peers.json` — every auto deal's terms and structure at pricing
+- `https://data.consumercreditmatters.com/abs/performance/data/<TICKER>.deals.html` — the shelf's Deals table as HTML
