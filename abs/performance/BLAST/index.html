@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="stylesheet" href="/style.css"><script src="/kit.js" defer></script>
 <meta name="description" content="Bridgecrest&#x27;s auto loan ABS shelf (BLAST): delinquency, net loss and repossession performance across 13 SEC-registered deals, from monthly 10-D servicer reports and ABS-EE loan-level data, updated daily.">
 <link rel="canonical" href="https://data.consumercreditmatters.com/abs/performance/BLAST/">
 <base href="../">
 <script>window.BB_PRESET={ac:"loan",sel:"BLAST",static:true};</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Dataset", "name": "Bridgecrest auto loan ABS performance · BLAST", "description": "Bridgecrest's auto loan ABS shelf (BLAST): delinquency, net loss and repossession performance across 13 SEC-registered deals, from monthly 10-D servicer reports and ABS-EE loan-level data, updated daily.", "url": "https://data.consumercreditmatters.com/abs/performance/BLAST/", "creator": {"@type": "Organization", "name": "Consumer Credit Matters"}, "isBasedOn": ["SEC Form 10-D servicer distribution reports", "SEC Form ABS-EE loan-level data"], "temporalCoverage": "2017-01/2026-10", "license": "https://data.consumercreditmatters.com/", "keywords": ["Bridgecrest", "BLAST", "auto ABS", "delinquency", "net loss", "securitization"], "distribution": [{"@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://data.consumercreditmatters.com/abs/performance/data/BLAST.json"}]}</script>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <title>Bridgecrest auto loan ABS performance · BLAST</title>
 <!-- Self-hosted, same copies the rest of the site uses. The CDN's bare
      vega@5 / vega-embed@6 URLs are unpinned — they float to whatever is
@@ -43,86 +46,32 @@
 </script>
 <script src="../../share/share.js"></script>
 <link rel="stylesheet" href="css/performance.css">
-<style>
-/* CCM data-subdomain top bar — shared across explorer / macro / issuance */
-.ccm-topbar{display:flex;align-items:center;justify-content:space-between;
-  height:56px;padding:0 24px;background:#0e1d2e;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-  position:relative;z-index:100;box-sizing:border-box}
-.ccm-topbar a{text-decoration:none;border:none}
-.ccm-topbar-brand{display:flex;align-items:center;color:#fafafa}
-.ccm-wordmark{display:block;height:32px;width:auto}
-.ccm-topbar-nav{display:flex;align-items:center;gap:24px;font-size:13.5px}
-.ccm-topbar-nav a:not(.ccm-cta){color:#a8b5c4;font-weight:500;letter-spacing:0.02em;
-  transition:color 0.15s}
-.ccm-topbar-nav a:not(.ccm-cta):hover{color:#fafafa}
-.ccm-topbar-nav .ccm-cta{background:#4ade80;color:#0e1d2e;padding:8px 16px;
-  border-radius:4px;font-weight:600;letter-spacing:0.02em;transition:background 0.15s}
-.ccm-topbar-nav .ccm-cta:hover{background:#65f08e}
-.ccm-topbar-nav a.ccm-back{color:#4ade80;font-weight:600}
-.ccm-topbar-nav a.ccm-back:hover{color:#65f08e}
-@media (max-width:640px){
-  .ccm-topbar{padding:0 14px}
-  .ccm-wordmark{height:26px}
-  .ccm-topbar-nav{gap:14px;font-size:12px}
-  .ccm-topbar-nav a:not(.ccm-cta){display:none}
-  /* The return link is the whole reason a newsletter reader is here, so it
-     stays when the other nav items collapse. Declared after the rule above:
-     equal specificity, so source order decides. */
-  .ccm-topbar-nav a.ccm-back{display:inline}
-}
-</style>
   <script data-goatcounter="https://consumercreditmatters.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
-<body>
-<header class="ccm-topbar" role="banner">
-  <a class="ccm-topbar-brand" href="https://www.consumercreditmatters.com/" aria-label="Consumer Credit Matters home">
-    <img src="https://data.consumercreditmatters.com/assets/brand/logo-horizontal-white.png" alt="Consumer Credit Matters" class="ccm-wordmark">
-  </a>
-  <nav class="ccm-topbar-nav" aria-label="Site navigation">
-    <a href="https://www.consumercreditmatters.com/">Home</a>
-    <a href="https://www.consumercreditmatters.com/newsletter">Newsletter</a>
-    <a href="https://www.consumercreditmatters.com/podcasts">Podcast</a>
-    <a class="ccm-cta" href="https://www.consumercreditmatters.com/subscribe">Subscribe</a>
-  </nav>
-</header>
-
-<script>
-/* These data pages are normally shown inside the /charts/ shell, which has
-   its own header — so this in-page bar would duplicate it. Hide it when we're
-   embedded in an iframe; keep it when the page is opened standalone. */
-if (window.self !== window.top) {
-  var _ccmBar = document.querySelector('.ccm-topbar');
-  if (_ccmBar) _ccmBar.style.display = 'none';
-}
-/* A chart opened from a newsletter exhibit carries ?back=/newsletter/<date>/, so
-   the reader can return to the article rather than only to the site's front
-   door. The page's own URL rewriting preserves unknown params, so the link
-   survives filtering and tab changes.
-
-   The value is matched against a whitelist, not merely checked for bad input:
-   accepting an arbitrary URL here would make every chart page an open redirect
-   on this domain — attractive for phishing, since the hop begins somewhere
-   genuine. Only a path under /newsletter/ built from unreserved characters is
-   allowed, which excludes another host (protocol-relative //evil.example.com),
-   backslashes, and traversal. */
-(function () {
-  try {
-    var p = new URLSearchParams(window.location.search).get('back');
-    if (!p || !/^\/newsletter\/[A-Za-z0-9._~/-]*$/.test(p) || p.indexOf('..') !== -1) return;
-    var nav = document.querySelector('.ccm-topbar-nav');
-    if (!nav) return;
-    var a = document.createElement('a');
-    a.className = 'ccm-back';
-    a.href = p;
-    a.textContent = '\u2190 Back to the issue';
-    nav.insertBefore(a, nav.firstChild);
-  } catch (_e) { /* never let this break the bar */ }
-})();
-</script>
+<body class="framed">
+<div id="app">
+<header id="header"><button id="hamburger" aria-label="Open navigation" aria-expanded="false"><span></span><span></span><span></span></button><a href="/" class="brand" aria-label="Consumer Credit Matters home"><img src="/assets/brand/logo-horizontal-white.png" alt="Consumer Credit Matters" class="brand-logo"></a><nav class="header-right"><a href="https://www.consumercreditmatters.com/disclaimer" rel="noopener" class="header-disclaimer">Disclaimer</a><a href="https://www.consumercreditmatters.com/subscribe" rel="noopener" class="btn-primary">Subscribe</a></nav></header>
+<div id="nav-backdrop" aria-hidden="true"></div>
+<nav id="rail" aria-label="Data modules">
+<div class="nav-section"><div class="nav-section-header open" role="button" aria-expanded="true" data-section="abs-data"><svg class="nav-section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 13.5h3v4.5H3v-4.5zm4.5-4.5h3v9h-3V9zm4.5-3h3v12h-3V6zm4.5-3h3v15h-3V3z"/></svg><span class="nav-section-label">ABS Data</span><svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><polyline stroke-linecap="round" stroke-linejoin="round" stroke-width="2" points="9,18 15,12 9,6"/></svg></div><div class="nav-items open"><a class="nav-item active" data-id="abs-auto" href="/abs/performance/index.html?ac=loan" aria-current="page"><svg class="nav-item-icon nav-item-icon-art" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-2.4 -2.7) scale(1.1)" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 31.5 L3 29.5 Q3 27.6 5.1 27.1 L11.6 25.5 L16.2 19.3 Q17.3 18 19.4 18 L30.8 18 Q32.8 18 34 19.6 L38.2 25.4 L43.2 26.6 Q45 27.1 45 29.1 L45 31.5 L39 31.5 A5 5 0 0 0 29 31.5 L19 31.5 A5 5 0 0 0 9 31.5 L3 31.5 Z"/><path d="M26 18.3 L26 30"/><path d="M13.5 26 L26 26"/><circle cx="14" cy="31.5" r="4.2"/><circle cx="34" cy="31.5" r="4.2"/></g><circle cx="36" cy="12.5" r="11" fill="#fff" stroke="#16a34a" stroke-width="2.4"/><g fill="none" stroke="#16a34a" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="32.8" cy="9.6" r="3"/><path d="M35 11.8 41.5 18.3"/><path d="M38.6 15.4 40.6 13.4"/><path d="M41.5 18.3 43.5 16.3"/></g></svg><span>Auto Loan</span></a><a class="nav-item" data-id="abs-auto-lease" href="/abs/performance/index.html?ac=lease"><svg class="nav-item-icon nav-item-icon-art" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-2.4 -2.7) scale(1.1)" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 31.5 L3 29.5 Q3 27.6 5.1 27.1 L11.6 25.5 L16.2 19.3 Q17.3 18 19.4 18 L30.8 18 Q32.8 18 34 19.6 L38.2 25.4 L43.2 26.6 Q45 27.1 45 29.1 L45 31.5 L39 31.5 A5 5 0 0 0 29 31.5 L19 31.5 A5 5 0 0 0 9 31.5 L3 31.5 Z"/><path d="M26 18.3 L26 30"/><path d="M13.5 26 L26 26"/><circle cx="14" cy="31.5" r="4.2"/><circle cx="34" cy="31.5" r="4.2"/></g><circle cx="36" cy="12.5" r="11" fill="#fff" stroke="#d97706" stroke-width="2.4"/><g fill="none" stroke="#d97706" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="30.5" y="7.7" width="11" height="9.6" rx="1.7"/><line x1="30.5" y1="11.1" x2="41.5" y2="11.1"/><line x1="33.8" y1="5.9" x2="33.8" y2="9"/><line x1="38.2" y1="5.9" x2="38.2" y2="9"/></g></svg><span>Auto Lease</span></a><a class="nav-item" data-id="abs-credit-card" href="/cc/index.html"><svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="6" width="20" height="13" rx="2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="2" y1="10.5" x2="22" y2="10.5" stroke-width="1.8" stroke-linecap="round"/><line x1="6" y1="15" x2="10" y2="15" stroke-width="1.8" stroke-linecap="round"/></svg><span>Credit Card</span></a><a class="nav-item" data-id="abs-issuance" href="/abs/issuance/index.html"><svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 3 2 8l10 5 10-5-10-5zM2 13l10 5 10-5M2 18l10 5 10-5"/></svg><span>Issuance</span></a></div></div>
+<div class="rail-divider"></div>
+<div class="nav-section"><a class="nav-section-header" data-id="macro-data" href="/macro/index.html"><svg class="nav-section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm0 0c-2.5 2.5-4 6-4 10s1.5 7.5 4 10m0-20c2.5 2.5 4 6 4 10s-1.5 7.5-4 10M2 12h20"/></svg><span class="nav-section-label">Macro</span></a></div>
+<div class="rail-divider"></div>
+<div class="nav-section"><a class="nav-section-header" data-id="data-calendar" href="/abs/schedule/Data_Cal_Calendar.html"><svg class="nav-section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="4" width="18" height="18" rx="2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="16" y1="2" x2="16" y2="6" stroke-linecap="round" stroke-width="1.8"/><line x1="8" y1="2" x2="8" y2="6" stroke-linecap="round" stroke-width="1.8"/><line x1="3" y1="10" x2="21" y2="10" stroke-linecap="round" stroke-width="1.8"/></svg><span class="nav-section-label">Data Calendar</span></a></div>
+<div class="rail-divider"></div>
+<div class="nav-section"><a class="nav-section-header nav-section-link" href="https://www.consumercreditmatters.com/newsletter" target="_blank" rel="noopener"><svg class="nav-section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/><polyline stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" points="14,2 14,8 20,8"/><line x1="8" y1="13" x2="16" y2="13" stroke-linecap="round" stroke-width="1.8"/><line x1="8" y1="17" x2="16" y2="17" stroke-linecap="round" stroke-width="1.8"/></svg><span class="nav-section-label">Weekly Newsletter</span><svg class="nav-item-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg></a></div>
+<div class="rail-divider"></div>
+<div class="nav-section"><a class="nav-section-header nav-section-link" href="https://www.consumercreditmatters.com/podcasts" target="_blank" rel="noopener"><svg class="nav-section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 10a7 7 0 0 1-14 0"/><line x1="12" y1="19" x2="12" y2="23" stroke-linecap="round" stroke-width="1.8"/><line x1="8" y1="23" x2="16" y2="23" stroke-linecap="round" stroke-width="1.8"/></svg><span class="nav-section-label">Podcast</span><svg class="nav-item-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg></a></div>
+</nav>
+<nav id="mobile-nav" aria-label="Mobile navigation"><div id="mobile-nav-sections"><button type="button" class="mobile-nav-pill active" data-section-id="abs-data" aria-expanded="true"><span class="pill-label"><span class="pill-label-full">ABS Data</span><span class="pill-label-short">ABS</span></span><svg class="pill-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><polyline stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" points="6,9 12,15 18,9"/></svg></button><a class="mobile-nav-pill" data-section-id="macro-data" href="/macro/index.html"><span class="pill-label"><span class="pill-label-full">Macro</span><span class="pill-label-short">Macro</span></span></a><a class="mobile-nav-pill" data-section-id="data-calendar" href="/abs/schedule/Data_Cal_Calendar.html"><span class="pill-label"><span class="pill-label-full">Data Calendar</span><span class="pill-label-short">Calendar</span></span></a><a class="mobile-nav-pill" data-section-id="newsletter" href="https://www.consumercreditmatters.com/newsletter" target="_blank" rel="noopener"><span class="pill-label"><span class="pill-label-full">Weekly Newsletter</span><span class="pill-label-short">Weekly Newsletter</span></span><svg class="nav-item-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg></a><a class="mobile-nav-pill" data-section-id="podcast" href="https://www.consumercreditmatters.com/podcasts" target="_blank" rel="noopener"><span class="pill-label"><span class="pill-label-full">Podcast</span><span class="pill-label-short">Podcast</span></span><svg class="nav-item-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg></a></div><div class="mobile-nav-items" id="mobile-nav-items" data-section-id="abs-data"><a class="mobile-nav-sub active" data-item-id="abs-auto" href="/abs/performance/index.html?ac=loan">Auto Loan</a><a class="mobile-nav-sub" data-item-id="abs-auto-lease" href="/abs/performance/index.html?ac=lease">Auto Lease</a><a class="mobile-nav-sub" data-item-id="abs-credit-card" href="/cc/index.html">Credit Card</a><a class="mobile-nav-sub" data-item-id="abs-issuance" href="/abs/issuance/index.html">Issuance</a></div></nav>
+<main id="main">
+<div id="panel-bar"><span id="panel-section-label">ABS Data</span><span class="panel-sep" id="panel-sep">›</span><span id="panel-title">Auto Loan</span></div>
+<div id="panel-content">
+<div class="ccm-page">
+<div class="bb-page">
+<section class="shelf-intro"><h1>Bridgecrest <span class="ticker">BLAST</span></h1><ul class="shelf-summary"><li><b>60+ day delinquency</b> 8.35% of loans, Aug 2026</li><li><b>Annualized net loss</b> 13.73% of average pool balance, Aug 2026</li><li><b>First-time repossessions</b> 1.27% of loans, Aug 2026</li><li><b>Deals</b> 12 active · 1 wound down · data through Aug 2026</li></ul><p class="shelf-caveats">Loans without a consumer credit score are excluded.</p></section>
 
 <div class="wrap">
-<section class="shelf-intro"><h1>Bridgecrest <span class="ticker">BLAST</span></h1><ul class="shelf-summary"><li><b>60+ day delinquency</b> 8.35% of loans, Aug 2026</li><li><b>Annualized net loss</b> 13.73% of average pool balance, Aug 2026</li><li><b>First-time repossessions</b> 1.27% of loans, Aug 2026</li><li><b>Deals</b> 12 active · 1 wound down · data through Aug 2026</li></ul><p class="shelf-caveats">Loans without a consumer credit score are excluded.</p></section>
   <div class="selector">
     <div class="seg" id="assetseg"><button class="on" data-asset="loan">Loans</button><button data-asset="lease">Leases</button></div>
     <span class="sellabel">Issuers:</span>
@@ -183,5 +132,10 @@ if (window.self !== window.top) {
 <script src="js/performance/deals.js"></script>
 <script src="js/performance/controls.js"></script>
 <script src="js/performance/boot.js"></script>
+</div>
+</div>
+</div>
+</main>
+</div>
 </body>
 </html>

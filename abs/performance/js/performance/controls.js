@@ -87,9 +87,9 @@ window.unsel=t=>{ if(selected.length<2)return; selected=selected.filter(x=>x!==t
 window.makeSubject=t=>{ selected=[t,...selected.filter(x=>x!==t)]; buildIssPanel(); refresh(); };
 el('issbtn').onclick=e=>{ e.stopPropagation(); buildIssPanel(); el('isspanel').classList.toggle('open'); };
 document.addEventListener('click',e=>{ if(!e.target.closest('#isswrap')) closeAdd(); });
-// Inside the site frame, Auto Loan and Auto Lease both open this page; tell the
-// frame which one is showing so its nav highlight follows the Loans | Leases toggle.
-function tellFrameAsset(){ if(window.self!==window.top){ try{ window.parent.postMessage({type:'ccm-asset', asset:assetClass}, '*'); }catch(e){} } }
+// Auto Loan and Auto Lease are both this page; the frame's highlight and
+// breadcrumb follow the Loans | Leases toggle.
+function tellFrameAsset(){ if(window.ccmFrame) ccmFrame.setActive(assetClass==='lease' ? 'abs-auto-lease' : 'abs-auto'); }
 // Tabs that belong to one asset class (Repossessions: loan; Residuals: lease).
 function syncTabs(){ document.querySelectorAll('.mtabs button[data-asset]').forEach(b=>{ b.hidden=b.dataset.asset!==assetClass; });
   // Deals describes one shelf; All Issuers has none, so the tab is greyed out
@@ -124,7 +124,6 @@ document.querySelectorAll('#xfseg button').forEach(b=>b.onclick=()=>{ transform=
 // only; redrawing then made the chart jump, so a phone redraws only when the
 // width changes (rotation).
 let _rz, _rzW=window.innerWidth; addEventListener('resize',()=>{ clearTimeout(_rz); _rz=setTimeout(()=>{
-  if(FRAME_VIEW) return;   // embedded on a phone: the frame's ccm-viewport drives redraws
   const changed = applyViewMode();
   if(isPhone() && !changed && window.innerWidth===_rzW) return;
   _rzW=window.innerWidth;

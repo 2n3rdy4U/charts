@@ -187,48 +187,20 @@ window.setRange=v=>{ range = v==='all'?'all':parseInt(v); renderChart(); };
 const CHART_CFG={axis:{labelFontSize:13,titleFontSize:14},
   title:{anchor:"middle",fontSize:15,subtitleFontSize:11},
   view:{continuousHeight:300,continuousWidth:300}};
-/* A phone either way up: portrait (narrow) or landscape (short). Both get the
-   phone layout; landscape also sizes the chart to the screen. The layout is
-   carried by two classes on <html> (bb-phone, bb-land), set from the screen:
-   this window's own size when the page is opened on its own; the site frame's
-   screen size when embedded — on a phone the frame grows this page to its full
-   height, so its own size no longer says which way up the phone is held. */
-const EMBEDDED = window.self !== window.top;
-let FRAME_VIEW = null;   // {vw, vh, visible} from the site frame (ccm-viewport), phone layouts only
+// The page is its own window now (the frame is stamped into it), so the
+// layout classes come from this window's size, and the visible height for a
+// landscape chart is the frame's content area, which is what scrolls.
 const isPhone=()=>document.documentElement.classList.contains('bb-phone');
 const isLandscapePhone=()=>document.documentElement.classList.contains('bb-land');
 function applyViewMode(){   // returns true when the layout changed
-  const w = FRAME_VIEW ? FRAME_VIEW.vw : innerWidth, h = FRAME_VIEW ? FRAME_VIEW.vh : innerHeight;
+  const w = innerWidth, h = innerHeight;
   const c = document.documentElement.classList, before = c.contains('bb-phone') + ':' + c.contains('bb-land');
   const land = w > h && h <= 500;
   c.toggle('bb-land', land); c.toggle('bb-phone', land || w <= 640);
   return before !== c.contains('bb-phone') + ':' + c.contains('bb-land');
 }
-// The height of screen the chart can fill: the frame's scrolling area when
-// embedded, else this window.
-const visibleHeight = () => (FRAME_VIEW && FRAME_VIEW.visible) || window.innerHeight;
-if(EMBEDDED){
-  let _lastVW = null;
-  addEventListener('message', e=>{
-    if(e.source !== window.parent || !e.data || e.data.type !== 'ccm-viewport') return;
-    FRAME_VIEW = e.data.phone ? {vw:e.data.vw, vh:e.data.vh, visible:e.data.visible} : null;
-    const changed = applyViewMode(), rotated = _lastVW !== null && _lastVW !== e.data.vw;
-    _lastVW = e.data.vw;
-    // Redraw only when the layout or the width changed: the visible height also
-    // moves as Safari's bars slide in and out, and redrawing on that is jank.
-    if((changed || rotated) && SHELVES[selected[0]]){ _focusNext = true; renderChart(); }
-  });
-  // Report this page's height so the frame can grow to fit it on a phone (the
-  // frame's listener ignores it on desktop) — the same message as the Explorer.
-  const postHeight = () => { const h = Math.max(document.documentElement.scrollHeight, document.body ? document.body.scrollHeight : 0);
-    try{ window.parent.postMessage({type:'cm-iframe-height', height:h}, '*'); }catch(e){} };
-  // Reported on the next frame, not inside the observer's own pass: the frame
-  // resizes this page in response, and doing that mid-pass is a layout loop.
-  let _ph = 0; const postHeightSoon = () => { cancelAnimationFrame(_ph); _ph = requestAnimationFrame(postHeight); };
-  if(typeof ResizeObserver !== 'undefined') addEventListener('DOMContentLoaded', ()=> new ResizeObserver(postHeightSoon).observe(document.body));
-  addEventListener('load', ()=>{ postHeight(); setTimeout(postHeight, 300); setTimeout(postHeight, 1500); });
-  try{ window.parent.postMessage({type:'ccm-viewport-request'}, '*'); }catch(e){}
-}
+const scroller = () => document.getElementById('main') || document.scrollingElement;
+const visibleHeight = () => (scroller() && scroller().clientHeight) || window.innerHeight;
 // Legend under the plot, columns by screen width — the Explorer's legendColumns().
 const legendCols=()=>isPhone()?4:window.matchMedia('(max-width:1024px)').matches?6:9;
 // Issuer names ("Santander (SDART)") are long: fewer, wider columns on a phone.
@@ -319,14 +291,10 @@ function chartHeight(nEntries, nCols){
 }
 // Landscape phone: after loading, rotating, or any tab/control change, settle
 // the page on the chart so it fills the screen and the result is in view.
-// Inside the site frame this page is grown to full height and the FRAME
-// scrolls, so the page asks it to (ccm-child-scroll, y = the chart's top).
 let _focusNext = true;
 function focusChart(){
   if(!isLandscapePhone()) return;
-  const r = el('export-region'); if(!r) return;
-  if(EMBEDDED){ try{ window.parent.postMessage({type:'ccm-child-scroll', y: r.getBoundingClientRect().top + window.scrollY}, '*'); }catch(e){} }
-  else r.scrollIntoView({block:'start', behavior:'smooth'});
+  const r = el('export-region'); if(r) r.scrollIntoView({block:'start', behavior:'smooth'});
 }
 document.addEventListener('click', e=>{ if(e.target.closest('.mtabs, .chartrail, #assetseg, #isspanel')) _focusNext=true; }, true);
 addEventListener('orientationchange', ()=>{ _focusNext=true; });

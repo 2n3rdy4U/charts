@@ -4,7 +4,7 @@
   --mono:ui-monospace,Menlo,monospace; --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
 }
 *{box-sizing:border-box}
-body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--bg);font-size:14px;line-height:1.45}
+.bb-page{margin:0;font-family:var(--sans);color:var(--ink);background:var(--bg);font-size:14px;line-height:1.45;min-height:100%}
 a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
 .live{background:#eaf6ef;border-bottom:1px solid #bfe0cd;color:#1f6b43;font-size:12px;padding:7px 24px;text-align:center}
 .live b{font-weight:600}
