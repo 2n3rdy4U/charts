@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="stylesheet" href="/style.css"><script src="/kit.js" defer></script>
+<meta charset="utf-8">
+
+<title>Credit Card ABS Performance</title>
+<script>
+  // Phone layout classes, set before the page paints (css/performance.css keys
+  // its phone rules to them).
+  (function(){ var w=innerWidth, h=innerHeight, c=document.documentElement.classList,
+                   land = w>h && h<=500;
+               c.toggle('bb-land', land); c.toggle('bb-phone', land || w<=640); })();
+</script>
+<script src="/assets/vendor/vega.min.js"></script>
+<script src="/assets/vendor/vega-lite.min.js"></script>
+<script src="/assets/vendor/vega-embed.min.js"></script>
+<script>
+  // Share/export wiring — same shared library and conventions as the auto page.
+  window.CC_CHART_META             = { title: "Credit Card ABS Performance",
+                                       url: "https://data.consumercreditmatters.com/abs/credit-card/" };
+  window.CC_CHART_SOURCE           = "SEC Form 10-D servicer distribution reports";
+  window.CC_CHART_TARGETS          = ".chartrail";
+  window.CC_CHART_CAPTURE_SELECTOR = ["#chart"];
+  window.CC_CHART_DYNAMIC_TITLE_SELECTOR    = "#viewTitle";
+  window.CC_CHART_DYNAMIC_SUBTITLE_SELECTOR = "#chartcap";
+</script>
+<script src="../../share/share.js"></script>
+<link rel="stylesheet" href="css/performance.css">
+  <script data-goatcounter="https://consumercreditmatters.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body class="framed">
+<div id="app">
+<header id="header"><button id="hamburger" aria-label="Open navigation" aria-expanded="false"><span></span><span></span><span></span></button><a href="/" class="brand" aria-label="Consumer Credit Matters home"><img src="/assets/brand/logo-horizontal-white.png" alt="Consumer Credit Matters" class="brand-logo"></a><nav class="header-right"><a href="https://www.consumercreditmatters.com/disclaimer" rel="noopener" class="header-disclaimer">Disclaimer</a><a href="https://www.consumercreditmatters.com/subscribe" rel="noopener" class="btn-primary">Subscribe</a></nav></header>
+<div id="nav-backdrop" aria-hidden="true"></div>
+<nav id="rail" aria-label="Data modules">
+<div class="nav-section"><div class="nav-section-header open" role="button" aria-expanded="true" data-section="abs-data"><svg class="nav-section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 13.5h3v4.5H3v-4.5zm4.5-4.5h3v9h-3V9zm4.5-3h3v12h-3V6zm4.5-3h3v15h-3V3z"/></svg><span class="nav-section-label">ABS Data</span><svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><polyline stroke-linecap="round" stroke-linejoin="round" stroke-width="2" points="9,18 15,12 9,6"/></svg></div><div class="nav-items open"><a class="nav-item" data-id="abs-auto" href="/abs/performance/index.html?ac=loan"><svg class="nav-item-icon nav-item-icon-art" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-2.4 -2.7) scale(1.1)" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 31.5 L3 29.5 Q3 27.6 5.1 27.1 L11.6 25.5 L16.2 19.3 Q17.3 18 19.4 18 L30.8 18 Q32.8 18 34 19.6 L38.2 25.4 L43.2 26.6 Q45 27.1 45 29.1 L45 31.5 L39 31.5 A5 5 0 0 0 29 31.5 L19 31.5 A5 5 0 0 0 9 31.5 L3 31.5 Z"/><path d="M26 18.3 L26 30"/><path d="M13.5 26 L26 26"/><circle cx="14" cy="31.5" r="4.2"/><circle cx="34" cy="31.5" r="4.2"/></g><circle cx="36" cy="12.5" r="11" fill="#fff" stroke="#16a34a" stroke-width="2.4"/><g fill="none" stroke="#16a34a" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="32.8" cy="9.6" r="3"/><path d="M35 11.8 41.5 18.3"/><path d="M38.6 15.4 40.6 13.4"/><path d="M41.5 18.3 43.5 16.3"/></g></svg><span>Auto Loan</span></a><a class="nav-item" data-id="abs-auto-lease" href="/abs/performance/index.html?ac=lease"><svg class="nav-item-icon nav-item-icon-art" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-2.4 -2.7) scale(1.1)" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 31.5 L3 29.5 Q3 27.6 5.1 27.1 L11.6 25.5 L16.2 19.3 Q17.3 18 19.4 18 L30.8 18 Q32.8 18 34 19.6 L38.2 25.4 L43.2 26.6 Q45 27.1 45 29.1 L45 31.5 L39 31.5 A5 5 0 0 0 29 31.5 L19 31.5 A5 5 0 0 0 9 31.5 L3 31.5 Z"/><path d="M26 18.3 L26 30"/><path d="M13.5 26 L26 26"/><circle cx="14" cy="31.5" r="4.2"/><circle cx="34" cy="31.5" r="4.2"/></g><circle cx="36" cy="12.5" r="11" fill="#fff" stroke="#d97706" stroke-width="2.4"/><g fill="none" stroke="#d97706" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="30.5" y="7.7" width="11" height="9.6" rx="1.7"/><line x1="30.5" y1="11.1" x2="41.5" y2="11.1"/><line x1="33.8" y1="5.9" x2="33.8" y2="9"/><line x1="38.2" y1="5.9" x2="38.2" y2="9"/></g></svg><span>Auto Lease</span></a><a class="nav-item active" data-id="abs-credit-card" href="/abs/credit-card/index.html" aria-current="page"><svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="6" width="20" height="13" rx="2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="2" y1="10.5" x2="22" y2="10.5" stroke-width="1.8" stroke-linecap="round"/><line x1="6" y1="15" x2="10" y2="15" stroke-width="1.8" stroke-linecap="round"/></svg><span>Credit Card</span></a><a class="nav-item" data-id="abs-issuance" href="/abs/issuance/index.html"><svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 3 2 8l10 5 10-5-10-5zM2 13l10 5 10-5M2 18l10 5 10-5"/></svg><span>Issuance</span></a></div></div>
+<div class="rail-divider"></div>
+<div class="nav-section"><a class="nav-section-header" data-id="macro-data" href="/macro/index.html"><svg class="nav-section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm0 0c-2.5 2.5-4 6-4 10s1.5 7.5 4 10m0-20c2.5 2.5 4 6 4 10s-1.5 7.5-4 10M2 12h20"/></svg><span class="nav-section-label">Macro</span></a></div>
+<div class="rail-divider"></div>
+<div class="nav-section"><a class="nav-section-header" data-id="data-calendar" href="/abs/schedule/Data_Cal_Calendar.html"><svg class="nav-section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="4" width="18" height="18" rx="2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="16" y1="2" x2="16" y2="6" stroke-linecap="round" stroke-width="1.8"/><line x1="8" y1="2" x2="8" y2="6" stroke-linecap="round" stroke-width="1.8"/><line x1="3" y1="10" x2="21" y2="10" stroke-linecap="round" stroke-width="1.8"/></svg><span class="nav-section-label">Data Calendar</span></a></div>
+<div class="rail-divider"></div>
+<div class="nav-section"><a class="nav-section-header nav-section-link" href="https://www.consumercreditmatters.com/newsletter" target="_blank" rel="noopener"><svg class="nav-section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/><polyline stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" points="14,2 14,8 20,8"/><line x1="8" y1="13" x2="16" y2="13" stroke-linecap="round" stroke-width="1.8"/><line x1="8" y1="17" x2="16" y2="17" stroke-linecap="round" stroke-width="1.8"/></svg><span class="nav-section-label">Weekly Newsletter</span><svg class="nav-item-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg></a></div>
+<div class="rail-divider"></div>
+<div class="nav-section"><a class="nav-section-header nav-section-link" href="https://www.consumercreditmatters.com/podcasts" target="_blank" rel="noopener"><svg class="nav-section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 10a7 7 0 0 1-14 0"/><line x1="12" y1="19" x2="12" y2="23" stroke-linecap="round" stroke-width="1.8"/><line x1="8" y1="23" x2="16" y2="23" stroke-linecap="round" stroke-width="1.8"/></svg><span class="nav-section-label">Podcast</span><svg class="nav-item-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg></a></div>
+</nav>
+<nav id="mobile-nav" aria-label="Mobile navigation"><div id="mobile-nav-sections"><button type="button" class="mobile-nav-pill active" data-section-id="abs-data" aria-expanded="true"><span class="pill-label"><span class="pill-label-full">ABS Data</span><span class="pill-label-short">ABS</span></span><svg class="pill-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><polyline stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" points="6,9 12,15 18,9"/></svg></button><a class="mobile-nav-pill" data-section-id="macro-data" href="/macro/index.html"><span class="pill-label"><span class="pill-label-full">Macro</span><span class="pill-label-short">Macro</span></span></a><a class="mobile-nav-pill" data-section-id="data-calendar" href="/abs/schedule/Data_Cal_Calendar.html"><span class="pill-label"><span class="pill-label-full">Data Calendar</span><span class="pill-label-short">Calendar</span></span></a><a class="mobile-nav-pill" data-section-id="newsletter" href="https://www.consumercreditmatters.com/newsletter" target="_blank" rel="noopener"><span class="pill-label"><span class="pill-label-full">Weekly Newsletter</span><span class="pill-label-short">Weekly Newsletter</span></span><svg class="nav-item-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg></a><a class="mobile-nav-pill" data-section-id="podcast" href="https://www.consumercreditmatters.com/podcasts" target="_blank" rel="noopener"><span class="pill-label"><span class="pill-label-full">Podcast</span><span class="pill-label-short">Podcast</span></span><svg class="nav-item-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg></a></div><div class="mobile-nav-items" id="mobile-nav-items" data-section-id="abs-data"><a class="mobile-nav-sub" data-item-id="abs-auto" href="/abs/performance/index.html?ac=loan">Auto Loan</a><a class="mobile-nav-sub" data-item-id="abs-auto-lease" href="/abs/performance/index.html?ac=lease">Auto Lease</a><a class="mobile-nav-sub active" data-item-id="abs-credit-card" href="/abs/credit-card/index.html">Credit Card</a><a class="mobile-nav-sub" data-item-id="abs-issuance" href="/abs/issuance/index.html">Issuance</a></div></nav>
+<main id="main">
+<div id="panel-bar"><span id="panel-section-label">ABS Data</span><span class="panel-sep" id="panel-sep">›</span><span id="panel-title">Credit Card</span></div>
+<div id="panel-content">
+<div class="ccm-page">
+<div class="bb-page">
+
+<div class="wrap">
+  <div class="selector">
+    <span class="sellabel">Trusts:</span>
+    <div class="multi-sel" id="isswrap">
+      <button class="multi-sel-btn" id="issbtn" type="button">Select trusts ▾</button>
+      <div class="multi-sel-panel" id="isspanel"></div>
+    </div>
+  </div>
+  <div class="ctxline" id="ctxline"></div>
+
+  <div class="mtabs">
+    <button class="on" data-tab="dq">Delinquencies</button>
+    <button data-tab="co">Charge-offs</button>
+    <button data-tab="pr">Payment Rate</button>
+    <button data-tab="yld">Yield &amp; Excess Spread</button>
+    <button data-tab="bal">Balance</button>
+    <button data-tab="deals">Deals</button>
+  </div>
+
+  <div class="layout">
+    <div class="main">
+      <div class="panel" id="perfPanel">
+        <div class="chartwrap">
+          <div class="chartmain" id="export-region">
+            <div class="chart-title" id="viewTitle"></div>
+            <div class="chart-cap" id="chartcap"></div>
+            <div id="chart"></div>
+            <div class="chart-src" id="chartsrc"></div>
+          </div>
+          <div class="chartrail">
+            <div class="cgroup" id="seriesgroup"><div class="cglabel">Series</div><div class="serieschips" id="serieschips"></div></div>
+            <div class="cgroup" id="dqctl"><div class="cglabel">DQ bucket</div><div class="seg" id="dqseg"><button class="on" data-dq="dq_30plus">30+</button><button data-dq="dq_30_60">30–60</button><button data-dq="dq_61_90">61–90</button><button data-dq="dq_91_120">91–120</button><button data-dq="dq_120plus">120+</button></div></div>
+            <div class="cgroup" id="yldctl" hidden><div class="cglabel">Measure</div><div class="seg" id="yldseg"><button class="on" data-yld="portfolio_yield">Portfolio yield</button><button data-yld="excess_spread">Excess spread</button></div></div>
+            <div class="cgroup" id="xfctl" hidden><div class="cglabel">Year over year</div><div class="seg" id="xfseg"><button class="on" data-transform="rate">Rate</button><button data-transform="yoy-delta">Change (pp)</button><button data-transform="yoy-pct">Change (%)</button></div></div>
+            <div class="cgroup"><div class="cglabel">Display</div><div class="seg" id="outseg"><button class="on" data-out="chart">Chart</button><button data-out="table">Table</button><button id="seasbtn" data-out="seasonal">Year overlay</button></div></div>
+            <div class="cgroup"><div class="cglabel">Macro overlay</div><select id="macrosel" class="ovsel"><option value="">＋ overlay</option></select></div>
+            <div class="cgroup" id="rangegroup"><div class="cglabel">Range</div><div class="rangebar" id="rangebar"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" id="dealsPanel" hidden>
+        <h2>Series issued from this trust · <span id="ndeals"></span> <span style="text-transform:none;font-weight:400;color:var(--muted)" id="dealsubj"></span>
+</h2>
+        <div id="dealsbody"></div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<script src="js/format.js"></script>
+<script src="js/credit_card/state.js"></script>
+<script src="js/kit/core.js"></script>
+<script src="js/credit_card/chart.js"></script>
+<script src="js/credit_card/deals.js"></script>
+<script src="js/credit_card/controls.js"></script>
+<script src="js/credit_card/boot.js"></script>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body>
+</html>

@@ -1,0 +1,23 @@
+# Consumer Credit Matters — credit card ABS performance
+
+> Monthly performance of every SEC-registered U.S. credit card master trust, from SEC Form 10-D
+> servicer reports: delinquency, charge-offs, payment rate, yield, excess spread and receivables.
+
+## Trusts (one page each)
+
+- [American Express Credit Account Master Trust (AMXCA)](https://data.consumercreditmatters.com/abs/credit-card/AMXCA/) — data https://data.consumercreditmatters.com/abs/credit-card/data/AMXCA.json
+- [BA Credit Card Trust (BACCT)](https://data.consumercreditmatters.com/abs/credit-card/BACCT/) — data https://data.consumercreditmatters.com/abs/credit-card/data/BACCT.json
+- [Barclays Dryrock Issuance Trust (DRYROCK)](https://data.consumercreditmatters.com/abs/credit-card/DRYROCK/) — data https://data.consumercreditmatters.com/abs/credit-card/data/DRYROCK.json
+- [Capital One Multi-Asset Execution Trust (COMET)](https://data.consumercreditmatters.com/abs/credit-card/COMET/) — data https://data.consumercreditmatters.com/abs/credit-card/data/COMET.json
+- [Chase Issuance Trust (CHAIT)](https://data.consumercreditmatters.com/abs/credit-card/CHAIT/) — data https://data.consumercreditmatters.com/abs/credit-card/data/CHAIT.json
+- [Citibank Credit Card Issuance Trust (CCCIT)](https://data.consumercreditmatters.com/abs/credit-card/CCCIT/) — data https://data.consumercreditmatters.com/abs/credit-card/data/CCCIT.json
+- [World Financial Network Credit Card Master Note Trust (WFNN)](https://data.consumercreditmatters.com/abs/credit-card/WFNN/) — data https://data.consumercreditmatters.com/abs/credit-card/data/WFNN.json
+- [First National Master Note Trust (FNBO)](https://data.consumercreditmatters.com/abs/credit-card/FNBO/) — data https://data.consumercreditmatters.com/abs/credit-card/data/FNBO.json
+- [Synchrony Card Issuance Trust (SYNIT)](https://data.consumercreditmatters.com/abs/credit-card/SYNIT/) — data https://data.consumercreditmatters.com/abs/credit-card/data/SYNIT.json
+- [WF Card Issuance Trust (WFCARD)](https://data.consumercreditmatters.com/abs/credit-card/WFCARD/) — data https://data.consumercreditmatters.com/abs/credit-card/data/WFCARD.json
+- [All Trusts (ALL)](https://data.consumercreditmatters.com/abs/credit-card/ALL/) — data https://data.consumercreditmatters.com/abs/credit-card/data/ALL.json
+
+## Data files
+
+- `https://data.consumercreditmatters.com/abs/credit-card/data/<TICKER>.json` — a trust's monthly series, latest readings, its note series and definitions
+- `https://data.consumercreditmatters.com/abs/credit-card/data/ALL.json` — All Trusts, weighted by receivables

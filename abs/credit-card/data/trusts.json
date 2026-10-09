@@ -1,0 +1,68 @@
+[
+ {
+  "t": "AMXCA",
+  "label": "American Express",
+  "name": "American Express Credit Account Master Trust",
+  "asset": "card"
+ },
+ {
+  "t": "BACCT",
+  "label": "Bank of America",
+  "name": "BA Credit Card Trust",
+  "asset": "card"
+ },
+ {
+  "t": "DRYROCK",
+  "label": "Barclays Dryrock",
+  "name": "Barclays Dryrock Issuance Trust",
+  "asset": "card"
+ },
+ {
+  "t": "COMET",
+  "label": "Capital One",
+  "name": "Capital One Multi-Asset Execution Trust",
+  "asset": "card"
+ },
+ {
+  "t": "CHAIT",
+  "label": "Chase",
+  "name": "Chase Issuance Trust",
+  "asset": "card"
+ },
+ {
+  "t": "CCCIT",
+  "label": "Citi",
+  "name": "Citibank Credit Card Issuance Trust",
+  "asset": "card"
+ },
+ {
+  "t": "WFNN",
+  "label": "Comenity (WFN)",
+  "name": "World Financial Network Credit Card Master Note Trust",
+  "asset": "card"
+ },
+ {
+  "t": "FNBO",
+  "label": "First National",
+  "name": "First National Master Note Trust",
+  "asset": "card"
+ },
+ {
+  "t": "SYNIT",
+  "label": "Synchrony",
+  "name": "Synchrony Card Issuance Trust",
+  "asset": "card"
+ },
+ {
+  "t": "WFCARD",
+  "label": "Wells Fargo",
+  "name": "WF Card Issuance Trust",
+  "asset": "card"
+ },
+ {
+  "t": "ALL",
+  "label": "All Trusts",
+  "name": "All Trusts",
+  "asset": "card"
+ }
+]

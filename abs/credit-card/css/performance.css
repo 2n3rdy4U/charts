@@ -1,0 +1,261 @@
+:root{
+  --ink:#1a2230; --muted:#6b7585; --line:#e4e8ef; --bg:#f6f8fb;
+  --accent:#2f6db5; --accent-soft:#9fc0e6; --loan:#2f6db5; --green:#2e8b57; --amber:#b5762f; --pros:#3b8a6e;
+  --good:#2e8b57; --bad:#c0492f; --panel:#fff;
+  --mono:ui-monospace,Menlo,monospace; --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+/* .bb-page is the page's root INSIDE the site frame (site_frame.wrap), where
+   the frame's content area is the scroll container; the rules a standalone
+   page once put on <body> live here. */
+.bb-page{margin:0;font-family:var(--sans);color:var(--ink);background:var(--bg);font-size:14px;line-height:1.45;min-height:100%}
+a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+.mono{font-family:var(--mono)}
+.wrap{max-width:1280px;margin:0 auto;padding:16px 24px 28px}
+
+.selector{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:10px 0 6px}
+.sellabel{font-size:12.5px;color:var(--muted);font-weight:600}
+#chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:7px;border-radius:20px;padding:6px 11px;font-size:13px;font-weight:600}
+.chip.sel{border:1px solid var(--accent-soft);background:#eaf2fb;color:var(--accent)}
+.chip.add{border:1px dashed #b9c4d4;background:#fff;color:var(--accent);cursor:pointer}
+.chip .sw{width:10px;height:10px;border-radius:2px}
+.chip .star{color:#e0a92b} .chip .x{color:var(--muted);cursor:pointer;font-weight:400} .chip .mk{font-size:11px;color:var(--muted);cursor:pointer;font-weight:400}
+.addwrap{position:relative;display:inline-flex}
+.addpop{position:absolute;top:calc(100% + 6px);left:0;z-index:50;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 30px rgba(20,30,50,.15);width:266px;padding:8px}
+.addsearch{width:100%;box-sizing:border-box;border:1px solid var(--line);border-radius:7px;padding:7px 10px;font-size:13px;margin-bottom:6px;outline:none}
+.addsearch:focus{border-color:var(--accent)}
+.addlist{max-height:300px;overflow:auto}
+.addopt{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:7px 9px;border-radius:7px;cursor:pointer;font-size:13px;color:var(--ink)}
+.addopt:hover{background:#f1f5fb}
+.addopt .tk{font:600 11px ui-monospace,SFMono-Regular,monospace;color:var(--muted);letter-spacing:.2px}
+.addempty{padding:10px 9px;color:var(--muted);font-size:12.5px;font-style:italic}
+.btn{border:1px solid var(--line);background:#fff;border-radius:6px;padding:7px 13px;font-size:12.5px;color:var(--ink);cursor:pointer}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.subjtag{font-size:11.5px;color:var(--muted);margin:2px 0 8px}.subjtag b{color:var(--accent)}
+.chart-title{font-size:16px;font-weight:600;color:var(--ink);margin:10px 0 2px;text-align:center}
+/* The table is wider than the panel on purpose — many deals. It scrolled
+   already, but macOS overlay scrollbars only appear mid-gesture, so it read
+   as cut off. Persistent bar + sticky label column + edge shade. */
+.otscroll{overflow:auto;max-height:360px;position:relative;
+          background:linear-gradient(to left,rgba(0,0,0,.055),transparent 22px) right/26px 100% no-repeat}
+.otscroll::-webkit-scrollbar{height:10px;width:10px}
+.otscroll::-webkit-scrollbar-thumb{background:#c3cad6;border-radius:6px}
+.otscroll::-webkit-scrollbar-thumb:hover{background:#a7b1c1}
+.otscroll::-webkit-scrollbar-track{background:#eef1f6;border-radius:6px}
+.otscroll{scrollbar-width:thin;scrollbar-color:#c3cad6 #eef1f6}
+.otscroll table.otable td:first-child,
+.otscroll table.otable th:first-child{position:sticky;left:0;z-index:2;background:#fff;
+          box-shadow:1px 0 0 var(--line)}
+.chart-src{font-size:11px;color:var(--muted);margin:6px 0 0;min-height:15px}
+.chart-src a{color:inherit;text-decoration:underline}
+.chartrail .cc-share-btn{position:static;margin-top:auto;align-self:flex-end;
+  background:#fff;border:1px solid var(--line);border-radius:7px}
+.chartrail .cc-share-btn:hover{border-color:#c3cad6}
+.muted{color:var(--muted)}
+.multi-sel{position:relative;display:inline-block}
+.multi-sel-btn{font-family:var(--sans);font-size:13px;padding:5px 10px;border:1px solid var(--line);
+  border-radius:7px;background:#fff;cursor:pointer;color:var(--ink);white-space:nowrap;
+  max-width:340px;min-width:180px;overflow:hidden;text-overflow:ellipsis;text-align:left}
+.multi-sel-btn:hover{border-color:#c3cad6}
+.multi-sel-panel{display:none;position:absolute;top:calc(100% + 4px);left:0;z-index:200;background:#fff;
+  border:1px solid var(--line);border-radius:7px;box-shadow:0 8px 24px rgba(16,24,40,.14);
+  padding:5px 0;min-width:250px;max-height:320px;overflow-y:auto}
+.multi-sel-panel.open{display:block}
+.multi-sel-panel label{display:flex;align-items:center;gap:7px;padding:4px 12px;font-size:12.5px;cursor:pointer}
+.multi-sel-panel label:hover{background:#f6f8fb}
+.multi-sel-sep{height:1px;background:var(--line);margin:4px 0}
+.mss-star{margin-left:auto;font-size:10.5px;color:var(--muted);padding:0 2px;cursor:pointer}
+.mss-star.on{color:var(--accent)}
+.mss-hint{padding:4px 12px 6px;font-size:11px;color:var(--muted)}
+
+/* Vega tooltip — same treatment as the live Explorer, which styles
+   #vg-tooltip-element in the site stylesheet and passes
+   tooltip:{disableDefaultStyle:true}. Build B keeps its own stylesheet, so
+   the rules live here with style.css's --radius/--shadow-tooltip resolved. */
+#vg-tooltip-element{visibility:hidden;position:fixed;z-index:1000;pointer-events:none;
+  background:rgba(31,41,55,.92);color:#fff;border:none;border-radius:8px;
+  box-shadow:0 4px 14px rgba(0,0,0,.25);
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  font-size:12.5px;padding:8px 12px;line-height:1.5;max-width:320px;word-wrap:break-word}
+#vg-tooltip-element.visible{visibility:visible}
+#vg-tooltip-element h2{margin:0 0 4px;padding:0;font-size:12.5px;font-weight:600;color:#fff}
+#vg-tooltip-element table{border-spacing:0}
+#vg-tooltip-element td{border:none;padding:2px 8px 2px 0}
+#vg-tooltip-element td.key{color:rgba(255,255,255,.7);font-weight:400;text-align:right}
+#vg-tooltip-element td.value{color:#fff;font-weight:600}
+.vega-embed svg .role-legend-entry rect.background{fill:none !important}
+
+.ctxline{font-size:11.5px;color:var(--muted);margin:2px 0 10px}
+.ctxline b{color:var(--ink);font-weight:600}
+
+.layout{display:grid;grid-template-columns:minmax(0,1fr);gap:22px;align-items:start}
+.panel{background:#fff;border:1px solid var(--line);border-radius:10px}
+.panel>h2{font-size:13px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:0;padding:13px 16px;border-bottom:1px solid var(--line);font-weight:600;display:flex;align-items:center;gap:10px}
+/* Tabs: the Explorer's (.mode-tabs) — underlined, not boxed. */
+.mtabs{display:flex;border-bottom:2px solid var(--line);margin:4px 0 0}
+.mtabs button{border:none;border-bottom:2px solid transparent;margin-bottom:-2px;background:none;padding:8px 16px 7px;
+  font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;white-space:nowrap;font-family:inherit}
+.mtabs button:hover{color:var(--ink)}
+.mtabs button:disabled{opacity:.4;cursor:not-allowed} .mtabs button:disabled:hover{color:var(--muted)}
+.multi-sel-panel label.off{opacity:.45;cursor:not-allowed}
+.mtabs button.on{color:#1e40af;border-bottom-color:#1e40af;font-weight:600}
+.chartwrap{display:grid;grid-template-columns:1fr 240px;gap:20px;align-items:stretch;padding:8px 16px 16px}
+.chartmain{min-width:0}
+.chartrail{display:flex;flex-direction:column;gap:15px;border-left:1px solid var(--line);padding:4px 0 0 18px}
+.cgroup{display:flex;flex-direction:column;gap:7px}
+.cgroup[hidden]{display:none}
+.cglabel{font-size:10px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);font-weight:600}
+.chartrail .seg{align-self:flex-start;flex-wrap:wrap} .chartrail .ovsel{width:100%} .chartrail .rangebar{padding:0}
+@media(max-width:860px){ .chartwrap{grid-template-columns:1fr} .chartrail{border-left:none;border-top:1px solid var(--line);padding:14px 0 0} }
+.seg{display:flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.seg{background:#eef1f6}
+.seg button{border:none;background:transparent;padding:6px 11px;font-size:12px;color:#55617a;cursor:pointer;border-right:1px solid var(--line)}
+.seg button:last-child{border-right:none}
+.seg button:hover:not(.on){background:#fff;color:var(--ink)}
+.seg button:last-child{border-right:none} .seg button.on{background:var(--accent);color:#fff;font-weight:600}
+.ctrllabel{font-size:10px;text-transform:uppercase;letter-spacing:.3px;color:var(--muted);font-weight:600;margin-right:2px}
+.ovsel{border:1px solid var(--line);border-radius:6px;padding:5px 22px 5px 9px;font-size:12px;background:#fff;color:var(--ink);cursor:pointer;appearance:none}
+.ovsel.on{border-color:#9c4fb5;background:#f5eefb;color:#9c4fb5;font-weight:600}
+.chart-cap{padding:0 0 6px;font-size:11.5px;color:var(--muted);text-align:center} .chart-cap b{color:var(--ink)}
+#chart{padding:4px 0 6px;min-height:380px}
+.rangebar{display:flex;align-items:center;gap:6px;padding:0 16px 12px;flex-wrap:wrap}
+.rangebar .rlab{font-size:10px;text-transform:uppercase;letter-spacing:.3px;color:var(--muted);font-weight:600;margin-right:4px}
+.rpill{border:1px solid var(--line);background:#fff;border-radius:16px;padding:4px 12px;font-size:12px;color:var(--muted);cursor:pointer}
+.rpill.on{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+.serieschips{display:flex;flex-direction:column;gap:7px;padding:0}
+.schip{display:flex;flex-wrap:wrap;align-items:center;gap:5px 6px;border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-size:11.5px}
+.schip .ssw{width:10px;height:10px;border-radius:2px;flex:none}
+.schip .snm{flex:1 1 60px;min-width:0;font-weight:600;color:var(--ink);line-height:1.3}
+.cgrp{display:inline-flex;border:1px solid var(--line);border-radius:5px;overflow:hidden}
+.cm{border:none;background:#fff;padding:2px 8px;font-size:11px;color:var(--muted);cursor:pointer;border-right:1px solid var(--line)}
+.cgrp .cm:last-child{border-right:none} .cm.on{background:var(--accent);color:#fff;font-weight:600}
+.chartph{min-height:280px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-style:italic;text-align:center;padding:0 30px}
+
+table.cmp,table.deals{width:100%;border-collapse:collapse;font-size:12.5px;font-variant-numeric:tabular-nums}
+.cmp th,.deals th{text-align:left;padding:9px 14px;font-size:11px;text-transform:uppercase;letter-spacing:.3px;color:var(--muted);border-bottom:2px solid var(--line)}
+.cmp td,.deals td{padding:9px 14px;border-bottom:1px solid var(--line)}
+.cmp td.num,.cmp th.num,.deals td.num,.deals th.num{text-align:right}
+.cmp tr.subj td{background:#eef5fc} .cmp tbody tr:hover,.deals tbody tr:hover{background:#fafcff}
+.pbadge{font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.3px;color:var(--accent);background:#dbeafe;border-radius:3px;padding:2px 6px}
+.sw2{width:10px;height:10px;border-radius:2px;display:inline-block;margin-right:7px;vertical-align:middle}
+.cmpfoot{padding:10px 14px;font-size:12px;color:var(--muted);border-top:1px solid var(--line);background:#fbfcfe;border-radius:0 0 10px 10px}
+.deals thead tr.grp th{font-size:10px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);font-weight:600;text-align:center;padding:8px 14px 3px;border-bottom:none}
+.deals .gsep{border-left:1px solid var(--line)}
+.deals th.num{text-align:center;vertical-align:bottom} .deals th .lbl{display:block;white-space:normal;max-width:5.6em;margin:0 auto;line-height:1.15} .deals th .basis{display:block;font-size:10px;font-weight:500;text-transform:none;letter-spacing:0;color:var(--muted);opacity:.85;margin-top:2px;white-space:nowrap}
+.deals td.tot{font-weight:600} .deals th.tot .lbl{color:var(--ink)}
+.deals td .deal{font-weight:600} .deals a.deal{color:inherit;text-decoration:none;border-bottom:1px solid #b9c6d8} .deals a.deal:hover{border-bottom-color:var(--accent,#2f6db5)}
+.deals .tag{display:inline-block;margin-left:6px;padding:1px 5px;font-size:9.5px;font-weight:700;letter-spacing:.4px;color:#2f6db5;background:#eaf1fb;border-radius:3px;vertical-align:1px}
+.deals tr.wound td{color:var(--muted)} .deals tr.wound .tag{color:var(--muted);background:#f0f2f5}
+.cmpfoot div{margin:3px 0}
+.otable{width:100%;border-collapse:collapse;font-size:12px;font-variant-numeric:tabular-nums}
+.otable th,.otable td{padding:6px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+.otable th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.3px;color:var(--muted)}
+.otable td.num,.otable th.num{text-align:right} .otable thead th{position:sticky;top:0;background:#fff;z-index:1}
+.otnote{font-size:11.5px;color:var(--muted);padding:9px 4px 2px}
+tr.woundtoggle td{background:#fafcff;text-align:center;padding:7px} tr.woundtoggle a{font-size:11.5px;color:var(--muted);font-weight:600;text-decoration:none;letter-spacing:.2px} tr.woundtoggle a:hover{color:var(--ink)}
+.docs{display:inline-flex;gap:4px;flex-wrap:wrap}.docpill{font-size:10px;border:1px solid var(--line);border-radius:4px;padding:1px 6px;color:var(--accent)}.docpill.psr{color:#7a5b16;border-color:#e8d79a;background:#fff8e8}
+
+.rail .group{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:14px}
+.rail h3{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:0 0 9px;font-weight:600}.rail h3 .sub{font-weight:400;text-transform:none;letter-spacing:0;color:var(--accent)}
+.keyrow{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px solid var(--line);font-size:12.5px}.keyrow:last-child{border-bottom:none}.keyrow .v{font-weight:600;text-align:right}
+.hint{font-size:12px;color:var(--muted);font-style:italic}
+.vega-embed{width:100%} .vega-embed summary{display:none}
+.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,12px);background:rgba(26,34,48,.94);color:#fff;
+       font-size:13px;padding:10px 16px;border-radius:8px;box-shadow:0 8px 24px rgba(16,24,40,.25);max-width:560px;
+       opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:500}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* Static shelf page (render_pages.py): the shelf's name and summary above the chart. */
+.shelf-intro{margin:14px 0 6px} .shelf-intro h1{font-size:22px;margin:0 0 6px;letter-spacing:-.2px}
+.shelf-intro .ticker{font-size:12px;font-weight:600;color:var(--muted);margin-left:8px;letter-spacing:.4px}
+.shelf-summary{list-style:none;padding:0;margin:0 0 4px;display:flex;flex-wrap:wrap;gap:6px 22px;font-size:13px}
+.shelf-caveats{font-size:12px;color:var(--muted);margin:4px 0 0;max-width:80ch}
+
+/* Source line: full on desktop; on a phone, one tappable "Source & notes". */
+.src-toggle{display:none;border:none;background:none;padding:0;font:inherit;color:var(--muted);text-decoration:underline;cursor:pointer}
+/* Touch screens have no hover: the Explorer hides the tooltip there rather
+   than leave one stuck on screen after a tap. */
+@media (hover:none){ #vg-tooltip-element{display:none !important} }
+
+/* Phone (portrait): the Explorer's arrangement — tabs slide sideways, the
+   controls sit ABOVE the chart as compact rows, the chart keeps a fixed height.
+   Phone layout, keyed to classes rather than a media query: Build B sets
+   html.bb-phone / html.bb-land from the screen — its own when opened on its
+   own, the site frame's when embedded (inside the frame the page is grown to
+   its full height, so its own size no longer says which way up the phone is). */
+  html.bb-phone .wrap{padding:8px 12px 20px}
+  html.bb-phone .selector{margin:6px 0 4px;gap:8px;flex-wrap:nowrap}
+  html.bb-phone .sellabel{display:none}
+  html.bb-phone #isswrap{flex:1;min-width:0}
+  html.bb-phone .multi-sel-btn{min-width:0;width:100%;max-width:none}
+  html.bb-phone .multi-sel-panel{min-width:0;width:100%}
+  html.bb-phone .ctxline{margin:2px 0 6px}
+  html.bb-phone .mtabs{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  html.bb-phone .mtabs::-webkit-scrollbar{display:none}
+  html.bb-phone .mtabs button{flex-shrink:0;min-height:36px;padding:7px 10px;font-size:12.5px}
+  html.bb-phone .panel{border:none;border-radius:0;background:transparent}
+  html.bb-phone .chartwrap{display:flex;flex-direction:column;padding:6px 0 0;gap:8px}
+  html.bb-phone .chartrail{order:-1;flex-direction:row;flex-wrap:wrap;gap:6px 10px;border:none;border-bottom:1px solid var(--line);padding:0 0 8px}
+  html.bb-phone .cgroup{flex-direction:row;align-items:center;gap:5px}
+  html.bb-phone .cglabel{font-size:10px;letter-spacing:.2px}
+  html.bb-phone #seriesgroup{display:none !important}
+  html.bb-phone .seg button{padding:5px 8px;font-size:12px}
+  html.bb-phone .rpill{padding:3px 9px}
+  html.bb-phone .chartrail .ovsel{width:auto;padding:4px 20px 4px 8px}
+  html.bb-phone .chartrail .cc-share-btn{margin:0 0 0 auto}
+  html.bb-phone .chart-title{font-size:15px;margin:6px 0 1px}
+  html.bb-phone .chart-cap{font-size:11.5px;padding:0 0 2px}
+  html.bb-phone #chart{min-height:0}
+  html.bb-phone .chart-src{text-align:center}
+  html.bb-phone .chart-src .src-toggle{display:inline}
+  html.bb-phone .chart-src .src-full{display:none}
+  html.bb-phone .chart-src.open .src-full{display:block;text-align:left;margin-top:4px}
+  html.bb-phone .shelf-intro h1{font-size:19px}
+  /* Compact phone chrome: the first screen should hold the controls AND the chart. */
+  /* body-qualified: the bar's own stylesheet is inserted after this one */
+  html.bb-phone body .ccm-topbar{height:40px;padding:0 12px}
+  html.bb-phone body .ccm-wordmark{height:28px}
+  html.bb-phone body .ccm-topbar-nav .ccm-cta{padding:4px 10px;font-size:12px}
+  html.bb-phone .selector{margin:4px 0 2px}
+  html.bb-phone .seg button{padding:4px 7px;font-size:11.5px}
+  html.bb-phone #assetseg button{padding:5px 9px}
+  html.bb-phone .multi-sel-btn{padding:4px 9px;font-size:12.5px}
+  html.bb-phone .ctxline{font-size:11px;margin:1px 0 2px}
+  /* Folder tabs on a phone: outlined, rounded tops; the open one is white and
+     joins the controls area beneath it (which turns white to match). */
+  html.bb-phone .mtabs{gap:3px;border-bottom:1px solid #cfd6e2;margin-top:6px}
+  html.bb-phone .mtabs button{min-height:32px;padding:6px 10px;font-size:12.5px;font-weight:500;color:#55617a;
+    background:#e9edf3;border:1px solid #cfd6e2;border-bottom:none;border-radius:7px 7px 0 0;margin-bottom:-1px}
+  html.bb-phone .mtabs button.on{background:#fff;color:#1e40af;font-weight:600;border-color:#cfd6e2;
+    box-shadow:inset 0 2px 0 #1e40af}
+  html.bb-phone .layout{background:#fff;border:1px solid #cfd6e2;border-top:none;border-radius:0 0 8px 8px;padding:0 10px 8px}
+  html.bb-phone .chartwrap{padding:4px 0 0;gap:4px}
+  html.bb-phone .chartrail{gap:5px 8px;padding:0 0 6px}
+  /* Buttons that name themselves need no label; DQ and Macro keep a short one. */
+  html.bb-phone #modeseg,html.bb-phone #outseg,html.bb-phone #poolseg,html.bb-phone #rangebar{margin:0}
+  html.bb-phone .cgroup:has(#modeseg)>.cglabel,html.bb-phone .cgroup:has(#outseg)>.cglabel,html.bb-phone #poolctl>.cglabel,html.bb-phone #rangegroup>.cglabel{display:none}
+  html.bb-phone #xfctl>.cglabel{font-size:0} html.bb-phone #xfctl>.cglabel::after{content:"YOY";font-size:10px}
+  html.bb-phone #dqctl>.cglabel{font-size:0}
+  html.bb-phone #dqctl>.cglabel::after{content:"DQ";font-size:10px}
+  html.bb-phone .cgroup:has(#macrosel)>.cglabel{font-size:0}
+  html.bb-phone .cgroup:has(#macrosel)>.cglabel::after{content:"Macro";font-size:10px}
+  html.bb-phone .rpill{padding:2px 8px;font-size:11.5px}
+  html.bb-phone .chartrail .ovsel{padding:3px 18px 3px 7px;font-size:11.5px;width:auto;max-width:112px}
+  html.bb-phone .chartrail .cc-share-btn{transform:scale(.85);transform-origin:right center}
+  html.bb-phone .chart-title{font-size:14px;margin:4px 0 0}
+  html.bb-phone .chart-cap{font-size:11px;padding:0}
+  html.bb-phone .shelf-summary{font-size:12px;gap:4px 14px}
+  /* The Deals table is wider than a phone: it scrolls inside its panel, not the page. */
+  html.bb-phone #dealsPanel{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  html.bb-phone #dealsPanel>h2{display:block;padding:10px 0;font-size:12px;line-height:1.5}
+
+
+/* Landscape phone: the same phone styling, but the chart comes first and fills
+   the screen; the controls sit BELOW it (a scroll away), and the sideways-room
+   lets the legend sit beside the plot (set in chart.js). */
+  html.bb-land .chartrail{order:0;border-bottom:none;border-top:1px solid var(--line);padding:8px 0 0}
+  html.bb-land .chart-title{margin:2px 0 0;font-size:13.5px}
+  html.bb-land .chart-cap{font-size:10.5px}
+  html.bb-land .chart-src{margin-top:2px}
+

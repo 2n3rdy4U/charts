@@ -30,7 +30,7 @@
           "label": "Credit Card",
           "icon": "credit-card",
           "type": "panel",
-          "url": "cc/index.html",
+          "url": "abs/credit-card/index.html",
           "badge": null
         },
         {
