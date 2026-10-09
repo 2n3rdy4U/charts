@@ -88,8 +88,16 @@ window.makeSubject=t=>{ selected=[t,...selected.filter(x=>x!==t)]; buildIssPanel
 el('issbtn').onclick=e=>{ e.stopPropagation(); buildIssPanel(); el('isspanel').classList.toggle('open'); };
 document.addEventListener('click',e=>{ if(!e.target.closest('#isswrap')) closeAdd(); });
 // Auto Loan and Auto Lease are both this page; the frame's highlight and
-// breadcrumb follow the Loans | Leases toggle.
-function tellFrameAsset(){ if(window.ccmFrame) ccmFrame.setActive(assetClass==='lease' ? 'abs-auto-lease' : 'abs-auto'); }
+// breadcrumb follow the Loans | Leases toggle, and so does the address — it
+// becomes the one the rail entry opens, so the rail, the address bar and the
+// page always agree (no reload; a copied address reopens this asset class).
+function tellFrameAsset(){
+  const id=assetClass==='lease' ? 'abs-auto-lease' : 'abs-auto';
+  if(window.ccmFrame) ccmFrame.setActive(id);
+  const rail=document.querySelector('#rail [data-id="'+id+'"]');
+  const href=rail ? rail.getAttribute('href') : location.pathname+'?ac='+assetClass;
+  try{ if(location.pathname+location.search!==href) history.replaceState(null,'',href); }catch(e){}
+}
 // Tabs that belong to one asset class (Repossessions: loan; Residuals: lease).
 function syncTabs(){ document.querySelectorAll('.mtabs button[data-asset]').forEach(b=>{ b.hidden=b.dataset.asset!==assetClass; });
   // Deals describes one shelf; All Issuers has none, so the tab is greyed out
