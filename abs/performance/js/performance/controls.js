@@ -88,12 +88,15 @@ window.makeSubject=t=>{ selected=[t,...selected.filter(x=>x!==t)]; buildIssPanel
 el('issbtn').onclick=e=>{ e.stopPropagation(); buildIssPanel(); el('isspanel').classList.toggle('open'); };
 document.addEventListener('click',e=>{ if(!e.target.closest('#isswrap')) closeAdd(); });
 // Auto Loan and Auto Lease are both this page; the frame's highlight and
-// breadcrumb follow the Loans | Leases toggle, and so does the address — it
-// becomes the one the rail entry opens, so the rail, the address bar and the
-// page always agree (no reload; a copied address reopens this asset class).
-function tellFrameAsset(){
+// breadcrumb follow the Loans | Leases toggle, and so does the address — on a
+// CLICK of the toggle it becomes the one the rail entry opens, so the rail, the
+// address bar and the page always agree (no reload; a copied address reopens
+// this asset class). On load the address is left alone: a deep link keeps its
+// settings in the bar (it once collapsed ?sel=…&m=… to ?ac=… on arrival).
+function tellFrameAsset(setAddress){
   const id=assetClass==='lease' ? 'abs-auto-lease' : 'abs-auto';
   if(window.ccmFrame) ccmFrame.setActive(id);
+  if(!setAddress) return;
   const rail=document.querySelector('#rail [data-id="'+id+'"]');
   const href=rail ? rail.getAttribute('href') : location.pathname+'?ac='+assetClass;
   try{ if(location.pathname+location.search!==href) history.replaceState(null,'',href); }catch(e){}
@@ -107,7 +110,7 @@ function syncTabs(){ document.querySelectorAll('.mtabs button[data-asset]').forE
 document.querySelectorAll('#assetseg button').forEach(b=>b.onclick=()=>{
   if(b.dataset.asset===assetClass)return;
   document.querySelectorAll('#assetseg button').forEach(x=>x.classList.remove('on'));b.classList.add('on');
-  assetClass=b.dataset.asset; selected=[CLASS_DEFAULT[assetClass]]; syncTabs(); tellFrameAsset();
+  assetClass=b.dataset.asset; selected=[CLASS_DEFAULT[assetClass]]; syncTabs(); tellFrameAsset(true);
   const cur=document.querySelector('.mtabs button.on'); if(cur&&cur.hidden){ document.querySelector('.mtabs button[data-metric="dq_60plus_pct"]').click(); }
   closeAdd(); buildIssPanel(); refresh(); countView();
 });
