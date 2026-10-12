@@ -32,7 +32,7 @@ function syncTabs(){
   // while it is the subject rather than opening on a message.
   const dt=document.querySelector('.mtabs button[data-tab="deals"]');
   if(dt){ dt.disabled=isAll(selected[0]); dt.title=dt.disabled?'All Trusts has no series of its own':''; }
-  syncDqSeg(); syncYldSeg();
+  syncDqSeg();
 }
 document.querySelectorAll('.mtabs button').forEach(b=>b.onclick=()=>{
   const tab=b.dataset.tab;
@@ -41,9 +41,7 @@ document.querySelectorAll('.mtabs button').forEach(b=>b.onclick=()=>{
   if(tabOf()!==tab) metric = TAB_DEFAULT[tab];
   syncTabs(); fitSelectionToView(); buildIssPanel(); updateIssBtn(); renderSubject(); showLens('chart'); countView();});
 function syncDqSeg(){ document.querySelectorAll('#dqseg button').forEach(x=>x.classList.toggle('on', x.dataset.dq===metric)); }
-function syncYldSeg(){ document.querySelectorAll('#yldseg button').forEach(x=>x.classList.toggle('on', x.dataset.yld===metric)); }
 document.querySelectorAll('#dqseg button').forEach(b=>b.onclick=()=>{ metric=b.dataset.dq; syncDqSeg(); renderChart(); countView(); });
-document.querySelectorAll('#yldseg button').forEach(b=>b.onclick=()=>{ metric=b.dataset.yld; syncYldSeg(); renderChart(); countView(); });
 document.querySelectorAll('#outseg button').forEach(b=>b.onclick=()=>setOutput(b.dataset.out));
 document.querySelectorAll('#xfseg button').forEach(b=>b.onclick=()=>{ transform=b.dataset.transform; renderChart(); });
 let _rz, _rzW=window.innerWidth; addEventListener('resize',()=>{ clearTimeout(_rz); _rz=setTimeout(()=>{

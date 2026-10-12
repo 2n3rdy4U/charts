@@ -73,7 +73,8 @@
     <button class="on" data-tab="dq">Delinquencies</button>
     <button data-tab="co">Charge-offs</button>
     <button data-tab="pr">Payment Rate</button>
-    <button data-tab="yld">Yield &amp; Excess Spread</button>
+    <button data-tab="yld">Yield</button>
+    <button data-tab="xs">Excess Spread</button>
     <button data-tab="bal">Balance</button>
     <button data-tab="deals">Deals</button>
   </div>
@@ -91,7 +92,6 @@
           <div class="chartrail">
             <div class="cgroup" id="seriesgroup"><div class="cglabel">Series</div><div class="serieschips" id="serieschips"></div></div>
             <div class="cgroup" id="dqctl"><div class="cglabel">DQ bucket</div><div class="seg" id="dqseg"><button class="on" data-dq="dq_30plus">30+</button><button data-dq="dq_30_60">30–60</button><button data-dq="dq_61_90">61–90</button><button data-dq="dq_91_120">91–120</button><button data-dq="dq_120plus">120+</button></div></div>
-            <div class="cgroup" id="yldctl" hidden><div class="cglabel">Measure</div><div class="seg" id="yldseg"><button class="on" data-yld="portfolio_yield">Portfolio yield</button><button data-yld="excess_spread">Excess spread</button></div></div>
             <div class="cgroup" id="xfctl" hidden><div class="cglabel">Year over year</div><div class="seg" id="xfseg"><button class="on" data-transform="rate">Rate</button><button data-transform="yoy-delta">Change (pp)</button><button data-transform="yoy-pct">Change (%)</button></div></div>
             <div class="cgroup"><div class="cglabel">Display</div><div class="seg" id="outseg"><button class="on" data-out="chart">Chart</button><button data-out="table">Table</button><button id="seasbtn" data-out="seasonal">Year overlay</button></div></div>
             <div class="cgroup"><div class="cglabel">Macro overlay</div><select id="macrosel" class="ovsel"><option value="">＋ overlay</option></select></div>
