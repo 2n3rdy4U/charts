@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Methodology &amp; Data Quality | Auto ABS Data Explorers</title>
+<title>Methodology &amp; Data Quality | ABS Performance</title>
 <style>
   :root {
     --text:#111827; --muted:#6b7280; --border:#e5e7eb; --bg:#fafafa;
@@ -55,9 +55,10 @@
 <body>
 <header>
   <h1>Methodology &amp; Data Quality</h1>
-  <span class="sub">Auto Loan &amp; Auto Lease ABS Performance</span>
+  <span class="sub">Auto Loan, Auto Lease &amp; Credit Card ABS Performance</span>
   <span class="back"><a href="performance/index.html?ac=loan">&larr; Auto Loan</a> &nbsp;&middot;&nbsp;
-    <a href="performance/index.html?ac=lease">&larr; Auto Lease</a></span>
+    <a href="performance/index.html?ac=lease">&larr; Auto Lease</a> &nbsp;&middot;&nbsp;
+    <a href="credit-card/index.html">&larr; Credit Card</a></span>
 </header>
 <main>
 
@@ -446,6 +447,63 @@ but are not yet surfaced, pending independent corroboration.
   <li><strong>Build identifier:</strong> each generated page carries a build
     timestamp.</li>
 </ul>
+
+<h2 id="credit-card">11. Credit Card Trusts &mdash; What Each Figure Is</h2>
+<p>
+The <a href="credit-card/index.html">Credit Card</a> page shows each master
+trust&rsquo;s monthly figures <strong>as its own servicer reports them</strong>
+on Form 10-D, and every stored figure is tied back to the certificate it came
+from (the daily check <code>cc_10d_tieback</code> re-reads the newest months
+from the filing and, where the certificate prints the components, recomputes
+the rate). The trusts do <strong>not</strong> define the figures alike, so
+levels are comparable only with the definitions below in mind; trends within a
+trust are always comparable. Where a certificate prints amounts but no rate,
+the rate is computed here and says so.
+</p>
+<table>
+<tr><th>Trust</th><th>Payment rate</th><th>Charge-offs</th><th>Yield</th><th>Excess spread</th></tr>
+<tr><td>American Express</td><td>&ldquo;Monthly Payment Rate&rdquo; (basis not printed)</td>
+    <td>&ldquo;Annualized Default Rate&rdquo; (gross) and &ldquo;&hellip;, Net of Recoveries&rdquo;</td>
+    <td>&ldquo;Trust Portfolio Yield&rdquo;</td><td>&ldquo;Excess Spread Percentage&rdquo; of the first series reporting one</td></tr>
+<tr><td>Bank of America</td><td>Total collections (principal and finance charge) &divide; prior-month principal and finance-charge receivables</td>
+    <td>&ldquo;Total / Net Charge-Offs as a percentage of Average Principal Receivables Outstanding&rdquo;</td>
+    <td>&ldquo;Portfolio Yield&rdquo;</td><td>&ldquo;Excess Available Funds Percentage&rdquo;</td></tr>
+<tr><td>Barclays Dryrock</td><td>&ldquo;Total payment rate&rdquo;: principal and finance-charge collections, investment earnings excluded (basis not printed)</td>
+    <td>&ldquo;Total Gross / Net Losses as a percentage of the Portfolio Principal Balance&rdquo;</td>
+    <td>&ldquo;Portfolio Yield&rdquo;, current monthly period</td><td>&ldquo;Excess Spread Percentage&rdquo;, current monthly period</td></tr>
+<tr><td>Capital One</td><td>&ldquo;Principal Payment Rate&rdquo;: principal collections &divide; beginning-of-month principal receivables</td>
+    <td>&ldquo;Annualized (Net) Default Rate&rdquo; &divide; adjusted beginning-of-month principal receivables, additions included</td>
+    <td>&ldquo;Annualized Yield&rdquo; on the same adjusted base</td><td>not reported</td></tr>
+<tr><td>Chase</td><td>&ldquo;Principal Payment Rate&rdquo;: principal collections &divide; beginning pool balance</td>
+    <td>&ldquo;Gross / Net Losses as a Percentage of Average Pool Balance&rdquo;, annualized</td>
+    <td>&ldquo;Portfolio Yield&rdquo;</td><td>&ldquo;Excess Spread Percentage&rdquo; = yield less base rate</td></tr>
+<tr><td>Citi</td><td>&ldquo;Total Payment Rate&rdquo;: principal and finance-charge collections (collateral-certificate basis)</td>
+    <td>net only: the &ldquo;Credit Loss Component&rdquo; of the collateral certificate&rsquo;s yield</td>
+    <td>&ldquo;Portfolio Yield&rdquo; for the collateral certificate</td><td>&ldquo;Surplus Finance Charge Collections&rdquo; as a percentage</td></tr>
+<tr><td>Comenity (WFN)</td><td>&ldquo;Monthly Payment Rate&rdquo;: total collections (principal and finance charge) &divide; beginning-of-month principal receivables</td>
+    <td>&ldquo;Gross / Net Principal Charge-Off Rate&rdquo;, &divide; end-of-month principal receivables, annualized</td>
+    <td>&ldquo;Gross Portfolio Yield&rdquo;: finance-charge collections &divide; collateral amount</td><td>&ldquo;Net Portfolio Adjusted Yield&rdquo; (yield less base rate)</td></tr>
+<tr><td>First National</td><td><em>computed here</em>: total collections &divide; average principal receivables &mdash; the certificate prints amounts, not a rate</td>
+    <td><em>computed here</em>, gross only: defaulted amount &divide; average principal receivables &times; 12</td>
+    <td>&ldquo;Portfolio Yield&rdquo;</td><td>&ldquo;Net Yield Percentage&rdquo; = yield less base rate</td></tr>
+<tr><td>Synchrony</td><td>&ldquo;Payment Rate&rdquo;: principal collections &divide; beginning-of-period principal receivables</td>
+    <td>&ldquo;Gross / Net Charge-Off Rate&rdquo;: defaulted amount (less recoveries) &divide; beginning-of-period principal receivables</td>
+    <td>&ldquo;Portfolio Yield&rdquo;</td><td>&ldquo;Excess Spread Percentage&rdquo; = yield less base rate</td></tr>
+<tr><td>Wells Fargo</td><td>&ldquo;Principal Payment Rate&rdquo;: principal collections &divide; beginning-of-period principal receivables (day-weighted in a month with account additions)</td>
+    <td>&ldquo;Gross / Net Charge-Off Rate&rdquo;</td>
+    <td>&ldquo;Portfolio Yield&rdquo;, interchange included</td><td>&ldquo;Excess Available Funds Percentage&rdquo;</td></tr>
+</table>
+<p>
+<strong>Delinquency</strong> is the share of receivables past due at the end of
+the collection month for every trust, but the first bucket is 30&ndash;59 days
+at some trusts and 31&ndash;60 at others, and Capital One measures it against
+total rather than principal receivables; the 30+ figure is the sum of the
+buckets. <strong>Charge-offs on the page</strong> are the net rate where a trust
+reports one and the gross rate where that is all it reports (First National),
+and say so. <strong>All Trusts</strong> weights each trust&rsquo;s own figure by
+its receivables; it is shown only where at least three trusts holding at least
+80% of receivables report the figure.
+</p>
 
 <p class="meta">
 This methodology page is regenerated with every pipeline run and is always in
