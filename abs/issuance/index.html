@@ -475,7 +475,7 @@
                 SEC publicly registered transactions only (ex-144A and PPs)
             </div>
         </div>
-        <span class="meta-date">Updated October 12, 2026</span>
+        <span class="meta-date">Filings through October 9, 2026</span>
         <div class="picker-wrap">
             <button id="col-picker-btn" class="btn btn--icon">&#9881; Columns</button>
             <div id="col-picker" class="hidden">
@@ -574,7 +574,34 @@
     return '' + y;
   }
 
+  // ── The address is the view ──────────────────────────────────────────────
+  // Every control's state is written to the address (no reload, no history
+  // entry) so a copied address reopens this view; on arrival the address is
+  // applied to the controls. Defaults are left out of the address.
+  // (window-scoped: the chart's script and the table's script are separate blocks)
+  window._applyingAddress = false; window._addressApplied = false;   // the chart's first render runs before the address is read
+  function syncAddress() {
+    if (window._applyingAddress || !window._addressApplied) return;
+    var p = new URLSearchParams();
+    var mp = document.querySelector('#metric-grp .pill.active'), gp = document.querySelector('#gran-grp .pill.active');
+    if (mp && mp.dataset.val !== 'count')  p.set('metric', mp.dataset.val);
+    if (gp && gp.dataset.val !== 'yearly') p.set('period', gp.dataset.val);
+    var acs = [...document.querySelectorAll('#sector-dd-menu input[data-ac]')];
+    var on  = acs.filter(c => c.checked).map(c => c.dataset.ac);
+    if (on.length && on.length < acs.length) p.set('sector', on.join(','));
+    var rp = document.querySelector('#rtg-grp .pill.active');
+    if (rp && rp.dataset.rtg !== 'all') p.set('rtg', rp.dataset.rtg);
+    var ags = [...document.querySelectorAll('#agency-dd-menu input[data-agency]')];
+    var agOn = ags.filter(c => c.checked).map(c => c.dataset.agency);
+    if (agOn.length && agOn.length < ags.length) p.set('agency', agOn.join(','));
+    var qEl = document.getElementById('deals-search');
+    if (qEl && qEl.value.trim()) p.set('q', qEl.value.trim());
+    var qs = p.toString().replace(/%2C/g, ',');
+    try { history.replaceState(null, '', location.pathname + (qs ? '?' + qs : '')); } catch (e) {}
+  }
+  window.syncAddress = syncAddress;
   function render() {
+    syncAddress();
     currentMetric = document.querySelector('#metric-grp .pill.active').dataset.val;
     const metric  = currentMetric;
     const gran    = document.querySelector('#gran-grp .pill.active').dataset.val;
@@ -1228,7 +1255,7 @@
     </table>
 
     <footer>
-        Data sourced from SEC EDGAR &bull; Last updated: October 12, 2026 at 18:31 &bull;
+        Data sourced from SEC EDGAR &bull; Filings through October 9, 2026 &bull;
         <a href="https://www.sec.gov/cgi-bin/browse-edgar" target="_blank" rel="noopener">EDGAR Search ↗</a>
     </footer>
 </div>
@@ -1830,6 +1857,32 @@ $(document).ready(function () {
         table.draw();
     });
 
+    // ---- The address is the view (table side) ----
+    table.on('draw', function() { if (window.syncAddress) window.syncAddress(); });
+    (function applyAddress() {
+        var q = new URLSearchParams(location.search);
+        window._applyingAddress = true;
+        try {
+            var m = q.get('metric'); if (m) { var b = document.querySelector('#metric-grp .pill[data-val="' + m + '"]'); if (b) b.click(); }
+            var g = q.get('period'); if (g) { var b2 = document.querySelector('#gran-grp .pill[data-val="' + g + '"]'); if (b2) b2.click(); }
+            var sec = q.get('sector');
+            if (sec) {
+                var want = new Set(sec.split(',').filter(Boolean));
+                var cbs = [...document.querySelectorAll('#sector-dd-menu input[data-ac]')];
+                cbs.forEach(function(c) { c.checked = want.has(c.dataset.ac); });
+                if (cbs.length) cbs[0].dispatchEvent(new Event('change', {bubbles: true}));
+            }
+            var r = q.get('rtg'); if (r) { var b3 = document.querySelector('#rtg-grp .pill[data-rtg="' + r + '"]'); if (b3) $(b3).trigger('click'); }
+            var ag = q.get('agency');
+            if (ag) {
+                var wantA = new Set(ag.split(',').filter(Boolean));
+                $('#agency-dd-menu input[data-agency]').each(function() { this.checked = wantA.has($(this).data('agency')); });
+                $('#agency-dd-menu input[data-agency]').first().trigger('change');
+            }
+            var s = q.get('q'); if (s) { $('#deals-search').val(s).trigger('input'); }
+        } finally { window._applyingAddress = false; window._addressApplied = true; }
+        if (window.syncAddress) window.syncAddress();
+    })();
     // ---- Column picker ----
     // PREF_KEY bumped to v8 when "Rated By" replaced the 5 individual
     // rating columns as the default visible column on desktop too. The
