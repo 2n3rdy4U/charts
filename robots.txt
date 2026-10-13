@@ -2,3 +2,6 @@ User-agent: *
 Allow: /
 
 Sitemap: https://data.consumercreditmatters.com/sitemap.xml
+
+# Data files under https://data.consumercreditmatters.com/download/ are licensed CC BY 4.0: free to reuse with attribution
+# to Consumer Credit Matters. Each file's header lines give its source and citation.

@@ -69,8 +69,7 @@
       "description": "The week in U.S. consumer-credit securitization, data, and policy. Independent, data-first, no paywall.",
       "icon": "document",
       "type": "link",
-      "url": "https://www.consumercreditmatters.com/newsletter",
-      "latest_issue": { "number": 3, "date": "2026-06-15" }
+      "url": "https://www.consumercreditmatters.com/newsletter"
     },
     {
       "id": "podcast",
