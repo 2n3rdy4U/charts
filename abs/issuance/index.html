@@ -245,6 +245,10 @@
         @media (max-width: 640px) {
             .wrap { padding: 8px 6px 24px; }
             .top { gap: 8px; padding-bottom: 10px; }
+            /* On a phone the title takes the full width; the date and the
+               Columns button share the row beneath it. */
+            .titleblock { flex: 1 1 100%; }
+            .meta-date { margin-right: auto; }
             h1 { font-size: 16px; }
             /* min-width:44px on .toggle-btn was conflicting with the
                explicit width:18px from the ≤900px rule (min-width always
@@ -410,35 +414,6 @@
             .dataTables_wrapper { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
         }
     </style>
-    <style>
-/* CCM data-subdomain top bar — shared across explorer / macro / issuance */
-.ccm-topbar{display:flex;align-items:center;justify-content:space-between;
-  height:56px;padding:0 24px;background:#0e1d2e;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-  position:relative;z-index:100;box-sizing:border-box}
-.ccm-topbar a{text-decoration:none;border:none}
-.ccm-topbar-brand{display:flex;align-items:center;color:#fafafa}
-.ccm-wordmark{display:block;height:32px;width:auto}
-.ccm-topbar-nav{display:flex;align-items:center;gap:24px;font-size:13.5px}
-.ccm-topbar-nav a:not(.ccm-cta){color:#a8b5c4;font-weight:500;letter-spacing:0.02em;
-  transition:color 0.15s}
-.ccm-topbar-nav a:not(.ccm-cta):hover{color:#fafafa}
-.ccm-topbar-nav .ccm-cta{background:#4ade80;color:#0e1d2e;padding:8px 16px;
-  border-radius:4px;font-weight:600;letter-spacing:0.02em;transition:background 0.15s}
-.ccm-topbar-nav .ccm-cta:hover{background:#65f08e}
-.ccm-topbar-nav a.ccm-back{color:#4ade80;font-weight:600}
-.ccm-topbar-nav a.ccm-back:hover{color:#65f08e}
-@media (max-width:640px){
-  .ccm-topbar{padding:0 14px}
-  .ccm-wordmark{height:26px}
-  .ccm-topbar-nav{gap:14px;font-size:12px}
-  .ccm-topbar-nav a:not(.ccm-cta){display:none}
-  /* The return link is the whole reason a newsletter reader is here, so it
-     stays when the other nav items collapse. Declared after the rule above:
-     equal specificity, so source order decides. */
-  .ccm-topbar-nav a.ccm-back{display:inline}
-}
-</style>
     <style id="cth-hide-style"></style>
   <script data-goatcounter="https://consumercreditmatters.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
@@ -462,11 +437,6 @@
 <div id="panel-bar"><span id="panel-section-label">ABS Data</span><span class="panel-sep" id="panel-sep">›</span><span id="panel-title">Issuance</span></div>
 <div id="panel-content">
 <div class="ccm-page">
-
-
-
-
-
 <div class="wrap">
     <div class="top">
         <div class="titleblock">
