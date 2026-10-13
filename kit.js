@@ -20,6 +20,9 @@
   if (hamburger && rail && backdrop) {
     hamburger.addEventListener('click', function () { rail.classList.contains('open') ? closeDrawer() : openDrawer(); });
     backdrop.addEventListener('click', closeDrawer);
+    document.addEventListener('keydown', function (e) {   // Escape closes the drawer; focus returns to the button
+      if (e.key === 'Escape' && rail.classList.contains('open')) { closeDrawer(); hamburger.focus(); }
+    });
   }
 
   // ── Rail accordion ──

@@ -15,7 +15,7 @@
   --color-surface:     #ffffff;
   --color-border:      #dde2ed;
   --color-text:        #111827;
-  --color-muted:       #6b7280;
+  --color-muted:       #5b6472;   /* 4.8:1 on the pill grey, 5.4:1 on the table grey (was #6b7280, 3.9:1) */
 
   /* Brand */
   --color-brand:       #0034A5;
@@ -23,6 +23,7 @@
 
   /* Accent */
   --color-accent:      #3b7eff;
+  --color-accent-pill: #2563eb;   /* the accent's text-bearing form: white on it reads 5.2:1 */
   --color-accent-dim:  rgba(59,126,255,0.12);
   --color-accent-nav:  #7eb3ff;
 
@@ -156,7 +157,7 @@ html, body {
    subscribe/sign-up CTAs across SaaS (Substack, MailChimp, etc.). */
 #header .header-right .btn-primary {
   background: #10b981;
-  color: #fff;
+  color: #0b1a2e;   /* navy on the brand green: 6.9:1; white was 2.5:1 */
   padding: 6px 14px;
   border-radius: var(--radius);
   font-weight: 600;
@@ -167,7 +168,7 @@ html, body {
 
 #header .header-right .btn-primary:hover {
   background: #059669;
-  color: #fff;
+  color: #0b1a2e;
 }
 
 /* ── Left rail ─────────────────────────────────────────────────── */
@@ -763,8 +764,8 @@ a.nav-section-header, a.tile { color: inherit; }   /* .nav-item, .mobile-nav-pil
 }
 .mobile-nav-pill.active,
 .mobile-nav-sub.active {
-  background: var(--color-accent);
-  border-color: var(--color-accent);
+  background: var(--color-accent-pill);   /* white text needs a deeper blue than the accent (5.2:1; the accent is 3.7:1) */
+  border-color: var(--color-accent-pill);
   color: #fff;
 }
 /* Pill content layout — label + small affordance icon (chevron for
@@ -1244,6 +1245,12 @@ button.btn {
 }
 
 /* ── Focus-visible (keyboard / accessibility) ────────────────────── */
+/* Every control shows where keyboard focus is, on every page. */
+a:focus-visible,
+button:focus-visible,
+select:focus-visible,
+input:focus-visible,
+[tabindex]:focus-visible,
 .btn:focus-visible,
 .pill:focus-visible,
 .multi-sel-btn:focus-visible,

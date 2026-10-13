@@ -13,7 +13,7 @@ let MACRO=null;                       // curated FRED overlay series (macro.json
 let transform='rate';                 // rate | yoy-delta | yoy-pct
 window.KIT_ROW_LABEL='Trust';
 // The tabs and their series. `unit` says how a value prints; `tab` groups the
-// delinquency buckets and the two yield measures under one tab each.
+// delinquency buckets under one tab.
 const METRIC_META={
   dq_30plus:         {tab:'dq',    title:'30+ Day Delinquency',      axis:['30+ Day Delinquency','(% of receivables)'],      unit:'rate'},
   dq_30_60:          {tab:'dq',    title:'30–60 Day Delinquency',    axis:['30–60 Day Delinquency','(% of receivables)'],    unit:'rate'},
@@ -23,10 +23,10 @@ const METRIC_META={
   charge_off_rate:   {tab:'co',    title:'Net Charge-off Rate',      axis:['Net Charge-off Rate','(annualized, % of receivables)'], unit:'rate'},
   payment_rate:      {tab:'pr',    title:'Monthly Payment Rate',     axis:['Monthly Payment Rate','(% of beginning receivables)'], unit:'rate'},
   portfolio_yield:   {tab:'yld',   title:'Portfolio Yield',          axis:['Portfolio Yield','(annualized, % of receivables)'], unit:'rate'},
-  excess_spread:     {tab:'yld',   title:'Excess Spread',            axis:['Excess Spread','(annualized, % of receivables)'],  unit:'rate'},
+  excess_spread:     {tab:'xs',    title:'Excess Spread',            axis:['Excess Spread','(annualized, % of receivables)'],  unit:'rate'},
   trust_balance:     {tab:'bal',   title:'Trust Receivables Balance',axis:['Receivables Balance','($ billions)'],             unit:'usd_bn'},
 };
-const TAB_DEFAULT={dq:'dq_30plus', co:'charge_off_rate', pr:'payment_rate', yld:'portfolio_yield', bal:'trust_balance'};
+const TAB_DEFAULT={dq:'dq_30plus', co:'charge_off_rate', pr:'payment_rate', yld:'portfolio_yield', xs:'excess_spread', bal:'trust_balance'};
 const meta=()=>METRIC_META[metric]||{};
 const tabOf=()=>metric==='deals'?'deals':meta().tab;
 const isRate=()=>meta().unit==='rate';

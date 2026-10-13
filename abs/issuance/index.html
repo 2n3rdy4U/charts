@@ -328,6 +328,7 @@
             table.dataTable thead th { padding: 4px 2px; font-size: 10.5px; letter-spacing: 0; }
             table.dataTable tbody td { padding: 3px 3px; font-size: 11px; }
             #deals-table th.col-toggle { width: 20px !important; }
+            .sr-only { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
             #deals-table th.col-psr    { width: 34px !important; }
             #deals-table th.col-close  { width: 56px !important; }
             #deals-table th.col-sector { width: 56px !important; }
@@ -743,7 +744,7 @@
     <table id="deals-table" class="dataTable display nowrap" style="width:100%;table-layout:fixed">
         <thead>
             <tr>
-                <th class="col-toggle" style="width:40px"></th>
+                <th class="col-toggle" style="width:40px"><span class="sr-only">Details</span></th>
                 <th class="col-deal" style="width:140px"><span class="lbl-full">Deal Name</span><span class="lbl-short">Deal</span></th>
                 <th class="col-sector sector-cell" style="width:56px">Sector</th>
                 <th class="col-psr" title="Presale report" style="width:34px">PSR</th>

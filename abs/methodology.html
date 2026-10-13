@@ -9,7 +9,7 @@
 <title>Methodology &amp; Data Quality | ABS Performance</title>
 <style>
   :root {
-    --text:#111827; --muted:#6b7280; --border:#e5e7eb; --bg:#fafafa;
+    --text:#111827; --muted:#5b6472; --border:#e5e7eb; --bg:#fafafa;
     --accent:#1e40af; --code-bg:#f3f4f6;
   }
   * { box-sizing: border-box; }
@@ -24,7 +24,7 @@
   .back a:hover { text-decoration:underline; }
   @media (max-width:640px) { main { padding:16px 16px 48px !important; } .page-head { padding:14px 16px; }
     table { display:block; overflow-x:auto; max-width:100%; -webkit-overflow-scrolling:touch; } }   /* a wide table scrolls in its own box on a phone */
-  main { max-width:880px; margin:0 auto; padding:32px 36px 80px; background:#fff;
+  .mbody { max-width:880px; margin:0 auto; padding:32px 36px 80px; background:#fff;
          border-left:1px solid var(--border); border-right:1px solid var(--border); }
   h2 { color:var(--accent); font-size:19px; margin:34px 0 8px;
        border-bottom:1px solid var(--border); padding-bottom:6px; }
@@ -81,7 +81,7 @@
   <h1>Methodology &amp; Data Quality</h1>
   <span class="sub">Auto Loan, Auto Lease &amp; Credit Card ABS Performance</span>
 </div>
-<main>
+<div class="mbody">
 
 <p style="font-size:15px;">
 This page documents the data sources, definitions, and quality considerations
@@ -358,7 +358,7 @@ Seven servicers print the number of vehicles repossessed each month in their
 10-D reports. We compare it with the loan-level count every day; a shelf whose
 ratio moves is flagged for review.
 </p>
-<table>
+<table tabindex="0">
   <thead><tr><th>Shelf</th><th class="num">Loan-level &divide; servicer</th><th>Reading</th></tr></thead>
   <tbody>
     <tr><td>Capital One, Ford, Hyundai, Toyota</td><td class="num">&asymp; 1.0</td>
@@ -504,7 +504,7 @@ levels are comparable only with the definitions below in mind; trends within a
 trust are always comparable. Where a certificate prints amounts but no rate,
 the rate is computed here and says so.
 </p>
-<table>
+<table tabindex="0">
 <tr><th>Trust</th><th>Payment rate</th><th>Charge-offs</th><th>Yield</th><th>Excess spread</th></tr>
 <tr><td>American Express</td><td>&ldquo;Monthly Payment Rate&rdquo; (basis not printed)</td>
     <td>&ldquo;Annualized Default Rate&rdquo; (gross) and &ldquo;&hellip;, Net of Recoveries&rdquo;</td>
@@ -567,7 +567,7 @@ This methodology page is regenerated with every pipeline run and is always in
 sync with the data currently served on both explorers.
 </p>
 
-</main>
+</div>
 </div>
 </div>
 </main>

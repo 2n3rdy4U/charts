@@ -90,7 +90,7 @@ function renderSeasonal(box){
     },
     config:CHART_CFG
   };
-  vegaEmbed(box,spec,VEGA_OPTS).then(()=>fitChart(box,spec)).catch(e=>{box.innerHTML='<div class="chartph">chart error: '+esc(e.message)+'</div>';});
+  vegaEmbed(box,spec,VEGA_OPTS).then(()=>{ describeChart(box); return fitChart(box,spec); }).catch(e=>{box.innerHTML='<div class="chartph">chart error: '+esc(e.message)+'</div>';});
 }
 function renderOverlay(box){
   const subj=SHELVES[selected[0]], sk=calKey(), mlab=metricLabel();
@@ -144,7 +144,9 @@ window.setRange=v=>{ range = v==='all'?'all':parseInt(v); renderChart(); };
 // The Explorer's chart settings (generate_sec_explorer_data.py), so the two
 // pages draw alike: Vega's default font, bold axis titles, gridlines in both
 // directions, the default plot border. Only sizes are set, as there.
-const CHART_CFG={axis:{labelFontSize:13,titleFontSize:14},
+// aria:false drops Vega's per-mark ARIA (hundreds of unlabeled graphics-symbol nodes); the
+// chart box carries one description instead (describeChart) and the Table display is the text.
+const CHART_CFG={aria:false,axis:{labelFontSize:13,titleFontSize:14},
   title:{anchor:"middle",fontSize:15,subtitleFontSize:11},
   view:{continuousHeight:300,continuousWidth:300}};
 // The page is its own window now (the frame is stamped into it), so the
@@ -200,6 +202,11 @@ const VEGA_OPTS={actions:false,renderer:'svg',tooltip:{disableDefaultStyle:true}
 // these disagreed the fit pass ran last and clawed the margin back.
 const BOTTOM_RESERVE=78;
 
+function describeChart(box){   // the box is the image; the SVG's own node tree says nothing a reader needs
+  const t=(el('viewTitle')||{}).textContent||'Chart';
+  box.setAttribute('role','img'); box.setAttribute('aria-label', t+'. The Table display lists the same figures.');
+  box.querySelectorAll('svg').forEach(s=>s.setAttribute('aria-hidden','true'));
+}
 function fitChart(box,spec){
   // One corrective pass. The plot box is the only part Vega sizes to order;
   // axis, axis title and legend are added on top, so the rendered SVG is the
@@ -208,11 +215,11 @@ function fitChart(box,spec){
   const avail=window.innerHeight-box.getBoundingClientRect().top-BOTTOM_RESERVE;
   const over=svg.getBoundingClientRect().height-avail;
   if(over>4 && spec.height-over>=200){
-    vegaEmbed(box,{...spec,height:Math.round(spec.height-over)},VEGA_OPTS).catch(()=>{});
+    return vegaEmbed(box,{...spec,height:Math.round(spec.height-over)},VEGA_OPTS).then(()=>describeChart(box)).catch(()=>{});
   }
 }
 function embed(box,spec){ if(typeof vegaEmbed==='undefined'){ box.innerHTML='<div class="chartph">loading chart library…</div>'; return; }
-  return vegaEmbed(box,spec,VEGA_OPTS).then(()=>fitChart(box,spec))
+  return vegaEmbed(box,spec,VEGA_OPTS).then(()=>{ describeChart(box); return fitChart(box,spec); })
     .catch(e=>{box.innerHTML='<div class="chartph">chart error: '+esc(e.message)+'</div>';}); }
 function hideChips(){ const g=el('seriesgroup'); if(g)g.style.display='none'; const b=el('serieschips'); if(b)b.innerHTML=''; }
 function renderSeriesChips(list, showAxis){   // each chart series: [swatch] name [≡|▋] [L|R]  (live-dashboard chip model)
@@ -363,5 +370,6 @@ function kitPicker(cfg){
   const close=()=>panel.classList.remove('open');
   btn.onclick=e=>{ e.stopPropagation(); build(); panel.classList.toggle('open'); };
   document.addEventListener('click',e=>{ if(!e.target.closest('#'+cfg.wrap)) close(); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape' && panel.classList.contains('open')){ close(); btn.focus(); } });   // Escape closes, focus returns to the button
   return {build, updateBtn, close};
 }

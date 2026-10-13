@@ -63,7 +63,7 @@
       gap: 10px;
     }
     #fred-header h1 { font-size: 18px; font-weight: normal; flex: 1; margin: 0; }
-    #updated { font-size: 11px; color: #999; white-space: nowrap; }
+    #updated { font-size: 11px; color: #5b6472; white-space: nowrap; }
     #recession-btn {
       padding: 4px 11px;
       border: 1px solid #ddd;
@@ -156,7 +156,7 @@
       font-weight: bold;
       text-transform: uppercase;
       letter-spacing: 0.04em;
-      color: #888;
+      color: #5b6472;
     }
     .series-item {
       display: flex;
@@ -206,7 +206,7 @@
       font-weight: 600;
       letter-spacing: 0.06em;
       text-transform: uppercase;
-      color: #8a8f98;
+      color: #5b6472;
       margin-right: 4px;
       user-select: none;
     }
@@ -420,14 +420,14 @@
     }
     #no-series-msg .no-series-secondary {
       font-size: 13px;
-      color: #7a8690;
+      color: #5b6472;
       line-height: 1.5;
       max-width: 440px;
       margin-bottom: 20px;
     }
     #no-series-msg .no-series-count {
       font-size: 11px;
-      color: #b0b0b0;
+      color: #5b6472;
       font-style: italic;
     }
     /* Touch phones/tablets: the empty-state prompt is flex:1 + centered inside a
@@ -819,10 +819,10 @@
           and click-to-close. */
     #fred-hamburger {
       display: none;
-      /* Match the parent shell's selected-pill blue (#3b7eff) so the
-         Series action reads as the same family of "active control" the
-         user just used to navigate here. */
-      background: #3b7eff;
+      /* Match the parent shell's selected-pill blue (#2563eb; white on it
+         reads 5.2:1) so the Series action reads as the same family of
+         "active control" the user just used to navigate here. */
+      background: #2563eb;
       color: #fff;
       border: none;
       border-radius: 6px;
@@ -1052,7 +1052,7 @@
 
         <div class="ctrl-group" id="suggested-views-group">
           <span class="ctrl-label">Views:</span>
-          <select id="suggested-views-select" class="curated-views-select">
+          <select id="suggested-views-select" class="curated-views-select" aria-label="Curated views">
             <option value="">— Curated Views —</option>
           </select>
         </div>
@@ -1998,6 +1998,7 @@ function buildSeriesList(cat) {
 
     const lbl = document.createElement("label");
     lbl.textContent = info.short_label || info.title || sid;
+    cb.id = "series-cb-" + sid; lbl.htmlFor = cb.id;        // the label names the checkbox
     lbl.title = info.title || sid;
     lbl.addEventListener("click", () => cb.click());
 

@@ -1,5 +1,5 @@
 :root{
-  --ink:#1a2230; --muted:#6b7585; --line:#e4e8ef; --bg:#f6f8fb;
+  --ink:#1a2230; --muted:#5b6472; --line:#e4e8ef; --bg:#f6f8fb;
   --accent:#2f6db5; --accent-soft:#9fc0e6; --loan:#2f6db5; --green:#2e8b57; --amber:#b5762f; --pros:#3b8a6e;
   --good:#2e8b57; --bad:#c0492f; --panel:#fff;
   --mono:ui-monospace,Menlo,monospace; --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
@@ -33,6 +33,7 @@ a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
 .btn{border:1px solid var(--line);background:#fff;border-radius:6px;padding:7px 13px;font-size:12.5px;color:var(--ink);cursor:pointer}
 .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
 .subjtag{font-size:11.5px;color:var(--muted);margin:2px 0 8px}.subjtag b{color:var(--accent)}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .chart-title{font-size:16px;font-weight:600;color:var(--ink);margin:10px 0 2px;text-align:center}
 /* The table is wider than the panel on purpose — many deals. It scrolled
    already, but macOS overlay scrollbars only appear mid-gesture, so it read
@@ -142,7 +143,7 @@ table.cmp,table.deals{width:100%;border-collapse:collapse;font-size:12.5px;font-
 .cmpfoot{padding:10px 14px;font-size:12px;color:var(--muted);border-top:1px solid var(--line);background:#fbfcfe;border-radius:0 0 10px 10px}
 .deals thead tr.grp th{font-size:10px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);font-weight:600;text-align:center;padding:8px 14px 3px;border-bottom:none}
 .deals .gsep{border-left:1px solid var(--line)}
-.deals th.num{text-align:center;vertical-align:bottom} .deals th .lbl{display:block;white-space:normal;max-width:5.6em;margin:0 auto;line-height:1.15} .deals th .basis{display:block;font-size:10px;font-weight:500;text-transform:none;letter-spacing:0;color:var(--muted);opacity:.85;margin-top:2px;white-space:nowrap}
+.deals th.num{text-align:center;vertical-align:bottom} .deals th .lbl{display:block;white-space:normal;max-width:5.6em;margin:0 auto;line-height:1.15} .deals th .basis{display:block;font-size:10px;font-weight:500;text-transform:none;letter-spacing:0;color:var(--muted);margin-top:2px;white-space:nowrap}
 .deals td.tot{font-weight:600} .deals th.tot .lbl{color:var(--ink)}
 .deals td .deal{font-weight:600} .deals a.deal{color:inherit;text-decoration:none;border-bottom:1px solid #b9c6d8} .deals a.deal:hover{border-bottom-color:var(--accent,#2f6db5)}
 .deals .tag{display:inline-block;margin-left:6px;padding:1px 5px;font-size:9.5px;font-weight:700;letter-spacing:.4px;color:#2f6db5;background:#eaf1fb;border-radius:3px;vertical-align:1px}
