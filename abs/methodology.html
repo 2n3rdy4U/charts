@@ -318,6 +318,28 @@ returned vehicle sells for less than the residual value written into the lease
     of the two risks on a prime lease pool.</li>
   <li>The two are not added into one &ldquo;total loss&rdquo;: only some
     servicers report such a figure, and their definitions differ.</li>
+  <li><strong>Turn-in rate</strong> is the share of leases reaching their
+    scheduled end whose vehicle comes back to the trust rather than being
+    bought by the lessee or a dealer &mdash; the driver of residual results,
+    since only a returned vehicle is sold at auction. Ford and GM Financial
+    print the returned and retained units behind it, and we compute the rate
+    from them; Volkswagen, World Omni and Porsche print their own rate, which
+    we show as printed (Volkswagen counts a dealer purchase at lease end as
+    turned in). BMW, Mercedes-Benz and Nissan do not report one. A month in
+    which fewer than 25 leases in a deal reached their scheduled end is not
+    shown, where the report prints that count (all but Porsche). The shelf line
+    combines its deals, each weighted by its leases reaching scheduled end that
+    month. Because the definitions
+    differ, compare a shelf&rsquo;s trend rather than levels across shelves.
+    A rate of zero before any lease in a deal has reached its scheduled end is
+    shown as no reading.</li>
+  <li><strong>Verification.</strong> Residual and turn-in figures are the
+    servicers&rsquo; own, from the monthly 10-D report. Each day the newest
+    reports are re-read and compared with what we store, and each
+    month&rsquo;s cumulative residual is checked against the prior month plus
+    the month&rsquo;s result. Where an issuer&rsquo;s definition can be rebuilt
+    from the loan-level filings (GM Financial, Ford), we rebuild it as an
+    independent check.</li>
 </ul>
 
 <h2 id="repossessions">5. Repossessions (First-Time Repossession Rate) <span class="tag tag-loan">Auto Loan</span></h2>
@@ -445,9 +467,9 @@ is typically small (&sim;1&ndash;4% for small-volume issuers where a repo happen
 to land on exactly 660).
 </p>
 <p style="margin-top:8px;font-size:13.5px;color:#374151;">
-<span class="tag tag-lease">Auto Lease</span> <strong>Delinquency only (MVP):</strong> residual-value realization,
-disposition mix, and cumulative net loss metrics are computed by the pipeline
-but are not yet surfaced, pending independent corroboration.
+<span class="tag tag-lease">Auto Lease</span> <strong>Lease shelves</strong> show delinquency, credit losses,
+residual value gain (loss) and turn-in, all from the servicers&rsquo; monthly
+reports; repossessions are not yet published for lease shelves.
 </p>
 
 <h2>9. Known Limitations</h2>

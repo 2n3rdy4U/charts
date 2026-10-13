@@ -86,6 +86,7 @@ window.sel=t=>{ if(!selected.includes(t))selected.push(t); buildIssPanel(); refr
 window.unsel=t=>{ if(selected.length<2)return; selected=selected.filter(x=>x!==t); buildIssPanel(); refresh(); };
 window.makeSubject=t=>{ selected=[t,...selected.filter(x=>x!==t)]; buildIssPanel(); refresh(); };
 el('issbtn').onclick=e=>{ e.stopPropagation(); buildIssPanel(); el('isspanel').classList.toggle('open'); };
+document.addEventListener('keydown', e=>{ if(e.key==='Escape' && el('isspanel').classList.contains('open')){ closeAdd(); el('issbtn').focus(); } });   // Escape closes, focus returns to the button
 document.addEventListener('click',e=>{ if(!e.target.closest('#isswrap')) closeAdd(); });
 // Auto Loan and Auto Lease are both this page; the frame's highlight and
 // breadcrumb follow the Loans | Leases toggle. The address follows too, by the

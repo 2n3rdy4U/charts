@@ -12,7 +12,7 @@ function buildSeries(){
           S.push({series:d.series, grp:yr, color:yearColor(yr), pts:d.curve_absee.filter(p=>p[K]!=null).map(p=>[p.m,p[K],fmtMonth(p.date)])});});
       } else {
         (subj.deals||[]).filter(d=>d.has_tend_curve&&d.curve&&d.curve.length).forEach(d=>{const yr=(d.series||'').slice(0,4);
-          S.push({series:d.series, grp:yr, color:yearColor(yr), pts:[[0,0,'']].concat(d.curve.filter(p=>p[K]!=null).map(p=>[p.m,p[K],fmtMonth(p.date)]))});});  // anchor at month-0 origin (cutoff)
+          S.push({series:d.series, grp:yr, color:yearColor(yr), pts:(isTurn()?[]:[[0,0,'']]).concat(d.curve.filter(p=>p[K]!=null).map(p=>[p.m,p[K],fmtMonth(p.date)]))});});  // anchor at month-0 origin (cutoff); a monthly rate has none
       }
     } else {
       const c=calOf(subj).filter(p=>p[K]!=null);
@@ -38,13 +38,14 @@ function updateOutputAvail(){
   const rc=el('rowsctl'); if(rc) rc.hidden = !(output==='table' && mode==='vintage');
   // Pools applies wherever a pooled series is drawn: time series, year overlay,
   // macro overlay. Per-deal vintage curves have no pool to season.
-  const pc=el('poolctl'); if(pc) pc.hidden = !(mode==='calendar' || output==='seasonal' || macroId);
-  const sb=el('seasbtn'); sb.style.opacity=multiIssuer()?0.4:1;
+  const pc=el('poolctl'); if(pc) pc.hidden = isTurn() || !(mode==='calendar' || output==='seasonal' || macroId);   // turn-in has one basis
+  const sb=el('seasbtn'); sb.style.opacity=multiIssuer()?0.4:1; sb.setAttribute('aria-disabled', String(multiIssuer()));   // faded = unavailable, said to a screen reader too
   sb.title=multiIssuer()?'Year overlay is for one issuer at a time':'';
   el('macrosel').disabled=multiIssuer();
   el('macrosel').title=multiIssuer()?'Macro overlay is for one issuer at a time':'';
   document.querySelectorAll('#poolseg button').forEach(b=>b.classList.toggle('on',b.dataset.pools===pools));
   el('modeseg').style.opacity = output==='seasonal' ? 0.4 : 1;   // vintage/calendar N/A for the YoY view
+  el('modeseg').querySelectorAll('button').forEach(b=>b.setAttribute('aria-disabled', String(output==='seasonal')));
   el('modeseg').title = output==='seasonal' ? 'Vintage/Time-series does not apply to the year-over-year view' : '';
 }
 function enforceSingleIssuerViews(){
@@ -78,7 +79,7 @@ function updateModeAvail(){
   // Explorer's does), so a second issuer never pushes the view to time series.
   // The All Issuers series has no deals, so no vintage curves either.
   const vin=document.querySelector('#modeseg button[data-mode="vintage"]'), noVin=isRepo()||anyAll();
-  vin.style.opacity=noVin?0.4:1;
+  vin.style.opacity=noVin?0.4:1; vin.setAttribute('aria-disabled', String(noVin));
   vin.title=isRepo()?'Repossessions are a monthly rate by calendar month; there is no per-deal vintage curve.'
           :anyAll()?'All Issuers is a pooled time series; pick one issuer for its vintage curves.':'';
   if(noVin && mode==='vintage'){ mode='calendar'; document.querySelectorAll('#modeseg button').forEach(b=>b.classList.toggle('on',b.dataset.mode==='calendar')); }
@@ -116,6 +117,8 @@ function renderChart(){
       ? '<div class="chartph">No servicer reports are collected for this shelf: its filings ended before collection began. Delinquency and repossessions come from the loan tape.</div>'
       : (isRepo() && assetClass==='lease')
       ? '<div class="chartph">Repossessions are not yet published for lease shelves.</div>'
+      : isTurn()
+      ? `<div class="chartph">${esc(((SHELVES[selected[0]]||{}).notes||{}).turnin?.[0] || 'No turn-in rate is reported for this shelf.')}</div>`
       : (isResid() && mode==='calendar')
       ? '<div class="chartph">Residual value gain (loss) is cumulative — see the vintage view.</div>'
       : (metric==='cnl_ratio' && !isVin && rs==='withheld')
@@ -130,7 +133,7 @@ function renderChart(){
   if(isVin){   // VINTAGE: per-deal/issuer lines — Vega legend + click-highlight, no per-series chips
     hideChips();
     const data=[]; S.forEach(s=>s.pts.forEach(([x,y,xl])=>data.push({x,y,series:s.series,grp:s.grp,xl})));
-    const T=tipLabels(), isLoss=(metric==='cnl_ratio'||isResid());
+    const T=tipLabels(), isLoss=(metric==='cnl_ratio'||isResid()||isTurn());   // x is deal age in months
     const X={field:"x",type:"quantitative",title:"Months Since Issuance",scale:{zero:true,nice:false},axis:{format:"d",tickMinStep:isLoss?6:1}};
     const Y={field:"y",type:"quantitative",title:metricAxis(),axis:{format:axFmt(data.map(d=>d.y))},scale:{zero:true}};
     const C={field:"series",type:"nominal",title:"Series",scale:{scheme:"tableau10"},legend:legendCfg()};

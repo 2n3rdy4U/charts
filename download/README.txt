@@ -13,5 +13,6 @@ Files:
   auto-loan-repossessions.csv  Auto Loan ABS — First-Time Repossessions
   auto-lease-delinquency.csv  Auto Lease ABS — Delinquency
   auto-lease-net-loss.csv  Auto Lease ABS — Annualized Credit Net Loss
+  auto-lease-turn-in.csv  Auto Lease ABS — Turn-in Rate
   credit-card-trust-performance.csv  Credit Card ABS — Master Trust Performance
   macro-indicators.csv  Macro Indicators

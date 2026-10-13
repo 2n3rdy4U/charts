@@ -1,7 +1,7 @@
 // Build B · Performance page — deep links, analytics and start-up. Plain scripts sharing one scope,
 // loaded in order by index.html; see web/README.md.
 /* ---------- deep-link + analytics (mirrors live macro CC_CHART_SHARE_URL convention) ---------- */
-const METRIC_SHORT={dq_60plus_pct:'dq60',dq_31_60_pct:'dq3059',dq_30plus_pct:'dq30',cnl_ratio:'loss',repo_rate:'repo',rv_gl_cum_ratio:'resid'};
+const METRIC_SHORT={dq_60plus_pct:'dq60',dq_31_60_pct:'dq3059',dq_30plus_pct:'dq30',cnl_ratio:'loss',repo_rate:'repo',rv_gl_cum_ratio:'resid',turn_in_ratio:'turnin'};
 function serializeState(){
   const p=new URLSearchParams();
   p.set('ac',assetClass); p.set('sel',selected.join(','));
@@ -27,7 +27,7 @@ function applyState(){   // restore a shared view from ?params on load
   if(sel.length)selected=sel; else if(!inClass(selected[0]))selected=[CLASS_DEFAULT[assetClass]];
   const m=q.get('m'); if(m&&(METRIC_META[m]||m==='deals'))metric=m;
   if(metric==='repo_rate'&&assetClass==='lease') metric='dq_60plus_pct';       // a tab of the other asset class
-  if(metric==='rv_gl_cum_ratio'&&assetClass==='loan') metric='dq_60plus_pct';
+  if((metric==='rv_gl_cum_ratio'||metric==='turn_in_ratio')&&assetClass==='loan') metric='dq_60plus_pct';
   if(metric==='deals'&&selected.length>1)selected=[selected[0]];   // Deals describes one shelf
   if(metric==='deals'&&isAll(selected[0]))metric='dq_60plus_pct';  // ... and All Issuers has none
   const v=q.get('view'); if(v==='vintage'||v==='calendar')mode=v;
