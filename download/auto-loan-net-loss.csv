@@ -526,6 +526,8 @@ BLAST,Bridgecrest,2026-07,all,12,0.130056
 BLAST,Bridgecrest,2026-07,seasoned,10,0.16161
 BLAST,Bridgecrest,2026-08,all,12,0.137313
 BLAST,Bridgecrest,2026-08,seasoned,10,0.168483
+BLAST,Bridgecrest,2026-09,all,12,0.144158
+BLAST,Bridgecrest,2026-09,seasoned,11,0.160502
 BMWOT,BMW,2018-01,all,1,-8.1e-05
 BMWOT,BMW,2018-02,all,1,0.000344
 BMWOT,BMW,2018-03,all,1,0.000289
@@ -956,6 +958,8 @@ CAOT,CarMax,2026-07,all,17,0.011323
 CAOT,CarMax,2026-07,seasoned,15,0.013843
 CAOT,CarMax,2026-08,all,16,0.013018
 CAOT,CarMax,2026-08,seasoned,14,0.016306
+CAOT,CarMax,2026-09,all,16,0.010593
+CAOT,CarMax,2026-09,seasoned,15,0.011954
 CMXS,CarMax Select,2024-06,all,1,0.0
 CMXS,CarMax Select,2024-07,all,1,0.002309
 CMXS,CarMax Select,2024-08,all,1,0.007284
@@ -1005,6 +1009,8 @@ CMXS,CarMax Select,2026-07,all,5,0.040823
 CMXS,CarMax Select,2026-07,seasoned,4,0.052414
 CMXS,CarMax Select,2026-08,all,5,0.048199
 CMXS,CarMax Select,2026-08,seasoned,4,0.06083
+CMXS,CarMax Select,2026-09,all,6,0.03994
+CMXS,CarMax Select,2026-09,seasoned,4,0.053291
 COPAR,Capital One Prime,2019-05,all,1,0.001182
 COPAR,Capital One Prime,2019-06,all,1,0.000279
 COPAR,Capital One Prime,2019-07,all,1,0.000367
@@ -1176,6 +1182,8 @@ COPAR,Capital One Prime,2026-07,all,4,0.001747
 COPAR,Capital One Prime,2026-07,seasoned,4,0.001747
 COPAR,Capital One Prime,2026-08,all,4,0.000266
 COPAR,Capital One Prime,2026-08,seasoned,4,0.000266
+COPAR,Capital One Prime,2026-09,all,5,0.000936
+COPAR,Capital One Prime,2026-09,seasoned,4,0.001078
 CRVNAN,Carvana N,2021-04,all,1,0.013221
 CRVNAN,Carvana N,2021-05,all,1,0.004042
 CRVNAN,Carvana N,2021-06,all,2,0.014815
@@ -1301,6 +1309,8 @@ CRVNAN,Carvana N,2026-07,all,4,0.136325
 CRVNAN,Carvana N,2026-07,seasoned,4,0.136325
 CRVNAN,Carvana N,2026-08,all,3,0.16979
 CRVNAN,Carvana N,2026-08,seasoned,3,0.16979
+CRVNAN,Carvana N,2026-09,all,3,0.121476
+CRVNAN,Carvana N,2026-09,seasoned,3,0.121476
 CRVNAP,Carvana P,2020-12,all,1,0.002609
 CRVNAP,Carvana P,2021-01,all,1,0.002898
 CRVNAP,Carvana P,2021-02,all,1,0.003416
@@ -1434,6 +1444,8 @@ CRVNAP,Carvana P,2026-07,all,15,0.010199
 CRVNAP,Carvana P,2026-07,seasoned,13,0.014369
 CRVNAP,Carvana P,2026-08,all,16,0.008362
 CRVNAP,Carvana P,2026-08,seasoned,14,0.012844
+CRVNAP,Carvana P,2026-09,all,16,0.008532
+CRVNAP,Carvana P,2026-09,seasoned,14,0.012543
 DRIVE,Santander (DRIVE),2017-06,all,1,0.00054
 DRIVE,Santander (DRIVE),2017-07,all,2,0.001848
 DRIVE,Santander (DRIVE),2017-08,all,2,0.006698
@@ -3521,6 +3533,8 @@ SDART,Santander (SDART),2026-07,all,20,0.058412
 SDART,Santander (SDART),2026-07,seasoned,20,0.058412
 SDART,Santander (SDART),2026-08,all,20,0.077938
 SDART,Santander (SDART),2026-08,seasoned,20,0.077938
+SDART,Santander (SDART),2026-09,all,20,0.080546
+SDART,Santander (SDART),2026-09,seasoned,20,0.080546
 TAOT,Toyota,2017-03,all,1,0.000263
 TAOT,Toyota,2017-04,all,1,0.000183
 TAOT,Toyota,2017-05,all,2,0.001754
