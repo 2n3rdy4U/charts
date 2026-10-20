@@ -113,6 +113,7 @@ function notesFor(){
     if(isRepo()) specific.push(...(n.repossessions||[]));
     if(isTurn()) specific.push(...(n.turnin||[]));   // each servicer states its rate its own way
     if(isResid()) specific.push(...(n.residual||[]));
+    if(metric==='cnl_ratio') specific.push(...(n.losses||[]));   // lease: the sign convention, a known odd month
     if(isAll(t) && !useAbsee()) general.push(...(n.universe||[]));   // the lease market line: how it adds up
     if(isRepo()||useAbsee()){ specific.push(...(n.score||[])); general.push(...(n.universe||[])); } });
   return [...new Set(specific), ...new Set(general)];   // shelf caveats first, the universe once

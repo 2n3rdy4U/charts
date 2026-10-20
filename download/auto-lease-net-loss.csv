@@ -11,228 +11,228 @@
 # Read in Python: pandas.read_csv(url, comment="#")
 shelf,shelf_name,month,universe,n_deals,annualized_net_loss
 ALL-LEASE,All Issuers,2017-03,all,,-1e-06
-ALL-LEASE,All Issuers,2017-04,all,,0.000761
+ALL-LEASE,All Issuers,2017-04,all,,0.000565
 ALL-LEASE,All Issuers,2017-05,all,,0.001152
-ALL-LEASE,All Issuers,2017-06,all,,0.002728
-ALL-LEASE,All Issuers,2017-07,all,,0.001004
+ALL-LEASE,All Issuers,2017-06,all,,0.00247
+ALL-LEASE,All Issuers,2017-07,all,,0.000998
 ALL-LEASE,All Issuers,2017-08,all,,0.002554
 ALL-LEASE,All Issuers,2017-08,seasoned,,0.002743
-ALL-LEASE,All Issuers,2017-09,all,,0.00221
+ALL-LEASE,All Issuers,2017-09,all,,0.001665
 ALL-LEASE,All Issuers,2017-09,seasoned,,0.002193
-ALL-LEASE,All Issuers,2017-10,all,,0.002725
-ALL-LEASE,All Issuers,2017-10,seasoned,,0.002167
-ALL-LEASE,All Issuers,2017-11,all,,0.001354
-ALL-LEASE,All Issuers,2017-11,seasoned,,0.001919
+ALL-LEASE,All Issuers,2017-10,all,,0.002721
+ALL-LEASE,All Issuers,2017-10,seasoned,,0.002157
+ALL-LEASE,All Issuers,2017-11,all,,0.00133
+ALL-LEASE,All Issuers,2017-11,seasoned,,0.001882
 ALL-LEASE,All Issuers,2017-12,all,,0.001732
 ALL-LEASE,All Issuers,2017-12,seasoned,,0.00176
 ALL-LEASE,All Issuers,2018-01,all,,0.001744
 ALL-LEASE,All Issuers,2018-01,seasoned,,0.002354
-ALL-LEASE,All Issuers,2018-02,all,,0.002366
-ALL-LEASE,All Issuers,2018-02,seasoned,,0.00213
-ALL-LEASE,All Issuers,2018-03,all,,0.001051
+ALL-LEASE,All Issuers,2018-02,all,,0.002115
+ALL-LEASE,All Issuers,2018-02,seasoned,,0.001773
+ALL-LEASE,All Issuers,2018-03,all,,0.000802
 ALL-LEASE,All Issuers,2018-03,seasoned,,0.001446
-ALL-LEASE,All Issuers,2018-04,all,,0.001228
-ALL-LEASE,All Issuers,2018-04,seasoned,,0.001245
-ALL-LEASE,All Issuers,2018-05,all,,0.002034
-ALL-LEASE,All Issuers,2018-05,seasoned,,0.002065
-ALL-LEASE,All Issuers,2018-06,all,,0.003315
-ALL-LEASE,All Issuers,2018-06,seasoned,,0.002961
-ALL-LEASE,All Issuers,2018-07,all,,0.002613
-ALL-LEASE,All Issuers,2018-07,seasoned,,0.002644
-ALL-LEASE,All Issuers,2018-08,all,,0.000304
-ALL-LEASE,All Issuers,2018-08,seasoned,,0.00032
-ALL-LEASE,All Issuers,2018-09,all,,0.001298
-ALL-LEASE,All Issuers,2018-09,seasoned,,0.000829
-ALL-LEASE,All Issuers,2018-10,all,,0.002724
-ALL-LEASE,All Issuers,2018-10,seasoned,,0.003052
-ALL-LEASE,All Issuers,2018-11,all,,0.000385
-ALL-LEASE,All Issuers,2018-11,seasoned,,0.000207
-ALL-LEASE,All Issuers,2018-12,all,,0.001597
-ALL-LEASE,All Issuers,2018-12,seasoned,,0.001493
-ALL-LEASE,All Issuers,2019-01,all,,0.001491
-ALL-LEASE,All Issuers,2019-01,seasoned,,0.001943
-ALL-LEASE,All Issuers,2019-02,all,,0.002011
-ALL-LEASE,All Issuers,2019-02,seasoned,,0.001334
-ALL-LEASE,All Issuers,2019-03,all,,0.000687
-ALL-LEASE,All Issuers,2019-03,seasoned,,0.000858
-ALL-LEASE,All Issuers,2019-04,all,,0.001047
-ALL-LEASE,All Issuers,2019-04,seasoned,,0.000849
-ALL-LEASE,All Issuers,2019-05,all,,0.000852
-ALL-LEASE,All Issuers,2019-05,seasoned,,0.000881
-ALL-LEASE,All Issuers,2019-06,all,,0.000909
-ALL-LEASE,All Issuers,2019-06,seasoned,,0.001061
-ALL-LEASE,All Issuers,2019-07,all,,0.00123
-ALL-LEASE,All Issuers,2019-07,seasoned,,0.001333
-ALL-LEASE,All Issuers,2019-08,all,,0.001675
-ALL-LEASE,All Issuers,2019-08,seasoned,,0.000943
-ALL-LEASE,All Issuers,2019-09,all,,0.002715
-ALL-LEASE,All Issuers,2019-09,seasoned,,0.003325
-ALL-LEASE,All Issuers,2019-10,all,,0.001922
-ALL-LEASE,All Issuers,2019-10,seasoned,,0.00189
-ALL-LEASE,All Issuers,2019-11,all,,0.001123
-ALL-LEASE,All Issuers,2019-11,seasoned,,0.001048
-ALL-LEASE,All Issuers,2019-12,all,,0.002302
-ALL-LEASE,All Issuers,2019-12,seasoned,,0.002345
-ALL-LEASE,All Issuers,2020-01,all,,0.001735
-ALL-LEASE,All Issuers,2020-01,seasoned,,0.002229
-ALL-LEASE,All Issuers,2020-02,all,,0.00162
-ALL-LEASE,All Issuers,2020-02,seasoned,,0.001034
-ALL-LEASE,All Issuers,2020-03,all,,0.001433
-ALL-LEASE,All Issuers,2020-03,seasoned,,0.001726
-ALL-LEASE,All Issuers,2020-04,all,,0.002675
-ALL-LEASE,All Issuers,2020-04,seasoned,,0.002992
-ALL-LEASE,All Issuers,2020-05,all,,0.003225
-ALL-LEASE,All Issuers,2020-05,seasoned,,0.002956
-ALL-LEASE,All Issuers,2020-06,all,,0.002337
-ALL-LEASE,All Issuers,2020-06,seasoned,,0.00186
-ALL-LEASE,All Issuers,2020-07,all,,0.000779
-ALL-LEASE,All Issuers,2020-07,seasoned,,0.000907
-ALL-LEASE,All Issuers,2020-08,all,,0.000528
-ALL-LEASE,All Issuers,2020-08,seasoned,,0.000422
-ALL-LEASE,All Issuers,2020-09,all,,0.000885
-ALL-LEASE,All Issuers,2020-09,seasoned,,0.000642
-ALL-LEASE,All Issuers,2020-10,all,,0.00031
-ALL-LEASE,All Issuers,2020-10,seasoned,,0.000525
-ALL-LEASE,All Issuers,2020-11,all,,0.001314
-ALL-LEASE,All Issuers,2020-11,seasoned,,0.00141
-ALL-LEASE,All Issuers,2020-12,all,,0.000255
-ALL-LEASE,All Issuers,2020-12,seasoned,,0.000231
-ALL-LEASE,All Issuers,2021-01,all,,0.00077
-ALL-LEASE,All Issuers,2021-01,seasoned,,0.000829
-ALL-LEASE,All Issuers,2021-02,all,,0.000836
-ALL-LEASE,All Issuers,2021-02,seasoned,,0.000371
-ALL-LEASE,All Issuers,2021-03,all,,-0.000106
-ALL-LEASE,All Issuers,2021-03,seasoned,,-0.000374
-ALL-LEASE,All Issuers,2021-04,all,,-0.000801
-ALL-LEASE,All Issuers,2021-04,seasoned,,-0.001042
-ALL-LEASE,All Issuers,2021-05,all,,-0.000832
-ALL-LEASE,All Issuers,2021-05,seasoned,,-0.001634
-ALL-LEASE,All Issuers,2021-06,all,,-0.000991
-ALL-LEASE,All Issuers,2021-06,seasoned,,-0.001283
-ALL-LEASE,All Issuers,2021-07,all,,-0.000924
-ALL-LEASE,All Issuers,2021-07,seasoned,,-0.001157
-ALL-LEASE,All Issuers,2021-08,all,,-0.000785
-ALL-LEASE,All Issuers,2021-08,seasoned,,-0.00102
-ALL-LEASE,All Issuers,2021-09,all,,-0.000429
-ALL-LEASE,All Issuers,2021-09,seasoned,,-0.000989
-ALL-LEASE,All Issuers,2021-10,all,,-0.001223
-ALL-LEASE,All Issuers,2021-10,seasoned,,-0.001573
-ALL-LEASE,All Issuers,2021-11,all,,-0.000889
-ALL-LEASE,All Issuers,2021-11,seasoned,,-0.001058
-ALL-LEASE,All Issuers,2021-12,all,,-0.000433
-ALL-LEASE,All Issuers,2021-12,seasoned,,-0.000306
-ALL-LEASE,All Issuers,2022-01,all,,-6.8e-05
-ALL-LEASE,All Issuers,2022-01,seasoned,,0.000251
-ALL-LEASE,All Issuers,2022-02,all,,-0.000602
-ALL-LEASE,All Issuers,2022-02,seasoned,,-0.000587
-ALL-LEASE,All Issuers,2022-03,all,,-0.000627
-ALL-LEASE,All Issuers,2022-03,seasoned,,-0.000723
-ALL-LEASE,All Issuers,2022-04,all,,-0.000589
-ALL-LEASE,All Issuers,2022-04,seasoned,,-0.000761
-ALL-LEASE,All Issuers,2022-05,all,,-0.000255
-ALL-LEASE,All Issuers,2022-05,seasoned,,-0.000579
-ALL-LEASE,All Issuers,2022-06,all,,-0.000264
-ALL-LEASE,All Issuers,2022-06,seasoned,,-0.00028
-ALL-LEASE,All Issuers,2022-07,all,,-0.00023
-ALL-LEASE,All Issuers,2022-07,seasoned,,-0.00026
-ALL-LEASE,All Issuers,2022-08,all,,-6.7e-05
-ALL-LEASE,All Issuers,2022-08,seasoned,,-0.000153
-ALL-LEASE,All Issuers,2022-09,all,,0.000129
-ALL-LEASE,All Issuers,2022-09,seasoned,,0.000151
-ALL-LEASE,All Issuers,2022-10,all,,0.000119
-ALL-LEASE,All Issuers,2022-10,seasoned,,0.000276
-ALL-LEASE,All Issuers,2022-11,all,,0.00046
-ALL-LEASE,All Issuers,2022-11,seasoned,,0.000371
-ALL-LEASE,All Issuers,2022-12,all,,0.000127
-ALL-LEASE,All Issuers,2022-12,seasoned,,0.000136
-ALL-LEASE,All Issuers,2023-01,all,,0.000674
-ALL-LEASE,All Issuers,2023-01,seasoned,,0.000895
-ALL-LEASE,All Issuers,2023-02,all,,0.000383
-ALL-LEASE,All Issuers,2023-02,seasoned,,0.000421
-ALL-LEASE,All Issuers,2023-03,all,,0.000362
-ALL-LEASE,All Issuers,2023-03,seasoned,,0.000395
-ALL-LEASE,All Issuers,2023-04,all,,-0.000106
-ALL-LEASE,All Issuers,2023-04,seasoned,,-0.000364
-ALL-LEASE,All Issuers,2023-05,all,,0.000645
-ALL-LEASE,All Issuers,2023-05,seasoned,,0.001002
-ALL-LEASE,All Issuers,2023-06,all,,0.000641
-ALL-LEASE,All Issuers,2023-06,seasoned,,0.001025
-ALL-LEASE,All Issuers,2023-07,all,,0.001013
-ALL-LEASE,All Issuers,2023-07,seasoned,,0.000557
-ALL-LEASE,All Issuers,2023-08,all,,0.0011
-ALL-LEASE,All Issuers,2023-08,seasoned,,0.000226
-ALL-LEASE,All Issuers,2023-09,all,,0.00069
-ALL-LEASE,All Issuers,2023-09,seasoned,,0.000619
-ALL-LEASE,All Issuers,2023-10,all,,0.001029
-ALL-LEASE,All Issuers,2023-10,seasoned,,0.001113
-ALL-LEASE,All Issuers,2023-11,all,,0.001041
-ALL-LEASE,All Issuers,2023-11,seasoned,,0.001304
-ALL-LEASE,All Issuers,2023-12,all,,0.00134
-ALL-LEASE,All Issuers,2023-12,seasoned,,0.00147
-ALL-LEASE,All Issuers,2024-01,all,,0.002284
-ALL-LEASE,All Issuers,2024-01,seasoned,,0.002868
-ALL-LEASE,All Issuers,2024-02,all,,0.00145
-ALL-LEASE,All Issuers,2024-02,seasoned,,0.00174
-ALL-LEASE,All Issuers,2024-03,all,,0.000977
-ALL-LEASE,All Issuers,2024-03,seasoned,,0.001261
-ALL-LEASE,All Issuers,2024-04,all,,0.002083
-ALL-LEASE,All Issuers,2024-04,seasoned,,0.002117
+ALL-LEASE,All Issuers,2018-04,all,,0.001133
+ALL-LEASE,All Issuers,2018-04,seasoned,,0.001167
+ALL-LEASE,All Issuers,2018-05,all,,0.001793
+ALL-LEASE,All Issuers,2018-05,seasoned,,0.001705
+ALL-LEASE,All Issuers,2018-06,all,,0.002897
+ALL-LEASE,All Issuers,2018-06,seasoned,,0.002639
+ALL-LEASE,All Issuers,2018-07,all,,0.002002
+ALL-LEASE,All Issuers,2018-07,seasoned,,0.001985
+ALL-LEASE,All Issuers,2018-08,all,,-0.001769
+ALL-LEASE,All Issuers,2018-08,seasoned,,-0.00198
+ALL-LEASE,All Issuers,2018-09,all,,-0.001025
+ALL-LEASE,All Issuers,2018-09,seasoned,,-0.002308
+ALL-LEASE,All Issuers,2018-10,all,,0.002712
+ALL-LEASE,All Issuers,2018-10,seasoned,,0.003034
+ALL-LEASE,All Issuers,2018-11,all,,-0.001063
+ALL-LEASE,All Issuers,2018-11,seasoned,,-0.001508
+ALL-LEASE,All Issuers,2018-12,all,,0.001068
+ALL-LEASE,All Issuers,2018-12,seasoned,,0.000721
+ALL-LEASE,All Issuers,2019-01,all,,0.001297
+ALL-LEASE,All Issuers,2019-01,seasoned,,0.001898
+ALL-LEASE,All Issuers,2019-02,all,,0.001243
+ALL-LEASE,All Issuers,2019-02,seasoned,,0.000136
+ALL-LEASE,All Issuers,2019-03,all,,-0.000185
+ALL-LEASE,All Issuers,2019-03,seasoned,,-0.000301
+ALL-LEASE,All Issuers,2019-04,all,,0.000223
+ALL-LEASE,All Issuers,2019-04,seasoned,,-0.000363
+ALL-LEASE,All Issuers,2019-05,all,,0.000227
+ALL-LEASE,All Issuers,2019-05,seasoned,,0.000109
+ALL-LEASE,All Issuers,2019-06,all,,0.000431
+ALL-LEASE,All Issuers,2019-06,seasoned,,0.000563
+ALL-LEASE,All Issuers,2019-07,all,,0.00012
+ALL-LEASE,All Issuers,2019-07,seasoned,,-0.000345
+ALL-LEASE,All Issuers,2019-08,all,,0.000881
+ALL-LEASE,All Issuers,2019-08,seasoned,,-0.000177
+ALL-LEASE,All Issuers,2019-09,all,,0.002672
+ALL-LEASE,All Issuers,2019-09,seasoned,,0.003272
+ALL-LEASE,All Issuers,2019-10,all,,0.001285
+ALL-LEASE,All Issuers,2019-10,seasoned,,0.001254
+ALL-LEASE,All Issuers,2019-11,all,,0.000269
+ALL-LEASE,All Issuers,2019-11,seasoned,,-0.00013
+ALL-LEASE,All Issuers,2019-12,all,,0.002226
+ALL-LEASE,All Issuers,2019-12,seasoned,,0.002245
+ALL-LEASE,All Issuers,2020-01,all,,0.000575
+ALL-LEASE,All Issuers,2020-01,seasoned,,0.000591
+ALL-LEASE,All Issuers,2020-02,all,,0.000115
+ALL-LEASE,All Issuers,2020-02,seasoned,,-0.001393
+ALL-LEASE,All Issuers,2020-03,all,,0.000523
+ALL-LEASE,All Issuers,2020-03,seasoned,,0.000609
+ALL-LEASE,All Issuers,2020-04,all,,0.002298
+ALL-LEASE,All Issuers,2020-04,seasoned,,0.002491
+ALL-LEASE,All Issuers,2020-05,all,,0.003075
+ALL-LEASE,All Issuers,2020-05,seasoned,,0.002756
+ALL-LEASE,All Issuers,2020-06,all,,0.000913
+ALL-LEASE,All Issuers,2020-06,seasoned,,0.000405
+ALL-LEASE,All Issuers,2020-07,all,,-0.000653
+ALL-LEASE,All Issuers,2020-07,seasoned,,-0.00041
+ALL-LEASE,All Issuers,2020-08,all,,-0.000344
+ALL-LEASE,All Issuers,2020-08,seasoned,,-0.000571
+ALL-LEASE,All Issuers,2020-09,all,,0.000248
+ALL-LEASE,All Issuers,2020-09,seasoned,,-0.000169
+ALL-LEASE,All Issuers,2020-10,all,,-0.00135
+ALL-LEASE,All Issuers,2020-10,seasoned,,-0.00105
+ALL-LEASE,All Issuers,2020-11,all,,0.001072
+ALL-LEASE,All Issuers,2020-11,seasoned,,0.00115
+ALL-LEASE,All Issuers,2020-12,all,,-0.000121
+ALL-LEASE,All Issuers,2020-12,seasoned,,-0.00027
+ALL-LEASE,All Issuers,2021-01,all,,-9.4e-05
+ALL-LEASE,All Issuers,2021-01,seasoned,,-0.000471
+ALL-LEASE,All Issuers,2021-02,all,,-6.8e-05
+ALL-LEASE,All Issuers,2021-02,seasoned,,-0.000726
+ALL-LEASE,All Issuers,2021-03,all,,-0.001088
+ALL-LEASE,All Issuers,2021-03,seasoned,,-0.001647
+ALL-LEASE,All Issuers,2021-04,all,,-0.002139
+ALL-LEASE,All Issuers,2021-04,seasoned,,-0.002516
+ALL-LEASE,All Issuers,2021-05,all,,-0.002695
+ALL-LEASE,All Issuers,2021-05,seasoned,,-0.00371
+ALL-LEASE,All Issuers,2021-06,all,,-0.002169
+ALL-LEASE,All Issuers,2021-06,seasoned,,-0.00246
+ALL-LEASE,All Issuers,2021-07,all,,-0.002745
+ALL-LEASE,All Issuers,2021-07,seasoned,,-0.003065
+ALL-LEASE,All Issuers,2021-08,all,,-0.002713
+ALL-LEASE,All Issuers,2021-08,seasoned,,-0.00313
+ALL-LEASE,All Issuers,2021-09,all,,-0.001089
+ALL-LEASE,All Issuers,2021-09,seasoned,,-0.001919
+ALL-LEASE,All Issuers,2021-10,all,,-0.003266
+ALL-LEASE,All Issuers,2021-10,seasoned,,-0.004141
+ALL-LEASE,All Issuers,2021-11,all,,-0.003691
+ALL-LEASE,All Issuers,2021-11,seasoned,,-0.004449
+ALL-LEASE,All Issuers,2021-12,all,,-0.000849
+ALL-LEASE,All Issuers,2021-12,seasoned,,-0.0006
+ALL-LEASE,All Issuers,2022-01,all,,-0.001233
+ALL-LEASE,All Issuers,2022-01,seasoned,,-0.001261
+ALL-LEASE,All Issuers,2022-02,all,,-0.002062
+ALL-LEASE,All Issuers,2022-02,seasoned,,-0.002298
+ALL-LEASE,All Issuers,2022-03,all,,-0.002837
+ALL-LEASE,All Issuers,2022-03,seasoned,,-0.003024
+ALL-LEASE,All Issuers,2022-04,all,,-0.001555
+ALL-LEASE,All Issuers,2022-04,seasoned,,-0.001968
+ALL-LEASE,All Issuers,2022-05,all,,-0.001459
+ALL-LEASE,All Issuers,2022-05,seasoned,,-0.002121
+ALL-LEASE,All Issuers,2022-06,all,,-0.000957
+ALL-LEASE,All Issuers,2022-06,seasoned,,-0.001012
+ALL-LEASE,All Issuers,2022-07,all,,-0.001067
+ALL-LEASE,All Issuers,2022-07,seasoned,,-0.001407
+ALL-LEASE,All Issuers,2022-08,all,,-0.001112
+ALL-LEASE,All Issuers,2022-08,seasoned,,-0.001471
+ALL-LEASE,All Issuers,2022-09,all,,-0.001318
+ALL-LEASE,All Issuers,2022-09,seasoned,,-0.000989
+ALL-LEASE,All Issuers,2022-10,all,,-0.001688
+ALL-LEASE,All Issuers,2022-10,seasoned,,-0.001659
+ALL-LEASE,All Issuers,2022-11,all,,-0.001295
+ALL-LEASE,All Issuers,2022-11,seasoned,,-0.001514
+ALL-LEASE,All Issuers,2022-12,all,,-0.001034
+ALL-LEASE,All Issuers,2022-12,seasoned,,-0.000579
+ALL-LEASE,All Issuers,2023-01,all,,0.000245
+ALL-LEASE,All Issuers,2023-01,seasoned,,0.000394
+ALL-LEASE,All Issuers,2023-02,all,,-0.001031
+ALL-LEASE,All Issuers,2023-02,seasoned,,-0.001485
+ALL-LEASE,All Issuers,2023-03,all,,-0.000729
+ALL-LEASE,All Issuers,2023-03,seasoned,,-0.00083
+ALL-LEASE,All Issuers,2023-04,all,,-0.001054
+ALL-LEASE,All Issuers,2023-04,seasoned,,-0.00168
+ALL-LEASE,All Issuers,2023-05,all,,-0.000272
+ALL-LEASE,All Issuers,2023-05,seasoned,,-0.000166
+ALL-LEASE,All Issuers,2023-06,all,,-0.000215
+ALL-LEASE,All Issuers,2023-06,seasoned,,-3.1e-05
+ALL-LEASE,All Issuers,2023-07,all,,0.000442
+ALL-LEASE,All Issuers,2023-07,seasoned,,-0.00019
+ALL-LEASE,All Issuers,2023-08,all,,-0.000125
+ALL-LEASE,All Issuers,2023-08,seasoned,,-0.00081
+ALL-LEASE,All Issuers,2023-09,all,,-0.000481
+ALL-LEASE,All Issuers,2023-09,seasoned,,-0.001206
+ALL-LEASE,All Issuers,2023-10,all,,-0.000118
+ALL-LEASE,All Issuers,2023-10,seasoned,,-0.00023
+ALL-LEASE,All Issuers,2023-11,all,,-0.000278
+ALL-LEASE,All Issuers,2023-11,seasoned,,-0.000444
+ALL-LEASE,All Issuers,2023-12,all,,0.000786
+ALL-LEASE,All Issuers,2023-12,seasoned,,0.000728
+ALL-LEASE,All Issuers,2024-01,all,,0.002146
+ALL-LEASE,All Issuers,2024-01,seasoned,,0.002663
+ALL-LEASE,All Issuers,2024-02,all,,0.00094
+ALL-LEASE,All Issuers,2024-02,seasoned,,0.000996
+ALL-LEASE,All Issuers,2024-03,all,,0.000308
+ALL-LEASE,All Issuers,2024-03,seasoned,,0.000365
+ALL-LEASE,All Issuers,2024-04,all,,0.000819
+ALL-LEASE,All Issuers,2024-04,seasoned,,0.000134
 ALL-LEASE,All Issuers,2024-05,all,,0.007539
 ALL-LEASE,All Issuers,2024-05,seasoned,,0.012139
-ALL-LEASE,All Issuers,2024-06,all,,0.001275
-ALL-LEASE,All Issuers,2024-06,seasoned,,0.001369
-ALL-LEASE,All Issuers,2024-07,all,,0.001788
-ALL-LEASE,All Issuers,2024-07,seasoned,,0.001616
-ALL-LEASE,All Issuers,2024-08,all,,0.001293
-ALL-LEASE,All Issuers,2024-08,seasoned,,0.001369
-ALL-LEASE,All Issuers,2024-09,all,,0.002147
-ALL-LEASE,All Issuers,2024-09,seasoned,,0.0023
-ALL-LEASE,All Issuers,2024-10,all,,0.002051
-ALL-LEASE,All Issuers,2024-10,seasoned,,0.001952
-ALL-LEASE,All Issuers,2024-11,all,,0.002364
-ALL-LEASE,All Issuers,2024-11,seasoned,,0.002523
-ALL-LEASE,All Issuers,2024-12,all,,0.003584
-ALL-LEASE,All Issuers,2024-12,seasoned,,0.003924
-ALL-LEASE,All Issuers,2025-01,all,,0.001278
-ALL-LEASE,All Issuers,2025-01,seasoned,,0.001709
-ALL-LEASE,All Issuers,2025-02,all,,0.002466
-ALL-LEASE,All Issuers,2025-02,seasoned,,0.002054
-ALL-LEASE,All Issuers,2025-03,all,,0.001082
-ALL-LEASE,All Issuers,2025-03,seasoned,,0.001137
-ALL-LEASE,All Issuers,2025-04,all,,0.00141
-ALL-LEASE,All Issuers,2025-04,seasoned,,0.001231
-ALL-LEASE,All Issuers,2025-05,all,,0.002511
-ALL-LEASE,All Issuers,2025-05,seasoned,,0.002427
-ALL-LEASE,All Issuers,2025-06,all,,0.001236
-ALL-LEASE,All Issuers,2025-06,seasoned,,0.000903
-ALL-LEASE,All Issuers,2025-07,all,,0.002046
-ALL-LEASE,All Issuers,2025-07,seasoned,,0.002442
-ALL-LEASE,All Issuers,2025-08,all,,0.001688
-ALL-LEASE,All Issuers,2025-08,seasoned,,0.001741
-ALL-LEASE,All Issuers,2025-09,all,,0.001674
-ALL-LEASE,All Issuers,2025-09,seasoned,,0.001858
-ALL-LEASE,All Issuers,2025-10,all,,0.001592
-ALL-LEASE,All Issuers,2025-10,seasoned,,0.001912
-ALL-LEASE,All Issuers,2025-11,all,,0.001887
-ALL-LEASE,All Issuers,2025-11,seasoned,,0.002203
-ALL-LEASE,All Issuers,2025-12,all,,0.002687
-ALL-LEASE,All Issuers,2025-12,seasoned,,0.002849
-ALL-LEASE,All Issuers,2026-01,all,,0.002519
-ALL-LEASE,All Issuers,2026-01,seasoned,,0.002994
-ALL-LEASE,All Issuers,2026-02,all,,0.001967
-ALL-LEASE,All Issuers,2026-02,seasoned,,0.001649
-ALL-LEASE,All Issuers,2026-03,all,,0.001431
-ALL-LEASE,All Issuers,2026-03,seasoned,,0.001471
-ALL-LEASE,All Issuers,2026-04,all,,0.00119
-ALL-LEASE,All Issuers,2026-04,seasoned,,0.00118
-ALL-LEASE,All Issuers,2026-05,all,,0.001319
-ALL-LEASE,All Issuers,2026-05,seasoned,,0.000736
-ALL-LEASE,All Issuers,2026-06,all,,0.001709
-ALL-LEASE,All Issuers,2026-06,seasoned,,0.001103
-ALL-LEASE,All Issuers,2026-07,all,,0.00277
-ALL-LEASE,All Issuers,2026-07,seasoned,,0.002363
-ALL-LEASE,All Issuers,2026-08,all,,0.001513
-ALL-LEASE,All Issuers,2026-08,seasoned,,0.001225
+ALL-LEASE,All Issuers,2024-06,all,,0.000973
+ALL-LEASE,All Issuers,2024-06,seasoned,,0.000915
+ALL-LEASE,All Issuers,2024-07,all,,0.001519
+ALL-LEASE,All Issuers,2024-07,seasoned,,0.001226
+ALL-LEASE,All Issuers,2024-08,all,,0.00128
+ALL-LEASE,All Issuers,2024-08,seasoned,,0.001351
+ALL-LEASE,All Issuers,2024-09,all,,0.001683
+ALL-LEASE,All Issuers,2024-09,seasoned,,0.001725
+ALL-LEASE,All Issuers,2024-10,all,,0.001772
+ALL-LEASE,All Issuers,2024-10,seasoned,,0.001574
+ALL-LEASE,All Issuers,2024-11,all,,0.00175
+ALL-LEASE,All Issuers,2024-11,seasoned,,0.001686
+ALL-LEASE,All Issuers,2024-12,all,,0.002901
+ALL-LEASE,All Issuers,2024-12,seasoned,,0.003237
+ALL-LEASE,All Issuers,2025-01,all,,0.00119
+ALL-LEASE,All Issuers,2025-01,seasoned,,0.001589
+ALL-LEASE,All Issuers,2025-02,all,,0.001925
+ALL-LEASE,All Issuers,2025-02,seasoned,,0.001349
+ALL-LEASE,All Issuers,2025-03,all,,0.000401
+ALL-LEASE,All Issuers,2025-03,seasoned,,0.000403
+ALL-LEASE,All Issuers,2025-04,all,,0.001003
+ALL-LEASE,All Issuers,2025-04,seasoned,,0.000704
+ALL-LEASE,All Issuers,2025-05,all,,0.001868
+ALL-LEASE,All Issuers,2025-05,seasoned,,0.001498
+ALL-LEASE,All Issuers,2025-06,all,,0.000673
+ALL-LEASE,All Issuers,2025-06,seasoned,,0.000136
+ALL-LEASE,All Issuers,2025-07,all,,0.001535
+ALL-LEASE,All Issuers,2025-07,seasoned,,0.001855
+ALL-LEASE,All Issuers,2025-08,all,,0.001053
+ALL-LEASE,All Issuers,2025-08,seasoned,,0.000833
+ALL-LEASE,All Issuers,2025-09,all,,0.001096
+ALL-LEASE,All Issuers,2025-09,seasoned,,0.001096
+ALL-LEASE,All Issuers,2025-10,all,,0.000554
+ALL-LEASE,All Issuers,2025-10,seasoned,,0.000355
+ALL-LEASE,All Issuers,2025-11,all,,0.001577
+ALL-LEASE,All Issuers,2025-11,seasoned,,0.001785
+ALL-LEASE,All Issuers,2025-12,all,,0.002428
+ALL-LEASE,All Issuers,2025-12,seasoned,,0.002538
+ALL-LEASE,All Issuers,2026-01,all,,0.002126
+ALL-LEASE,All Issuers,2026-01,seasoned,,0.002665
+ALL-LEASE,All Issuers,2026-02,all,,0.001065
+ALL-LEASE,All Issuers,2026-02,seasoned,,0.00049
+ALL-LEASE,All Issuers,2026-03,all,,0.000629
+ALL-LEASE,All Issuers,2026-03,seasoned,,0.000549
+ALL-LEASE,All Issuers,2026-04,all,,0.000425
+ALL-LEASE,All Issuers,2026-04,seasoned,,9.4e-05
+ALL-LEASE,All Issuers,2026-05,all,,0.000677
+ALL-LEASE,All Issuers,2026-05,seasoned,,-0.000226
+ALL-LEASE,All Issuers,2026-06,all,,0.001188
+ALL-LEASE,All Issuers,2026-06,seasoned,,0.000492
+ALL-LEASE,All Issuers,2026-07,all,,0.002517
+ALL-LEASE,All Issuers,2026-07,seasoned,,0.002009
+ALL-LEASE,All Issuers,2026-08,all,,0.000579
+ALL-LEASE,All Issuers,2026-08,seasoned,,0.000309
 BMWLT,BMW,2017-03,all,1,6.9e-05
 BMWLT,BMW,2017-04,all,1,1.6e-05
 BMWLT,BMW,2017-05,all,1,9.2e-05
@@ -456,7 +456,7 @@ BMWLT,BMW,2026-08,all,4,0.001675
 BMWLT,BMW,2026-08,seasoned,3,0.000116
 FCALT,Ford,2017-10,all,1,0.0
 FCALT,Ford,2018-04,all,1,0.0
-FCALT,Ford,2018-05,all,1,0.0
+FCALT,Ford,2018-05,all,1,-2.1e-05
 FCALT,Ford,2018-09,all,1,0.0
 FCALT,Ford,2019-02,all,1,0.0
 FCALT,Ford,2019-07,all,1,0.0
@@ -478,41 +478,41 @@ FCALT,Ford,2021-01,all,6,0.001536
 FCALT,Ford,2021-01,seasoned,5,0.002065
 FCALT,Ford,2021-02,all,6,0.001053
 FCALT,Ford,2021-02,seasoned,5,0.001373
-FCALT,Ford,2021-03,all,6,0.000746
-FCALT,Ford,2021-03,seasoned,5,0.000816
-FCALT,Ford,2021-04,all,6,0.000348
-FCALT,Ford,2021-04,seasoned,5,0.000511
-FCALT,Ford,2021-05,all,5,0.000203
-FCALT,Ford,2021-05,seasoned,4,0.00031
-FCALT,Ford,2021-06,all,5,0.000362
-FCALT,Ford,2021-06,seasoned,5,0.000362
+FCALT,Ford,2021-03,all,6,0.00073
+FCALT,Ford,2021-03,seasoned,5,0.000793
+FCALT,Ford,2021-04,all,6,0.000297
+FCALT,Ford,2021-04,seasoned,5,0.000453
+FCALT,Ford,2021-05,all,5,0.000175
+FCALT,Ford,2021-05,seasoned,4,0.000269
+FCALT,Ford,2021-06,all,5,0.000347
+FCALT,Ford,2021-06,seasoned,5,0.000347
 FCALT,Ford,2021-07,all,5,0.000637
 FCALT,Ford,2021-07,seasoned,5,0.000637
 FCALT,Ford,2021-08,all,5,0.000823
 FCALT,Ford,2021-08,seasoned,5,0.000823
 FCALT,Ford,2021-09,all,5,0.000453
 FCALT,Ford,2021-09,seasoned,4,0.000672
-FCALT,Ford,2021-10,all,5,0.00034
-FCALT,Ford,2021-10,seasoned,4,0.000511
-FCALT,Ford,2021-11,all,5,0.000263
-FCALT,Ford,2021-11,seasoned,4,0.000401
+FCALT,Ford,2021-10,all,5,0.000296
+FCALT,Ford,2021-10,seasoned,4,0.000445
+FCALT,Ford,2021-11,all,5,0.000215
+FCALT,Ford,2021-11,seasoned,4,0.000388
 FCALT,Ford,2021-12,all,5,0.00087
 FCALT,Ford,2021-12,seasoned,4,0.00098
-FCALT,Ford,2022-01,all,5,0.000455
-FCALT,Ford,2022-01,seasoned,4,0.000714
+FCALT,Ford,2022-01,all,5,0.000405
+FCALT,Ford,2022-01,seasoned,4,0.000636
 FCALT,Ford,2022-02,all,5,0.000566
 FCALT,Ford,2022-02,seasoned,5,0.000566
 FCALT,Ford,2022-03,all,4,0.000665
 FCALT,Ford,2022-03,seasoned,4,0.000665
-FCALT,Ford,2022-04,all,5,8.1e-05
-FCALT,Ford,2022-04,seasoned,4,0.000119
+FCALT,Ford,2022-04,all,5,7e-05
+FCALT,Ford,2022-04,seasoned,4,0.000103
 FCALT,Ford,2022-05,all,5,0.000795
 FCALT,Ford,2022-05,seasoned,4,0.001
-FCALT,Ford,2022-06,all,5,0.00035
-FCALT,Ford,2022-06,seasoned,4,0.000532
+FCALT,Ford,2022-06,all,5,0.000334
+FCALT,Ford,2022-06,seasoned,4,0.000509
 FCALT,Ford,2022-07,all,4,0.001025
 FCALT,Ford,2022-07,seasoned,3,0.001388
-FCALT,Ford,2022-08,all,4,0.000739
+FCALT,Ford,2022-08,all,4,0.000723
 FCALT,Ford,2022-08,seasoned,3,0.001185
 FCALT,Ford,2022-09,all,4,0.000817
 FCALT,Ford,2022-09,seasoned,4,0.000817
@@ -614,443 +614,443 @@ GMALT,GM Financial,2017-04,all,1,0.002591
 GMALT,GM Financial,2017-05,all,1,0.000479
 GMALT,GM Financial,2017-06,all,2,0.006134
 GMALT,GM Financial,2017-07,all,2,0.001806
-GMALT,GM Financial,2017-09,all,3,0.003217
+GMALT,GM Financial,2017-09,all,3,0.001653
 GMALT,GM Financial,2017-09,seasoned,1,0.005165
-GMALT,GM Financial,2017-10,all,3,0.004018
-GMALT,GM Financial,2017-10,seasoned,1,0.0
+GMALT,GM Financial,2017-10,all,3,0.004004
+GMALT,GM Financial,2017-10,seasoned,1,-4.2e-05
 GMALT,GM Financial,2017-11,all,3,0.00277
 GMALT,GM Financial,2017-11,seasoned,2,0.003417
 GMALT,GM Financial,2017-12,all,3,0.001378
 GMALT,GM Financial,2017-12,seasoned,2,0.000475
 GMALT,GM Financial,2018-01,all,3,0.00254
 GMALT,GM Financial,2018-01,seasoned,2,0.003456
-GMALT,GM Financial,2018-02,all,4,0.003358
-GMALT,GM Financial,2018-02,seasoned,3,0.001509
-GMALT,GM Financial,2018-03,all,4,0.001674
+GMALT,GM Financial,2018-02,all,4,0.002649
+GMALT,GM Financial,2018-02,seasoned,3,0.000505
+GMALT,GM Financial,2018-03,all,4,0.001555
 GMALT,GM Financial,2018-03,seasoned,3,0.002371
-GMALT,GM Financial,2018-04,all,4,0.002279
-GMALT,GM Financial,2018-04,seasoned,3,0.001543
-GMALT,GM Financial,2018-05,all,4,0.001573
-GMALT,GM Financial,2018-05,seasoned,3,0.00122
-GMALT,GM Financial,2018-06,all,5,0.006546
+GMALT,GM Financial,2018-04,all,4,0.002105
+GMALT,GM Financial,2018-04,seasoned,3,0.001296
+GMALT,GM Financial,2018-05,all,4,0.000783
+GMALT,GM Financial,2018-05,seasoned,3,9.3e-05
+GMALT,GM Financial,2018-06,all,5,0.006099
 GMALT,GM Financial,2018-06,seasoned,3,0.008444
-GMALT,GM Financial,2018-07,all,5,0.003989
-GMALT,GM Financial,2018-07,seasoned,4,0.00528
-GMALT,GM Financial,2018-08,all,5,0.00028
-GMALT,GM Financial,2018-08,seasoned,4,0.000318
-GMALT,GM Financial,2018-09,all,6,0.001844
-GMALT,GM Financial,2018-09,seasoned,4,0.0
-GMALT,GM Financial,2018-10,all,6,0.003122
-GMALT,GM Financial,2018-10,seasoned,4,0.003057
-GMALT,GM Financial,2018-11,all,6,0.0
-GMALT,GM Financial,2018-11,seasoned,5,0.0
-GMALT,GM Financial,2018-12,all,6,0.00073
-GMALT,GM Financial,2018-12,seasoned,5,0.000562
-GMALT,GM Financial,2019-01,all,6,0.002175
+GMALT,GM Financial,2018-07,all,5,0.002792
+GMALT,GM Financial,2018-07,seasoned,4,0.003886
+GMALT,GM Financial,2018-08,all,5,-0.003997
+GMALT,GM Financial,2018-08,seasoned,4,-0.005361
+GMALT,GM Financial,2018-09,all,6,-0.003991
+GMALT,GM Financial,2018-09,seasoned,4,-0.009349
+GMALT,GM Financial,2018-10,all,6,0.003089
+GMALT,GM Financial,2018-10,seasoned,4,0.003003
+GMALT,GM Financial,2018-11,all,6,-0.003042
+GMALT,GM Financial,2018-11,seasoned,5,-0.003258
+GMALT,GM Financial,2018-12,all,6,-0.000757
+GMALT,GM Financial,2018-12,seasoned,5,-0.001327
+GMALT,GM Financial,2019-01,all,6,0.002144
 GMALT,GM Financial,2019-01,seasoned,5,0.002771
-GMALT,GM Financial,2019-02,all,7,0.002127
-GMALT,GM Financial,2019-02,seasoned,6,0.0
-GMALT,GM Financial,2019-03,all,7,0.000506
-GMALT,GM Financial,2019-03,seasoned,6,0.000628
-GMALT,GM Financial,2019-04,all,8,0.000953
-GMALT,GM Financial,2019-04,seasoned,6,0.000753
-GMALT,GM Financial,2019-05,all,7,0.001237
-GMALT,GM Financial,2019-05,seasoned,5,0.001284
-GMALT,GM Financial,2019-06,all,8,0.001526
-GMALT,GM Financial,2019-06,seasoned,6,0.001731
-GMALT,GM Financial,2019-07,all,8,0.000364
-GMALT,GM Financial,2019-07,seasoned,7,0.000215
-GMALT,GM Financial,2019-08,all,9,0.003093
-GMALT,GM Financial,2019-08,seasoned,7,0.000248
+GMALT,GM Financial,2019-02,all,7,-5.9e-05
+GMALT,GM Financial,2019-02,seasoned,6,-0.002702
+GMALT,GM Financial,2019-03,all,7,-0.001917
+GMALT,GM Financial,2019-03,seasoned,6,-0.002163
+GMALT,GM Financial,2019-04,all,8,-0.000994
+GMALT,GM Financial,2019-04,seasoned,6,-0.002049
+GMALT,GM Financial,2019-05,all,7,0.00055
+GMALT,GM Financial,2019-05,seasoned,5,0.000728
+GMALT,GM Financial,2019-06,all,8,0.000637
+GMALT,GM Financial,2019-06,seasoned,6,0.000911
+GMALT,GM Financial,2019-07,all,8,-0.0031
+GMALT,GM Financial,2019-07,seasoned,7,-0.00406
+GMALT,GM Financial,2019-08,all,9,0.001389
+GMALT,GM Financial,2019-08,seasoned,7,-0.00223
 GMALT,GM Financial,2019-09,all,9,0.006153
 GMALT,GM Financial,2019-09,seasoned,8,0.007182
-GMALT,GM Financial,2019-10,all,9,0.000623
-GMALT,GM Financial,2019-10,seasoned,8,0.000737
-GMALT,GM Financial,2019-11,all,8,0.001188
-GMALT,GM Financial,2019-11,seasoned,7,0.000383
-GMALT,GM Financial,2019-12,all,8,0.003168
-GMALT,GM Financial,2019-12,seasoned,7,0.003302
-GMALT,GM Financial,2020-01,all,8,0.000502
-GMALT,GM Financial,2020-01,seasoned,8,0.000502
-GMALT,GM Financial,2020-02,all,9,0.002148
-GMALT,GM Financial,2020-02,seasoned,8,0.0
-GMALT,GM Financial,2020-03,all,8,5.6e-05
-GMALT,GM Financial,2020-03,seasoned,7,7.2e-05
-GMALT,GM Financial,2020-04,all,8,0.000664
-GMALT,GM Financial,2020-04,seasoned,7,0.000599
-GMALT,GM Financial,2020-05,all,8,0.001873
-GMALT,GM Financial,2020-05,seasoned,7,0.001425
-GMALT,GM Financial,2020-06,all,8,0.001826
-GMALT,GM Financial,2020-06,seasoned,6,0.0
-GMALT,GM Financial,2020-07,all,8,0.0
-GMALT,GM Financial,2020-07,seasoned,7,0.0
-GMALT,GM Financial,2020-08,all,8,0.001051
-GMALT,GM Financial,2020-08,seasoned,7,0.000614
-GMALT,GM Financial,2020-09,all,8,0.001595
-GMALT,GM Financial,2020-09,seasoned,6,0.0
-GMALT,GM Financial,2020-10,all,8,0.0
-GMALT,GM Financial,2020-10,seasoned,6,0.0
-GMALT,GM Financial,2020-11,all,7,0.000645
-GMALT,GM Financial,2020-11,seasoned,6,0.000885
-GMALT,GM Financial,2020-12,all,7,0.000415
-GMALT,GM Financial,2020-12,seasoned,6,0.000128
-GMALT,GM Financial,2021-01,all,6,8.5e-05
-GMALT,GM Financial,2021-01,seasoned,5,0.00012
-GMALT,GM Financial,2021-02,all,7,0.001903
-GMALT,GM Financial,2021-02,seasoned,6,2.9e-05
-GMALT,GM Financial,2021-03,all,7,7.4e-05
-GMALT,GM Financial,2021-03,seasoned,6,9.8e-05
-GMALT,GM Financial,2021-04,all,7,0.0
-GMALT,GM Financial,2021-04,seasoned,6,0.0
-GMALT,GM Financial,2021-05,all,8,0.001144
-GMALT,GM Financial,2021-05,seasoned,6,0.0
-GMALT,GM Financial,2021-06,all,7,0.0
-GMALT,GM Financial,2021-06,seasoned,5,0.0
-GMALT,GM Financial,2021-07,all,7,0.0
-GMALT,GM Financial,2021-07,seasoned,6,0.0
-GMALT,GM Financial,2021-08,all,8,0.0
-GMALT,GM Financial,2021-08,seasoned,6,0.0
-GMALT,GM Financial,2021-09,all,7,0.000643
-GMALT,GM Financial,2021-09,seasoned,5,2.8e-05
-GMALT,GM Financial,2021-10,all,7,0.0
-GMALT,GM Financial,2021-10,seasoned,6,0.0
-GMALT,GM Financial,2021-11,all,7,0.0
-GMALT,GM Financial,2021-11,seasoned,6,0.0
-GMALT,GM Financial,2021-12,all,7,0.00026
-GMALT,GM Financial,2021-12,seasoned,6,0.000325
-GMALT,GM Financial,2022-01,all,6,0.000101
-GMALT,GM Financial,2022-01,seasoned,6,0.000101
-GMALT,GM Financial,2022-02,all,7,0.0
-GMALT,GM Financial,2022-02,seasoned,6,0.0
-GMALT,GM Financial,2022-03,all,7,0.0
-GMALT,GM Financial,2022-03,seasoned,6,0.0
-GMALT,GM Financial,2022-04,all,7,0.0
-GMALT,GM Financial,2022-04,seasoned,6,0.0
-GMALT,GM Financial,2022-05,all,8,0.000373
-GMALT,GM Financial,2022-05,seasoned,6,0.0
-GMALT,GM Financial,2022-06,all,7,0.0
-GMALT,GM Financial,2022-06,seasoned,5,0.0
-GMALT,GM Financial,2022-07,all,7,0.000189
-GMALT,GM Financial,2022-07,seasoned,6,0.0
-GMALT,GM Financial,2022-08,all,8,8e-05
-GMALT,GM Financial,2022-08,seasoned,6,4.9e-05
-GMALT,GM Financial,2022-09,all,8,0.0
-GMALT,GM Financial,2022-09,seasoned,6,0.0
-GMALT,GM Financial,2022-10,all,8,0.0
-GMALT,GM Financial,2022-10,seasoned,7,0.0
-GMALT,GM Financial,2022-11,all,8,0.000333
-GMALT,GM Financial,2022-11,seasoned,7,0.0
-GMALT,GM Financial,2022-12,all,8,0.0
-GMALT,GM Financial,2022-12,seasoned,7,0.0
-GMALT,GM Financial,2023-01,all,7,0.000847
-GMALT,GM Financial,2023-01,seasoned,7,0.000847
-GMALT,GM Financial,2023-02,all,7,0.000566
-GMALT,GM Financial,2023-02,seasoned,6,0.0
-GMALT,GM Financial,2023-03,all,7,0.0
-GMALT,GM Financial,2023-03,seasoned,6,0.0
-GMALT,GM Financial,2023-04,all,7,0.000634
-GMALT,GM Financial,2023-04,seasoned,6,0.0
-GMALT,GM Financial,2023-05,all,8,0.000858
-GMALT,GM Financial,2023-05,seasoned,6,4.3e-05
-GMALT,GM Financial,2023-06,all,8,0.000346
-GMALT,GM Financial,2023-06,seasoned,6,0.000564
-GMALT,GM Financial,2023-07,all,7,0.001119
-GMALT,GM Financial,2023-07,seasoned,6,3.1e-05
-GMALT,GM Financial,2023-08,all,8,0.00104
-GMALT,GM Financial,2023-08,seasoned,6,0.000362
-GMALT,GM Financial,2023-09,all,8,4.5e-05
-GMALT,GM Financial,2023-09,seasoned,6,0.0
-GMALT,GM Financial,2023-10,all,8,0.000472
-GMALT,GM Financial,2023-10,seasoned,7,0.000562
-GMALT,GM Financial,2023-11,all,7,9.4e-05
-GMALT,GM Financial,2023-11,seasoned,6,0.0
-GMALT,GM Financial,2023-12,all,7,0.000288
-GMALT,GM Financial,2023-12,seasoned,6,0.000229
-GMALT,GM Financial,2024-01,all,7,0.002151
-GMALT,GM Financial,2024-01,seasoned,7,0.002151
-GMALT,GM Financial,2024-02,all,8,0.001425
-GMALT,GM Financial,2024-02,seasoned,7,0.000564
-GMALT,GM Financial,2024-03,all,7,0.0
-GMALT,GM Financial,2024-03,seasoned,6,0.0
-GMALT,GM Financial,2024-04,all,7,9.3e-05
-GMALT,GM Financial,2024-04,seasoned,6,0.0
+GMALT,GM Financial,2019-10,all,9,-0.001065
+GMALT,GM Financial,2019-10,seasoned,8,-0.000706
+GMALT,GM Financial,2019-11,all,8,-0.000583
+GMALT,GM Financial,2019-11,seasoned,7,-0.001736
+GMALT,GM Financial,2019-12,all,8,0.003166
+GMALT,GM Financial,2019-12,seasoned,7,0.003299
+GMALT,GM Financial,2020-01,all,8,-0.00409
+GMALT,GM Financial,2020-01,seasoned,8,-0.00409
+GMALT,GM Financial,2020-02,all,9,-0.003237
+GMALT,GM Financial,2020-02,seasoned,8,-0.006802
+GMALT,GM Financial,2020-03,all,8,-0.002623
+GMALT,GM Financial,2020-03,seasoned,7,-0.002786
+GMALT,GM Financial,2020-04,all,8,-0.000637
+GMALT,GM Financial,2020-04,seasoned,7,-0.001078
+GMALT,GM Financial,2020-05,all,8,0.001371
+GMALT,GM Financial,2020-05,seasoned,7,0.000774
+GMALT,GM Financial,2020-06,all,8,-0.002305
+GMALT,GM Financial,2020-06,seasoned,6,-0.005735
+GMALT,GM Financial,2020-07,all,8,-0.00455
+GMALT,GM Financial,2020-07,seasoned,7,-0.004518
+GMALT,GM Financial,2020-08,all,8,-0.002408
+GMALT,GM Financial,2020-08,seasoned,7,-0.003871
+GMALT,GM Financial,2020-09,all,8,-0.000503
+GMALT,GM Financial,2020-09,seasoned,6,-0.00358
+GMALT,GM Financial,2020-10,all,8,-0.006076
+GMALT,GM Financial,2020-10,seasoned,6,-0.007547
+GMALT,GM Financial,2020-11,all,7,-3e-06
+GMALT,GM Financial,2020-11,seasoned,6,0.000346
+GMALT,GM Financial,2020-12,all,7,-0.000682
+GMALT,GM Financial,2020-12,seasoned,6,-0.001392
+GMALT,GM Financial,2021-01,all,6,-0.003231
+GMALT,GM Financial,2021-01,seasoned,5,-0.004574
+GMALT,GM Financial,2021-02,all,7,-0.00122
+GMALT,GM Financial,2021-02,seasoned,6,-0.004063
+GMALT,GM Financial,2021-03,all,7,-0.002539
+GMALT,GM Financial,2021-03,seasoned,6,-0.003101
+GMALT,GM Financial,2021-04,all,7,-0.004643
+GMALT,GM Financial,2021-04,seasoned,6,-0.005513
+GMALT,GM Financial,2021-05,all,8,-0.004022
+GMALT,GM Financial,2021-05,seasoned,6,-0.006732
+GMALT,GM Financial,2021-06,all,7,-0.003583
+GMALT,GM Financial,2021-06,seasoned,5,-0.004618
+GMALT,GM Financial,2021-07,all,7,-0.005821
+GMALT,GM Financial,2021-07,seasoned,6,-0.006039
+GMALT,GM Financial,2021-08,all,8,-0.005306
+GMALT,GM Financial,2021-08,seasoned,6,-0.007072
+GMALT,GM Financial,2021-09,all,7,-0.001113
+GMALT,GM Financial,2021-09,seasoned,5,-0.00266
+GMALT,GM Financial,2021-10,all,7,-0.006286
+GMALT,GM Financial,2021-10,seasoned,6,-0.006596
+GMALT,GM Financial,2021-11,all,7,-0.007529
+GMALT,GM Financial,2021-11,seasoned,6,-0.008116
+GMALT,GM Financial,2021-12,all,7,-0.00096
+GMALT,GM Financial,2021-12,seasoned,6,-0.000321
+GMALT,GM Financial,2022-01,all,6,-0.004408
+GMALT,GM Financial,2022-01,seasoned,6,-0.004408
+GMALT,GM Financial,2022-02,all,7,-0.004156
+GMALT,GM Financial,2022-02,seasoned,6,-0.005203
+GMALT,GM Financial,2022-03,all,7,-0.006448
+GMALT,GM Financial,2022-03,seasoned,6,-0.007509
+GMALT,GM Financial,2022-04,all,7,-0.00235
+GMALT,GM Financial,2022-04,seasoned,6,-0.002898
+GMALT,GM Financial,2022-05,all,8,-0.002757
+GMALT,GM Financial,2022-05,seasoned,6,-0.004671
+GMALT,GM Financial,2022-06,all,7,-0.002393
+GMALT,GM Financial,2022-06,seasoned,5,-0.002989
+GMALT,GM Financial,2022-07,all,7,-0.002641
+GMALT,GM Financial,2022-07,seasoned,6,-0.003643
+GMALT,GM Financial,2022-08,all,8,-0.0023
+GMALT,GM Financial,2022-08,seasoned,6,-0.003029
+GMALT,GM Financial,2022-09,all,8,-0.004179
+GMALT,GM Financial,2022-09,seasoned,6,-0.004048
+GMALT,GM Financial,2022-10,all,8,-0.004551
+GMALT,GM Financial,2022-10,seasoned,7,-0.004936
+GMALT,GM Financial,2022-11,all,8,-0.004664
+GMALT,GM Financial,2022-11,seasoned,7,-0.006249
+GMALT,GM Financial,2022-12,all,8,-0.003244
+GMALT,GM Financial,2022-12,seasoned,7,-0.002272
+GMALT,GM Financial,2023-01,all,7,-0.00016
+GMALT,GM Financial,2023-01,seasoned,7,-0.00016
+GMALT,GM Financial,2023-02,all,7,-0.003616
+GMALT,GM Financial,2023-02,seasoned,6,-0.005437
+GMALT,GM Financial,2023-03,all,7,-0.003019
+GMALT,GM Financial,2023-03,seasoned,6,-0.003167
+GMALT,GM Financial,2023-04,all,7,-0.00161
+GMALT,GM Financial,2023-04,seasoned,6,-0.002948
+GMALT,GM Financial,2023-05,all,8,-0.001383
+GMALT,GM Financial,2023-05,seasoned,6,-0.003228
+GMALT,GM Financial,2023-06,all,8,-0.001756
+GMALT,GM Financial,2023-06,seasoned,6,-0.00209
+GMALT,GM Financial,2023-07,all,7,-0.000622
+GMALT,GM Financial,2023-07,seasoned,6,-0.002131
+GMALT,GM Financial,2023-08,all,8,-0.00231
+GMALT,GM Financial,2023-08,seasoned,6,-0.002628
+GMALT,GM Financial,2023-09,all,8,-0.003284
+GMALT,GM Financial,2023-09,seasoned,6,-0.004882
+GMALT,GM Financial,2023-10,all,8,-0.003178
+GMALT,GM Financial,2023-10,seasoned,7,-0.003037
+GMALT,GM Financial,2023-11,all,7,-0.004438
+GMALT,GM Financial,2023-11,seasoned,6,-0.005459
+GMALT,GM Financial,2023-12,all,7,-0.001601
+GMALT,GM Financial,2023-12,seasoned,6,-0.002059
+GMALT,GM Financial,2024-01,all,7,0.001753
+GMALT,GM Financial,2024-01,seasoned,7,0.001753
+GMALT,GM Financial,2024-02,all,8,-0.000326
+GMALT,GM Financial,2024-02,seasoned,7,-0.001744
+GMALT,GM Financial,2024-03,all,7,-0.002503
+GMALT,GM Financial,2024-03,seasoned,6,-0.003032
+GMALT,GM Financial,2024-04,all,7,-0.004411
+GMALT,GM Financial,2024-04,seasoned,6,-0.006117
 GMALT,GM Financial,2024-05,all,8,0.024637
 GMALT,GM Financial,2024-05,seasoned,6,0.039833
-GMALT,GM Financial,2024-06,all,8,0.000566
-GMALT,GM Financial,2024-06,seasoned,6,0.000187
-GMALT,GM Financial,2024-07,all,7,0.000553
-GMALT,GM Financial,2024-07,seasoned,6,0.000274
+GMALT,GM Financial,2024-06,all,8,-0.000511
+GMALT,GM Financial,2024-06,seasoned,6,-0.001706
+GMALT,GM Financial,2024-07,all,7,-0.000559
+GMALT,GM Financial,2024-07,seasoned,6,-0.001157
 GMALT,GM Financial,2024-08,all,7,0.002042
 GMALT,GM Financial,2024-08,seasoned,6,0.001994
-GMALT,GM Financial,2024-09,all,7,0.002205
-GMALT,GM Financial,2024-09,seasoned,5,0.001152
-GMALT,GM Financial,2024-10,all,7,0.000772
-GMALT,GM Financial,2024-10,seasoned,6,0.000858
-GMALT,GM Financial,2024-11,all,7,0.002149
-GMALT,GM Financial,2024-11,seasoned,6,0.000662
-GMALT,GM Financial,2024-12,all,6,0.00013
-GMALT,GM Financial,2024-12,seasoned,5,0.000168
-GMALT,GM Financial,2025-01,all,6,0.002089
-GMALT,GM Financial,2025-01,seasoned,5,0.002577
-GMALT,GM Financial,2025-02,all,7,0.004398
-GMALT,GM Financial,2025-02,seasoned,6,0.001538
-GMALT,GM Financial,2025-03,all,7,0.000225
-GMALT,GM Financial,2025-03,seasoned,6,0.000305
-GMALT,GM Financial,2025-04,all,7,0.00037
-GMALT,GM Financial,2025-04,seasoned,6,3.5e-05
-GMALT,GM Financial,2025-05,all,8,0.002106
-GMALT,GM Financial,2025-05,seasoned,6,0.000113
-GMALT,GM Financial,2025-06,all,8,0.00088
-GMALT,GM Financial,2025-06,seasoned,6,0.000246
-GMALT,GM Financial,2025-07,all,7,0.001841
-GMALT,GM Financial,2025-07,seasoned,6,0.002285
-GMALT,GM Financial,2025-08,all,8,0.002026
-GMALT,GM Financial,2025-08,seasoned,6,0.000686
-GMALT,GM Financial,2025-09,all,8,0.001304
-GMALT,GM Financial,2025-09,seasoned,6,0.000472
-GMALT,GM Financial,2025-10,all,7,0.000256
-GMALT,GM Financial,2025-10,seasoned,6,0.0
-GMALT,GM Financial,2025-11,all,7,0.001883
-GMALT,GM Financial,2025-11,seasoned,6,0.001777
-GMALT,GM Financial,2025-12,all,7,0.001924
-GMALT,GM Financial,2025-12,seasoned,6,0.001674
-GMALT,GM Financial,2026-01,all,7,0.002617
-GMALT,GM Financial,2026-01,seasoned,7,0.002617
-GMALT,GM Financial,2026-02,all,7,0.002563
-GMALT,GM Financial,2026-02,seasoned,6,0.000179
-GMALT,GM Financial,2026-03,all,7,0.00039
-GMALT,GM Financial,2026-03,seasoned,6,0.000469
-GMALT,GM Financial,2026-04,all,7,0.000809
-GMALT,GM Financial,2026-04,seasoned,6,0.000633
-GMALT,GM Financial,2026-05,all,8,0.001686
-GMALT,GM Financial,2026-05,seasoned,6,0.0
-GMALT,GM Financial,2026-06,all,8,0.000687
-GMALT,GM Financial,2026-06,seasoned,6,0.000476
-GMALT,GM Financial,2026-07,all,7,0.002431
-GMALT,GM Financial,2026-07,seasoned,6,0.001836
-GMALT,GM Financial,2026-08,all,8,0.001454
-GMALT,GM Financial,2026-08,seasoned,6,0.000138
-MBALT,Mercedes-Benz,2017-04,all,1,0.0
+GMALT,GM Financial,2024-09,all,7,0.000737
+GMALT,GM Financial,2024-09,seasoned,5,-0.001293
+GMALT,GM Financial,2024-10,all,7,-8.8e-05
+GMALT,GM Financial,2024-10,seasoned,6,-0.000228
+GMALT,GM Financial,2024-11,all,7,-0.000263
+GMALT,GM Financial,2024-11,seasoned,6,-0.002403
+GMALT,GM Financial,2024-12,all,6,-0.002616
+GMALT,GM Financial,2024-12,seasoned,5,-0.002812
+GMALT,GM Financial,2025-01,all,6,0.001815
+GMALT,GM Financial,2025-01,seasoned,5,0.002222
+GMALT,GM Financial,2025-02,all,7,0.002459
+GMALT,GM Financial,2025-02,seasoned,6,-0.001068
+GMALT,GM Financial,2025-03,all,7,-0.002353
+GMALT,GM Financial,2025-03,seasoned,6,-0.002625
+GMALT,GM Financial,2025-04,all,7,-0.001169
+GMALT,GM Financial,2025-04,seasoned,6,-0.00207
+GMALT,GM Financial,2025-05,all,8,-0.000118
+GMALT,GM Financial,2025-05,seasoned,6,-0.003594
+GMALT,GM Financial,2025-06,all,8,-0.000566
+GMALT,GM Financial,2025-06,seasoned,6,-0.00212
+GMALT,GM Financial,2025-07,all,7,0.000636
+GMALT,GM Financial,2025-07,seasoned,6,0.000978
+GMALT,GM Financial,2025-08,all,8,-7.3e-05
+GMALT,GM Financial,2025-08,seasoned,6,-0.002356
+GMALT,GM Financial,2025-09,all,8,-0.000764
+GMALT,GM Financial,2025-09,seasoned,6,-0.002556
+GMALT,GM Financial,2025-10,all,7,-0.004588
+GMALT,GM Financial,2025-10,seasoned,6,-0.005701
+GMALT,GM Financial,2025-11,all,7,0.001233
+GMALT,GM Financial,2025-11,seasoned,6,0.001009
+GMALT,GM Financial,2025-12,all,7,0.000752
+GMALT,GM Financial,2025-12,seasoned,6,0.000283
+GMALT,GM Financial,2026-01,all,7,0.002112
+GMALT,GM Financial,2026-01,seasoned,7,0.002112
+GMALT,GM Financial,2026-02,all,7,-0.001529
+GMALT,GM Financial,2026-02,seasoned,6,-0.00471
+GMALT,GM Financial,2026-03,all,7,-0.002948
+GMALT,GM Financial,2026-03,seasoned,6,-0.00282
+GMALT,GM Financial,2026-04,all,7,-0.003125
+GMALT,GM Financial,2026-04,seasoned,6,-0.004135
+GMALT,GM Financial,2026-05,all,8,-0.001101
+GMALT,GM Financial,2026-05,seasoned,6,-0.004232
+GMALT,GM Financial,2026-06,all,8,-0.001249
+GMALT,GM Financial,2026-06,seasoned,6,-0.001889
+GMALT,GM Financial,2026-07,all,7,0.001374
+GMALT,GM Financial,2026-07,seasoned,6,0.000485
+GMALT,GM Financial,2026-08,all,8,-0.002798
+GMALT,GM Financial,2026-08,seasoned,6,-0.004644
+MBALT,Mercedes-Benz,2017-04,all,1,-0.00047
 MBALT,Mercedes-Benz,2017-05,all,1,0.001664
-MBALT,Mercedes-Benz,2017-06,all,1,0.0
-MBALT,Mercedes-Benz,2017-07,all,1,0.0
+MBALT,Mercedes-Benz,2017-06,all,1,-0.000951
+MBALT,Mercedes-Benz,2017-07,all,1,-2.2e-05
 MBALT,Mercedes-Benz,2017-08,all,1,0.001505
 MBALT,Mercedes-Benz,2017-09,all,1,3e-06
 MBALT,Mercedes-Benz,2017-09,seasoned,1,3e-06
 MBALT,Mercedes-Benz,2017-10,all,1,0.001315
 MBALT,Mercedes-Benz,2017-10,seasoned,1,0.001315
-MBALT,Mercedes-Benz,2017-11,all,1,0.0
-MBALT,Mercedes-Benz,2017-11,seasoned,1,0.0
+MBALT,Mercedes-Benz,2017-11,all,1,-0.000141
+MBALT,Mercedes-Benz,2017-11,seasoned,1,-0.000141
 MBALT,Mercedes-Benz,2017-12,all,1,0.000752
 MBALT,Mercedes-Benz,2017-12,seasoned,1,0.000752
 MBALT,Mercedes-Benz,2018-01,all,2,0.001814
 MBALT,Mercedes-Benz,2018-01,seasoned,1,0.002905
 MBALT,Mercedes-Benz,2018-02,all,2,0.001138
 MBALT,Mercedes-Benz,2018-02,seasoned,1,0.001658
-MBALT,Mercedes-Benz,2018-03,all,2,0.000248
+MBALT,Mercedes-Benz,2018-03,all,2,-0.000683
 MBALT,Mercedes-Benz,2018-03,seasoned,1,0.000458
-MBALT,Mercedes-Benz,2018-04,all,2,0.000873
+MBALT,Mercedes-Benz,2018-04,all,2,0.000666
 MBALT,Mercedes-Benz,2018-04,seasoned,1,0.001627
 MBALT,Mercedes-Benz,2018-05,all,2,0.001747
 MBALT,Mercedes-Benz,2018-05,seasoned,1,0.00097
-MBALT,Mercedes-Benz,2018-06,all,2,0.001686
-MBALT,Mercedes-Benz,2018-06,seasoned,2,0.001686
-MBALT,Mercedes-Benz,2018-07,all,2,0.0
-MBALT,Mercedes-Benz,2018-07,seasoned,2,0.0
-MBALT,Mercedes-Benz,2018-08,all,2,0.000474
-MBALT,Mercedes-Benz,2018-08,seasoned,2,0.000474
-MBALT,Mercedes-Benz,2018-09,all,2,0.000436
-MBALT,Mercedes-Benz,2018-09,seasoned,2,0.000436
+MBALT,Mercedes-Benz,2018-06,all,2,0.000471
+MBALT,Mercedes-Benz,2018-06,seasoned,2,0.000471
+MBALT,Mercedes-Benz,2018-07,all,2,-0.000681
+MBALT,Mercedes-Benz,2018-07,seasoned,2,-0.000681
+MBALT,Mercedes-Benz,2018-08,all,2,-0.001397
+MBALT,Mercedes-Benz,2018-08,seasoned,2,-0.001397
+MBALT,Mercedes-Benz,2018-09,all,2,0.000394
+MBALT,Mercedes-Benz,2018-09,seasoned,2,0.000394
 MBALT,Mercedes-Benz,2018-10,all,2,0.001238
 MBALT,Mercedes-Benz,2018-10,seasoned,2,0.001238
-MBALT,Mercedes-Benz,2018-11,all,3,0.0
-MBALT,Mercedes-Benz,2018-11,seasoned,2,0.0
+MBALT,Mercedes-Benz,2018-11,all,3,-0.001863
+MBALT,Mercedes-Benz,2018-11,seasoned,2,-0.002072
 MBALT,Mercedes-Benz,2018-12,all,3,0.002364
 MBALT,Mercedes-Benz,2018-12,seasoned,2,0.003219
-MBALT,Mercedes-Benz,2019-01,all,4,0.000628
-MBALT,Mercedes-Benz,2019-01,seasoned,2,0.000973
+MBALT,Mercedes-Benz,2019-01,all,4,-6.8e-05
+MBALT,Mercedes-Benz,2019-01,seasoned,2,0.000732
 MBALT,Mercedes-Benz,2019-02,all,4,0.001129
 MBALT,Mercedes-Benz,2019-02,seasoned,2,0.001548
-MBALT,Mercedes-Benz,2019-03,all,4,0.000957
-MBALT,Mercedes-Benz,2019-03,seasoned,2,0.001093
-MBALT,Mercedes-Benz,2019-04,all,4,0.000597
-MBALT,Mercedes-Benz,2019-04,seasoned,3,0.00027
-MBALT,Mercedes-Benz,2019-05,all,4,0.00019
-MBALT,Mercedes-Benz,2019-05,seasoned,3,0.000294
-MBALT,Mercedes-Benz,2019-06,all,4,0.000631
-MBALT,Mercedes-Benz,2019-06,seasoned,4,0.000631
-MBALT,Mercedes-Benz,2019-07,all,4,0.001229
-MBALT,Mercedes-Benz,2019-07,seasoned,4,0.001229
-MBALT,Mercedes-Benz,2019-08,all,3,0.0
-MBALT,Mercedes-Benz,2019-08,seasoned,3,0.0
-MBALT,Mercedes-Benz,2019-09,all,3,0.000385
-MBALT,Mercedes-Benz,2019-09,seasoned,3,0.000385
-MBALT,Mercedes-Benz,2019-10,all,3,0.00131
-MBALT,Mercedes-Benz,2019-10,seasoned,3,0.00131
-MBALT,Mercedes-Benz,2019-11,all,4,0.000414
-MBALT,Mercedes-Benz,2019-11,seasoned,3,0.000655
-MBALT,Mercedes-Benz,2019-12,all,4,0.00136
-MBALT,Mercedes-Benz,2019-12,seasoned,3,0.001573
-MBALT,Mercedes-Benz,2020-01,all,5,0.001878
-MBALT,Mercedes-Benz,2020-01,seasoned,3,0.004258
-MBALT,Mercedes-Benz,2020-02,all,5,0.00088
-MBALT,Mercedes-Benz,2020-02,seasoned,3,0.000542
-MBALT,Mercedes-Benz,2020-03,all,5,0.000809
-MBALT,Mercedes-Benz,2020-03,seasoned,3,0.00123
-MBALT,Mercedes-Benz,2020-04,all,5,0.001116
-MBALT,Mercedes-Benz,2020-04,seasoned,4,0.001093
-MBALT,Mercedes-Benz,2020-05,all,5,0.002334
-MBALT,Mercedes-Benz,2020-05,seasoned,4,0.001988
-MBALT,Mercedes-Benz,2020-06,all,5,0.002224
-MBALT,Mercedes-Benz,2020-06,seasoned,5,0.002224
-MBALT,Mercedes-Benz,2020-07,all,4,0.001152
-MBALT,Mercedes-Benz,2020-07,seasoned,4,0.001152
-MBALT,Mercedes-Benz,2020-08,all,4,0.000245
-MBALT,Mercedes-Benz,2020-08,seasoned,4,0.000245
-MBALT,Mercedes-Benz,2020-09,all,4,0.001923
-MBALT,Mercedes-Benz,2020-09,seasoned,4,0.001923
-MBALT,Mercedes-Benz,2020-10,all,5,0.001392
-MBALT,Mercedes-Benz,2020-10,seasoned,4,0.001864
-MBALT,Mercedes-Benz,2020-11,all,5,0.001162
-MBALT,Mercedes-Benz,2020-11,seasoned,4,0.000873
-MBALT,Mercedes-Benz,2020-12,all,5,0.000229
-MBALT,Mercedes-Benz,2020-12,seasoned,4,0.000231
-MBALT,Mercedes-Benz,2021-01,all,6,0.000314
-MBALT,Mercedes-Benz,2021-01,seasoned,4,0.000503
-MBALT,Mercedes-Benz,2021-02,all,6,0.000232
-MBALT,Mercedes-Benz,2021-02,seasoned,5,0.00032
-MBALT,Mercedes-Benz,2021-03,all,5,0.000807
-MBALT,Mercedes-Benz,2021-03,seasoned,4,0.000653
-MBALT,Mercedes-Benz,2021-04,all,5,0.001152
-MBALT,Mercedes-Benz,2021-04,seasoned,4,0.001651
-MBALT,Mercedes-Benz,2021-05,all,4,9e-05
-MBALT,Mercedes-Benz,2021-05,seasoned,3,0.000133
-MBALT,Mercedes-Benz,2021-06,all,5,1.6e-05
-MBALT,Mercedes-Benz,2021-06,seasoned,4,2.2e-05
-MBALT,Mercedes-Benz,2021-07,all,5,0.0
-MBALT,Mercedes-Benz,2021-07,seasoned,4,0.0
-MBALT,Mercedes-Benz,2021-08,all,5,0.0
-MBALT,Mercedes-Benz,2021-08,seasoned,4,0.0
-MBALT,Mercedes-Benz,2021-09,all,5,0.000734
-MBALT,Mercedes-Benz,2021-09,seasoned,4,0.000691
-MBALT,Mercedes-Benz,2021-10,all,5,0.000143
-MBALT,Mercedes-Benz,2021-10,seasoned,4,0.0
-MBALT,Mercedes-Benz,2021-11,all,5,0.0
-MBALT,Mercedes-Benz,2021-11,seasoned,5,0.0
-MBALT,Mercedes-Benz,2021-12,all,4,0.001272
-MBALT,Mercedes-Benz,2021-12,seasoned,4,0.001272
-MBALT,Mercedes-Benz,2022-01,all,5,0.001467
-MBALT,Mercedes-Benz,2022-01,seasoned,5,0.001467
-MBALT,Mercedes-Benz,2022-02,all,5,0.000433
-MBALT,Mercedes-Benz,2022-02,seasoned,5,0.000433
-MBALT,Mercedes-Benz,2022-03,all,5,0.0
-MBALT,Mercedes-Benz,2022-03,seasoned,5,0.0
-MBALT,Mercedes-Benz,2022-04,all,4,0.0
-MBALT,Mercedes-Benz,2022-04,seasoned,4,0.0
-MBALT,Mercedes-Benz,2022-05,all,4,0.0
-MBALT,Mercedes-Benz,2022-05,seasoned,4,0.0
+MBALT,Mercedes-Benz,2019-03,all,4,0.000695
+MBALT,Mercedes-Benz,2019-03,seasoned,2,0.000467
+MBALT,Mercedes-Benz,2019-04,all,4,-0.000109
+MBALT,Mercedes-Benz,2019-04,seasoned,3,-0.000805
+MBALT,Mercedes-Benz,2019-05,all,4,-0.001865
+MBALT,Mercedes-Benz,2019-05,seasoned,3,-0.002713
+MBALT,Mercedes-Benz,2019-06,all,4,-0.000242
+MBALT,Mercedes-Benz,2019-06,seasoned,4,-0.000242
+MBALT,Mercedes-Benz,2019-07,all,4,0.001008
+MBALT,Mercedes-Benz,2019-07,seasoned,4,0.001008
+MBALT,Mercedes-Benz,2019-08,all,3,-0.001369
+MBALT,Mercedes-Benz,2019-08,seasoned,3,-0.001369
+MBALT,Mercedes-Benz,2019-09,all,3,7.1e-05
+MBALT,Mercedes-Benz,2019-09,seasoned,3,7.1e-05
+MBALT,Mercedes-Benz,2019-10,all,3,0.00062
+MBALT,Mercedes-Benz,2019-10,seasoned,3,0.00062
+MBALT,Mercedes-Benz,2019-11,all,4,-0.001309
+MBALT,Mercedes-Benz,2019-11,seasoned,3,-0.001833
+MBALT,Mercedes-Benz,2019-12,all,4,0.000967
+MBALT,Mercedes-Benz,2019-12,seasoned,3,0.000944
+MBALT,Mercedes-Benz,2020-01,all,5,0.001498
+MBALT,Mercedes-Benz,2020-01,seasoned,3,0.003674
+MBALT,Mercedes-Benz,2020-02,all,5,0.000461
+MBALT,Mercedes-Benz,2020-02,seasoned,3,-0.00037
+MBALT,Mercedes-Benz,2020-03,all,5,-2.9e-05
+MBALT,Mercedes-Benz,2020-03,seasoned,3,-0.0008
+MBALT,Mercedes-Benz,2020-04,all,5,0.001023
+MBALT,Mercedes-Benz,2020-04,seasoned,4,0.000952
+MBALT,Mercedes-Benz,2020-05,all,5,0.002276
+MBALT,Mercedes-Benz,2020-05,seasoned,4,0.001899
+MBALT,Mercedes-Benz,2020-06,all,5,0.001621
+MBALT,Mercedes-Benz,2020-06,seasoned,5,0.001621
+MBALT,Mercedes-Benz,2020-07,all,4,0.000693
+MBALT,Mercedes-Benz,2020-07,seasoned,4,0.000693
+MBALT,Mercedes-Benz,2020-08,all,4,7.2e-05
+MBALT,Mercedes-Benz,2020-08,seasoned,4,7.2e-05
+MBALT,Mercedes-Benz,2020-09,all,4,0.001473
+MBALT,Mercedes-Benz,2020-09,seasoned,4,0.001473
+MBALT,Mercedes-Benz,2020-10,all,5,0.000646
+MBALT,Mercedes-Benz,2020-10,seasoned,4,0.001529
+MBALT,Mercedes-Benz,2020-11,all,5,0.00063
+MBALT,Mercedes-Benz,2020-11,seasoned,4,0.000154
+MBALT,Mercedes-Benz,2020-12,all,5,-0.000456
+MBALT,Mercedes-Benz,2020-12,seasoned,4,-0.000701
+MBALT,Mercedes-Benz,2021-01,all,6,-0.000573
+MBALT,Mercedes-Benz,2021-01,seasoned,4,-0.001061
+MBALT,Mercedes-Benz,2021-02,all,6,-0.000318
+MBALT,Mercedes-Benz,2021-02,seasoned,5,0.000109
+MBALT,Mercedes-Benz,2021-03,all,5,-0.001092
+MBALT,Mercedes-Benz,2021-03,seasoned,4,-0.002045
+MBALT,Mercedes-Benz,2021-04,all,5,0.000166
+MBALT,Mercedes-Benz,2021-04,seasoned,4,0.000893
+MBALT,Mercedes-Benz,2021-05,all,4,-0.001989
+MBALT,Mercedes-Benz,2021-05,seasoned,3,-0.00238
+MBALT,Mercedes-Benz,2021-06,all,5,-0.000881
+MBALT,Mercedes-Benz,2021-06,seasoned,4,-0.001023
+MBALT,Mercedes-Benz,2021-07,all,5,-0.001356
+MBALT,Mercedes-Benz,2021-07,seasoned,4,-0.001615
+MBALT,Mercedes-Benz,2021-08,all,5,-0.001542
+MBALT,Mercedes-Benz,2021-08,seasoned,4,-0.001966
+MBALT,Mercedes-Benz,2021-09,all,5,-0.000308
+MBALT,Mercedes-Benz,2021-09,seasoned,4,-0.000777
+MBALT,Mercedes-Benz,2021-10,all,5,-0.001924
+MBALT,Mercedes-Benz,2021-10,seasoned,4,-0.002936
+MBALT,Mercedes-Benz,2021-11,all,5,-0.004876
+MBALT,Mercedes-Benz,2021-11,seasoned,5,-0.004876
+MBALT,Mercedes-Benz,2021-12,all,4,0.000666
+MBALT,Mercedes-Benz,2021-12,seasoned,4,0.000666
+MBALT,Mercedes-Benz,2022-01,all,5,0.001114
+MBALT,Mercedes-Benz,2022-01,seasoned,5,0.001114
+MBALT,Mercedes-Benz,2022-02,all,5,-0.00113
+MBALT,Mercedes-Benz,2022-02,seasoned,5,-0.00113
+MBALT,Mercedes-Benz,2022-03,all,5,-0.001732
+MBALT,Mercedes-Benz,2022-03,seasoned,5,-0.001732
+MBALT,Mercedes-Benz,2022-04,all,4,-0.002655
+MBALT,Mercedes-Benz,2022-04,seasoned,4,-0.002655
+MBALT,Mercedes-Benz,2022-05,all,4,-0.001727
+MBALT,Mercedes-Benz,2022-05,seasoned,4,-0.001727
 MBALT,Mercedes-Benz,2022-06,all,3,0.001264
 MBALT,Mercedes-Benz,2022-06,seasoned,3,0.001264
-MBALT,Mercedes-Benz,2022-07,all,3,0.001141
-MBALT,Mercedes-Benz,2022-07,seasoned,3,0.001141
-MBALT,Mercedes-Benz,2022-08,all,3,2.4e-05
-MBALT,Mercedes-Benz,2022-08,seasoned,3,2.4e-05
-MBALT,Mercedes-Benz,2022-09,all,3,0.001738
-MBALT,Mercedes-Benz,2022-09,seasoned,3,0.001738
-MBALT,Mercedes-Benz,2022-10,all,3,0.0
-MBALT,Mercedes-Benz,2022-10,seasoned,3,0.0
-MBALT,Mercedes-Benz,2022-11,all,3,0.001485
-MBALT,Mercedes-Benz,2022-11,seasoned,3,0.001485
-MBALT,Mercedes-Benz,2022-12,all,3,0.000455
-MBALT,Mercedes-Benz,2022-12,seasoned,3,0.000455
-MBALT,Mercedes-Benz,2023-01,all,3,0.001471
-MBALT,Mercedes-Benz,2023-01,seasoned,3,0.001471
-MBALT,Mercedes-Benz,2023-02,all,3,0.002952
-MBALT,Mercedes-Benz,2023-02,seasoned,3,0.002952
-MBALT,Mercedes-Benz,2023-03,all,2,0.0
-MBALT,Mercedes-Benz,2023-03,seasoned,2,0.0
-MBALT,Mercedes-Benz,2023-04,all,2,0.0
-MBALT,Mercedes-Benz,2023-04,seasoned,2,0.0
-MBALT,Mercedes-Benz,2023-05,all,3,0.001796
+MBALT,Mercedes-Benz,2022-07,all,3,0.000992
+MBALT,Mercedes-Benz,2022-07,seasoned,3,0.000992
+MBALT,Mercedes-Benz,2022-08,all,3,-0.002674
+MBALT,Mercedes-Benz,2022-08,seasoned,3,-0.002674
+MBALT,Mercedes-Benz,2022-09,all,3,0.001414
+MBALT,Mercedes-Benz,2022-09,seasoned,3,0.001414
+MBALT,Mercedes-Benz,2022-10,all,3,-0.002941
+MBALT,Mercedes-Benz,2022-10,seasoned,3,-0.002941
+MBALT,Mercedes-Benz,2022-11,all,3,0.001074
+MBALT,Mercedes-Benz,2022-11,seasoned,3,0.001074
+MBALT,Mercedes-Benz,2022-12,all,3,-1.6e-05
+MBALT,Mercedes-Benz,2022-12,seasoned,3,-1.6e-05
+MBALT,Mercedes-Benz,2023-01,all,3,-0.000352
+MBALT,Mercedes-Benz,2023-01,seasoned,3,-0.000352
+MBALT,Mercedes-Benz,2023-02,all,3,0.001899
+MBALT,Mercedes-Benz,2023-02,seasoned,3,0.001899
+MBALT,Mercedes-Benz,2023-03,all,2,-0.001702
+MBALT,Mercedes-Benz,2023-03,seasoned,2,-0.001702
+MBALT,Mercedes-Benz,2023-04,all,2,-0.003715
+MBALT,Mercedes-Benz,2023-04,seasoned,2,-0.003715
+MBALT,Mercedes-Benz,2023-05,all,3,0.000403
 MBALT,Mercedes-Benz,2023-05,seasoned,2,0.004714
-MBALT,Mercedes-Benz,2023-06,all,3,0.002079
-MBALT,Mercedes-Benz,2023-06,seasoned,2,0.004764
+MBALT,Mercedes-Benz,2023-06,all,3,0.000552
+MBALT,Mercedes-Benz,2023-06,seasoned,2,0.000588
 MBALT,Mercedes-Benz,2023-07,all,2,0.003599
 MBALT,Mercedes-Benz,2023-07,seasoned,1,0.003468
 MBALT,Mercedes-Benz,2023-08,all,2,0.004206
 MBALT,Mercedes-Benz,2023-08,seasoned,1,0.001952
-MBALT,Mercedes-Benz,2023-09,all,2,0.0
-MBALT,Mercedes-Benz,2023-09,seasoned,1,0.0
-MBALT,Mercedes-Benz,2023-10,all,2,0.004153
-MBALT,Mercedes-Benz,2023-10,seasoned,2,0.004153
+MBALT,Mercedes-Benz,2023-09,all,2,-0.001405
+MBALT,Mercedes-Benz,2023-09,seasoned,1,-0.003965
+MBALT,Mercedes-Benz,2023-10,all,2,0.003383
+MBALT,Mercedes-Benz,2023-10,seasoned,2,0.003383
 MBALT,Mercedes-Benz,2023-11,all,2,0.005068
 MBALT,Mercedes-Benz,2023-11,seasoned,2,0.005068
 MBALT,Mercedes-Benz,2023-12,all,2,0.005911
 MBALT,Mercedes-Benz,2023-12,seasoned,2,0.005911
-MBALT,Mercedes-Benz,2024-01,all,2,0.004727
-MBALT,Mercedes-Benz,2024-01,seasoned,2,0.004727
+MBALT,Mercedes-Benz,2024-01,all,2,0.00414
+MBALT,Mercedes-Benz,2024-01,seasoned,2,0.00414
 MBALT,Mercedes-Benz,2024-02,all,2,0.008741
 MBALT,Mercedes-Benz,2024-02,seasoned,2,0.008741
 MBALT,Mercedes-Benz,2024-03,all,1,4.3e-05
 MBALT,Mercedes-Benz,2024-03,seasoned,1,4.3e-05
-MBALT,Mercedes-Benz,2024-04,all,1,0.0
-MBALT,Mercedes-Benz,2024-04,seasoned,1,0.0
+MBALT,Mercedes-Benz,2024-04,all,1,-0.002661
+MBALT,Mercedes-Benz,2024-04,seasoned,1,-0.002661
 MBALT,Mercedes-Benz,2024-05,all,2,0.001826
 MBALT,Mercedes-Benz,2024-05,seasoned,1,0.002826
 MBALT,Mercedes-Benz,2024-06,all,2,0.002444
 MBALT,Mercedes-Benz,2024-06,seasoned,1,0.00514
 MBALT,Mercedes-Benz,2024-07,all,2,0.002915
 MBALT,Mercedes-Benz,2024-07,seasoned,1,0.002626
-MBALT,Mercedes-Benz,2024-08,all,2,0.000503
-MBALT,Mercedes-Benz,2024-08,seasoned,1,0.0
-MBALT,Mercedes-Benz,2024-09,all,3,0.00145
+MBALT,Mercedes-Benz,2024-08,all,2,0.000344
+MBALT,Mercedes-Benz,2024-08,seasoned,1,-0.000404
+MBALT,Mercedes-Benz,2024-09,all,3,0.000915
 MBALT,Mercedes-Benz,2024-09,seasoned,1,0.002939
-MBALT,Mercedes-Benz,2024-10,all,3,0.003212
-MBALT,Mercedes-Benz,2024-10,seasoned,2,0.003729
+MBALT,Mercedes-Benz,2024-10,all,3,0.002724
+MBALT,Mercedes-Benz,2024-10,seasoned,2,0.002916
 MBALT,Mercedes-Benz,2024-11,all,3,0.00481
 MBALT,Mercedes-Benz,2024-11,seasoned,2,0.006983
 MBALT,Mercedes-Benz,2024-12,all,3,0.005443
 MBALT,Mercedes-Benz,2024-12,seasoned,2,0.005128
-MBALT,Mercedes-Benz,2025-01,all,3,0.002431
-MBALT,Mercedes-Benz,2025-01,seasoned,2,0.004054
-MBALT,Mercedes-Benz,2025-02,all,3,0.003494
-MBALT,Mercedes-Benz,2025-02,seasoned,3,0.003494
+MBALT,Mercedes-Benz,2025-01,all,3,0.002179
+MBALT,Mercedes-Benz,2025-01,seasoned,2,0.003632
+MBALT,Mercedes-Benz,2025-02,all,3,0.003383
+MBALT,Mercedes-Benz,2025-02,seasoned,3,0.003383
 MBALT,Mercedes-Benz,2025-03,all,3,0.002925
 MBALT,Mercedes-Benz,2025-03,seasoned,3,0.002925
 MBALT,Mercedes-Benz,2025-04,all,3,0.002498
 MBALT,Mercedes-Benz,2025-04,seasoned,3,0.002498
 MBALT,Mercedes-Benz,2025-05,all,4,0.003491
 MBALT,Mercedes-Benz,2025-05,seasoned,3,0.005477
-MBALT,Mercedes-Benz,2025-06,all,4,0.003503
-MBALT,Mercedes-Benz,2025-06,seasoned,3,0.003073
-MBALT,Mercedes-Benz,2025-07,all,4,0.002379
-MBALT,Mercedes-Benz,2025-07,seasoned,3,0.003832
-MBALT,Mercedes-Benz,2025-08,all,4,0.002171
-MBALT,Mercedes-Benz,2025-08,seasoned,3,0.002159
-MBALT,Mercedes-Benz,2025-09,all,4,0.001107
+MBALT,Mercedes-Benz,2025-06,all,4,0.002026
+MBALT,Mercedes-Benz,2025-06,seasoned,3,0.000723
+MBALT,Mercedes-Benz,2025-07,all,4,0.000394
+MBALT,Mercedes-Benz,2025-07,seasoned,3,0.001517
+MBALT,Mercedes-Benz,2025-08,all,4,0.001302
+MBALT,Mercedes-Benz,2025-08,seasoned,3,0.000743
+MBALT,Mercedes-Benz,2025-09,all,4,0.000372
 MBALT,Mercedes-Benz,2025-09,seasoned,3,0.001824
-MBALT,Mercedes-Benz,2025-10,all,5,0.001681
-MBALT,Mercedes-Benz,2025-10,seasoned,4,0.002148
-MBALT,Mercedes-Benz,2025-11,all,5,0.002429
-MBALT,Mercedes-Benz,2025-11,seasoned,4,0.003329
-MBALT,Mercedes-Benz,2025-12,all,4,0.001451
+MBALT,Mercedes-Benz,2025-10,all,5,0.001652
+MBALT,Mercedes-Benz,2025-10,seasoned,4,0.002106
+MBALT,Mercedes-Benz,2025-11,all,5,0.001264
+MBALT,Mercedes-Benz,2025-11,seasoned,4,0.001634
+MBALT,Mercedes-Benz,2025-12,all,4,0.001415
 MBALT,Mercedes-Benz,2025-12,seasoned,3,0.002173
-MBALT,Mercedes-Benz,2026-01,all,5,0.00062
-MBALT,Mercedes-Benz,2026-01,seasoned,3,0.00127
-MBALT,Mercedes-Benz,2026-02,all,5,0.001988
-MBALT,Mercedes-Benz,2026-02,seasoned,3,0.00206
-MBALT,Mercedes-Benz,2026-03,all,5,0.002653
-MBALT,Mercedes-Benz,2026-03,seasoned,4,0.002162
-MBALT,Mercedes-Benz,2026-04,all,5,0.002304
-MBALT,Mercedes-Benz,2026-04,seasoned,4,0.002917
-MBALT,Mercedes-Benz,2026-05,all,5,0.001461
-MBALT,Mercedes-Benz,2026-05,seasoned,4,0.001286
-MBALT,Mercedes-Benz,2026-06,all,5,0.001671
-MBALT,Mercedes-Benz,2026-06,seasoned,5,0.001671
-MBALT,Mercedes-Benz,2026-07,all,5,0.003115
-MBALT,Mercedes-Benz,2026-07,seasoned,5,0.003115
-MBALT,Mercedes-Benz,2026-08,all,5,0.001161
-MBALT,Mercedes-Benz,2026-08,seasoned,5,0.001161
+MBALT,Mercedes-Benz,2026-01,all,5,-0.001027
+MBALT,Mercedes-Benz,2026-01,seasoned,3,-0.000479
+MBALT,Mercedes-Benz,2026-02,all,5,0.001701
+MBALT,Mercedes-Benz,2026-02,seasoned,3,0.001879
+MBALT,Mercedes-Benz,2026-03,all,5,0.001482
+MBALT,Mercedes-Benz,2026-03,seasoned,4,0.000559
+MBALT,Mercedes-Benz,2026-04,all,5,0.001813
+MBALT,Mercedes-Benz,2026-04,seasoned,4,0.002242
+MBALT,Mercedes-Benz,2026-05,all,5,0.001031
+MBALT,Mercedes-Benz,2026-05,seasoned,4,0.000692
+MBALT,Mercedes-Benz,2026-06,all,5,0.000701
+MBALT,Mercedes-Benz,2026-06,seasoned,5,0.000701
+MBALT,Mercedes-Benz,2026-07,all,5,0.0026
+MBALT,Mercedes-Benz,2026-07,seasoned,5,0.0026
+MBALT,Mercedes-Benz,2026-08,all,5,0.000536
+MBALT,Mercedes-Benz,2026-08,seasoned,5,0.000536
 NALT,Nissan,2017-06,all,1,0.000673
 NALT,Nissan,2017-07,all,1,-0.000358
 NALT,Nissan,2017-08,all,1,0.003898
