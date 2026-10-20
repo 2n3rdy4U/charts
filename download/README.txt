@@ -14,5 +14,6 @@ Files:
   auto-lease-delinquency.csv  Auto Lease ABS — Delinquency
   auto-lease-net-loss.csv  Auto Lease ABS — Annualized Credit Net Loss
   auto-lease-turn-in.csv  Auto Lease ABS — Turn-in Rate
+  auto-lease-residual.csv  Auto Lease ABS — Residual Gain (Loss) on Vehicles Sold
   credit-card-trust-performance.csv  Credit Card ABS — Master Trust Performance
   macro-indicators.csv  Macro Indicators

@@ -2,7 +2,7 @@
 # Source: Monthly servicer reports (SEC Form 10-D) of the public auto-loan shelves, compiled by Consumer Credit Matters
 # Definition: Net losses in the collection month, annualized, over the pool balance, summed across each shelf's deals; https://data.consumercreditmatters.com/abs/methodology.html#losses
 # Note: Rates are fractions (0.05 = 5%).
-# Columns: shelf = the shelf's ticker (ALL = every loan shelf pooled); shelf_name = the issuer; month = collection month, YYYY-MM; universe = 'all' (every active deal) or 'seasoned' (deals at least 6 months old); n_deals = deals in the figure; annualized_net_loss = annualized net loss rate
+# Columns: shelf = the shelf's ticker (ALL = every loan shelf pooled; ALL-LEASE = every lease shelf pooled); shelf_name = the issuer; month = collection month, YYYY-MM; universe = 'all' (every active deal) or 'seasoned' (deals at least 6 months old); n_deals = deals in the figure; annualized_net_loss = annualized net loss rate
 # Data through: 2026-09
 # Page: https://data.consumercreditmatters.com/abs/performance/index.html?ac=loan
 # Licence: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/) — free to use, share and adapt with attribution to Consumer Credit Matters

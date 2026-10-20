@@ -175,5 +175,10 @@
   "t": "ALL",
   "label": "All Issuers",
   "asset": "loan"
+ },
+ {
+  "t": "ALL-LEASE",
+  "label": "All Issuers",
+  "asset": "lease"
  }
 ]

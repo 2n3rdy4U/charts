@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://data.consumercreditmatters.com/</loc><lastmod>2026-10-18</lastmod></url>
-  <url><loc>https://data.consumercreditmatters.com/abs/changelog.html</loc><lastmod>2026-10-13</lastmod></url>
+  <url><loc>https://data.consumercreditmatters.com/abs/changelog.html</loc><lastmod>2026-10-20</lastmod></url>
   <url><loc>https://data.consumercreditmatters.com/abs/credit-card/</loc><lastmod>2026-10-13</lastmod></url>
   <url><loc>https://data.consumercreditmatters.com/abs/credit-card/ALL/</loc><lastmod>2026-10-16</lastmod></url>
   <url><loc>https://data.consumercreditmatters.com/abs/credit-card/AMXCA/</loc><lastmod>2026-10-16</lastmod></url>
@@ -278,9 +278,10 @@
   <url><loc>https://data.consumercreditmatters.com/abs/issuance/presale/world-omni-select-auto-trust-2025-a.html</loc><lastmod>2026-10-10</lastmod></url>
   <url><loc>https://data.consumercreditmatters.com/abs/issuance/presale/world-omni-select-auto-trust-2026-a.html</loc><lastmod>2026-10-10</lastmod></url>
   <url><loc>https://data.consumercreditmatters.com/abs/lease_explorer/</loc><lastmod>2026-10-09</lastmod></url>
-  <url><loc>https://data.consumercreditmatters.com/abs/methodology.html</loc><lastmod>2026-10-13</lastmod></url>
+  <url><loc>https://data.consumercreditmatters.com/abs/methodology.html</loc><lastmod>2026-10-20</lastmod></url>
   <url><loc>https://data.consumercreditmatters.com/abs/performance/</loc><lastmod>2026-10-13</lastmod></url>
   <url><loc>https://data.consumercreditmatters.com/abs/performance/AART/</loc><lastmod>2026-10-13</lastmod></url>
+  <url><loc>https://data.consumercreditmatters.com/abs/performance/ALL-LEASE/</loc><lastmod>2026-10-20</lastmod></url>
   <url><loc>https://data.consumercreditmatters.com/abs/performance/ALL/</loc><lastmod>2026-10-16</lastmod></url>
   <url><loc>https://data.consumercreditmatters.com/abs/performance/AMCAR/</loc><lastmod>2026-10-13</lastmod></url>
   <url><loc>https://data.consumercreditmatters.com/abs/performance/BLAST/</loc><lastmod>2026-10-16</lastmod></url>
@@ -316,7 +317,7 @@
   <url><loc>https://data.consumercreditmatters.com/abs/performance/WOART/</loc><lastmod>2026-10-13</lastmod></url>
   <url><loc>https://data.consumercreditmatters.com/abs/performance/WOSAT/</loc><lastmod>2026-10-13</lastmod></url>
   <url><loc>https://data.consumercreditmatters.com/cc/</loc><lastmod>2026-10-09</lastmod></url>
-  <url><loc>https://data.consumercreditmatters.com/download/</loc><lastmod>2026-10-19</lastmod></url>
+  <url><loc>https://data.consumercreditmatters.com/download/</loc><lastmod>2026-10-20</lastmod></url>
   <url><loc>https://data.consumercreditmatters.com/macro/</loc><lastmod>2026-10-19</lastmod></url>
   <url><loc>https://data.consumercreditmatters.com/newsletter/</loc><lastmod>2026-10-18</lastmod></url>
   <url><loc>https://data.consumercreditmatters.com/newsletter/2026-05-25/</loc><lastmod>2026-10-09</lastmod></url>

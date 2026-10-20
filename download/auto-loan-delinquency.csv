@@ -3,7 +3,7 @@
 # Definition: Share of active loans past due at month end, counted loan by loan across each shelf's deals; https://data.consumercreditmatters.com/abs/methodology.html#active-pool
 # Note: Rates are fractions (0.05 = 5%).
 # Note: Loans without a consumer credit score are excluded.
-# Columns: shelf = the shelf's ticker (ALL = every loan shelf pooled); shelf_name = the issuer; month = collection month, YYYY-MM; universe = 'all' (every active deal) or 'seasoned' (deals at least 6 months old); n_loans = active loans in the month; dq_30plus = share 30+ days past due; dq_31_60 = share 30/31-60 days past due; dq_60plus = share 60+ days past due
+# Columns: shelf = the shelf's ticker (ALL = every loan shelf pooled; ALL-LEASE = every lease shelf pooled); shelf_name = the issuer; month = collection month, YYYY-MM; universe = 'all' (every active deal) or 'seasoned' (deals at least 6 months old); n_loans = active loans in the month; dq_30plus = share 30+ days past due; dq_31_60 = share 30/31-60 days past due; dq_60plus = share 60+ days past due
 # Data through: 2026-09
 # Page: https://data.consumercreditmatters.com/abs/performance/index.html?ac=loan
 # Licence: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/) — free to use, share and adapt with attribution to Consumer Credit Matters

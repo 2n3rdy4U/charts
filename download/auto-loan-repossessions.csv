@@ -3,7 +3,7 @@
 # Definition: Loans repossessed for the first time in the month over the loans at risk at its start; https://data.consumercreditmatters.com/abs/methodology.html#repossessions
 # Note: Rates are fractions (0.05 = 5%).
 # Note: Shelves whose loan-level flag does not track repossessions are not in the file.
-# Columns: shelf = the shelf's ticker (ALL = every loan shelf pooled); shelf_name = the issuer; month = collection month, YYYY-MM; universe = 'all' (every active deal) or 'seasoned' (deals at least 6 months old); repossessions = first-time repossessions in the month; at_risk = loans at risk at the start of the month; repo_rate = repossessions / at_risk; reversed_share = share of the month's repossessions later reinstated
+# Columns: shelf = the shelf's ticker (ALL = every loan shelf pooled; ALL-LEASE = every lease shelf pooled); shelf_name = the issuer; month = collection month, YYYY-MM; universe = 'all' (every active deal) or 'seasoned' (deals at least 6 months old); repossessions = first-time repossessions in the month; at_risk = loans at risk at the start of the month; repo_rate = repossessions / at_risk; reversed_share = share of the month's repossessions later reinstated
 # Data through: 2026-09
 # Page: https://data.consumercreditmatters.com/abs/performance/index.html?ac=loan
 # Licence: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/) — free to use, share and adapt with attribution to Consumer Credit Matters

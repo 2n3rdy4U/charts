@@ -40,6 +40,7 @@
 - [World Omni (WOALT)](https://data.consumercreditmatters.com/abs/performance/WOALT/): delinquency, net loss — data https://data.consumercreditmatters.com/abs/performance/data/WOALT.json
 - [Porsche (PILOT)](https://data.consumercreditmatters.com/abs/performance/PILOT/): delinquency, net loss — data https://data.consumercreditmatters.com/abs/performance/data/PILOT.json
 - [All Issuers (ALL)](https://data.consumercreditmatters.com/abs/performance/ALL/): delinquency, net loss, repossessions — data https://data.consumercreditmatters.com/abs/performance/data/ALL.json
+- [All Issuers (ALL-LEASE)](https://data.consumercreditmatters.com/abs/performance/ALL-LEASE/): delinquency, net loss — data https://data.consumercreditmatters.com/abs/performance/data/ALL-LEASE.json
 
 ## Other pages
 
