@@ -38,14 +38,15 @@ function updateOutputAvail(){
   const rc=el('rowsctl'); if(rc) rc.hidden = !(output==='table' && mode==='vintage');
   // Pools applies wherever a pooled series is drawn: time series, year overlay,
   // macro overlay. Per-deal vintage curves have no pool to season.
-  const pc=el('poolctl'); if(pc) pc.hidden = isTurn() || !(mode==='calendar' || output==='seasonal' || macroId);   // turn-in has one basis
+  const pc=el('poolctl'); if(pc) pc.hidden = isTurn() || (isResid() && mode==='calendar') || !(mode==='calendar' || output==='seasonal' || macroId);   // one basis: turn-in, residual by month
   const sb=el('seasbtn'); sb.style.opacity=multiIssuer()?0.4:1; sb.setAttribute('aria-disabled', String(multiIssuer()));   // faded = unavailable, said to a screen reader too
   sb.title=multiIssuer()?'Year overlay is for one issuer at a time':'';
   el('macrosel').disabled=multiIssuer();
   el('macrosel').title=multiIssuer()?'Macro overlay is for one issuer at a time':'';
   document.querySelectorAll('#poolseg button').forEach(b=>b.classList.toggle('on',b.dataset.pools===pools));
   el('modeseg').style.opacity = output==='seasonal' ? 0.4 : 1;   // vintage/calendar N/A for the YoY view
-  el('modeseg').querySelectorAll('button').forEach(b=>b.setAttribute('aria-disabled', String(output==='seasonal')));
+  el('modeseg').querySelectorAll('button').forEach(b=>b.setAttribute('aria-disabled',
+    String(output==='seasonal' || (b.dataset.mode==='vintage' && (isRepo()||anyAll())))));   // the same rule updateModeAvail fades by
   el('modeseg').title = output==='seasonal' ? 'Vintage/Time-series does not apply to the year-over-year view' : '';
 }
 function enforceSingleIssuerViews(){
@@ -112,7 +113,9 @@ function renderChart(){
   if(!S.length || S.every(x=>!x.pts.length)){ hideChips();
     const rs=((SHELVES[selected[0]]||{}).pool_snapshot||{}).loss_recon_status;
     box.innerHTML = (anyAll() && !isDQ())
-      ? '<div class="chartph">All Issuers is published for delinquency only; pick an issuer for its losses and repossessions.</div>'
+      ? (assetClass==='lease'
+         ? '<div class="chartph">All Issuers is published for delinquency and credit losses; residual results and turn-in are each servicer\'s own definition, so pick an issuer for them.</div>'
+         : '<div class="chartph">All Issuers is published for delinquency only; pick an issuer for its losses and repossessions.</div>')
       : (metric==='cnl_ratio' && rs==='none')
       ? '<div class="chartph">No servicer reports are collected for this shelf: its filings ended before collection began. Delinquency and repossessions come from the loan tape.</div>'
       : (isRepo() && assetClass==='lease')
@@ -120,7 +123,7 @@ function renderChart(){
       : isTurn()
       ? `<div class="chartph">${esc(((SHELVES[selected[0]]||{}).notes||{}).turnin?.[0] || 'No turn-in rate is reported for this shelf.')}</div>`
       : (isResid() && mode==='calendar')
-      ? '<div class="chartph">Residual value gain (loss) is cumulative — see the vintage view.</div>'
+      ? '<div class="chartph">No monthly residual results are reported for this shelf.</div>'
       : (metric==='cnl_ratio' && !isVin && rs==='withheld')
       ? '<div class="chartph">Loss series withheld: this shelf\'s monthly and cumulative loss figures do not reconcile, so it is not published until they do.</div>'
       : '<div class="chartph">no curve data wired for this view yet</div>';

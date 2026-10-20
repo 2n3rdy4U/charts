@@ -15,7 +15,7 @@ function renderCtx(){
     ? `loan tape through <b>${fmtMonth(ps.absee_through)}</b>`
     : `data through <b>${fmtMonth(ps.data_through||ps.as_of)}</b>` + (ps.as_of?` (reported ${fmtDate(ps.as_of)})`:'');
   if(isAll(d.ticker)){   // the market series: shelves, not deals
-    el('ctxline').innerHTML=`${ps.n_shelves} loan shelves added together &middot; ${through}`
+    el('ctxline').innerHTML=`${ps.n_shelves} ${assetClass==='lease'?'lease':'loan'} shelves added together &middot; ${through}`
       + (selected.length>1?` &middot; +${selected.length-1} comparison${selected.length>2?'s':''} on the chart`:'');
     return;
   }
