@@ -5,10 +5,10 @@
 # Note: Servicers differ in which vehicles they count and which residual value they use (the methodology says how); compare a shelf's trend, not levels across shelves.
 # Note: Months with less than $500,000 of residual value sold are not shown.
 # Columns: shelf = the shelf's ticker; shelf_name = the issuer; month = collection month, YYYY-MM; n_deals = deals with vehicles sold that month; residual_value_sold = residual value of the vehicles sold, US dollars; residual_gain_loss = gain (loss) as a share of residual_value_sold; a gain is positive
-# Data through: 2026-08
+# Data through: 2026-09
 # Page: https://data.consumercreditmatters.com/abs/performance/index.html?ac=lease&m=rv_gl_cum_ratio&view=calendar
 # Licence: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/) — free to use, share and adapt with attribution to Consumer Credit Matters
-# Cite as: Consumer Credit Matters, “Auto Lease ABS — Residual Gain (Loss) on Vehicles Sold”, data through 2026-08, https://data.consumercreditmatters.com/download/auto-lease-residual.csv
+# Cite as: Consumer Credit Matters, “Auto Lease ABS — Residual Gain (Loss) on Vehicles Sold”, data through 2026-09, https://data.consumercreditmatters.com/download/auto-lease-residual.csv
 # Read in Python: pandas.read_csv(url, comment="#")
 shelf,shelf_name,month,n_deals,residual_value_sold,residual_gain_loss
 BMWLT,BMW,2017-03,1,3382531.3,0.554771
@@ -634,6 +634,7 @@ VWALT,Volkswagen,2026-05,3,25598480.53,0.158377
 VWALT,Volkswagen,2026-06,3,36505035.35,0.136938
 VWALT,Volkswagen,2026-07,3,39986311.85,0.110398
 VWALT,Volkswagen,2026-08,3,43282211.02,0.081832
+VWALT,Volkswagen,2026-09,4,44794363.57,0.032611
 WOALT,World Omni,2018-02,1,539558.45,-0.217458
 WOALT,World Omni,2018-03,2,989239.12,-0.029616
 WOALT,World Omni,2018-05,2,1531041.95,-0.044223

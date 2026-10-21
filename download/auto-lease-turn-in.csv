@@ -5,10 +5,10 @@
 # Note: Servicers define the rate differently (the methodology says how each does); compare a shelf's trend, not levels across shelves.
 # Note: BMW, Mercedes-Benz and Nissan do not report a turn-in rate.
 # Columns: shelf = the shelf's ticker; shelf_name = the issuer; month = collection month, YYYY-MM; n_deals = deals reporting a turn-in rate that month; leases = leases reaching scheduled end that month (blank where the servicer prints no count); turn_in = turn-in rate
-# Data through: 2026-08
+# Data through: 2026-09
 # Page: https://data.consumercreditmatters.com/abs/performance/index.html?ac=lease&m=turn_in_ratio
 # Licence: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/) — free to use, share and adapt with attribution to Consumer Credit Matters
-# Cite as: Consumer Credit Matters, “Auto Lease ABS — Turn-in Rate”, data through 2026-08, https://data.consumercreditmatters.com/download/auto-lease-turn-in.csv
+# Cite as: Consumer Credit Matters, “Auto Lease ABS — Turn-in Rate”, data through 2026-09, https://data.consumercreditmatters.com/download/auto-lease-turn-in.csv
 # Read in Python: pandas.read_csv(url, comment="#")
 shelf,shelf_name,month,n_deals,leases,turn_in
 FCALT,Ford,2017-06,1,70,0.814286
@@ -315,6 +315,7 @@ VWALT,Volkswagen,2026-05,2,1012,0.931793
 VWALT,Volkswagen,2026-06,3,1416,0.908145
 VWALT,Volkswagen,2026-07,3,1634,0.902096
 VWALT,Volkswagen,2026-08,3,1711,0.910027
+VWALT,Volkswagen,2026-09,3,1806,0.884836
 WOALT,World Omni,2018-06,2,92,0.641283
 WOALT,World Omni,2018-07,2,148,0.581046
 WOALT,World Omni,2018-08,1,79,0.7215

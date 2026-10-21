@@ -4,10 +4,10 @@
 # Note: Rates are fractions (0.05 = 5%).
 # Note: Credit losses only; residual-value results are not in this file.
 # Columns: shelf = the shelf's ticker (ALL = every loan shelf pooled; ALL-LEASE = every lease shelf pooled); shelf_name = the issuer; month = collection month, YYYY-MM; universe = 'all' (every active deal) or 'seasoned' (deals at least 6 months old); n_deals = deals in the figure; annualized_net_loss = annualized credit net loss rate
-# Data through: 2026-08
+# Data through: 2026-09
 # Page: https://data.consumercreditmatters.com/abs/performance/index.html?ac=lease
 # Licence: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/) — free to use, share and adapt with attribution to Consumer Credit Matters
-# Cite as: Consumer Credit Matters, “Auto Lease ABS — Annualized Credit Net Loss”, data through 2026-08, https://data.consumercreditmatters.com/download/auto-lease-net-loss.csv
+# Cite as: Consumer Credit Matters, “Auto Lease ABS — Annualized Credit Net Loss”, data through 2026-09, https://data.consumercreditmatters.com/download/auto-lease-net-loss.csv
 # Read in Python: pandas.read_csv(url, comment="#")
 shelf,shelf_name,month,universe,n_deals,annualized_net_loss
 ALL-LEASE,All Issuers,2017-03,all,,-1e-06
@@ -1430,6 +1430,8 @@ VWALT,Volkswagen,2026-07,all,4,0.004554
 VWALT,Volkswagen,2026-07,seasoned,3,0.002326
 VWALT,Volkswagen,2026-08,all,4,0.002361
 VWALT,Volkswagen,2026-08,seasoned,4,0.002361
+VWALT,Volkswagen,2026-09,all,5,0.002948
+VWALT,Volkswagen,2026-09,seasoned,4,0.003517
 WOALT,World Omni,2017-03,all,1,-0.000103
 WOALT,World Omni,2017-04,all,1,0.001008
 WOALT,World Omni,2017-05,all,1,0.002316

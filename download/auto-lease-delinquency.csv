@@ -4,10 +4,10 @@
 # Note: Rates are fractions (0.05 = 5%).
 # Note: By balance, not by count: lease shelves file no loan-level delinquency.
 # Columns: shelf = the shelf's ticker (ALL = every loan shelf pooled; ALL-LEASE = every lease shelf pooled); shelf_name = the issuer; month = collection month, YYYY-MM; universe = 'all' (every active deal) or 'seasoned' (deals at least 6 months old); n_deals = deals in the figure; pool_factor = pool balance / original balance; dq_30plus = share 30+ days past due; dq_31_60 = share 30/31-60 days past due; dq_60plus = share 60+ days past due
-# Data through: 2026-08
+# Data through: 2026-09
 # Page: https://data.consumercreditmatters.com/abs/performance/index.html?ac=lease
 # Licence: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/) — free to use, share and adapt with attribution to Consumer Credit Matters
-# Cite as: Consumer Credit Matters, “Auto Lease ABS — Delinquency”, data through 2026-08, https://data.consumercreditmatters.com/download/auto-lease-delinquency.csv
+# Cite as: Consumer Credit Matters, “Auto Lease ABS — Delinquency”, data through 2026-09, https://data.consumercreditmatters.com/download/auto-lease-delinquency.csv
 # Read in Python: pandas.read_csv(url, comment="#")
 shelf,shelf_name,month,universe,n_deals,pool_factor,dq_30plus,dq_31_60,dq_60plus
 ALL-LEASE,All Issuers,2017-03,all,,,0.003142,0.002897,0.000245
@@ -1497,6 +1497,8 @@ VWALT,Volkswagen,2026-07,all,4,0.693201,0.007917,0.005362,0.002554
 VWALT,Volkswagen,2026-07,seasoned,3,0.606957,0.008361,0.005642,0.002719
 VWALT,Volkswagen,2026-08,all,4,0.667496,0.008373,0.005411,0.002962
 VWALT,Volkswagen,2026-08,seasoned,4,0.667496,0.008373,0.005411,0.002962
+VWALT,Volkswagen,2026-09,all,5,0.690507,0.008191,0.005439,0.002752
+VWALT,Volkswagen,2026-09,seasoned,4,0.64295,0.008746,0.005656,0.003089
 WOALT,World Omni,2017-03,all,1,0.977111,0.003315,0.002865,0.00045
 WOALT,World Omni,2017-04,all,1,0.964886,0.004764,0.004003,0.00076
 WOALT,World Omni,2017-05,all,1,0.949889,0.005237,0.004366,0.000871
