@@ -29,8 +29,12 @@ function fitSelectionToView(){
   }
 }
 
+// An earlier issuer (no shelf of its own today; loss_history) carries its years: 'Triad (2002–2007)'.
+const issText=a=>a.label+(a.years?` (${a.years})`:'')+(a.retired?' (retired)':'');
+const isHist=t=>!!(AVAIL.find(a=>a.t===t)||{}).historical;
+const isPort=t=>!!(AVAIL.find(a=>a.t===t)||{}).portfolio;
 function updateIssBtn(){
-  const parts = selected.map(t=>{ const a=AVAIL.find(x=>x.t===t)||{label:t}; return a.label+(a.retired?' (retired)':''); });
+  const parts = selected.map(t=>issText(AVAIL.find(x=>x.t===t)||{label:t}));
   const b = el('issbtn');
   if(!parts.length)        b.textContent = 'Select issuers \u25be';
   else if(parts.length<=2) b.textContent = parts.join(', ') + ' \u25be';
@@ -39,7 +43,8 @@ function updateIssBtn(){
 
 function buildIssPanel(){
   const panel = el('isspanel');
-  const opts = classAvail().sort((x,y)=>x.label.localeCompare(y.label));
+  const opts = classAvail().sort((x,y)=>(!!x.group-!!y.group)||x.label.localeCompare(y.label));   // earlier issuers last, under their heading
+  let groupShown=null;
   panel.innerHTML = '';
   if(!issMulti()){
     const h=document.createElement('div'); h.className='mss-hint';
@@ -48,11 +53,13 @@ function buildIssPanel(){
     panel.appendChild(h);
   }
   for(const a of opts){
+    if(a.group && a.group!==groupShown){ const g=document.createElement('div'); g.className='mss-hint mss-group'; g.textContent=a.group; panel.appendChild(g); groupShown=a.group; }
     const lbl=document.createElement('label');
     const cb=document.createElement('input');
     cb.type = issMulti() ? 'checkbox' : 'radio';
     cb.name = 'issPick'; cb.value=a.t; cb.checked = selected.includes(a.t);
     if(!issMulti() && isAll(a.t)){ cb.disabled=true; lbl.classList.add('off'); lbl.title='All Issuers has no deals of its own'; }
+    if(issMulti() && a.historical){ cb.disabled=true; lbl.classList.add('off'); lbl.title='Loss curves by deal age only: there is no monthly series to compare'; }
     cb.addEventListener('change', ()=>{
       if(!issMulti()){ selected=[a.t]; }
       else if(cb.checked){ if(!selected.includes(a.t)) selected.push(a.t); }
@@ -63,7 +70,7 @@ function buildIssPanel(){
       buildIssPanel(); updateIssBtn(); refresh(); countView();
     });
     lbl.appendChild(cb);
-    lbl.appendChild(document.createTextNode(' '+a.label+(a.retired?' (retired)':'')));
+    lbl.appendChild(document.createTextNode(' '+issText(a)));
     if(issMulti() && selected.includes(a.t)){
       const st=document.createElement('span');
       const isSubj = selected[0]===a.t;
@@ -99,7 +106,16 @@ function syncTabs(){ document.querySelectorAll('.mtabs button[data-asset]').forE
   // Deals describes one shelf; All Issuers has none, so the tab is greyed out
   // while it is the subject rather than opening on a message.
   const dt=document.querySelector('.mtabs button[data-metric="deals"]');
-  if(dt){ dt.disabled=isAll(selected[0]); dt.title=dt.disabled?'All Issuers has no deals of its own':''; } }
+  if(dt){ dt.disabled=isAll(selected[0]); dt.title=dt.disabled?'All Issuers has no deals of its own':''; }
+  // An earlier issuer has loss curves only (and its deals, unless it is a whole-portfolio set of originations).
+  const h=isHist(selected[0]), pf=isPort(selected[0]);
+  document.querySelectorAll('.mtabs button[data-metric]').forEach(b=>{
+    const m=b.dataset.metric, own=!b.dataset.asset||b.dataset.asset===assetClass;
+    b.hidden=!own || (h && m!=='cnl_ratio' && (m!=='deals'||pf)); });
+  if(h && metric!=='cnl_ratio' && (metric!=='deals'||pf)){ metric='cnl_ratio'; mode='vintage';
+    el('dqctl').style.display='none'; if(SHELVES[selected[0]]) showLens('chart');   // as the Losses tab's own click does (once the shelf has loaded)
+    document.querySelectorAll('.mtabs button').forEach(b=>b.classList.toggle('on',b.dataset.metric==='cnl_ratio'));
+    document.querySelectorAll('#modeseg button').forEach(b=>b.classList.toggle('on',b.dataset.mode==='vintage')); } }
 document.querySelectorAll('#assetseg button').forEach(b=>b.onclick=()=>{
   if(b.dataset.asset===assetClass)return;
   document.querySelectorAll('#assetseg button').forEach(x=>x.classList.remove('on'));b.classList.add('on');
@@ -119,6 +135,7 @@ function syncDqSeg(){ document.querySelectorAll('#dqseg button').forEach(x=>x.cl
 document.querySelectorAll('#dqseg button').forEach(b=>b.onclick=()=>{ metric=b.dataset.dq; syncDqSeg(); renderChart(); });
 document.querySelectorAll('#modeseg button').forEach(b=>b.onclick=()=>{
   if(b.dataset.mode==='vintage'&&isRepo())return;   // repossessions are a calendar rate; no vintage curve
+  if(b.dataset.mode==='calendar'&&isHist(selected[0]))return;   // an earlier issuer: curves by deal age only
   setMode(b.dataset.mode); refresh(); countView();});
 document.querySelectorAll('#outseg button').forEach(b=>b.onclick=()=>setOutput(b.dataset.out));
 document.querySelectorAll('#poolseg button').forEach(b=>b.onclick=()=>{ pools=b.dataset.pools; renderChart(); });

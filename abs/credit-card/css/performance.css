@@ -260,3 +260,4 @@ tr.woundtoggle td{background:#fafcff;text-align:center;padding:7px} tr.woundtogg
   html.bb-land .chart-cap{font-size:10.5px}
   html.bb-land .chart-src{margin-top:2px}
 
+.vintcustom{display:flex;align-items:center;gap:6px;margin-top:6px;width:100%;font-size:12px;color:var(--muted)} .chartrail .vintcustom .ovsel{width:auto}

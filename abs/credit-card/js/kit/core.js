@@ -135,7 +135,7 @@ function renderRangeBar(){
   if(output==='seasonal'){ if(grp)grp.style.display='none'; return; }   // year-overlay is already Jan–Dec
   if(grp)grp.style.display='';
   const isVin = mode==='vintage' && !macroId;   // overlay is calendar
-  const opts = isVin ? [['12','M12'],['24','M24'],['36','M36'],['48','M48'],['all','All']]
+  const opts = isVin ? [['12','12'],['24','24'],['36','36'],['48','48'],['all','All']]   // months of deal age (the row is labelled so)
                      : [['1','1Y'],['3','3Y'],['5','5Y'],['all','All']];
   if(!opts.some(o=>o[0]===String(range))) range='all';   // reset if the unit no longer applies (mode switch)
   bar.innerHTML=opts.map(([v,l])=>`<button class="rpill ${String(range)===v?'on':''}" onclick="setRange('${v}')">${l}</button>`).join('');

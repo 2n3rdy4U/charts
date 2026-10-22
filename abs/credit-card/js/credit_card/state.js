@@ -49,7 +49,8 @@ const calOf=sh=>(sh&&sh.calendar)||[];
 const calKey=()=>metric;
 const scaleOf=()=>meta().unit==='usd_bn' ? 1e-9 : 1;
 const lab=t=>(AVAIL.find(a=>a.t===t)||{}).label||t;
-const labCode=t=>isAll(t) ? 'All Trusts' : `${lab(t)} (${t})`;
+const bare=t=>lab(t).replace(/ \(.*\)$/,'');   // 'Comenity (WFN)' -> 'Comenity': the ticker goes in its own brackets
+const labCode=t=>isAll(t) ? 'All Trusts' : `${bare(t)} (${t})`;
 const metricTitle=()=>meta().title||'';
 const metricLabel=()=>(meta().title||'this metric').toLowerCase();
 const metricAxis=()=>{
@@ -61,16 +62,26 @@ const tipLabels=()=>yoyActive() ? {series:'Series', x:'Month', y: transform==='y
                                 : {series:'Trust', x:'Month', y: isRate() ? 'Rate' : '$ billions'};
 const extraRows=()=>anyAll() ? [{field:"n",type:"quantitative",title:"Trusts in figure",format:"d"}] : [];
 const extraOf=p=>{ const n=p[metric+'_n']; return n!=null ? {n} : null; };
-function sourceFor(){ return 'SEC Form 10-D servicer distribution reports, EDGAR'; }
-// Disclosures for the trusts on screen, from the metrics layer via trust_detail:
-// what a trust does not report, and the universe line, once.
+function sourceFor(){ return 'SEC Form 10-D servicer reports'; }
+// The chart footer: the source, then only what is needed to read THIS chart — the yield's basis, how All
+// Trusts is built, a gross charge-off series, and a line that starts later than its trust's records (written from
+// the data, for the metric on screen, only when that start is in view). Definitions and coverage in full are on
+// the methodology page (§11), which the footer links to.
 function notesFor(){
-  const specific=[], general=[];
-  selected.forEach(t=>{ const n=(SHELVES[t]||{}).notes||{}; specific.push(...(n.gaps||[]), ...((n.metric||{})[metric]||[])); general.push(...(n.universe||[])); });
-  // a gross-basis charge-off series says so on the chart that draws it
+  const out=[];
+  if(metric==='portfolio_yield' && Object.values(SHELVES).some(s=>(s.labels||{}).portfolio_yield)) out.push('Yield is before charge-offs.');
+  if(anyAll()) out.push('All Trusts is weighted by receivables.');
   if(metric==='charge_off_rate') selected.forEach(t=>{ const s=(SHELVES[t]||{}).snapshot||{};
-    if(s.charge_off_basis==='gross') specific.push(`${lab(t)}'s charge-off rate is gross of recoveries.`); });
-  return [...new Set(specific), ...new Set(general)];
+    if(s.charge_off_basis==='gross') out.push(`${lab(t)}'s charge-off rate is gross of recoveries.`); });
+  selected.filter(t=>!isAll(t)).forEach(t=>{
+    const cal=calOf(SHELVES[t]), first=(cal[0]||{}).date, f=cal.find(p=>p[metric]!=null);
+    if(!first||!f) return;
+    const gap=(+f.date.slice(0,4)-+first.slice(0,4))*12+(+f.date.slice(5,7)-+first.slice(5,7));
+    const latest=(cal[cal.length-1]||{}).date||'', cut=range==='all'||mode==='vintage' ? '' : (parseInt(latest.slice(0,4))-range)+latest.slice(4);
+    if(gap>=3 && f.date>cut) out.push(`${bare(t)}'s ${metricLabel()} begins ${fmtMonth(f.date)}.`);
+  });
+  out.push("Trusts' definitions differ.");
+  return [...new Set(out)];
 }
 const CARD=()=>'Credit Card ABS';
 function titleFor(){
