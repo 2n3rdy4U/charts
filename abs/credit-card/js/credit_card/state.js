@@ -27,7 +27,11 @@ const METRIC_META={
   trust_balance:     {tab:'bal',   title:'Trust Receivables Balance',axis:['Receivables Balance','($ billions)'],             unit:'usd_bn'},
 };
 const TAB_DEFAULT={dq:'dq_30plus', co:'charge_off_rate', pr:'payment_rate', yld:'portfolio_yield', xs:'excess_spread', bal:'trust_balance'};
-const meta=()=>METRIC_META[metric]||{};
+// A label the data overrides (trust_detail `labels`: e.g. "Gross Portfolio Yield" once the trust-level
+// definitions are on), so the page never names a figure differently from the records it draws.
+const meta=()=>{ const m=METRIC_META[metric]||{};
+  const o=Object.values(SHELVES).map(s=>(s.labels||{})[metric]).find(Boolean);
+  return o ? {...m, title:o, axis:[o, (m.axis||[])[1]||'']} : m; };
 const tabOf=()=>metric==='deals'?'deals':meta().tab;
 const isRate=()=>meta().unit==='rate';
 const isDQ=()=>meta().tab==='dq';
@@ -62,7 +66,7 @@ function sourceFor(){ return 'SEC Form 10-D servicer distribution reports, EDGAR
 // what a trust does not report, and the universe line, once.
 function notesFor(){
   const specific=[], general=[];
-  selected.forEach(t=>{ const n=(SHELVES[t]||{}).notes||{}; specific.push(...(n.gaps||[])); general.push(...(n.universe||[])); });
+  selected.forEach(t=>{ const n=(SHELVES[t]||{}).notes||{}; specific.push(...(n.gaps||[]), ...((n.metric||{})[metric]||[])); general.push(...(n.universe||[])); });
   // a gross-basis charge-off series says so on the chart that draws it
   if(metric==='charge_off_rate') selected.forEach(t=>{ const s=(SHELVES[t]||{}).snapshot||{};
     if(s.charge_off_basis==='gross') specific.push(`${lab(t)}'s charge-off rate is gross of recoveries.`); });
