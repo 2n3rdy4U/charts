@@ -99,7 +99,7 @@ html, body {
 /* ── Layout shell ──────────────────────────────────────────────── */
 #app {
   display: grid;
-  grid-template-rows: var(--header-height) 1fr;
+  grid-template-rows: calc(var(--header-height) + env(safe-area-inset-top, 0px)) 1fr;
   grid-template-columns: var(--rail-width) 1fr;
   grid-template-areas:
     "header header"
@@ -115,8 +115,11 @@ html, body {
   align-items: center;
   /* Honor iOS notch — viewport-fit=cover lets content extend edge-to-edge
      so the page can bleed under the side bars; this keeps header content
-     out of the notch while still using the full viewport. */
-  padding: 0 max(20px, env(safe-area-inset-right)) 0 max(20px, env(safe-area-inset-left));
+     out of the notch while still using the full viewport. The top inset
+     is here too: in home-screen (standalone) mode iOS draws its status bar
+     over the top of the page, so the header plate extends under it and the
+     logo and Subscribe button sit below it. */
+  padding: env(safe-area-inset-top, 0px) max(20px, env(safe-area-inset-right)) 0 max(20px, env(safe-area-inset-left));
   background: var(--color-shell-deep);
   border-bottom: 1px solid var(--color-shell-border);
   gap: 12px;
@@ -828,7 +831,7 @@ a.nav-section-header, a.tile { color: inherit; }   /* .nav-item, .mobile-nav-pil
   #header {
     flex-shrink: 0;
     overflow: visible;
-    padding: 0 max(12px, env(safe-area-inset-right)) 0 max(12px, env(safe-area-inset-left));
+    padding: env(safe-area-inset-top, 0px) max(12px, env(safe-area-inset-right)) 0 max(12px, env(safe-area-inset-left));
   }
   #header .brand-logo { height: 28px; }
   /* Hide the header disclaimer link on mobile to keep the compact header
