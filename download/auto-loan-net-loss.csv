@@ -236,6 +236,8 @@ AART,Ally,2026-07,all,6,0.007788
 AART,Ally,2026-07,seasoned,5,0.009518
 AART,Ally,2026-08,all,5,0.008038
 AART,Ally,2026-08,seasoned,5,0.008038
+AART,Ally,2026-09,all,5,0.009078
+AART,Ally,2026-09,seasoned,5,0.009078
 AMCAR,AmeriCredit,2017-02,all,1,0.001673
 AMCAR,AmeriCredit,2017-03,all,1,0.007045
 AMCAR,AmeriCredit,2017-04,all,1,0.018062
@@ -3087,6 +3089,8 @@ MBART,Mercedes-Benz,2026-07,all,6,0.008559
 MBART,Mercedes-Benz,2026-07,seasoned,5,0.009138
 MBART,Mercedes-Benz,2026-08,all,6,0.006472
 MBART,Mercedes-Benz,2026-08,seasoned,5,0.01124
+MBART,Mercedes-Benz,2026-09,all,6,0.007624
+MBART,Mercedes-Benz,2026-09,seasoned,5,0.013706
 NAROT,Nissan,2017-03,all,1,0.002455
 NAROT,Nissan,2017-04,all,1,0.003754
 NAROT,Nissan,2017-05,all,1,0.006819

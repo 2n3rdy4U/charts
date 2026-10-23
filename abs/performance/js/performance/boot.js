@@ -9,6 +9,7 @@ function serializeState(){
   p.set('view',mode);
   if(output!=='chart')p.set('out',output);
   if(range&&range!=='all')p.set('range',range);
+  if(mode==='vintage'&&vint!=='10')p.set('vint',vint);
   if(macroId)p.set('macro',macroId);
   if(pools!=='all')p.set('pools',pools);
   if(transform!=='rate')p.set('transform',transform);   // the Explorer's own name and values
@@ -33,6 +34,7 @@ function applyState(){   // restore a shared view from ?params on load
   const v=q.get('view'); if(v==='vintage'||v==='calendar')mode=v;
   const o=q.get('out'); if(o==='table'||o==='seasonal'||o==='chart')output=o;
   const r=q.get('range'); if(r)range=r;
+  const vt=q.get('vint'); if(vt&&/^(5|10|all|\d{4}-\d{4})$/.test(vt))vint=vt;
   const mc=q.get('macro'); if(mc)macroId=mc;
   if(q.get('pools')==='seasoned')pools='seasoned';
   const xf=q.get('transform'); if(xf==='yoy-delta'||xf==='yoy-pct')transform=xf;

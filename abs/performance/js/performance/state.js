@@ -19,6 +19,16 @@ const SHELVES={}; let selected=['CRVNAP'], assetClass='loan', mode='vintage', me
 // but not offered here: a cut by origination score needs a paragraph to read
 // correctly, so it is left to the newsletter's editorial charts.)
 let transform='rate';
+// Vintage charts: which vintages to draw — '5' / '10' (the last N vintage years of the shelf on screen), 'all', or
+// 'YYYY-YYYY'. With 25 years of deals on a shelf, which vintages is the first question; the deal-age row
+// (`range`) then caps the age axis.
+let vint='10';
+const vintYears=()=>[...new Set(((SHELVES[selected[0]]||{}).deals||[]).map(d=>+(d.series||'').slice(0,4)).filter(y=>y>1990))].sort((a,b)=>a-b);
+function vintOK(series){
+  const y=+(series||'').slice(0,4); if(!y||vint==='all') return true;
+  const m=/^(\d{4})-(\d{4})$/.exec(vint); if(m) return y>=+m[1] && y<=+m[2];
+  const ys=vintYears(); return !ys.length || y>ys[ys.length-1]-(+vint);
+}
 const yoyActive=()=>isDQ()&&useAbsee()&&mode==='calendar'&&output!=='seasonal'&&!macroId&&transform!=='rate';
 let MACRO=null;   // curated FRED overlay series (macro.json)
 const DQ_LAB={dq_60plus_pct:'60+',dq_31_60_pct:'30–59',dq_30plus_pct:'30+'};
@@ -96,14 +106,33 @@ const tipLabels=()=>{
   return {series:'Series', x:'Date', y:DPD()};
 };
 const lab=t=>(AVAIL.find(a=>a.t===t)||{}).label||t;
-const labCode=t=>{ if(isAll(t)) return 'All Issuers'; const l=lab(t); return l.includes(`(${t})`)?l:`${l} (${t})`; };   // the Explorer's issuer label: "Name (CODE)"
+const labCode=t=>{ if(isAll(t)) return 'All Issuers'; const l=lab(t); if((AVAIL.find(a=>a.t===t)||{}).portfolio) return l;   // no code for a whole-portfolio set
+  return l.includes(`(${t})`)?l:`${l} (${t})`; };   // the Explorer's issuer label: "Name (CODE)"
 const metricTitle=()=>isRepo()?'First-Time Repossession Rate':isTurn()?'Turn-in Rate':isResid()?(mode==='calendar'?'Residual Gain (Loss) on Vehicles Sold':'Cumulative Residual Value Gain (Loss)'):metric==='cnl_ratio'?(mode==='calendar'?(assetClass==='lease'?'Annualized Net Credit Loss Rate':'Annualized Net Loss Rate'):(assetClass==='lease'?'Cumulative Net Credit Loss':'Cumulative Net Loss')):(isDQ()?`${DQ_LAB[metric]} Day Delinquency Rate`:metricLabel());
+function renderVintBar(){
+  const g=el('vintgroup'), bar=el('vintbar'), isVin=mode==='vintage'&&!macroId&&selected.length===1&&output!=='seasonal';
+  const lbl=el('rangelabel'); if(lbl) lbl.textContent = isVin ? 'Deal age, months' : 'Range';
+  g.hidden=!isVin; if(!isVin) return;
+  const ys=vintYears(); if(ys.length<2){ g.hidden=true; return; }
+  const last=ys[ys.length-1], m=/^(\d{4})-(\d{4})$/.exec(vint);
+  const hi=m?+m[2]:last, lo=m?+m[1]:(vint==='all'?ys[0]:(ys.find(y=>y>last-(+vint))||ys[0]));   // the menus show the range drawn
+  const opt=(v,sel)=>ys.map(y=>`<option${y===sel?' selected':''}>${y}</option>`).join('');
+  bar.innerHTML=[['5','Last 5 yrs'],['10','Last 10 yrs'],['all','All']].map(([v,l])=>`<button class="rpill ${vint===v?'on':''}" onclick="setVint('${v}')">${l}</button>`).join('')
+    + `<span class="vintcustom"><select class="ovsel" aria-label="First vintage" onchange="setVint(this.value+'-'+this.nextElementSibling.nextElementSibling.value)">${opt(0,lo)}</select>`
+    + `<span> to </span><select class="ovsel" aria-label="Last vintage" onchange="setVint(this.previousElementSibling.previousElementSibling.value+'-'+this.value)">${opt(0,hi)}</select></span>`;
+}
+window.setVint=v=>{ const m=/^(\d{4})-(\d{4})$/.exec(v); vint = m && +m[1]>+m[2] ? `${m[2]}-${m[1]}` : v; renderChart(); };
 function sourceFor(){
   // Says which source the chart on screen is actually drawn from: the loan
   // tape for loan delinquencies, the servicer reports for everything else.
-  return (useAbsee()||isRepo()) ? 'SEC Form ABS-EE loan-level data, EDGAR'
-                    : 'SEC Form 10-D servicer distribution reports, EDGAR';
+  if(useAbsee()||isRepo()) return 'SEC Form ABS-EE loan-level data, EDGAR';
+  if((SHELVES[selected[0]]||{}).portfolio) return "Issuer's static-pool disclosures in its prospectuses: all originations, not securitized pools";
+  return hasHistory() ? "SEC Form 10-D servicer reports; deals before 2010 from issuers' static-pool disclosures"
+                      : 'SEC Form 10-D servicer distribution reports, EDGAR';
 }
+// The Losses tab draws older deals from the backfill on this shelf (loss_history): from a static-pool table where
+// the trust's own reports are not public. The source line says so; the methodology has the detail.
+const hasHistory=()=>metric==='cnl_ratio' && selected.some(t=>((SHELVES[t]||{}).deals||[]).some(d=>d.curve_source && d.curve_source!=='servicer report (10-D)'));
 // Disclosures for the shelves on screen, from the metrics layer via the
 // resolver: repossession caveats, credit-score caveats, and the loan-tape
 // universe — each only where the chart actually draws that kind of data.
@@ -148,7 +177,7 @@ function subtitleFor(){
   let parts;
   if(macroId)                          parts=[metricAxis()[0], poolTxt];
   else if(mode==='vintage' && isDQ())  parts=[DPD(), ...book];
-  else if(mode==='vintage')            parts=['By series (individual deals)'];
+  else if(mode==='vintage')            parts=[(SHELVES[selected[0]]||{}).portfolio?'By origination year (all of the lender\'s loans)':'By series (individual deals)'];
   else if(isDQ() && useAbsee())        parts=[...book, pools==='seasoned'?'Seasoned (>6mo)':''];
   else if(isTurn())                    parts=['All deals, weighted by leases reaching scheduled end', ...n];
   else if(isResid())                   parts=['All deals, weighted by value of vehicles sold', ...n];   // exactly the Explorer's DQ time series

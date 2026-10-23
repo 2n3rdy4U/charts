@@ -180,5 +180,77 @@
   "t": "ALL-LEASE",
   "label": "All Issuers",
   "asset": "lease"
+ },
+ {
+  "t": "TRIAD",
+  "label": "Triad",
+  "asset": "loan",
+  "historical": true,
+  "group": "Earlier issuers",
+  "years": "2002\u20132007"
+ },
+ {
+  "t": "UPFC",
+  "label": "United PanAm",
+  "asset": "loan",
+  "historical": true,
+  "group": "Earlier issuers",
+  "years": "2004\u20132007"
+ },
+ {
+  "t": "LBAAT",
+  "label": "Long Beach Acceptance",
+  "asset": "loan",
+  "historical": true,
+  "group": "Earlier issuers",
+  "years": "2002\u20132006"
+ },
+ {
+  "t": "FRANK",
+  "label": "Franklin",
+  "asset": "loan",
+  "historical": true,
+  "group": "Earlier issuers",
+  "years": "2001\u20132009"
+ },
+ {
+  "t": "BAAT",
+  "label": "Bank of America",
+  "asset": "loan",
+  "historical": true,
+  "group": "Earlier issuers",
+  "years": "2008\u20132016"
+ },
+ {
+  "t": "HUNT",
+  "label": "Huntington",
+  "asset": "loan",
+  "historical": true,
+  "group": "Earlier issuers",
+  "years": "2012\u20132020"
+ },
+ {
+  "t": "CFAST",
+  "label": "Chrysler Financial",
+  "asset": "loan",
+  "historical": true,
+  "group": "Earlier issuers",
+  "years": "2010\u20132013"
+ },
+ {
+  "t": "ALLYPORT",
+  "label": "Ally, all originations",
+  "asset": "loan",
+  "historical": true,
+  "group": "Earlier issuers",
+  "portfolio": true
+ },
+ {
+  "t": "BMWPORT",
+  "label": "BMW, all originations",
+  "asset": "loan",
+  "historical": true,
+  "group": "Earlier issuers",
+  "portfolio": true
  }
 ]

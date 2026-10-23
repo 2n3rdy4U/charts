@@ -263,6 +263,27 @@ offers two views of that data.
     <em>By Series</em> (individual deals).</li>
 </ul>
 
+<h3 id="loss-history">Older deals on the loss curves</h3>
+<ul>
+  <li><strong>2010&ndash;2016 deals:</strong> the trust&rsquo;s own monthly servicer reports (Form 10&#8209;D), read
+    and numbered exactly as for later deals.</li>
+  <li><strong>Earlier deals</strong>, whose trusts stopped filing monthly reports after about a year: the sponsor&rsquo;s
+    static&#8209;pool tables in its later prospectuses, which report each prior pool&rsquo;s cumulative net loss month by
+    month. The curve is that loss &divide; the pool&rsquo;s initial balance, taken from the latest prospectus that
+    printed it; where a deal also has servicer reports, the two agree. Months are counted from the pool&rsquo;s
+    cut&#8209;off date, as the tables print them. AmeriCredit published its 2001&ndash;2010 tables on its own website;
+    those are read from the archived copies.</li>
+  <li><strong>Not shown:</strong> Ally&rsquo;s revolving trusts and whole&#8209;portfolio vintages (neither is a
+    single pool&rsquo;s loss curve), and CarMax&rsquo;s pre&#8209;2010 tables, which print percentages without a stated
+    base.</li>
+  <li>A deal&rsquo;s cumulative net loss occasionally falls from one month to the next; every month is shown as
+    reported.</li>
+  <li><strong>Earlier issuers</strong> (listed separately in the issuer picker, with the years their data spans)
+    no longer issue public auto ABS; their deals are shown by deal age only, from the same two sources.</li>
+  <li><strong>All originations</strong> (Ally, BMW): the lender&rsquo;s whole auto-loan book by year of origination, as
+    its prospectuses print it &mdash; securitized or not, so not comparable with a securitization&rsquo;s pool.</li>
+</ul>
+
 <h3>Annualized Net Loss, by calendar month</h3>
 <p>
 CNL is cumulative and indexed by loan age, so it cannot be placed on a calendar
@@ -545,38 +566,39 @@ levels are comparable only with the definitions below in mind; trends within a
 trust are always comparable. Where a certificate prints amounts but no rate,
 the rate is computed here and says so.
 </p>
+<p><strong>Yield and excess spread</strong> are shown on one footing for every trust: yield <strong>before losses</strong> (finance charges, fees, interchange and, where the trust counts them as finance charge collections, recoveries, over principal receivables, annualized) &mdash; the market&rsquo;s convention, with charge-offs on their own line &mdash; and excess spread at the level of the trust: its group figure where it prints one, otherwise each reporting series&rsquo; figure weighted by the base of its own yield, leaving out a series in its first month (a partial or long first period distorts it), and blank for a month in which any series&rsquo; figure is missing or every series is new. The table says which line each comes from.</p>
 <table tabindex="0">
 <tr><th>Trust</th><th>Payment rate</th><th>Charge-offs</th><th>Yield</th><th>Excess spread</th></tr>
 <tr><td>American Express</td><td>&ldquo;Monthly Payment Rate&rdquo; (basis not printed)</td>
     <td>&ldquo;Annualized Default Rate&rdquo; (gross) and &ldquo;&hellip;, Net of Recoveries&rdquo;</td>
-    <td>&ldquo;Trust Portfolio Yield&rdquo;</td><td>&ldquo;Excess Spread Percentage&rdquo; of the first series reporting one</td></tr>
+    <td>Total collections of finance charge receivables, recoveries included, &divide; beginning principal receivables, annualized (the printed &ldquo;Trust Portfolio Yield&rdquo; is this less defaults)</td><td>&ldquo;Excess Spread Percentage&rdquo;: the same Group figure on every series</td></tr>
 <tr><td>Bank of America</td><td>Total collections (principal and finance charge) &divide; prior-month principal and finance-charge receivables</td>
     <td>&ldquo;Total / Net Charge-Offs as a percentage of Average Principal Receivables Outstanding&rdquo;</td>
-    <td>&ldquo;Portfolio Yield&rdquo;</td><td>&ldquo;Excess Available Funds Percentage&rdquo;</td></tr>
+    <td>&ldquo;Total Cash Yield&rdquo; (finance charges, discount option receivables, interchange and recoveries) as a percentage of the BAseries investor interest</td><td>&ldquo;Excess Available Funds Percentage&rdquo; of the BAseries</td></tr>
 <tr><td>Barclays Dryrock</td><td>&ldquo;Total payment rate&rdquo;: principal and finance-charge collections, investment earnings excluded (basis not printed)</td>
     <td>&ldquo;Total Gross / Net Losses as a percentage of the Portfolio Principal Balance&rdquo;</td>
-    <td>&ldquo;Portfolio Yield&rdquo;, current monthly period</td><td>&ldquo;Excess Spread Percentage&rdquo;, current monthly period</td></tr>
+    <td><em>computed here</em>: the trust&rsquo;s total finance charge collections (fees, interchange and recoveries; investment earnings excluded) &divide; beginning principal receivables plus additions, &times; 12</td><td><em>weighted across series</em>: each series&rsquo; &ldquo;Excess Spread Percentage&rdquo; by its allocation amount; a series in its first month is left out</td></tr>
 <tr><td>Capital One</td><td>&ldquo;Principal Payment Rate&rdquo;: principal collections &divide; beginning-of-month principal receivables</td>
     <td>&ldquo;Annualized (Net) Default Rate&rdquo; &divide; adjusted beginning-of-month principal receivables, additions included</td>
-    <td>&ldquo;Annualized Yield&rdquo; on the same adjusted base</td><td>not reported</td></tr>
+    <td>&ldquo;Annualized Yield&rdquo; on the same adjusted base (already before losses)</td><td>not reported</td></tr>
 <tr><td>Chase</td><td>&ldquo;Principal Payment Rate&rdquo;: principal collections &divide; beginning pool balance</td>
     <td>&ldquo;Gross / Net Losses as a Percentage of Average Pool Balance&rdquo;, annualized</td>
-    <td>&ldquo;Portfolio Yield&rdquo;</td><td>&ldquo;Excess Spread Percentage&rdquo; = yield less base rate</td></tr>
+    <td>&ldquo;Yield &ndash; Finance Charge, Fees &amp; Interchange&rdquo; plus the yield on discount receivables, before net credit losses</td><td>&ldquo;Excess Spread Percentage&rdquo; of the CHASEseries</td></tr>
 <tr><td>Citi</td><td>&ldquo;Total Payment Rate&rdquo;: principal and finance-charge collections (collateral-certificate basis)</td>
     <td>net only: the &ldquo;Credit Loss Component&rdquo; of the collateral certificate&rsquo;s yield</td>
-    <td>&ldquo;Portfolio Yield&rdquo; for the collateral certificate</td><td>&ldquo;Surplus Finance Charge Collections&rdquo; as a percentage</td></tr>
+    <td>the &ldquo;Yield Component&rdquo; of the collateral certificate&rsquo;s portfolio yield, before the credit loss component</td><td>&ldquo;Surplus Finance Charge Collections&rdquo; as a percentage</td></tr>
 <tr><td>Comenity (WFN)</td><td>&ldquo;Monthly Payment Rate&rdquo;: total collections (principal and finance charge) &divide; beginning-of-month principal receivables</td>
     <td>&ldquo;Gross / Net Principal Charge-Off Rate&rdquo;, &divide; end-of-month principal receivables, annualized</td>
-    <td>&ldquo;Gross Portfolio Yield&rdquo;: finance-charge collections &divide; collateral amount</td><td>&ldquo;Net Portfolio Adjusted Yield&rdquo; (yield less base rate)</td></tr>
+    <td>&ldquo;Gross Portfolio Yield&rdquo;, <em>weighted across series</em> by collateral amount plus principal accumulation account, a series in its first month left out (printed from Nov-2014)</td><td><em>weighted across series</em>: each series&rsquo; &ldquo;Portfolio Adjusted Yield&rdquo; by its collateral amount plus principal accumulation account; a series in its first month is left out</td></tr>
 <tr><td>First National</td><td><em>computed here</em>: total collections &divide; average principal receivables &mdash; the certificate prints amounts, not a rate</td>
     <td><em>computed here</em>, gross only: defaulted amount &divide; average principal receivables &times; 12</td>
-    <td>&ldquo;Portfolio Yield&rdquo;</td><td>&ldquo;Net Yield Percentage&rdquo; = yield less base rate</td></tr>
+    <td><em>computed here</em>: the trust&rsquo;s finance charge collections (interchange, recoveries, finance charges and fees, discount receivables) &divide; average principal receivables, annualized by days</td><td><em>weighted across series</em>: each publicly reported series&rsquo; &ldquo;Net Yield Percentage&rdquo; by its collateral amount plus principal accumulation account as of the first day of the month (the base of its yield in the prospectus); a series in its first month is left out, and privately held variable-funding series publish no statement</td></tr>
 <tr><td>Synchrony</td><td>&ldquo;Payment Rate&rdquo;: principal collections &divide; beginning-of-period principal receivables</td>
     <td>&ldquo;Gross / Net Charge-Off Rate&rdquo;: defaulted amount (less recoveries) &divide; beginning-of-period principal receivables</td>
-    <td>&ldquo;Portfolio Yield&rdquo;</td><td>&ldquo;Excess Spread Percentage&rdquo; = yield less base rate</td></tr>
+    <td>&ldquo;Gross Trust Yield&rdquo;: finance charge collections plus recoveries &divide; beginning principal receivables</td><td>&ldquo;Excess Spread Percentage&rdquo; = yield less base rate</td></tr>
 <tr><td>Wells Fargo</td><td>&ldquo;Principal Payment Rate&rdquo;: principal collections &divide; beginning-of-period principal receivables (day-weighted in a month with account additions)</td>
     <td>&ldquo;Gross / Net Charge-Off Rate&rdquo;</td>
-    <td>&ldquo;Portfolio Yield&rdquo;, interchange included</td><td>&ldquo;Excess Available Funds Percentage&rdquo;</td></tr>
+    <td>trust-wide: &ldquo;Yield from Finance Charges Collected&rdquo; plus &ldquo;Yield from Interchange&rdquo; (the noteholder series receives all interchange, so its own yield runs higher)</td><td>&ldquo;Excess Available Funds Percentage&rdquo;</td></tr>
 </table>
 <p>
 <strong>Delinquency</strong> is the share of receivables past due at the end of
@@ -589,6 +611,8 @@ and say so. <strong>All Trusts</strong> weights each trust&rsquo;s own figure by
 its receivables; it is shown only where at least three trusts holding at least
 80% of receivables report the figure.
 </p>
+<p><strong>Coverage.</strong> First National reports a gross default rate only; its charge-off series is gross of recoveries and is left out of the All Trusts charge-off line. Capital One&#x27;s servicer report does not state excess spread; its net default rate begins Feb-2016 (gross from Jan-2006). Citi reports a net default rate only. Amex&#x27;s delinquency buckets begin Jan-2014 (the 91–120 and 120+ buckets Nov-2015); its net default rate begins Oct-2008. Chase&#x27;s delinquency and default rates begin Nov-2015. Comenity&#x27;s delinquency and default rates begin Nov-2015; its portfolio yield Nov-2014. Bank of America&#x27;s default rates begin Nov-2015. Barclays Dryrock&#x27;s default rates begin Nov-2015. Months in which a trust had no public notes outstanding are blank.</p>
+
 
 <h2 id="downloads">12. Data Downloads &amp; Licence</h2>
 <p>

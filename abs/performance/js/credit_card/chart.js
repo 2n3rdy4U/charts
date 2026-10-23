@@ -51,9 +51,9 @@ function renderChart(){
   if(_focusNext){ _focusNext=false; requestAnimationFrame(focusChart); }
   const _src = sourceFor(), _notes = notesFor();
   el('chartsrc').innerHTML = '<button type="button" class="src-toggle" onclick="this.parentNode.classList.toggle(\'open\')">Source &amp; notes ›</button>'
-    + '<span class="src-full">Source: ' + esc(_src)
-    + (_notes.length ? ' &middot; ' + esc(_notes.join(' ')) : '')
-    + ' &middot; <a href="../methodology.html">Methodology &amp; Data Quality</a></span>';
+    + '<span class="src-full">Source: ' + esc(_src) + '.'
+    + (_notes.length ? ' ' + esc(_notes.join(' ')) : '')
+    + ' <a href="../methodology.html#credit-card">Methodology ›</a></span>';
   window.CC_CHART_SOURCE = _src + (_notes.length ? '. ' + _notes.join(' ') : '');
   const box=el('chart');
   if(metric==='deals') return;                 // the Deals lens has no chart

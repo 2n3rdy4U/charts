@@ -41,6 +41,15 @@
 - [Porsche (PILOT)](https://data.consumercreditmatters.com/abs/performance/PILOT/): delinquency, net loss — data https://data.consumercreditmatters.com/abs/performance/data/PILOT.json
 - [All Issuers (ALL)](https://data.consumercreditmatters.com/abs/performance/ALL/): delinquency, net loss, repossessions — data https://data.consumercreditmatters.com/abs/performance/data/ALL.json
 - [All Issuers (ALL-LEASE)](https://data.consumercreditmatters.com/abs/performance/ALL-LEASE/): delinquency, net loss — data https://data.consumercreditmatters.com/abs/performance/data/ALL-LEASE.json
+- [Triad (TRIAD)](https://data.consumercreditmatters.com/abs/performance/TRIAD/): delinquency, net loss, repossessions — data https://data.consumercreditmatters.com/abs/performance/data/TRIAD.json
+- [United PanAm (UPFC)](https://data.consumercreditmatters.com/abs/performance/UPFC/): delinquency, net loss, repossessions — data https://data.consumercreditmatters.com/abs/performance/data/UPFC.json
+- [Long Beach Acceptance (LBAAT)](https://data.consumercreditmatters.com/abs/performance/LBAAT/): delinquency, net loss, repossessions — data https://data.consumercreditmatters.com/abs/performance/data/LBAAT.json
+- [Franklin (FRANK)](https://data.consumercreditmatters.com/abs/performance/FRANK/): delinquency, net loss, repossessions — data https://data.consumercreditmatters.com/abs/performance/data/FRANK.json
+- [Bank of America (BAAT)](https://data.consumercreditmatters.com/abs/performance/BAAT/): delinquency, net loss, repossessions — data https://data.consumercreditmatters.com/abs/performance/data/BAAT.json
+- [Huntington (HUNT)](https://data.consumercreditmatters.com/abs/performance/HUNT/): delinquency, net loss, repossessions — data https://data.consumercreditmatters.com/abs/performance/data/HUNT.json
+- [Chrysler Financial (CFAST)](https://data.consumercreditmatters.com/abs/performance/CFAST/): delinquency, net loss, repossessions — data https://data.consumercreditmatters.com/abs/performance/data/CFAST.json
+- [Ally, all originations (ALLYPORT)](https://data.consumercreditmatters.com/abs/performance/ALLYPORT/): delinquency, net loss, repossessions — data https://data.consumercreditmatters.com/abs/performance/data/ALLYPORT.json
+- [BMW, all originations (BMWPORT)](https://data.consumercreditmatters.com/abs/performance/BMWPORT/): delinquency, net loss, repossessions — data https://data.consumercreditmatters.com/abs/performance/data/BMWPORT.json
 
 ## Other pages
 

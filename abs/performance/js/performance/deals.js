@@ -20,6 +20,8 @@ function renderCtx(){
     return;
   }
   const n=dealCounts(d);
+  // an earlier issuer: its deals, all wound down; a whole-portfolio set: origination years, not deals
+  if(d.portfolio || d.historical){ el('ctxline').innerHTML=`${(d.deals||[]).length} ${d.portfolio?'origination years':'deals'} &middot; ${through}`; return; }
   el('ctxline').innerHTML=[
       `${n.active} active deal${n.active===1?'':'s'}`,
       n.new?`${n.new} awaiting first report`:'',

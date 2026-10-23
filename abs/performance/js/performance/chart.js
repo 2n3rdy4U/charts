@@ -8,11 +8,11 @@ function buildSeries(){
   if(selected.length===1){
     if(mode==='vintage'){
       if(useAbsee()){   // loan tape: starts at the first full performance month, as the Explorer draws it
-        (subj.deals||[]).filter(d=>d.curve_absee&&d.curve_absee.length).forEach(d=>{const yr=(d.series||'').slice(0,4);
+        (subj.deals||[]).filter(d=>d.curve_absee&&d.curve_absee.length&&vintOK(d.series)).forEach(d=>{const yr=(d.series||'').slice(0,4);
           S.push({series:d.series, grp:yr, color:yearColor(yr), pts:d.curve_absee.filter(p=>p[K]!=null).map(p=>[p.m,p[K],fmtMonth(p.date)])});});
       } else {
-        (subj.deals||[]).filter(d=>d.has_tend_curve&&d.curve&&d.curve.length).forEach(d=>{const yr=(d.series||'').slice(0,4);
-          S.push({series:d.series, grp:yr, color:yearColor(yr), pts:(isTurn()?[]:[[0,0,'']]).concat(d.curve.filter(p=>p[K]!=null).map(p=>[p.m,p[K],fmtMonth(p.date)]))});});  // anchor at month-0 origin (cutoff); a monthly rate has none
+        (subj.deals||[]).filter(d=>d.has_tend_curve&&d.curve&&d.curve.length&&vintOK(d.series)).forEach(d=>{const yr=(d.series||'').slice(0,4);
+          S.push({series:d.series, grp:yr, color:yearColor(yr), pts:(isTurn()?[]:[[0,0,'']]).concat(d.curve.filter(p=>p[K]!=null).map(p=>[p.m,p[K],fmtMonth(p.date)+(d.curve_source?' · '+d.curve_source:'')]))});});  // anchor at month-0 origin (cutoff); a monthly rate has none. curve_source: an older deal's source (loss_history)
       }
     } else {
       const c=calOf(subj).filter(p=>p[K]!=null);
@@ -84,9 +84,13 @@ function updateModeAvail(){
   vin.title=isRepo()?'Repossessions are a monthly rate by calendar month; there is no per-deal vintage curve.'
           :anyAll()?'All Issuers is a pooled time series; pick one issuer for its vintage curves.':'';
   if(noVin && mode==='vintage'){ mode='calendar'; document.querySelectorAll('#modeseg button').forEach(b=>b.classList.toggle('on',b.dataset.mode==='calendar')); }
+  // an earlier issuer has curves by deal age only
+  const cal=document.querySelector('#modeseg button[data-mode="calendar"]'), noCal=isHist(selected[0]);
+  cal.style.opacity=noCal?0.4:1; cal.setAttribute('aria-disabled', String(noCal)); cal.title=noCal?'Loss curves by deal age only for an earlier issuer':'';
+  if(noCal && mode==='calendar'){ mode='vintage'; document.querySelectorAll('#modeseg button').forEach(b=>b.classList.toggle('on',b.dataset.mode==='vintage')); }
 }
 function renderChart(){
-  updateModeAvail(); updateOutputAvail(); setCap(); renderRangeBar(); requestAnimationFrame(fitRail);
+  updateModeAvail(); updateOutputAvail(); setCap(); renderRangeBar(); renderVintBar(); requestAnimationFrame(fitRail);
   // One title, set here so every view below it (chart / table / year overlay /
   // macro overlay) is captioned by the same call that decides what is drawn.
   // share.js reads this element for the exported PNG's header, so the image
@@ -103,7 +107,7 @@ function renderChart(){
   el('chartsrc').innerHTML = '<button type="button" class="src-toggle" onclick="this.parentNode.classList.toggle(\'open\')">Source &amp; notes ›</button>'
     + '<span class="src-full">Source: ' + esc(_src)
     + (_notes.length ? ' &middot; ' + esc(_notes.join(' ')) : '')
-    + ' &middot; <a href="../methodology.html">Methodology &amp; Data Quality</a></span>';
+    + ' &middot; <a href="../methodology.html' + (hasHistory() ? '#loss-history' : '') + '">Methodology ›</a></span>';
   window.CC_CHART_SOURCE = _src + (_notes.length ? '. ' + _notes.join(' ') : '');
   const box=el('chart');
   if(!metric){ box.innerHTML='<div class="chartph">This metric is coming soon.</div>'; return; }
@@ -137,15 +141,23 @@ function renderChart(){
     hideChips();
     const data=[]; S.forEach(s=>s.pts.forEach(([x,y,xl])=>data.push({x,y,series:s.series,grp:s.grp,xl})));
     const T=tipLabels(), isLoss=(metric==='cnl_ratio'||isResid()||isTurn());   // x is deal age in months
-    const X={field:"x",type:"quantitative",title:"Months Since Issuance",scale:{zero:true,nice:false},axis:{format:"d",tickMinStep:isLoss?6:1}};
-    const Y={field:"y",type:"quantitative",title:metricAxis(),axis:{format:axFmt(data.map(d=>d.y))},scale:{zero:true}};
-    const C={field:"series",type:"nominal",title:"Series",scale:{scheme:"tableau10"},legend:legendCfg()};
+    const X={field:"x",type:"quantitative",title:(SHELVES[selected[0]]||{}).portfolio?"Months Since Origination":"Months Since Issuance",scale:{zero:true,nice:false},axis:{format:"d",tickMinStep:isLoss?6:1}};
+    // From 0 unless a value is visibly below it (a lease credit gain): a negligible negative — AmeriCredit 2001-B's
+    // -0.000065% first month — must not pull a "nice" axis down a whole step. The value itself is unchanged.
+    const ymin=Math.min(0,...data.map(d=>d.y).filter(v=>v!=null));
+    const Y={field:"y",type:"quantitative",title:metricAxis(),axis:{format:axFmt(data.map(d=>d.y))},
+             scale:ymin>-0.0005?{zero:true,domainMin:0}:{zero:true}};
+    // Past 30 deals a colour per deal stops telling them apart: colour and legend by vintage year instead (the
+    // tooltip still names the deal).
+    const MANY=new Set(S.map(x=>x.series)).size>30 && ((SHELVES[selected[0]]||{}).deals||[]).some(d=>d.curve_source);   // only with the older deals (loss_history)
+    const C=MANY?{field:"grp",type:"ordinal",title:"Vintage",scale:{scheme:"viridis"},legend:legendCfg()}
+               :{field:"series",type:"nominal",title:"Series",scale:{scheme:"tableau10"},legend:legendCfg()};
     const rows=[{field:"series",type:"nominal",title:T.series},
       isLoss?{field:"x",type:"quantitative",title:T.x}:{field:"xl",type:"nominal",title:T.x},
       {field:"y",type:"quantitative",title:T.y,format:".2%"}];
-    return embed(box,{ $schema:"https://vega.github.io/schema/vega-lite/v5.json", width:"container", height:chartHeight(new Set(S.map(x=>x.series)).size,legendCols()), background:null,
+    return embed(box,{ $schema:"https://vega.github.io/schema/vega-lite/v5.json", width:"container", height:chartHeight(MANY?new Set(S.map(x=>x.grp)).size:new Set(S.map(x=>x.series)).size,legendCols()), background:null,
       layer:[
-        {data:{values:data}, params:[{name:"hl",select:{type:"point",fields:["series"],toggle:true,clear:false},bind:"legend"}],
+        {data:{values:data}, params:[{name:"hl",select:{type:"point",fields:[MANY?"grp":"series"],toggle:true,clear:false},bind:"legend"}],
          mark:{type:"line",interpolate:"monotone"},
          encoding:{x:X, y:Y, color:C, detail:{field:"series"},
            opacity:{condition:{param:"hl",value:1},value:0.25},
