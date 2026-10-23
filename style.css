@@ -174,6 +174,29 @@ html, body {
   color: #0b1a2e;
 }
 
+/* iOS home-screen ("standalone") app: since iOS 26 WebKit fades a Liquid
+   Glass edge blur ~40pt down from the top of the web view, over the header.
+   No CSS or meta switch turns it off, but WebKit skips it and colours the
+   status bar from the page when a fixed, full-width (>=90%), solid element
+   taller than 10px sits at the top edge. This 12px band is that element; it
+   is the header's own navy so it is invisible. Inert outside standalone mode
+   and outside iOS. The page does not draw under the status bar in this mode
+   (the top safe-area inset is 0), so this is separate from the inset padding
+   on #header above. */
+@media (display-mode: standalone) {
+  @supports (-webkit-touch-callout: none) {
+    #header::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 12px;
+      background: var(--color-shell-deep);
+      pointer-events: none;
+      z-index: 2147483647;
+    }
+  }
+}
+
 /* ── Left rail ─────────────────────────────────────────────────── */
 #rail {
   grid-area: rail;
