@@ -29,7 +29,8 @@
 }
 .ccm-page {
   margin:0; padding:0; background:var(--bg); color:var(--text);
-  padding: env(safe-area-inset-top) env(safe-area-inset-right) 0 env(safe-area-inset-left);
+  /* top inset is carried by the shared #header (style.css) */
+  padding: 0 env(safe-area-inset-right) 0 env(safe-area-inset-left);
 }
 .ccm-page { display:flex; flex-direction:column; min-height:100vh; }
 .wrap {
