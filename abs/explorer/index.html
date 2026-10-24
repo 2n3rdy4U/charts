@@ -14,7 +14,7 @@
 </style>
 <script>
 (function () {
-  var SHELVES = {"AART": "loan", "ALL": "loan", "ALL-LEASE": "lease", "AMCAR": "loan", "BLAST": "loan", "BMWLT": "lease", "BMWOT": "loan", "CAOT": "loan", "CMXS": "loan", "COPAR": "loan", "CRART": "loan", "CRVNAN": "loan", "CRVNAP": "loan", "DRIVE": "loan", "EART": "loan", "EARTS": "loan", "FCALT": "lease", "FCAOT": "loan", "FTAT": "loan", "GMALT": "lease", "GMCAR": "loan", "HAROT": "loan", "HART": "loan", "MBALT": "lease", "MBART": "loan", "NALT": "lease", "NAROT": "loan", "PILOT": "lease", "SDART": "loan", "TAOT": "loan", "USAOT": "loan", "VALET": "loan", "VWALT": "lease", "WOALT": "lease", "WOART": "loan", "WOSAT": "loan"}, SPLITS = {"CRVNA": ["CRVNAP", "CRVNAN"]}, KIND = "loan";
+  var SHELVES = {"AART": "loan", "ALL": "loan", "ALL-LEASE": "lease", "ALLYPORT": "loan", "AMCAR": "loan", "BAAT": "loan", "BLAST": "loan", "BMWLT": "lease", "BMWOT": "loan", "BMWPORT": "loan", "CAOT": "loan", "CFAST": "loan", "CMXS": "loan", "COPAR": "loan", "CRART": "loan", "CRVNAN": "loan", "CRVNAP": "loan", "DRIVE": "loan", "EART": "loan", "EARTS": "loan", "FCALT": "lease", "FCAOT": "loan", "FRANK": "loan", "FTAT": "loan", "GMALT": "lease", "GMCAR": "loan", "HAROT": "loan", "HART": "loan", "HUNT": "loan", "LBAAT": "loan", "MBALT": "lease", "MBART": "loan", "NALT": "lease", "NAROT": "loan", "PILOT": "lease", "SDART": "loan", "TAOT": "loan", "TRIAD": "loan", "UPFC": "loan", "USAOT": "loan", "VALET": "loan", "VWALT": "lease", "WOALT": "lease", "WOART": "loan", "WOSAT": "loan"}, SPLITS = {"CRVNA": ["CRVNAP", "CRVNAN"]}, KIND = "loan";
   var q = new URLSearchParams(location.search);
   // --- which shelves ---
   var raw = (q.get("issuers") || q.get("issuer") || q.get("ticker") || "").split(",");
