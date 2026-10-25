@@ -1,6 +1,6 @@
 // Credit Card page — deep links, analytics and start-up. Plain scripts sharing one scope,
 // loaded in order by credit_card.html; see web/README.md.
-const METRIC_SHORT={dq_30plus:'dq30',dq_30_60:'dq3060',dq_61_90:'dq6190',dq_91_120:'dq91120',dq_120plus:'dq120',charge_off_rate:'co',payment_rate:'pr',portfolio_yield:'yld',excess_spread:'xs',trust_balance:'bal'};
+const METRIC_SHORT={dq_30plus:'dq30',dq_30_60:'dq3060',dq_61_90:'dq6190',dq_91_120:'dq91120',dq_120plus:'dq120',charge_off_rate:'co',payment_rate:'pr',portfolio_yield:'yld',excess_spread:'xs',excess_trigger:'xs3',trust_balance:'bal'};
 function serializeState(){
   const p=new URLSearchParams();
   p.set('sel',selected.join(','));
