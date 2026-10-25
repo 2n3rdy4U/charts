@@ -40,7 +40,9 @@ document.querySelectorAll('.mtabs button').forEach(b=>b.onclick=()=>{
   // a tab remembers its last bucket / measure
   if(tabOf()!==tab) metric = TAB_DEFAULT[tab];
   syncTabs(); fitSelectionToView(); buildIssPanel(); updateIssBtn(); renderSubject(); showLens('chart'); countView();});
-function syncDqSeg(){ document.querySelectorAll('#dqseg button').forEach(x=>x.classList.toggle('on', x.dataset.dq===metric)); }
+function syncDqSeg(){ document.querySelectorAll('#dqseg button').forEach(x=>x.classList.toggle('on', x.dataset.dq===metric));
+  document.querySelectorAll('#xsseg button').forEach(x=>x.classList.toggle('on', x.dataset.xs===metric)); }
+document.querySelectorAll('#xsseg button').forEach(b=>b.onclick=()=>{ metric=b.dataset.xs; syncDqSeg(); renderChart(); countView(); });
 document.querySelectorAll('#dqseg button').forEach(b=>b.onclick=()=>{ metric=b.dataset.dq; syncDqSeg(); renderChart(); countView(); });
 document.querySelectorAll('#outseg button').forEach(b=>b.onclick=()=>setOutput(b.dataset.out));
 document.querySelectorAll('#xfseg button').forEach(b=>b.onclick=()=>{ transform=b.dataset.transform; renderChart(); });

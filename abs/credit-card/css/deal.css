@@ -47,6 +47,7 @@ table.cap{width:100%;border-collapse:collapse;font-size:12.5px;font-variant-nume
 .cmp th:first-child{text-align:left}
 .cmp td{padding:8px 12px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap;vertical-align:top}
 .cmp td.rl{text-align:left;color:var(--muted)}
+.cmp .subcell{font-size:10.5px;color:var(--muted)}
 .cmp tr.sec td{background:#f6f8fb;font-size:10px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);font-weight:700;padding:7px 12px;text-align:left}
 .cmp .subj{background:#eef5fc} .cmp th.subj{color:var(--accent)}
 .dl{font-size:10px;font-weight:600;padding:1px 5px;border-radius:3px;margin-left:5px;white-space:nowrap}

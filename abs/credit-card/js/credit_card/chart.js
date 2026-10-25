@@ -25,6 +25,7 @@ function updateOutputAvail(){
   document.querySelectorAll('#xfseg button').forEach(b=>b.classList.toggle('on',b.dataset.transform===transform));
   document.querySelectorAll('#outseg button').forEach(b=>b.classList.toggle('on',b.dataset.out===output));
   el('dqctl').hidden = !isDQ();
+  el('xsctl').hidden = meta().tab!=='xs';
   const sb=el('seasbtn'); sb.style.opacity=multiIssuer()?0.4:1; sb.setAttribute('aria-disabled', String(multiIssuer()));
   sb.title=multiIssuer()?'Year overlay is for one trust at a time':'';
   el('macrosel').disabled=multiIssuer();
