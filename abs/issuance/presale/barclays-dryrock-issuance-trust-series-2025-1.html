@@ -185,10 +185,17 @@ table.grid.cap-structure th, table.grid.cap-structure td {
    (left-aligned date). With the default 8px left/right padding, the
    right-edge WAL value visually touches the left-edge Legal Final date
    at the column boundary — adding 12px to each side opens a clearer gap. */
-table.grid.cap-structure th:nth-child(6),
-table.grid.cap-structure td:nth-child(6) { padding-right: 20px; }
 table.grid.cap-structure th:nth-child(7),
-table.grid.cap-structure td:nth-child(7) { padding-left: 20px; }
+table.grid.cap-structure td:nth-child(7) { padding-right: 20px; }
+table.grid.cap-structure th:nth-child(8),
+table.grid.cap-structure td:nth-child(8) { padding-left: 20px; }
+table.grid.cap-structure .bench { font-size: 10.5px; color: var(--muted); }
+table.grid.cap-structure .tag-ret { font-size: 9px; text-transform: uppercase; letter-spacing: 0.05em;
+    color: var(--muted); border: 1px solid var(--grid); border-radius: 3px; padding: 0 4px; margin-left: 6px; }
+table.grid.comparison td.srccol, table.grid.comparison th.srccol {
+    color: var(--muted); font-size: 11px; text-align: right; white-space: nowrap; }
+table.grid.comparison .sub-cell { font-size: 10.5px; color: var(--muted); font-weight: 400; }
+.criteria.fn { margin-top: 8px; line-height: 1.45; max-width: 90ch; }
 table.grid.comparison { table-layout: fixed; }
 table.grid.comparison th, table.grid.comparison td {
     padding: 5px 6px; font-size: 12px; vertical-align: top;
