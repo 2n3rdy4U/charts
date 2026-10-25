@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://data.consumercreditmatters.com/</loc><lastmod>2026-10-23</lastmod></url>
+  <url><loc>https://data.consumercreditmatters.com/</loc><lastmod>2026-10-25</lastmod></url>
   <url><loc>https://data.consumercreditmatters.com/abs/changelog.html</loc><lastmod>2026-10-24</lastmod></url>
   <url><loc>https://data.consumercreditmatters.com/abs/credit-card/</loc><lastmod>2026-10-13</lastmod></url>
   <url><loc>https://data.consumercreditmatters.com/abs/credit-card/ALL/</loc><lastmod>2026-10-22</lastmod></url>
@@ -328,7 +328,7 @@
   <url><loc>https://data.consumercreditmatters.com/cc/</loc><lastmod>2026-10-09</lastmod></url>
   <url><loc>https://data.consumercreditmatters.com/download/</loc><lastmod>2026-10-24</lastmod></url>
   <url><loc>https://data.consumercreditmatters.com/macro/</loc><lastmod>2026-10-23</lastmod></url>
-  <url><loc>https://data.consumercreditmatters.com/newsletter/</loc><lastmod>2026-10-18</lastmod></url>
+  <url><loc>https://data.consumercreditmatters.com/newsletter/</loc><lastmod>2026-10-25</lastmod></url>
   <url><loc>https://data.consumercreditmatters.com/newsletter/2026-05-25/</loc><lastmod>2026-10-09</lastmod></url>
   <url><loc>https://data.consumercreditmatters.com/newsletter/2026-06-01/</loc><lastmod>2026-10-09</lastmod></url>
   <url><loc>https://data.consumercreditmatters.com/newsletter/2026-06-08/</loc><lastmod>2026-10-09</lastmod></url>
@@ -350,5 +350,6 @@
   <url><loc>https://data.consumercreditmatters.com/newsletter/2026-10-05/</loc><lastmod>2026-10-09</lastmod></url>
   <url><loc>https://data.consumercreditmatters.com/newsletter/2026-10-12/</loc><lastmod>2026-10-11</lastmod></url>
   <url><loc>https://data.consumercreditmatters.com/newsletter/2026-10-19/</loc><lastmod>2026-10-18</lastmod></url>
+  <url><loc>https://data.consumercreditmatters.com/newsletter/2026-10-26/</loc><lastmod>2026-10-25</lastmod></url>
   <url><loc>https://data.consumercreditmatters.com/sec/Data_Cal_Calendar.html</loc><lastmod>2026-10-09</lastmod></url>
 </urlset>
