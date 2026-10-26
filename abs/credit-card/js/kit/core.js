@@ -319,7 +319,7 @@ function calendarChart(box,S,o){
 /* Picker — a button that summarises the selection and a panel of checkboxes
    (radio when the view takes one). The subject is selected[0]: the panel
    marks it with a star and lets a checked entry be promoted.
-   cfg: {btn, panel, wrap, placeholder, options() → [{t,label,retired,off,offTitle}],
+   cfg: {btn, panel, wrap, placeholder, options() → [{t,label,retired,off,offTitle,group}],
          multi() → bool, hint() → text or '', get() → selected, set(arr),
          onChange('pick' | 'subject')} */
 function kitPicker(cfg){
@@ -336,7 +336,10 @@ function kitPicker(cfg){
     panel.innerHTML = '';
     const hint=cfg.hint();
     if(hint){ const h=document.createElement('div'); h.className='mss-hint'; h.textContent=hint; panel.appendChild(h); }
+    let groupShown=null;
     for(const a of cfg.options()){
+      // a grouped entry (e.g. 'Earlier trusts') sits under its heading; options() lists groups last
+      if(a.group && a.group!==groupShown){ const g=document.createElement('div'); g.className='mss-hint mss-group'; g.textContent=a.group; panel.appendChild(g); groupShown=a.group; }
       const lbl=document.createElement('label');
       const cb=document.createElement('input');
       cb.type = multi ? 'checkbox' : 'radio';

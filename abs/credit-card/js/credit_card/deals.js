@@ -8,6 +8,12 @@ function renderCtx(){
     el('ctxline').innerHTML=`${s.n_trusts} trusts weighted by receivables &middot; ${through}${more}`;
     return;
   }
+  if(d.earlier){     // a trust no longer reporting (src/metrics/cc_history.EARLIER): its span, not a series count
+    el('ctxline').innerHTML=[`earlier trust: reports <b>${fmtMonth(s.since)}</b> to <b>${fmtMonth(s.through)}</b>`,
+      s.balance!=null ? `receivables <b>${money(s.balance)}</b> at its last report` : '', more.replace(/^ &middot; /,'')]
+      .filter(Boolean).join(' &middot; ');
+    return;
+  }
   el('ctxline').innerHTML=[
       s.balance!=null ? `receivables <b>${money(s.balance)}</b>` : '',
       `${s.n_active} series outstanding`, s.n_matured ? `${s.n_matured} matured` : '',

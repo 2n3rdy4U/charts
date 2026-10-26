@@ -12,8 +12,9 @@ function fitSelectionToView(){
   }
 }
 const PICK = kitPicker({btn:'issbtn', panel:'isspanel', wrap:'isswrap', placeholder:'Select trusts ▾',
-  options:()=>AVAIL.slice().sort((x,y)=>isAll(x.t)?-1:isAll(y.t)?1:x.label.localeCompare(y.label))
-                .map(a=>({...a, off:!issMulti()&&isAll(a.t), offTitle:'All Trusts has no series of its own'})),
+  options:()=>AVAIL.slice().sort((x,y)=>isAll(x.t)?-1:isAll(y.t)?1:(!!x.group-!!y.group)||x.label.localeCompare(y.label))
+                .map(a=>({...a, off:!issMulti()&&(isAll(a.t)||!!a.group),
+                          offTitle:isAll(a.t)?'All Trusts has no series of its own':'No SEC-registered series on file for this earlier trust'})),
   multi:issMulti,
   hint:()=>issMulti() ? '' : 'Deals describes one trust at a time',
   get:()=>selected, set:v=>{ selected=v; },
