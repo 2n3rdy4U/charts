@@ -61,13 +61,17 @@ const metricAxis=()=>{
 // Tooltip rows. All Trusts carries the number of trusts behind each point.
 const tipLabels=()=>yoyActive() ? {series:'Series', x:'Month', y: transform==='yoy-delta' ? 'YOY Δ (pp)' : 'YOY %'}
                                 : {series:'Trust', x:'Month', y: isRate() ? 'Rate' : '$ billions'};
+// A month from the site's history (src/metrics/cc_history: before 10-D reporting, or a month the current reader
+// misses) says so in its tooltip; the trigger view names a linked trust's weakest series (src/metrics/cc_excess).
+const anyHist=()=>selected.some(t=>((SHELVES[t]||{}).sources||[]).includes('history'));
 const extraRows=()=>[...(anyAll() ? [{field:"n",type:"quantitative",title:"Trusts in figure",format:"d"}] : []),
+                     ...(anyHist() ? [{field:"src",type:"nominal",title:"Source"}] : []),
                      ...(metric==='excess_trigger' ? [{field:"tested",type:"nominal",title:"Tested at"}] : [])];
-// The trigger view: a linked trust's figure is its weakest series' (src/metrics/cc_excess) — the tooltip names it.
 const extraOf=p=>{ const o={}, n=p[metric+'_n']; if(n!=null) o.n=n;
+  if(anyHist()) o.src=p.hist ? 'Servicer report (history)' : 'Servicer report (10-D)';
   if(metric==='excess_trigger') o.tested=p.trigger_series ? `Series ${p.trigger_series} (lowest of ${p.trigger_n})` : 'The issuance series';
   return Object.keys(o).length ? o : null; };
-function sourceFor(){ return 'SEC Form 10-D servicer reports'; }
+function sourceFor(){ return anyHist() ? 'SEC servicer reports (Form 8-K to 2006, Form 10-D after)' : 'SEC Form 10-D servicer reports'; }
 // The chart footer: the source, then only what is needed to read THIS chart — the yield's basis, how All
 // Trusts is built, a gross charge-off series, and a line that starts later than its trust's records (written from
 // the data, for the metric on screen, only when that start is in view). Definitions and coverage in full are on
@@ -77,12 +81,20 @@ function notesFor(){
   if(metric==='portfolio_yield' && Object.values(SHELVES).some(s=>(s.labels||{}).portfolio_yield)) out.push('Yield is before charge-offs.');
   if(anyAll()) out.push('All Trusts is weighted by receivables.');
   if(metric==='charge_off_rate') selected.forEach(t=>{ const s=(SHELVES[t]||{}).snapshot||{};
-    if(s.charge_off_basis==='gross') out.push(`${lab(t)}'s charge-off rate is gross of recoveries.`); });
+    if(s.charge_off_basis==='gross'){ out.push(`${lab(t)}'s charge-off rate is gross of recoveries.`); return; }
+    // a trust that reports net now but only gross in its earlier months (Capital One before 2006, Amex before
+    // Oct-2008): say so when those months are on screen
+    const cal=calOf(SHELVES[t]), firstNet=cal.find(p=>p.charge_off_basis==='net'&&p.charge_off_rate!=null);
+    const latest=(cal[cal.length-1]||{}).date||'', cut=range==='all' ? '' : (parseInt(latest.slice(0,4))-range)+latest.slice(4);
+    if(firstNet && cal.some(p=>p.charge_off_basis==='gross'&&p.charge_off_rate!=null&&p.date<firstNet.date&&p.date>cut))
+      out.push(`${bare(t)}'s charge-off rate is gross of recoveries before ${fmtMonth(firstNet.date)}.`); });
   selected.filter(t=>!isAll(t)).forEach(t=>{
     const cal=calOf(SHELVES[t]), first=(cal[0]||{}).date, f=cal.find(p=>p[metric]!=null);
     if(!first||!f) return;
     const gap=(+f.date.slice(0,4)-+first.slice(0,4))*12+(+f.date.slice(5,7)-+first.slice(5,7));
     const latest=(cal[cal.length-1]||{}).date||'', cut=range==='all'||mode==='vintage' ? '' : (parseInt(latest.slice(0,4))-range)+latest.slice(4);
+    // a trust already footnoted as gross before some month needs no 'begins' line: what begins there is its gross rate
+    if(metric==='charge_off_rate' && out.some(x=>x.startsWith(`${bare(t)}'s charge-off rate is gross`))) return;
     if(gap>=3 && f.date>cut) out.push(`${bare(t)}'s ${metricLabel()} begins ${fmtMonth(f.date)}.`);
   });
   if(metric==='excess_trigger'){

@@ -96,21 +96,29 @@ const M_COLL=[
   {l:"WA APR", g:x=>(x.terms||{}).wa_apr, f:v=>pct(v,2), d:{u:"pp",good:-1}},
   {l:"WA original term", g:x=>(x.terms||{}).wa_original_term, f:v=>v!=null?Math.round(v)+" mo":"—", d:{u:"raw",good:-1}},
   {l:"% new vehicles", g:x=>(x.terms||{}).pct_new_vehicles, f:v=>pct(v,1)},
-  {l:"Reserve %", g:x=>cap(x).reserve_pct, f:v=>pct(v,2)},
   {l:"Geo top-3", g:x=>(x.terms||{}).geo_top5, f:geo3},
 ];
+// Same rows, order and names as the presale report's Structure block (2026-10-25):
+// the protection beneath the AAA term notes first, then its parts, then the price.
+// "AAA % of pool" is gone — it was the complement of enhancement and moved with
+// money-market A-1 sizing, not with protection.
+const spreadCell=x=>{ const c=cap(x); if(c.aaa_spread_bps==null) return "—";
+  const sub=c.aaa_spread_class?`<br><span class="subcell">${esc(c.aaa_spread_class)}${c.aaa_spread_wal!=null?" · "+Number(c.aaa_spread_wal).toFixed(1)+"y":""}</span>`:"";
+  return "+"+Math.round(c.aaa_spread_bps)+" bps"+sub; };
 const M_STRUCT=[
-  {l:"AAA spread", g:x=>cap(x).aaa_spread_bps, f:v=>v!=null?"+"+Math.round(v)+" bps":"—", d:{u:"bps",good:-1}},
-  {l:"AAA % of pool", g:x=>cap(x).aaa_pct_of_pool, f:v=>pct(v,1), d:{u:"pp",good:1}},
-  {l:"Subordination below AAA", g:x=>cap(x).sub_below_aaa, f:v=>pct(v,1), d:{u:"pp",good:1}},
+  {l:"Enhancement beneath AAA, initial", g:x=>cap(x).hard_ce_pct, f:v=>pct(v,2), d:{u:"pp",good:1}},
+  {l:"Enhancement beneath AAA, target", g:x=>cap(x).hard_ce_target, f:v=>pct(v,2)},
+  {l:"Subordinate notes", g:x=>cap(x).sub_below_aaa, f:v=>pct(v,1), d:{u:"pp",good:1}},
   {l:"OC (initial)", g:x=>cap(x).oc_initial, f:v=>pct(v,2)},
+  {l:"Reserve", g:x=>cap(x).reserve_pct, f:v=>pct(v,2)},
   {l:"YSOC", g:x=>cap(x).ysoc_na?"n.a.":cap(x).ysoc_pct, f:v=>v==="n.a."?v:pct(v,2)},
+  {l:"AAA spread", g:x=>cap(x).aaa_spread_bps, f:(v,x)=>x?spreadCell(x):(v!=null?"+"+Math.round(v)+" bps":"—"), d:{u:"bps",good:-1}},
   {l:"Tranches", g:x=>cap(x).n_classes, f:v=>v!=null?String(v):"—"},
 ];
 function cmpRow(r,cohort,others){
   const cells=cohort.map((x,i)=>{ const v=r.g(x); let badge="";
     if(i===0&&r.d&&v!=null){ const ov=others.map(r.g).filter(z=>z!=null); if(ov.length) badge=dlSpan(v-median(ov),r.d); }
-    return `<td class="${i===0?"subj":""}">${r.f(v)}${badge}</td>`; }).join("");
+    return `<td class="${i===0?"subj":""}">${r.f(v,x)}${badge}</td>`; }).join("");
   return `<tr><td class="rl">${esc(r.l)}</td>${cells}</tr>`;
 }
 function renderCompare(elId,cohort,others,colTicker){
@@ -122,7 +130,8 @@ function renderCompare(elId,cohort,others,colTicker){
 function peerAdapt(p,dt){ return {ticker:dt||p.ticker, series:p.series,
   terms:{closing_date:p.effective_date, initial_pool_balance:p.pool_balance, wa_fico:p.wa_fico, wa_apr:p.wa_apr,
     wa_original_term:p.wa_original_term, pct_new_vehicles:p.pct_new_vehicles, geo_top5:p.geo_top5},
-  capital:{aaa_spread_bps:p.aaa_spread_bps, aaa_pct_of_pool:p.aaa_pct, sub_below_aaa:p.subordination_pct,
+  capital:{aaa_spread_bps:p.aaa_spread_bps, aaa_spread_class:p.aaa_spread_class, aaa_spread_wal:p.aaa_spread_wal,
+    aaa_pct_of_pool:p.aaa_pct, sub_below_aaa:p.subordination_pct, hard_ce_pct:p.hard_ce_pct, hard_ce_target:p.hard_ce_target,
     oc_initial:p.oc_pct, ysoc_pct:p.ysoc_pct, ysoc_na:p.ysoc_not_applicable, reserve_pct:p.reserve_fund_pct,
     n_classes:p.n_classes} }; }
 const subjPeer=d=>PEERS && PEERS.find(p=>p.ticker===normT(T) && p.series===d.series);
