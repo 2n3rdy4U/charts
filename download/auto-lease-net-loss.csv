@@ -1272,6 +1272,8 @@ NALT,Nissan,2026-07,all,5,0.001167
 NALT,Nissan,2026-07,seasoned,4,0.00113
 NALT,Nissan,2026-08,all,5,0.000642
 NALT,Nissan,2026-08,seasoned,4,1.7e-05
+NALT,Nissan,2026-09,all,5,0.003312
+NALT,Nissan,2026-09,seasoned,4,0.00214
 PILOT,Porsche,2026-06,all,1,0.0
 PILOT,Porsche,2026-07,all,1,0.000729
 PILOT,Porsche,2026-08,all,1,0.0
