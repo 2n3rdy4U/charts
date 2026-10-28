@@ -174,29 +174,6 @@ html, body {
   color: #0b1a2e;
 }
 
-/* iOS home-screen ("standalone") app: since iOS 26 WebKit fades a Liquid
-   Glass edge blur ~40pt down from the top of the web view, over the header.
-   No CSS or meta switch turns it off, but WebKit skips it and colours the
-   status bar from the page when a fixed, full-width (>=90%), solid element
-   taller than 10px sits at the top edge. This 12px band is that element; it
-   is the header's own navy so it is invisible. Inert outside standalone mode
-   and outside iOS. The page does not draw under the status bar in this mode
-   (the top safe-area inset is 0), so this is separate from the inset padding
-   on #header above. */
-@media (display-mode: standalone) {
-  @supports (-webkit-touch-callout: none) {
-    #header::before {
-      content: "";
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      height: 12px;
-      background: var(--color-shell-deep);
-      pointer-events: none;
-      z-index: 2147483647;
-    }
-  }
-}
-
 /* ── Left rail ─────────────────────────────────────────────────── */
 #rail {
   grid-area: rail;
@@ -1389,4 +1366,28 @@ input:focus-visible,
   .tile .tile-icon     { width: 24px; height: 24px; }
   .tile .tile-icon-art { width: 28px; height: 28px; }
   .tile .tile-label    { font-size: 12.5px; }
+}
+
+/* ── iOS home-screen ("standalone") app ──────────────────────────────
+   Since iOS 26 WebKit fades a Liquid Glass edge blur roughly 40pt down from
+   the top of the web view, over whatever sits there; no CSS or meta switch
+   turns it off. The page does not draw under the status bar in this mode
+   (the top inset is 0), so the only remedies are to give WebKit a real
+   sticky full-width solid element at the top edge, which lets it colour the
+   status bar from the page, and to start the header's content below the
+   fade. A fixed 12px band tried first (2026-10-23) painted over the logo
+   and did not stop the blur. Must stay at the END of this file: the phone
+   block sets the padding shorthand on #header and this has to win. Inert
+   outside standalone mode and outside iOS. */
+@media (display-mode: standalone) {
+  @supports (-webkit-touch-callout: none) {
+    #app {
+      grid-template-rows: calc(var(--header-height) + env(safe-area-inset-top, 0px) + 32px) 1fr;
+    }
+    #header {
+      position: sticky;
+      top: 0;
+      padding-top: calc(env(safe-area-inset-top, 0px) + 32px);
+    }
+  }
 }
