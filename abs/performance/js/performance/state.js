@@ -3,7 +3,7 @@
 // The issuer picker: every shelf, its name and asset class — written by the
 // resolver (shelves.json) from the issuer roster; filled in by boot.js.
 const AVAIL=[];
-const CLASS_DEFAULT={loan:'CRVNAP',lease:'FCALT'};
+const CLASS_DEFAULT={loan:'ALL',lease:'ALL-LEASE'};   // the market series: a neutral opening view, not one issuer's
 const ISSCOLOR=['#2f6db5','#2e8b57','#b5762f','#9c4fb5'];
 // The All Issuers series (every loan shelf's tape added together, from the
 // metrics layer): time series only, delinquency only, drawn heavier and in ink.
@@ -13,7 +13,7 @@ const anyAll=()=>selected.some(isAll);
 const ALL_COLOR='#1a2230';
 const yearColor=y=>({'2023':'#9c4fb5','2024':'#b5762f','2025':'#2e8b57','2026':'#2f6db5'}[y]||'#5a6b85');
 
-const SHELVES={}; let selected=['CRVNAP'], assetClass='loan', mode='vintage', metric='dq_60plus_pct', output='chart', tableAll=false, macroId=null, range='all', pools='all';
+const SHELVES={}; let selected=['ALL'], assetClass='loan', mode='vintage', metric='dq_60plus_pct', output='chart', tableAll=false, macroId=null, range='all', pools='all';
 // The loan-tape time series can be shown as the change on a year earlier.
 // (Credit-score and vehicle cuts of it are computed daily into <T>.cuts.json
 // but not offered here: a cut by origination score needs a paragraph to read
