@@ -832,6 +832,8 @@ GMALT,GM Financial,2026-07,all,7,0.001374
 GMALT,GM Financial,2026-07,seasoned,6,0.000485
 GMALT,GM Financial,2026-08,all,8,-0.002798
 GMALT,GM Financial,2026-08,seasoned,6,-0.004644
+GMALT,GM Financial,2026-09,all,8,-0.000622
+GMALT,GM Financial,2026-09,seasoned,6,-0.002285
 MBALT,Mercedes-Benz,2017-04,all,1,-0.00047
 MBALT,Mercedes-Benz,2017-05,all,1,0.001664
 MBALT,Mercedes-Benz,2017-06,all,1,-0.000951
@@ -1662,3 +1664,5 @@ WOALT,World Omni,2026-07,all,3,0.008238
 WOALT,World Omni,2026-07,seasoned,2,0.007622
 WOALT,World Omni,2026-08,all,3,0.004791
 WOALT,World Omni,2026-08,seasoned,3,0.004791
+WOALT,World Omni,2026-09,all,3,0.011784
+WOALT,World Omni,2026-09,seasoned,3,0.011784

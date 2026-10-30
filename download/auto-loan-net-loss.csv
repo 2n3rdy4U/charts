@@ -463,6 +463,8 @@ AMCAR,AmeriCredit,2026-07,all,5,0.066804
 AMCAR,AmeriCredit,2026-07,seasoned,5,0.066804
 AMCAR,AmeriCredit,2026-08,all,5,0.078202
 AMCAR,AmeriCredit,2026-08,seasoned,5,0.078202
+AMCAR,AmeriCredit,2026-09,all,5,0.068736
+AMCAR,AmeriCredit,2026-09,seasoned,5,0.068736
 BLAST,Bridgecrest,2023-10,all,1,0.008587
 BLAST,Bridgecrest,2023-11,all,1,0.016092
 BLAST,Bridgecrest,2023-12,all,1,0.0611
@@ -1806,6 +1808,8 @@ EART,Exeter,2026-07,all,24,0.112213
 EART,Exeter,2026-07,seasoned,22,0.128685
 EART,Exeter,2026-08,all,25,0.101043
 EART,Exeter,2026-08,seasoned,23,0.124442
+EART,Exeter,2026-09,all,25,0.108447
+EART,Exeter,2026-09,seasoned,23,0.126951
 EARTS,Exeter Select,2025-04,all,1,0.000426
 EARTS,Exeter Select,2025-05,all,1,0.004322
 EARTS,Exeter Select,2025-06,all,1,0.011567
@@ -1835,6 +1839,8 @@ EARTS,Exeter Select,2026-07,all,4,0.040675
 EARTS,Exeter Select,2026-07,seasoned,3,0.054154
 EARTS,Exeter Select,2026-08,all,4,0.059013
 EARTS,Exeter Select,2026-08,seasoned,3,0.054194
+EARTS,Exeter Select,2026-09,all,5,0.043598
+EARTS,Exeter Select,2026-09,seasoned,3,0.060011
 FCAOT,Ford,2017-01,all,1,4e-06
 FCAOT,Ford,2017-02,all,1,0.000253
 FCAOT,Ford,2017-03,all,1,0.001159
@@ -2254,6 +2260,8 @@ FTAT,Fifth Third,2026-07,all,1,0.00377
 FTAT,Fifth Third,2026-07,seasoned,1,0.00377
 FTAT,Fifth Third,2026-08,all,1,0.006227
 FTAT,Fifth Third,2026-08,seasoned,1,0.006227
+FTAT,Fifth Third,2026-09,all,1,0.004423
+FTAT,Fifth Third,2026-09,seasoned,1,0.004423
 GMCAR,GM Financial,2018-01,all,1,4.6e-05
 GMCAR,GM Financial,2018-02,all,1,0.000514
 GMCAR,GM Financial,2018-03,all,1,0.002639
@@ -4188,6 +4196,8 @@ WOART,World Omni,2026-07,all,15,0.00711
 WOART,World Omni,2026-07,seasoned,14,0.006737
 WOART,World Omni,2026-08,all,16,0.007336
 WOART,World Omni,2026-08,seasoned,14,0.007737
+WOART,World Omni,2026-09,all,16,0.007448
+WOART,World Omni,2026-09,seasoned,14,0.008219
 WOSAT,World Omni Select,2019-10,all,1,0.002215
 WOSAT,World Omni Select,2019-11,all,1,0.005434
 WOSAT,World Omni Select,2019-12,all,1,0.023221
@@ -4349,3 +4359,5 @@ WOSAT,World Omni Select,2026-07,all,4,0.014443
 WOSAT,World Omni Select,2026-07,seasoned,3,0.023804
 WOSAT,World Omni Select,2026-08,all,4,0.020701
 WOSAT,World Omni Select,2026-08,seasoned,3,0.033749
+WOSAT,World Omni Select,2026-09,all,4,0.023317
+WOSAT,World Omni Select,2026-09,seasoned,3,0.037067
