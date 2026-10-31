@@ -134,10 +134,12 @@ document.querySelectorAll('.mtabs button').forEach(b=>b.onclick=()=>{document.qu
 function syncDqSeg(){ document.querySelectorAll('#dqseg button').forEach(x=>x.classList.toggle('on', x.dataset.dq===metric)); }
 document.querySelectorAll('#dqseg button').forEach(b=>b.onclick=()=>{ metric=b.dataset.dq; syncDqSeg(); renderChart(); });
 document.querySelectorAll('#modeseg button').forEach(b=>b.onclick=()=>{
-  if(b.dataset.mode==='vintage'&&isRepo())return;   // repossessions are a calendar rate; no vintage curve
+  if(b.dataset.mode==='vintage'&&(isRepo()||isRecov()))return;   // calendar rates; no per-deal vintage curve
   if(b.dataset.mode==='calendar'&&isHist(selected[0]))return;   // an earlier issuer: curves by deal age only
   setMode(b.dataset.mode); refresh(); countView();});
 document.querySelectorAll('#outseg button').forEach(b=>b.onclick=()=>setOutput(b.dataset.out));
+document.querySelectorAll('#recwinseg button').forEach(b=>b.onclick=()=>{ recWin=b.dataset.win; renderChart(); countView(); });
+document.querySelectorAll('#recviewseg button').forEach(b=>b.onclick=()=>{ recView=b.dataset.rview; renderChart(); countView(); });
 document.querySelectorAll('#poolseg button').forEach(b=>b.onclick=()=>{ pools=b.dataset.pools; renderChart(); });
 document.querySelectorAll('#xfseg button').forEach(b=>b.onclick=()=>{ transform=b.dataset.transform; renderChart(); });
 // Redraw on resize — height is derived from the window. On a phone, Safari's

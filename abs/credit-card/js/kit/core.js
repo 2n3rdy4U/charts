@@ -277,12 +277,15 @@ function fitRail(){
 // The calendar (time-series) chart: per-series chips (line/bar + L/R axis),
 // dual axes via yL/yR fields, the Explorer's hover. `o`: axisTitle, axisFormat(vals),
 // tip {series,x,y}, valueFormat, extraRows, boldTest (Vega expression), nEntries, xTitle.
-// A series with `seg` set is one piece of a line drawn in pieces (a gap breaks it).
+// A series with `seg` set is one piece of a line drawn in pieces (a gap breaks it); with `dash` set, that
+// piece is drawn dashed (a provisional reading). Opt-in, for series that carry an uncertainty:
+// o.band (each point's extra holds lo/hi: a shaded margin per series) and o.points (a dot per point,
+// drawn hollow and grey where the point's extra has flag:true). o.yZero:false lets a rate axis fit its data.
 function calendarChart(box,S,o){
   const grps=[...new Set(S.map(s=>s.grp))], col=g=>S.find(s=>s.grp===g).color;
   // CALENDAR: per-series chips (line/bar + L/R axis) → dual-axis via yL/yR fields
   renderSeriesChips(grps.map(g=>({key:g,name:g,color:col(g)})), grps.length>1);
-  const data=[]; S.forEach(s=>{ const ax=seriesAxis(s.grp); s.pts.forEach(([x,y,xl,extra])=>data.push({x,xl,series:s.series,grp:s.grp,seg:s.seg||s.series, yL:ax==='left'?y:null, yR:ax==='right'?y:null, ...(extra||{})})); });
+  const data=[]; S.forEach(s=>{ const ax=seriesAxis(s.grp); s.pts.forEach(([x,y,xl,extra])=>data.push({x,xl,series:s.series,grp:s.grp,seg:s.seg||s.series, dash:!!s.dash, yL:ax==='left'?y:null, yR:ax==='right'?y:null, ...(extra||{})})); });
   const nMonths=new Set(data.map(d=>String(d.x).slice(0,7))).size;
   const X={field:"x",type:"temporal",title:o.xTitle||"Reporting Date",axis:dateAxis(nMonths)};
   const C={field:"grp",type:"nominal",title:"Series",scale:{domain:grps,range:grps.map(col)}};
@@ -299,20 +302,31 @@ function calendarChart(box,S,o){
     // When both axes are in use, colour each axis like its series (one series)
     // so the reader can tell which line reads against which scale.
     const ac = dual && gs.length===1 ? {titleColor:col(gs[0]),labelColor:col(gs[0])} : {};
-    const Y={field:yf,type:"quantitative",title:o.axisTitle,scale:{zero:true,nice:true},
+    const Y={field:yf,type:"quantitative",title:o.axisTitle,scale:{zero:o.yZero!==false,nice:true},
              axis:{format: o.axisFormat(data.map(r=>r[yf])),grid:sd==='left'||!dual,orient:sd,...ac}};
     const d=data.filter(r=>r[yf]!=null);
     const marks=['line','bar'].map(mk=>{ const ms=gs.filter(g=>seriesMark(g)===mk); if(!ms.length) return null;
       return {data:{values:d.filter(r=>ms.includes(r.grp))},
         mark: mk==='bar'?{type:"bar",opacity:0.75}:{type:"line",interpolate:"monotone"},
         encoding:{y:Y, detail:{field:"seg"},
-          ...(mk==='line' ? {strokeWidth:{condition:{test:o.boldTest, value:4}, value:2.6}} : {})}}; }).filter(Boolean);
-    return {layer: marks.concat(hoverLayers(d, X, Y,
+          ...(mk==='line' ? {strokeWidth:{condition:{test:o.boldTest, value:4}, value:2.6},
+                             strokeDash:{condition:{test:"datum.dash", value:[5,4]}, value:[1,0]}} : {})}}; }).filter(Boolean);
+    // The margin sits under the lines; the dots on top. Both read the same y scale as the lines.
+    const band = o.band ? [{data:{values:d.filter(r=>r.lo!=null&&r.hi!=null&&!r.dash)},
+        mark:{type:"area",interpolate:"monotone",opacity:gs.length>2?0.10:0.16},
+        encoding:{y:{...Y,field:"lo"}, y2:{field:"hi"}, detail:{field:"seg"}}}] : [];
+    const dots = o.points ? [{data:{values:d},
+        mark:{type:"point",filled:true,size:28,strokeWidth:1.6},
+        encoding:{y:Y,
+          fill:{condition:{test:"datum.flag || datum.dash", value:"#ffffff"}, field:"grp", type:"nominal", scale:C.scale, legend:null},
+          stroke:{condition:{test:"datum.flag", value:"#8a929e"}, field:"grp", type:"nominal", scale:C.scale, legend:null}}}] : [];
+    return {layer: band.concat(marks, dots, hoverLayers(d, X, Y,
       {color:C, rows:[{field:"series",type:"nominal",title:T.series},{field:"xl",type:"nominal",title:T.x},{field:yf,type:"quantitative",title:T.y,format:o.valueFormat||".2%"}, ...(o.extraRows||[])]}, "hover"+sd))};
   };
   const groups=[side('left'),side('right')].filter(Boolean);
   return embed(box,{ $schema:"https://vega.github.io/schema/vega-lite/v5.json", width:"container", height:chartHeight(o.nEntries,6), background:null,
-    encoding:{ x:X, color:{...C, legend: grps.length>1 ? legendCfg(true) : null} },
+    // symbolOpacity: with a band, the legend would otherwise take the band's faint opacity.
+    encoding:{ x:X, color:{...C, legend: grps.length>1 ? {...legendCfg(true), ...(o.band?{symbolOpacity:1}:{})} : null} },
     layer: groups.length>1 ? groups : groups[0].layer,
     ...(groups.length>1 ? {resolve:{scale:{y:"independent"}}} : {}), config:CHART_CFG });
 }
