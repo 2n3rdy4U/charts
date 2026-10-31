@@ -64,70 +64,70 @@
   "label": "Discover",
   "name": "Discover Card Master Trust I / Discover Card Execution Note Trust",
   "asset": "card",
-  "group": "Earlier trusts"
+  "ended": 2025
  },
  {
   "t": "SYNCCMNT",
   "label": "GE Capital (Synchrony)",
   "name": "GE Capital / Synchrony Credit Card Master Note Trust",
   "asset": "card",
-  "group": "Earlier trusts"
+  "ended": 2023
  },
  {
   "t": "SEARS2",
   "label": "Sears",
   "name": "Sears Credit Account Master Trust II",
   "asset": "card",
-  "group": "Earlier trusts"
+  "ended": 2005
  },
  {
   "t": "PROVIDIAN",
   "label": "Providian",
   "name": "Providian Master Trust",
   "asset": "card",
-  "group": "Earlier trusts"
+  "ended": 2005
  },
  {
   "t": "METRIS",
   "label": "Metris",
   "name": "Metris Master Trust",
   "asset": "card",
-  "group": "Earlier trusts"
+  "ended": 2006
  },
  {
   "t": "HSBCCC",
   "label": "Household / HSBC",
   "name": "Household / HSBC Credit Card Master Note Trust (USA) I",
   "asset": "card",
-  "group": "Earlier trusts"
+  "ended": 2010
  },
  {
   "t": "HSBCPL",
   "label": "HSBC Private Label",
   "name": "HSBC Private Label Credit Card Master Note Trust (USA) I",
   "asset": "card",
-  "group": "Earlier trusts"
+  "ended": 2010
  },
  {
   "t": "HAFF",
   "label": "Household Affinity",
   "name": "Household Affinity Credit Card Master Note Trust I",
   "asset": "card",
-  "group": "Earlier trusts"
+  "ended": 2008
  },
  {
   "t": "NATCITY",
   "label": "National City",
   "name": "National City Credit Card Master Trust",
   "asset": "card",
-  "group": "Earlier trusts"
+  "ended": 2012
  },
  {
   "t": "AMEXIT",
   "label": "Amex charge cards",
   "name": "American Express Issuance Trust (charge card receivables)",
   "asset": "card",
-  "group": "Earlier trusts"
+  "ended": 2013
  },
  {
   "t": "ALL",

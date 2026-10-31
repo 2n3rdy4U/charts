@@ -9,7 +9,7 @@ function renderCtx(){
     return;
   }
   if(d.earlier){     // a trust no longer reporting (src/metrics/cc_history.EARLIER): its span, not a series count
-    el('ctxline').innerHTML=[`earlier trust: reports <b>${fmtMonth(s.since)}</b> to <b>${fmtMonth(s.through)}</b>`,
+    el('ctxline').innerHTML=[`no longer reporting &middot; reported <b>${fmtMonth(s.since)}</b> to <b>${fmtMonth(s.through)}</b>`,
       s.balance!=null ? `receivables <b>${money(s.balance)}</b> at its last report` : '', more.replace(/^ &middot; /,'')]
       .filter(Boolean).join(' &middot; ');
     return;

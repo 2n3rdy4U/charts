@@ -68,6 +68,8 @@ a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
 .multi-sel-sep{height:1px;background:var(--line);margin:4px 0}
 .mss-star{margin-left:auto;font-size:10.5px;color:var(--muted);padding:0 2px;cursor:pointer}
 .mss-star.on{color:var(--accent)}
+.mss-ended{margin-left:auto;font-size:11px;color:var(--muted);white-space:nowrap}
+.mss-ended+.mss-star{margin-left:6px}
 .mss-hint{padding:4px 12px 6px;font-size:11px;color:var(--muted)}
 .mss-group{font-weight:700;text-transform:uppercase;letter-spacing:.3px;border-top:1px solid var(--line);margin-top:4px;padding-top:8px}
 
