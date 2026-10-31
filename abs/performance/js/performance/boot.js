@@ -1,7 +1,7 @@
 // Build B · Performance page — deep links, analytics and start-up. Plain scripts sharing one scope,
 // loaded in order by index.html; see web/README.md.
 /* ---------- deep-link + analytics (mirrors live macro CC_CHART_SHARE_URL convention) ---------- */
-const METRIC_SHORT={dq_60plus_pct:'dq60',dq_31_60_pct:'dq3059',dq_30plus_pct:'dq30',cnl_ratio:'loss',repo_rate:'repo',rv_gl_cum_ratio:'resid',turn_in_ratio:'turnin'};
+const METRIC_SHORT={dq_60plus_pct:'dq60',dq_31_60_pct:'dq3059',dq_30plus_pct:'dq30',cnl_ratio:'loss',repo_rate:'repo',recovery_rate:'recov',rv_gl_cum_ratio:'resid',turn_in_ratio:'turnin'};
 function serializeState(){
   const p=new URLSearchParams();
   p.set('ac',assetClass); p.set('sel',selected.join(','));
@@ -13,6 +13,7 @@ function serializeState(){
   if(macroId)p.set('macro',macroId);
   if(pools!=='all')p.set('pools',pools);
   if(transform!=='rate')p.set('transform',transform);   // the Explorer's own name and values
+  if(metric==='recovery_rate'){ if(recWin!=='12')p.set('win',recWin); if(recView!=='time')p.set('rview',recView); }
   return p;
 }
 window.CC_CHART_SHARE_URL=function(){   // explicit Copy-link only; never writes the address bar (can't affect rendering)
@@ -27,7 +28,9 @@ function applyState(){   // restore a shared view from ?params on load
   const sel=(q.get('sel')||'').split(',').map(s=>s.trim()).filter(inClass);
   if(sel.length)selected=sel; else if(!inClass(selected[0]))selected=[CLASS_DEFAULT[assetClass]];
   const m=q.get('m'); if(m&&(METRIC_META[m]||m==='deals'))metric=m;
-  if(metric==='repo_rate'&&assetClass==='lease') metric='dq_60plus_pct';       // a tab of the other asset class
+  if((metric==='repo_rate'||metric==='recovery_rate')&&assetClass==='lease') metric='dq_60plus_pct';   // a tab of the other asset class
+  if(q.get('win')==='6')recWin='6';
+  const rvw=q.get('rview'); if(rvw==='ltv'||rvw==='veh')recView=rvw;
   if((metric==='rv_gl_cum_ratio'||metric==='turn_in_ratio')&&assetClass==='loan') metric='dq_60plus_pct';
   if(metric==='deals'&&selected.length>1)selected=[selected[0]];   // Deals describes one shelf
   if(metric==='deals'&&isAll(selected[0]))metric='dq_60plus_pct';  // ... and All Issuers has none

@@ -80,6 +80,7 @@
     <button class="on" data-metric="dq_60plus_pct">Delinquencies</button>
     <button data-metric="cnl_ratio">Losses</button>
     <button data-metric="repo_rate" data-asset="loan">Repossessions</button>
+    <button data-metric="recovery_rate" data-asset="loan">Recoveries</button>
     <button data-metric="rv_gl_cum_ratio" data-asset="lease">Residuals</button>
     <button data-metric="turn_in_ratio" data-asset="lease">Turn-in</button>
     <button data-metric="deals">Deals</button>
@@ -98,6 +99,8 @@
           <div class="chartrail">
             <div class="cgroup" id="seriesgroup"><div class="cglabel">Series</div><div class="serieschips" id="serieschips"></div></div>
             <div class="cgroup"><div class="cglabel">Basis</div><div class="seg" id="modeseg"><button class="on" data-mode="vintage">Vintage curves</button><button data-mode="calendar">Time series</button></div></div>
+            <div class="cgroup" id="recwinctl" hidden><div class="cglabel">Recovered within</div><div class="seg" id="recwinseg"><button class="on" data-win="12">12 months</button><button data-win="6">6 months · early read</button></div></div>
+            <div class="cgroup" id="recviewctl" hidden><div class="cglabel">View</div><div class="seg" id="recviewseg"><button class="on" data-rview="time">Over time</button><button data-rview="ltv">By LTV</button><button data-rview="veh">New vs used</button></div></div>
             <div class="cgroup" id="dqctl"><div class="cglabel">DQ bucket</div><div class="seg" id="dqseg"><button class="on" data-dq="dq_60plus_pct">60+</button><button data-dq="dq_31_60_pct">30–59</button><button data-dq="dq_30plus_pct">30+</button></div></div>
             <div class="cgroup" id="xfctl" hidden><div class="cglabel">Year over year</div><div class="seg" id="xfseg"><button class="on" data-transform="rate">Rate</button><button data-transform="yoy-delta">Change (pp)</button><button data-transform="yoy-pct">Change (%)</button></div></div>
             <div class="cgroup"><div class="cglabel">Display</div><div class="seg" id="outseg"><button class="on" data-out="chart">Chart</button><button data-out="table">Table</button><button id="seasbtn" data-out="seasonal">Year overlay</button></div></div>

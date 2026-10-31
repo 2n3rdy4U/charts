@@ -11,6 +11,7 @@ Files:
   auto-loan-delinquency.csv  Auto Loan ABS — Delinquency
   auto-loan-net-loss.csv  Auto Loan ABS — Annualized Net Loss
   auto-loan-repossessions.csv  Auto Loan ABS — First-Time Repossessions
+  auto-loan-recoveries.csv  Auto Loan ABS — Recovery on Defaulted Loans
   auto-lease-delinquency.csv  Auto Lease ABS — Delinquency
   auto-lease-net-loss.csv  Auto Lease ABS — Annualized Credit Net Loss
   auto-lease-turn-in.csv  Auto Lease ABS — Turn-in Rate

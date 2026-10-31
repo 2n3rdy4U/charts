@@ -19,6 +19,9 @@ const SHELVES={}; let selected=['ALL'], assetClass='loan', mode='vintage', metri
 // but not offered here: a cut by origination score needs a paragraph to read
 // correctly, so it is left to the newsletter's editorial charts.)
 let transform='rate';
+// Recoveries: the window (12 months after default, or the 6-month early read) and the view (over time,
+// or the newest cohort cut by loan-to-value or new/used vehicle).
+let recWin='12', recView='time';
 // Vintage charts: which vintages to draw — '5' / '10' (the last N vintage years of the shelf on screen), 'all', or
 // 'YYYY-YYYY'. With 25 years of deals on a shelf, which vintages is the first question; the deal-age row
 // (`range`) then caps the age axis.
@@ -49,6 +52,9 @@ const useAbsee=()=>isDQ()&&hasAbsee(SHELVES[selected[0]]);
 // Repossessions: the monthly first-time repossession rate from the loan tape
 // (src/metrics/absee_repossessions.py) — a calendar series, loan shelves only.
 const isRepo=()=>metric==='repo_rate';
+// Recoveries: cash collected on defaulted loans within 12 (or 6) months of default, as a share of the balance
+// owed, by four-quarter default cohort (src/metrics/recoveries.py) — loan shelves only, a calendar series.
+const isRecov=()=>metric==='recovery_rate';
 // Pooled series: all deals reporting that month, or only deals at least six
 // months old — the "seasoned" basis, which keeps a burst of new issuance
 // (near-zero delinquency, no losses yet) from diluting the rate. Every pooled
@@ -60,11 +66,12 @@ const calOf=sh=>{
   if(isResid()) return P.resid_calendar||[];   // one basis: the vehicles sold that month
   if(metric==='cnl_ratio') return (seas?P.loss_calendar_seasoned:P.loss_calendar)||[];
   if(isRepo()) return (seas?P.repo_calendar_seasoned:P.repo_calendar)||[];
+  if(isRecov()) return (recWin==='6'?P.recovery_calendar_6m:P.recovery_calendar)||[];   // one basis: the cohort
   if(useAbsee()&&hasAbsee(sh)) return (seas?P.absee_calendar_seasoned:P.absee_calendar)||[];
   return (seas?P.calendar_seasoned:P.calendar)||[];
 };
 const lossWord=()=>assetClass==='lease'?'net credit loss':'net loss';
-const metricLabel=()=>isRepo()?'first-time repossessions':isTurn()?'turn-in rate':isResid()?(mode==='calendar'?'residual gain (loss) on vehicles sold':'cumulative residual value gain (loss)'):(metric==='cnl_ratio'&&mode==='calendar')?`annualized ${lossWord()}`:(isDQ()?`${DQ_LAB[metric]} delinquency`:(metric==='cnl_ratio'?`cumulative ${lossWord()}`:'this metric'));
+const metricLabel=()=>isRecov()?'recovery on defaulted loans':isRepo()?'first-time repossessions':isTurn()?'turn-in rate':isResid()?(mode==='calendar'?'residual gain (loss) on vehicles sold':'cumulative residual value gain (loss)'):(metric==='cnl_ratio'&&mode==='calendar')?`annualized ${lossWord()}`:(isDQ()?`${DQ_LAB[metric]} delinquency`:(metric==='cnl_ratio'?`cumulative ${lossWord()}`:'this metric'));
 // Axis titles in the Explorer's words: the measure on the first line, its
 // denominator on the second — an axis that says "delinquency" without saying
 // "of what" is not self-describing.
@@ -75,6 +82,7 @@ const metricAxis=()=>{
   if(yoyActive())                       return transform==='yoy-delta' ? 'YOY \u0394 (percentage points)' : 'YOY % Change';
   if(isDQ())                            return [DPD(), useAbsee()?'(% of active loans)':'(% of pool balance)'];
   if(isRepo())                          return ['1st-Time Repo','(% of loans at start of month)'];
+  if(isRecov())                         return [`Recovered within ${recWin} months`,'(% of balance at default)'];
   if(isTurn())                          return ['Turn-in Rate','(% of leases reaching scheduled end)'];
   if(isResid())                         return mode==='calendar'
       ? ['Residual Gain (Loss)','(% of residual value of vehicles sold)']
@@ -88,11 +96,16 @@ const metricAxis=()=>{
 // Extra tooltip rows for a metric, read from the same metrics-layer point as
 // the rate: a repossession rate shows the repossessions and the loans at risk
 // it was computed from.
-const extraRows=()=>isRepo() ? [{field:"repos",type:"quantitative",title:"Repossessions",format:","},
+const extraRows=()=>isRecov() ? [{field:"severity",type:"quantitative",title:"Loss severity",format:".1%"},
+                                 {field:"margin",type:"quantitative",title:"\u00b1 margin (95%)",format:".1%"},
+                                 {field:"loans",type:"quantitative",title:"Defaulted loans",format:","},
+                                 {field:"window",type:"nominal",title:"Defaults"}]
+                 : isRepo() ? [{field:"repos",type:"quantitative",title:"Repossessions",format:","},
                                 {field:"at_risk",type:"quantitative",title:"Loans at start of month",format:","}]
                  : (isTurn() && mode==='calendar') ? [{field:"leases",type:"quantitative",title:"Leases reaching scheduled end",format:","}]
                  : (isResid() && mode==='calendar') ? [{field:"base",type:"quantitative",title:"Residual value of vehicles sold ($)",format:",.0f"}] : [];
-const extraOf=p=>isRepo() ? {repos:p.repos, at_risk:p.at_risk} : (isTurn() && p.leases!=null) ? {leases:p.leases}
+const extraOf=p=>isRecov() ? {severity:1-p.recovery_rate, lo:p.recovery_rate-p.margin, hi:p.recovery_rate+p.margin, margin:p.margin, loans:p.loans,
+                               window:p.window, flag:!!p.grey} : isRepo() ? {repos:p.repos, at_risk:p.at_risk} : (isTurn() && p.leases!=null) ? {leases:p.leases}
                : (isResid() && p.base!=null) ? {base:p.base} : null;
 const tipLabels=()=>{
   if(isTurn())               return mode==='vintage' ? {series:'Vintage', x:'Months', y:'Turn-in'} : {series:'Issuer', x:'Month', y:'Turn-in'};
@@ -100,6 +113,7 @@ const tipLabels=()=>{
     return {series:'Vintage', x:'Months', y: isResid()?'Cum. Residual G/(L)':'Cum. Loss Rate'};
   if(isResid())              return {series:'Issuer', x:'Month', y:'Residual G/(L) on vehicles sold'};
   if(isRepo())               return {series:'Issuer', x:'Month', y:'Rate'};
+  if(isRecov())              return {series:'Issuer', x:'Defaults through', y:'Recovered'};
   if(metric==='cnl_ratio')   return {series:'Issuer', x:'Month', y:`Annualized ${lossName().toLowerCase()}`};
   // (repossessions: the count and the loans at risk ride along — see extraRows)
   if(yoyActive())            return {series:'Series', x:'Date', y: transform==='yoy-delta' ? 'YOY \u0394 (pp)' : 'YOY %'};
@@ -108,7 +122,7 @@ const tipLabels=()=>{
 const lab=t=>(AVAIL.find(a=>a.t===t)||{}).label||t;
 const labCode=t=>{ if(isAll(t)) return 'All Issuers'; const l=lab(t); if((AVAIL.find(a=>a.t===t)||{}).portfolio) return l;   // no code for a whole-portfolio set
   return l.includes(`(${t})`)?l:`${l} (${t})`; };   // the Explorer's issuer label: "Name (CODE)"
-const metricTitle=()=>isRepo()?'First-Time Repossession Rate':isTurn()?'Turn-in Rate':isResid()?(mode==='calendar'?'Residual Gain (Loss) on Vehicles Sold':'Cumulative Residual Value Gain (Loss)'):metric==='cnl_ratio'?(mode==='calendar'?(assetClass==='lease'?'Annualized Net Credit Loss Rate':'Annualized Net Loss Rate'):(assetClass==='lease'?'Cumulative Net Credit Loss':'Cumulative Net Loss')):(isDQ()?`${DQ_LAB[metric]} Day Delinquency Rate`:metricLabel());
+const metricTitle=()=>isRecov()?'Recovery Rate on Defaulted Loans':isRepo()?'First-Time Repossession Rate':isTurn()?'Turn-in Rate':isResid()?(mode==='calendar'?'Residual Gain (Loss) on Vehicles Sold':'Cumulative Residual Value Gain (Loss)'):metric==='cnl_ratio'?(mode==='calendar'?(assetClass==='lease'?'Annualized Net Credit Loss Rate':'Annualized Net Loss Rate'):(assetClass==='lease'?'Cumulative Net Credit Loss':'Cumulative Net Loss')):(isDQ()?`${DQ_LAB[metric]} Day Delinquency Rate`:metricLabel());
 function renderVintBar(){
   const g=el('vintgroup'), bar=el('vintbar'), isVin=mode==='vintage'&&!macroId&&selected.length===1&&output!=='seasonal';
   const lbl=el('rangelabel'); if(lbl) lbl.textContent = isVin ? 'Deal age, months' : 'Range';
@@ -125,6 +139,7 @@ window.setVint=v=>{ const m=/^(\d{4})-(\d{4})$/.exec(v); vint = m && +m[1]>+m[2]
 function sourceFor(){
   // Says which source the chart on screen is actually drawn from: the loan
   // tape for loan delinquencies, the servicer reports for everything else.
+  if(isRecov()) return 'SEC Form ABS-EE loan-level data, checked against Form 10-D servicer reports, EDGAR';
   if(useAbsee()||isRepo()) return 'SEC Form ABS-EE loan-level data, EDGAR';
   if((SHELVES[selected[0]]||{}).portfolio) return "Issuer's static-pool disclosures in its prospectuses: all originations, not securitized pools";
   return hasHistory() ? "SEC Form 10-D servicer reports; deals before 2010 from issuers' static-pool disclosures"
@@ -140,6 +155,7 @@ function notesFor(){
   const specific=[], general=[];
   selected.forEach(t=>{ const n=(SHELVES[t]||{}).notes||{};
     if(isRepo()) specific.push(...(n.repossessions||[]));
+    if(isRecov()) specific.push(...(n.recoveries||[]).map(s=>`${lab(t)}: ${s}`));   // several issuers: say whose
     if(isTurn()) specific.push(...(n.turnin||[]));   // each servicer states its rate its own way
     if(isResid()) specific.push(...(n.residual||[]));
     if(metric==='cnl_ratio') specific.push(...(n.losses||[]));   // lease: the sign convention, a known odd month
@@ -157,6 +173,8 @@ function titleFor(){
   const one=selected.length===1 && !isAll(selected[0]), who=labCode(selected[0]);
   if(macroId){ const m=MACRO&&MACRO.find(x=>x.id===macroId); return `${who} vs ${m?m.name:'macro'}`; }
   if(isRepo())                 return `${one?who:AUTO()} — 1st-Time Repossessions`;
+  if(isRecov())                return recView==='time' ? `${one?who:AUTO()} — Recovery Rate, ${recWin} Months After Default`
+                                    : `${one?who:AUTO()} — Recovery Rate by ${recView==='ltv'?'Loan-to-Value':'New vs Used Vehicle'}`;
   if(mode==='vintage'){
     if(metric==='cnl_ratio')   return `${who} Vintage Loss Curves`;
     if(isResid())              return `${who} Vintage Residual Value Gain (Loss)`;
@@ -179,6 +197,9 @@ function subtitleFor(){
   else if(mode==='vintage' && isDQ())  parts=[DPD(), ...book];
   else if(mode==='vintage')            parts=[(SHELVES[selected[0]]||{}).portfolio?'By origination year (all of the lender\'s loans)':'By series (individual deals)'];
   else if(isDQ() && useAbsee())        parts=[...book, pools==='seasoned'?'Seasoned (>6mo)':''];
+  else if(isRecov())                   parts=recView==='time'
+                                         ? ['Loans defaulting in the four quarters to each date', 'Net of repossession and sale costs', ...n]
+                                         : ['Newest cohort with 12 months of follow-up', 'Faded bars: fewer than 400 loans', ...n];
   else if(isTurn())                    parts=['All deals, weighted by leases reaching scheduled end', ...n];
   else if(isResid())                   parts=['All deals, weighted by value of vehicles sold', ...n];   // exactly the Explorer's DQ time series
   else                                 parts=[poolTxt, ...n];
@@ -186,7 +207,7 @@ function subtitleFor(){
   return parts.filter(Boolean).join(' · ');
 }
 const mkey=()=>(metric==='cnl_ratio'&&mode==='calendar')?'anl_pct':(isResid()&&mode==='calendar')?'rv_margin':metric;   // calendar = the month's flow  // losses on calendar = annualized flow, not cumulative
-const METRIC_META={dq_60plus_pct:{mode:'vintage',dq:true},dq_31_60_pct:{mode:'vintage',dq:true},dq_30plus_pct:{mode:'vintage',dq:true},cnl_ratio:{mode:'vintage',dq:false},repo_rate:{mode:'calendar',dq:false},rv_gl_cum_ratio:{mode:'vintage',dq:false},turn_in_ratio:{mode:'calendar',dq:false}};
+const METRIC_META={dq_60plus_pct:{mode:'vintage',dq:true},dq_31_60_pct:{mode:'vintage',dq:true},dq_30plus_pct:{mode:'vintage',dq:true},cnl_ratio:{mode:'vintage',dq:false},repo_rate:{mode:'calendar',dq:false},recovery_rate:{mode:'calendar',dq:false},rv_gl_cum_ratio:{mode:'vintage',dq:false},turn_in_ratio:{mode:'calendar',dq:false}};
 // Residual value gain/loss: lease shelves only; cumulative by deal age on the vintage view; on the time
 // series, the month's gain (loss) on the vehicles sold as a share of their residual value.
 const isResid=()=>metric==='rv_gl_cum_ratio';

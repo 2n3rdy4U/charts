@@ -452,7 +452,122 @@ A daily check flags any shelf whose repossession rate suddenly collapses or
 spikes, so a new break of this kind is caught in the month it appears.
 </p>
 
-<h2>6. Credit Score Methodology <span class="tag tag-loan">Auto Loan</span></h2>
+<h2 id="recoveries">6. Recoveries on Defaulted Loans <span class="tag tag-loan">Auto Loan</span></h2>
+<p>
+How much of what a borrower owed is recovered after a loan defaults &mdash; from
+the sale of the repossessed vehicle and from payments collected afterward.
+Loss severity is 100% minus the recovery rate.
+</p>
+<ul>
+  <li><strong>Default:</strong> the month a loan is reported as charged off in
+    the loan-level filings and stays charged off. A charge-off the borrower
+    cures &mdash; the loan is reinstated and payments resume, or it is paid off
+    &mdash; is not a default; if the loan defaults again, it enters at the later
+    charge-off. A servicer re-booking the remaining balance after the sale is
+    not a cure: that is still one default, at the first charge-off.</li>
+  <li><strong>Balance at default (denominator):</strong> the loan&rsquo;s
+    balance at the end of the month before it defaulted &mdash; the same filing
+    field for every issuer.</li>
+  <li><strong>Recovered (numerator):</strong> all cash collected on the loan in
+    the 12 monthly reports starting with the month of default: vehicle sale
+    proceeds, insurance and later payments from the borrower, net of
+    repossession, auction and collection costs.</li>
+  <li><strong>Cohort:</strong> each point covers the loans that defaulted over
+    four consecutive quarters, recalculated every quarter. Every dollar in the
+    numerator belongs to a loan in the denominator.</li>
+</ul>
+
+<h3>Why cohorts, not &ldquo;flow&rdquo; ratios</h3>
+<p>
+Issuers often quote a recovery rate as this period&rsquo;s recoveries divided by
+this period&rsquo;s charge-offs. The two come from different loans &mdash; most
+recoveries arrive months after the charge-off they belong to &mdash; so the
+ratio moves with default volumes as much as with vehicle values. When
+charge-offs fell sharply in 2020&ndash;21, one issuer&rsquo;s flow ratio
+exceeded 100%. Following the same loans removes that distortion, and is how
+rating agencies treat recovery: as a property of a group of defaulted loans.
+</p>
+
+<h3>Why 12 months, and the early read</h3>
+<p>
+Twelve months captures 88&ndash;96% of what is recovered within 24 months at
+every issuer shown. A 12-month figure can be published about 15 months after
+the defaults it covers. For a timelier signal the page also offers the 6-month
+rate, which runs lower by construction; its newest points &mdash; loans not yet
+12 months past default &mdash; are drawn dashed as an early read.
+</p>
+<p>
+Recent figures can be revised when later filings show a charge-off was cured.
+In backtests, 12-month figures moved by 0.3 points or less after first
+publication, and the 6-month early read by up to 0.8 points, always upward.
+</p>
+
+<h3>How each figure is checked</h3>
+<p>
+Every figure is measured loan by loan from issuers&rsquo; asset-level filings
+(Form ABS-EE) and checked, deal by deal and month by month, against the
+trust&rsquo;s own servicer report (Form 10-D). An issuer is shown only when the
+number of loans charged off and the recovery cash tie to its servicer reports.
+Issuers record the same cash in different fields, and some define the balance
+at default differently in their servicer reports; the table records how each
+is handled.
+</p>
+<table>
+<thead><tr><th>Issuer</th><th>Where the vehicle sale cash is recorded</th><th>Handling and notes</th></tr></thead>
+<tbody>
+<tr><td>Santander Drive, Drive Auto</td><td>Amounts recovered</td><td>Scaled to the servicer report&rsquo;s net proceeds (trailing four quarters). Loans Santander bought back after default leave the cohort at buyback; the sponsor&rsquo;s payment is not a recovery.</td></tr>
+<tr><td>Exeter</td><td>Amounts recovered</td><td>The servicer report also deducts recovery fees paid to the servicer; scaled to its net proceeds.</td></tr>
+<tr><td>Bridgecrest, Carvana</td><td>Amounts recovered, before liquidation expenses</td><td>Scaled to the servicer report&rsquo;s net proceeds. Carvana from defaults in January 2022: its 2021 filings report the written-off balance as recovered on top of the cash.</td></tr>
+<tr><td>AmeriCredit, GM Financial</td><td>Amounts recovered plus repossession proceeds (which carry repossession expenses as negatives, including those booked before the charge-off)</td><td>The two fields together equal the servicer report&rsquo;s net liquidation proceeds. From defaults in June 2019, when the filings began to carry sale proceeds. The servicer report&rsquo;s charge-offs run about 4% below the prior-month balance used here.</td></tr>
+<tr><td>CarMax, CarMax Select</td><td>Amounts recovered</td><td>CarMax reinstates some charged-off loans. Its servicer report counts every charge-off and subtracts a loan&rsquo;s original charge-off when it is reinstated; here a charge-off the borrower cured is not a default.</td></tr>
+<tr><td>Volkswagen</td><td>Amounts recovered</td><td>The servicer report&rsquo;s balance at default runs about 5% above the filing field; recoveries agree to the cent.</td></tr>
+<tr><td>Hyundai</td><td>Principal paid in the month of charge-off</td><td>Sale proceeds are applied before the charge-off; counted as recovered.</td></tr>
+<tr><td>Ford Credit, Capital One</td><td>Principal paid in the month of charge-off</td><td>Charged off net of the sale; the balance at default is taken before the sale.</td></tr>
+<tr><td>BMW</td><td>Not reported</td><td>Charged off net of the sale; proceeds are inferred as the balance at default less the amount charged off, which ties to the servicer report. Few defaults: shown with its margin and a caution.</td></tr>
+<tr><td>Ally</td><td>Amounts recovered plus repossession proceeds</td><td>The two fields together equal the servicer report&rsquo;s liquidation proceeds.</td></tr>
+<tr><td>Honda, Nissan, Toyota, World Omni, World Omni Select</td><td>Amounts recovered</td><td>Tie to the servicer reports.</td></tr>
+</tbody>
+</table>
+
+<h3>Exclusions</h3>
+<ul>
+  <li><strong>Sponsor buybacks after default.</strong> A payment by the sponsor
+    to repurchase a defaulted loan is not a recovery from the borrower or the
+    vehicle; such loans leave the cohort when bought back.</li>
+  <li><strong>Impossible values.</strong> A loan whose reported recoveries
+    exceed 150% of what it owed is excluded as a data error.</li>
+</ul>
+
+<h3>Precision</h3>
+<p>
+Each figure is an exact count of what happened to the loans in the cohort.
+With few defaults, though, a handful of unusually good or bad sales moves the
+rate, so a change may reflect chance rather than a shift in recovery values.
+The chart shades the 95% margin around each line and draws a point hollow and
+grey where the margin exceeds &plusmn;3 percentage points. Issuers with few
+defaults are shown with that caution rather than left out.
+</p>
+
+<h3>Comparing issuers</h3>
+<p>
+Levels differ across issuers for real reasons &mdash; credit mix, vehicle age,
+loan-to-value, how and where vehicles are sold. Trends within an issuer are
+the cleanest read.
+</p>
+
+<h3>Not shown</h3>
+<ul>
+  <li><strong>Mercedes-Benz:</strong> its loan-level filings omit the vehicle
+    sale cash.</li>
+  <li><strong>Fifth Third:</strong> its loan-level filings do not yet reconcile
+    to its servicer reports.</li>
+  <li><strong>Exeter Select:</strong> not yet four quarters of defaults with 12
+    months of follow-up.</li>
+  <li><strong>Lease shelves:</strong> lease losses come from residual values on
+    returned vehicles, covered under Residuals and Turn-in.</li>
+</ul>
+
+<h2>7. Credit Score Methodology <span class="tag tag-loan">Auto Loan</span></h2>
 <p>
 Analysis uses the consumer credit bureau score reported in SEC ABS-EE filings,
 filtered to the 300&ndash;900 range. Seven of twenty-five issuers explicitly
@@ -479,7 +594,7 @@ FICO for most loans in its 2026 deals. The FICO is used where both are given, an
 the VantageScore where it is the only score; both are retained in our data.
 </p>
 
-<h2>7. Vintage Curves vs Time Series</h2>
+<h2>8. Vintage Curves vs Time Series</h2>
 <ul>
   <li><strong>Vintage Curves</strong> plot the metric as a function of months
     since deal issuance, one line per deal series. Useful for comparing the
@@ -489,7 +604,7 @@ the VantageScore where it is the only score; both are retained in our data.
     trend comparisons.</li>
 </ul>
 
-<h2>8. Scope &amp; Boundary Notes</h2>
+<h2>9. Scope &amp; Boundary Notes</h2>
 <p style="font-size:13.5px;color:#374151;">
 <span class="tag tag-loan">Auto Loan</span> <strong>Issuers with commercial-auto exposure:</strong> for issuers that
 securitize both consumer and commercial auto loans (Ford, Ally), we exclude
@@ -512,7 +627,7 @@ residual value gain (loss) and turn-in, all from the servicers&rsquo; monthly
 reports; repossessions are not yet published for lease shelves.
 </p>
 
-<h2>9. Known Limitations</h2>
+<h2>10. Known Limitations</h2>
 <ul>
   <li><span class="tag tag-loan">Auto Loan</span> <strong>Repossession flag quality varies by issuer:</strong>
     the flag is only as good as each issuer&rsquo;s file. Known breaks (Exeter
@@ -544,7 +659,7 @@ reports; repossessions are not yet published for lease shelves.
     default risk but cannot be analyzed from this dataset.</li>
 </ul>
 
-<h2>10. Update Schedule &amp; Audit Trail</h2>
+<h2>11. Update Schedule &amp; Audit Trail</h2>
 <ul>
   <li><strong>Daily pipeline:</strong> runs twice a day, every day of the week
     (6 AM and 6 PM ET). Figures change only when an issuer files new data.</li>
@@ -554,7 +669,7 @@ reports; repossessions are not yet published for lease shelves.
     the pages are listed on the <a href="changelog.html">changelog</a>.</li>
 </ul>
 
-<h2 id="credit-card">11. Credit Card Trusts &mdash; What Each Figure Is</h2>
+<h2 id="credit-card">12. Credit Card Trusts &mdash; What Each Figure Is</h2>
 <p>
 The <a href="credit-card/index.html">Credit Card</a> page shows each master
 trust&rsquo;s monthly figures <strong>as its own servicer reports them</strong>
@@ -617,7 +732,7 @@ its receivables; it is shown only where at least three trusts holding at least
 <p><strong>Coverage.</strong> First National reports a gross default rate only; its charge-off series is gross of recoveries and is left out of the All Trusts charge-off line. Capital One&#x27;s servicer report does not state excess spread. Citi reports a net default rate only. Amex&#x27;s delinquency buckets begin Jan-2014 (the 91–120 and 120+ buckets Nov-2015). Chase reports a net loss rate only before Nov-2015. Comenity&#x27;s default rates begin Sep-2011 and its delinquency buckets Nov-2015; its portfolio yield Nov-2014. Barclays Dryrock&#x27;s net default rate begins Nov-2015 (gross from Dec-2012). Months in which a trust had no public notes outstanding are blank.</p>
 
 
-<h2 id="downloads">12. Data Downloads &amp; Licence</h2>
+<h2 id="downloads">13. Data Downloads &amp; Licence</h2>
 <p>
 Every series on these pages can be downloaded as a CSV file from the
 <a href="../download/index.html">Downloads</a> page: auto loan delinquency,
