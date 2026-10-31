@@ -1,6 +1,6 @@
 // Credit Card page — deep links, analytics and start-up. Plain scripts sharing one scope,
 // loaded in order by credit_card.html; see web/README.md.
-const METRIC_SHORT={dq_30plus:'dq30',dq_30_60:'dq3060',dq_61_90:'dq6190',dq_91_120:'dq91120',dq_120plus:'dq120',charge_off_rate:'co',payment_rate:'pr',portfolio_yield:'yld',excess_spread:'xs',excess_trigger:'xs3',trust_balance:'bal'};
+const METRIC_SHORT={dq_30plus:'dq30',dq_30_60:'dq3060',dq_61_90:'dq6190',dq_91_120:'dq91120',dq_120plus:'dq120',charge_off_rate:'co',payment_rate:'pr',portfolio_yield:'yld',excess_3mo:'xs3',excess_weakest:'xs1',trust_balance:'bal'};
 function serializeState(){
   const p=new URLSearchParams();
   p.set('sel',selected.join(','));
@@ -21,7 +21,9 @@ function applyState(){   // restore a shared view from ?params on load
   const known=t=>AVAIL.some(a=>a.t===t);
   const sel=(q.get('sel')||'').split(',').map(s=>s.trim()).filter(known);
   if(sel.length)selected=sel;
-  const m=q.get('m'); if(m&&(METRIC_META[m]||m==='deals'))metric=m;
+  // links from before 2026-10-31 name the old excess views: the 3-month average stands in for both
+  const m={excess_trigger:'excess_3mo', excess_spread:'excess_3mo'}[q.get('m')]||q.get('m');
+  if(m&&(METRIC_META[m]||m==='deals'))metric=m;
   if(metric==='deals'&&selected.length>1)selected=[selected[0]];
   if(metric==='deals'&&isAll(selected[0]))metric='dq_30plus';
   const o=q.get('out'); if(o==='table'||o==='seasonal'||o==='chart')output=o;
