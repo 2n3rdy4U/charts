@@ -17,4 +17,5 @@ Files:
   auto-lease-turn-in.csv  Auto Lease ABS — Turn-in Rate
   auto-lease-residual.csv  Auto Lease ABS — Residual Gain (Loss) on Vehicles Sold
   credit-card-trust-performance.csv  Credit Card ABS — Master Trust Performance
+  credit-card-series-excess-spread.csv  Credit Card ABS — Excess Spread by Series
   macro-indicators.csv  Macro Indicators
