@@ -11154,6 +11154,7 @@ JTSHIR,Hire rate (JOLTS),Bureau of Labor Statistics (BLS) via FRED,Hire rate (JO
 JTSHIR,Hire rate (JOLTS),Bureau of Labor Statistics (BLS) via FRED,Hire rate (JOLTS),m,2026-06-01,3.4
 JTSHIR,Hire rate (JOLTS),Bureau of Labor Statistics (BLS) via FRED,Hire rate (JOLTS),m,2026-07-01,3.2
 JTSHIR,Hire rate (JOLTS),Bureau of Labor Statistics (BLS) via FRED,Hire rate (JOLTS),m,2026-08-01,3.3
+JTSHIR,Hire rate (JOLTS),Bureau of Labor Statistics (BLS) via FRED,Hire rate (JOLTS),m,2026-09-01,3.4
 JTSJOL,"Job openings (JOLTS, SA)",Bureau of Labor Statistics (BLS) via FRED,"Job openings (JOLTS, SA)",m,2021-11-01,11199.0
 JTSJOL,"Job openings (JOLTS, SA)",Bureau of Labor Statistics (BLS) via FRED,"Job openings (JOLTS, SA)",m,2021-12-01,11520.0
 JTSJOL,"Job openings (JOLTS, SA)",Bureau of Labor Statistics (BLS) via FRED,"Job openings (JOLTS, SA)",m,2022-01-01,11210.0
@@ -11211,7 +11212,8 @@ JTSJOL,"Job openings (JOLTS, SA)",Bureau of Labor Statistics (BLS) via FRED,"Job
 JTSJOL,"Job openings (JOLTS, SA)",Bureau of Labor Statistics (BLS) via FRED,"Job openings (JOLTS, SA)",m,2026-05-01,7537.0
 JTSJOL,"Job openings (JOLTS, SA)",Bureau of Labor Statistics (BLS) via FRED,"Job openings (JOLTS, SA)",m,2026-06-01,7182.0
 JTSJOL,"Job openings (JOLTS, SA)",Bureau of Labor Statistics (BLS) via FRED,"Job openings (JOLTS, SA)",m,2026-07-01,7335.0
-JTSJOL,"Job openings (JOLTS, SA)",Bureau of Labor Statistics (BLS) via FRED,"Job openings (JOLTS, SA)",m,2026-08-01,7079.0
+JTSJOL,"Job openings (JOLTS, SA)",Bureau of Labor Statistics (BLS) via FRED,"Job openings (JOLTS, SA)",m,2026-08-01,7190.0
+JTSJOL,"Job openings (JOLTS, SA)",Bureau of Labor Statistics (BLS) via FRED,"Job openings (JOLTS, SA)",m,2026-09-01,7523.0
 JTSLDR,Layoffs & discharges rate (JOLTS),Bureau of Labor Statistics (BLS) via FRED,Layoffs & discharges rate (JOLTS),m,2021-11-01,0.9
 JTSLDR,Layoffs & discharges rate (JOLTS),Bureau of Labor Statistics (BLS) via FRED,Layoffs & discharges rate (JOLTS),m,2021-12-01,0.9
 JTSLDR,Layoffs & discharges rate (JOLTS),Bureau of Labor Statistics (BLS) via FRED,Layoffs & discharges rate (JOLTS),m,2022-01-01,0.9
@@ -11269,7 +11271,8 @@ JTSLDR,Layoffs & discharges rate (JOLTS),Bureau of Labor Statistics (BLS) via FR
 JTSLDR,Layoffs & discharges rate (JOLTS),Bureau of Labor Statistics (BLS) via FRED,Layoffs & discharges rate (JOLTS),m,2026-05-01,1.1
 JTSLDR,Layoffs & discharges rate (JOLTS),Bureau of Labor Statistics (BLS) via FRED,Layoffs & discharges rate (JOLTS),m,2026-06-01,1.1
 JTSLDR,Layoffs & discharges rate (JOLTS),Bureau of Labor Statistics (BLS) via FRED,Layoffs & discharges rate (JOLTS),m,2026-07-01,1.1
-JTSLDR,Layoffs & discharges rate (JOLTS),Bureau of Labor Statistics (BLS) via FRED,Layoffs & discharges rate (JOLTS),m,2026-08-01,1.0
+JTSLDR,Layoffs & discharges rate (JOLTS),Bureau of Labor Statistics (BLS) via FRED,Layoffs & discharges rate (JOLTS),m,2026-08-01,1.1
+JTSLDR,Layoffs & discharges rate (JOLTS),Bureau of Labor Statistics (BLS) via FRED,Layoffs & discharges rate (JOLTS),m,2026-09-01,1.0
 JTSQUR,Quit rate (JOLTS),Bureau of Labor Statistics (BLS) via FRED,Quit rate (JOLTS),m,2021-11-01,3.0
 JTSQUR,Quit rate (JOLTS),Bureau of Labor Statistics (BLS) via FRED,Quit rate (JOLTS),m,2021-12-01,2.9
 JTSQUR,Quit rate (JOLTS),Bureau of Labor Statistics (BLS) via FRED,Quit rate (JOLTS),m,2022-01-01,2.9
@@ -11328,6 +11331,7 @@ JTSQUR,Quit rate (JOLTS),Bureau of Labor Statistics (BLS) via FRED,Quit rate (JO
 JTSQUR,Quit rate (JOLTS),Bureau of Labor Statistics (BLS) via FRED,Quit rate (JOLTS),m,2026-06-01,2.0
 JTSQUR,Quit rate (JOLTS),Bureau of Labor Statistics (BLS) via FRED,Quit rate (JOLTS),m,2026-07-01,1.9
 JTSQUR,Quit rate (JOLTS),Bureau of Labor Statistics (BLS) via FRED,Quit rate (JOLTS),m,2026-08-01,1.9
+JTSQUR,Quit rate (JOLTS),Bureau of Labor Statistics (BLS) via FRED,Quit rate (JOLTS),m,2026-09-01,2.1
 LNS11300060,"Labor force participation rate, 25-54 yr (SA)",Bureau of Labor Statistics (BLS) via FRED,"Labor force participation rate, 25-54 yr (SA)",m,2016-11-01,81.4
 LNS11300060,"Labor force participation rate, 25-54 yr (SA)",Bureau of Labor Statistics (BLS) via FRED,"Labor force participation rate, 25-54 yr (SA)",m,2016-12-01,81.3
 LNS11300060,"Labor force participation rate, 25-54 yr (SA)",Bureau of Labor Statistics (BLS) via FRED,"Labor force participation rate, 25-54 yr (SA)",m,2017-01-01,81.5
