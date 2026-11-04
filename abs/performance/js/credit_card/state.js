@@ -23,11 +23,11 @@ const METRIC_META={
   charge_off_rate:   {tab:'co',    title:'Net Charge-off Rate',      axis:['Net Charge-off Rate','(annualized, % of receivables)'], unit:'rate'},
   payment_rate:      {tab:'pr',    title:'Monthly Payment Rate',     axis:['Monthly Payment Rate','(% of beginning receivables)'], unit:'rate'},
   portfolio_yield:   {tab:'yld',   title:'Portfolio Yield',          axis:['Portfolio Yield','(annualized, % of receivables)'], unit:'rate'},
-  excess_trigger:    {tab:'xs',    title:'Excess Spread, 3-Month Average', axis:['Excess Spread, 3-month average','(as the trigger tests it, annualized)'], unit:'rate'},
-  excess_spread:     {tab:'xs',    title:'Excess Spread',            axis:['Excess Spread','(annualized, % of receivables)'],  unit:'rate'},
+  excess_3mo:        {tab:'xs',    title:'Excess Spread, 3-Month Average', axis:['Excess Spread, 3-month average','(annualized, % of receivables)'], unit:'rate'},
+  excess_weakest:    {tab:'xs',    title:'Excess Spread, Weakest Series',  axis:['Excess Spread, one month','(weakest series tested, annualized)'], unit:'rate'},
   trust_balance:     {tab:'bal',   title:'Trust Receivables Balance',axis:['Receivables Balance','($ billions)'],             unit:'usd_bn'},
 };
-const TAB_DEFAULT={dq:'dq_30plus', co:'charge_off_rate', pr:'payment_rate', yld:'portfolio_yield', xs:'excess_trigger', bal:'trust_balance'};
+const TAB_DEFAULT={dq:'dq_30plus', co:'charge_off_rate', pr:'payment_rate', yld:'portfolio_yield', xs:'excess_3mo', bal:'trust_balance'};
 // A label the data overrides (trust_detail `labels`: e.g. "Gross Portfolio Yield" once the trust-level
 // definitions are on), so the page never names a figure differently from the records it draws.
 const meta=()=>{ const m=METRIC_META[metric]||{};
@@ -62,14 +62,14 @@ const metricAxis=()=>{
 const tipLabels=()=>yoyActive() ? {series:'Series', x:'Month', y: transform==='yoy-delta' ? 'YOY Δ (pp)' : 'YOY %'}
                                 : {series:'Trust', x:'Month', y: isRate() ? 'Rate' : '$ billions'};
 // A month from the site's history (src/metrics/cc_history: before 10-D reporting, or a month the current reader
-// misses) says so in its tooltip; the trigger view names a linked trust's weakest series (src/metrics/cc_excess).
+// misses) says so in its tooltip; the one-month excess view names the series it shows (src/metrics/cc_excess).
 const anyHist=()=>selected.some(t=>((SHELVES[t]||{}).sources||[]).includes('history'));
 const extraRows=()=>[...(anyAll() ? [{field:"n",type:"quantitative",title:"Trusts in figure",format:"d"}] : []),
                      ...(anyHist() ? [{field:"src",type:"nominal",title:"Source"}] : []),
-                     ...(metric==='excess_trigger' ? [{field:"tested",type:"nominal",title:"Tested at"}] : [])];
+                     ...(metric==='excess_weakest' && !anyAll() ? [{field:"tested",type:"nominal",title:"Tested at"}] : [])];
 const extraOf=p=>{ const o={}, n=p[metric+'_n']; if(n!=null) o.n=n;
   if(anyHist()) o.src=p.hist ? 'Servicer report (history)' : 'Servicer report (10-D)';
-  if(metric==='excess_trigger') o.tested=p.trigger_series ? `Series ${p.trigger_series} (lowest of ${p.trigger_n})` : 'The issuance series';
+  if(metric==='excess_weakest' && !anyAll()) o.tested=p.weakest_series ? `Series ${p.weakest_series} (lowest of ${p.weakest_n})` : 'All notes (one test)';
   return Object.keys(o).length ? o : null; };
 function sourceFor(){ return anyHist() ? 'SEC servicer reports (Form 8-K to 2006, Form 10-D after)' : 'SEC Form 10-D servicer reports'; }
 // The chart footer: the source, then only what is needed to read THIS chart — the yield's basis, how All
@@ -97,15 +97,18 @@ function notesFor(){
     if(metric==='charge_off_rate' && out.some(x=>x.startsWith(`${bare(t)}'s charge-off rate is gross`))) return;
     if(gap>=3 && f.date>cut) out.push(`${bare(t)}'s ${metricLabel()} begins ${fmtMonth(f.date)}.`);
   });
-  if(metric==='excess_trigger'){
-    out.push('3-month average, at the level each trust\'s early-amortization trigger tests it.');
+  if(metric==='excess_3mo'||metric==='excess_weakest'){
+    out.push(metric==='excess_3mo' ? 'Mean of the month and the two before it, the period early-amortization triggers test.'
+                                   : 'One month, at the weakest series the trigger tests; where one test covers every note, the trust\'s own figure.');
     // the trigger is 0% at every trust today; a trust whose report states another level is named
     selected.forEach(t=>{ const r=[...calOf(SHELVES[t])].reverse().find(p=>p.trigger_required!=null);
       if(r) out.push(`${bare(t)}'s trigger is ${(r.trigger_required*100).toFixed(2)}%, not 0%.`); });
-    const linked=selected.filter(t=>calOf(SHELVES[t]).some(p=>p.trigger_series));
-    if(linked.length) out.push(`${linked.map(bare).join(', ')}: the lowest of ${linked.length>1?'their':'its'} series.`);
+    const linked=selected.filter(t=>calOf(SHELVES[t]).some(p=>p.weakest_series));
+    if(linked.length) out.push(metric==='excess_3mo'
+      ? `${linked.map(bare).join(', ')} test${linked.length>1?'':'s'} each series on its own: see Weakest series.`
+      : `${linked.map(bare).join(', ')}: the lowest of ${linked.length>1?'their':'its'} series.`);
     if(selected.includes('COMET')) out.push('Capital One\'s figure is calculated from its reports on its prospectus\'s definition.');
-    if(anyAll()) out.push('All Trusts has no trigger of its own: see Monthly.');
+    if(anyAll() && metric==='excess_weakest') out.push('All Trusts has no series of its own: its monthly average.');
   }
   out.push("Trusts' definitions differ.");
   return [...new Set(out)];
@@ -119,10 +122,9 @@ function titleFor(){
   return `${one?who:(selected.length>1?CARD():who)} ${metricTitle()}${yoy}`;
 }
 function subtitleFor(){
-  const n = selected.length>1 ? [`${selected.length} trusts`] : [];
   let parts;
   if(macroId)                     parts=[metricAxis()[0]];
-  else                            parts=['By collection month', ...n];
+  else                            parts=['By collection month'];
   if(output==='seasonal') parts.push('Year overlay');
   return parts.filter(Boolean).join(' · ');
 }

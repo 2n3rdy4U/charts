@@ -333,14 +333,16 @@ function calendarChart(box,S,o){
 /* Picker — a button that summarises the selection and a panel of checkboxes
    (radio when the view takes one). The subject is selected[0]: the panel
    marks it with a star and lets a checked entry be promoted.
-   cfg: {btn, panel, wrap, placeholder, options() → [{t,label,retired,off,offTitle,group}],
+   cfg: {btn, panel, wrap, placeholder, options() → [{t,label,retired,ended,off,offTitle,group}],
          multi() → bool, hint() → text or '', get() → selected, set(arr),
-         onChange('pick' | 'subject')} */
+         onChange('pick' | 'subject')}
+   `ended` (a year) marks an entry no longer reporting: 'to 2005' at the row's right, ' (to 2005)' on the button. */
 function kitPicker(cfg){
   const btn=el(cfg.btn), panel=el(cfg.panel);
   const text=a=>a.label+(a.retired?' (retired)':'');
+  const btnText=a=>text(a)+(a.ended?' (to '+a.ended+')':'');
   function updateBtn(){
-    const parts = cfg.get().map(t=>text(cfg.options().find(x=>x.t===t)||{label:t}));
+    const parts = cfg.get().map(t=>btnText(cfg.options().find(x=>x.t===t)||{label:t}));
     if(!parts.length)        btn.textContent = cfg.placeholder;
     else if(parts.length<=2) btn.textContent = parts.join(', ') + ' \u25be';
     else                     btn.textContent = parts[0] + ', +' + (parts.length-1) + ' more \u25be';
@@ -352,7 +354,7 @@ function kitPicker(cfg){
     if(hint){ const h=document.createElement('div'); h.className='mss-hint'; h.textContent=hint; panel.appendChild(h); }
     let groupShown=null;
     for(const a of cfg.options()){
-      // a grouped entry (e.g. 'Earlier trusts') sits under its heading; options() lists groups last
+      // a grouped entry sits under its heading; options() lists groups last
       if(a.group && a.group!==groupShown){ const g=document.createElement('div'); g.className='mss-hint mss-group'; g.textContent=a.group; panel.appendChild(g); groupShown=a.group; }
       const lbl=document.createElement('label');
       const cb=document.createElement('input');
@@ -370,6 +372,7 @@ function kitPicker(cfg){
       });
       lbl.appendChild(cb);
       lbl.appendChild(document.createTextNode(' '+text(a)));
+      if(a.ended){ const e=document.createElement('span'); e.className='mss-ended'; e.textContent='to '+a.ended; lbl.appendChild(e); }
       if(multi && selected.includes(a.t)){
         const st=document.createElement('span');
         const isSubj = selected[0]===a.t;
