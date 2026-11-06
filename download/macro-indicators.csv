@@ -146,6 +146,7 @@ AISRSA,Auto inventory-to-sales ratio (SA),U.S. Census Bureau via FRED,Auto inven
 AISRSA,Auto inventory-to-sales ratio (SA),U.S. Census Bureau via FRED,Auto inventory-to-sales ratio (SA),m,2026-06-01,1.2
 AISRSA,Auto inventory-to-sales ratio (SA),U.S. Census Bureau via FRED,Auto inventory-to-sales ratio (SA),m,2026-07-01,1.18
 AISRSA,Auto inventory-to-sales ratio (SA),U.S. Census Bureau via FRED,Auto inventory-to-sales ratio (SA),m,2026-08-01,1.24
+AISRSA,Auto inventory-to-sales ratio (SA),U.S. Census Bureau via FRED,Auto inventory-to-sales ratio (SA),m,2026-09-01,1.32
 ALTSALES,Light vehicle sales (SAAR),Bureau of Economic Analysis (BEA) via FRED,Light vehicle sales (SAAR),m,2016-11-01,17.41
 ALTSALES,Light vehicle sales (SAAR),Bureau of Economic Analysis (BEA) via FRED,Light vehicle sales (SAAR),m,2016-12-01,17.91
 ALTSALES,Light vehicle sales (SAAR),Bureau of Economic Analysis (BEA) via FRED,Light vehicle sales (SAAR),m,2017-01-01,17.29
@@ -256,15 +257,16 @@ ALTSALES,Light vehicle sales (SAAR),Bureau of Economic Analysis (BEA) via FRED,L
 ALTSALES,Light vehicle sales (SAAR),Bureau of Economic Analysis (BEA) via FRED,Light vehicle sales (SAAR),m,2025-10-01,15.68
 ALTSALES,Light vehicle sales (SAAR),Bureau of Economic Analysis (BEA) via FRED,Light vehicle sales (SAAR),m,2025-11-01,15.81
 ALTSALES,Light vehicle sales (SAAR),Bureau of Economic Analysis (BEA) via FRED,Light vehicle sales (SAAR),m,2025-12-01,16.01
-ALTSALES,Light vehicle sales (SAAR),Bureau of Economic Analysis (BEA) via FRED,Light vehicle sales (SAAR),m,2026-01-01,14.96
-ALTSALES,Light vehicle sales (SAAR),Bureau of Economic Analysis (BEA) via FRED,Light vehicle sales (SAAR),m,2026-02-01,15.55
-ALTSALES,Light vehicle sales (SAAR),Bureau of Economic Analysis (BEA) via FRED,Light vehicle sales (SAAR),m,2026-03-01,16.07
+ALTSALES,Light vehicle sales (SAAR),Bureau of Economic Analysis (BEA) via FRED,Light vehicle sales (SAAR),m,2026-01-01,14.97
+ALTSALES,Light vehicle sales (SAAR),Bureau of Economic Analysis (BEA) via FRED,Light vehicle sales (SAAR),m,2026-02-01,15.56
+ALTSALES,Light vehicle sales (SAAR),Bureau of Economic Analysis (BEA) via FRED,Light vehicle sales (SAAR),m,2026-03-01,16.08
 ALTSALES,Light vehicle sales (SAAR),Bureau of Economic Analysis (BEA) via FRED,Light vehicle sales (SAAR),m,2026-04-01,16.16
 ALTSALES,Light vehicle sales (SAAR),Bureau of Economic Analysis (BEA) via FRED,Light vehicle sales (SAAR),m,2026-05-01,16.44
 ALTSALES,Light vehicle sales (SAAR),Bureau of Economic Analysis (BEA) via FRED,Light vehicle sales (SAAR),m,2026-06-01,16.76
-ALTSALES,Light vehicle sales (SAAR),Bureau of Economic Analysis (BEA) via FRED,Light vehicle sales (SAAR),m,2026-07-01,16.17
-ALTSALES,Light vehicle sales (SAAR),Bureau of Economic Analysis (BEA) via FRED,Light vehicle sales (SAAR),m,2026-08-01,16.57
+ALTSALES,Light vehicle sales (SAAR),Bureau of Economic Analysis (BEA) via FRED,Light vehicle sales (SAAR),m,2026-07-01,16.16
+ALTSALES,Light vehicle sales (SAAR),Bureau of Economic Analysis (BEA) via FRED,Light vehicle sales (SAAR),m,2026-08-01,16.56
 ALTSALES,Light vehicle sales (SAAR),Bureau of Economic Analysis (BEA) via FRED,Light vehicle sales (SAAR),m,2026-09-01,15.98
+ALTSALES,Light vehicle sales (SAAR),Bureau of Economic Analysis (BEA) via FRED,Light vehicle sales (SAAR),m,2026-10-01,15.54
 AUINSA,Auto inventories (NSA),U.S. Census Bureau via FRED,Auto inventories (NSA),m,2021-11-01,78.61
 AUINSA,Auto inventories (NSA),U.S. Census Bureau via FRED,Auto inventories (NSA),m,2021-12-01,84.9
 AUINSA,Auto inventories (NSA),U.S. Census Bureau via FRED,Auto inventories (NSA),m,2022-01-01,74.79
@@ -321,8 +323,9 @@ AUINSA,Auto inventories (NSA),U.S. Census Bureau via FRED,Auto inventories (NSA)
 AUINSA,Auto inventories (NSA),U.S. Census Bureau via FRED,Auto inventories (NSA),m,2026-04-01,209.98
 AUINSA,Auto inventories (NSA),U.S. Census Bureau via FRED,Auto inventories (NSA),m,2026-05-01,199.79
 AUINSA,Auto inventories (NSA),U.S. Census Bureau via FRED,Auto inventories (NSA),m,2026-06-01,187.09
-AUINSA,Auto inventories (NSA),U.S. Census Bureau via FRED,Auto inventories (NSA),m,2026-07-01,180.6
-AUINSA,Auto inventories (NSA),U.S. Census Bureau via FRED,Auto inventories (NSA),m,2026-08-01,187.1
+AUINSA,Auto inventories (NSA),U.S. Census Bureau via FRED,Auto inventories (NSA),m,2026-07-01,181.08
+AUINSA,Auto inventories (NSA),U.S. Census Bureau via FRED,Auto inventories (NSA),m,2026-08-01,187.72
+AUINSA,Auto inventories (NSA),U.S. Census Bureau via FRED,Auto inventories (NSA),m,2026-09-01,182.15
 AWHAETP,"Avg weekly hours, private (SA)",Bureau of Labor Statistics (BLS) via FRED,"Avg weekly hours, private (SA)",m,2021-11-01,34.8
 AWHAETP,"Avg weekly hours, private (SA)",Bureau of Labor Statistics (BLS) via FRED,"Avg weekly hours, private (SA)",m,2021-12-01,34.9
 AWHAETP,"Avg weekly hours, private (SA)",Bureau of Labor Statistics (BLS) via FRED,"Avg weekly hours, private (SA)",m,2022-01-01,34.5
