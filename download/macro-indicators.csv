@@ -382,6 +382,7 @@ AWHAETP,"Avg weekly hours, private (SA)",Bureau of Labor Statistics (BLS) via FR
 AWHAETP,"Avg weekly hours, private (SA)",Bureau of Labor Statistics (BLS) via FRED,"Avg weekly hours, private (SA)",m,2026-07-01,34.3
 AWHAETP,"Avg weekly hours, private (SA)",Bureau of Labor Statistics (BLS) via FRED,"Avg weekly hours, private (SA)",m,2026-08-01,34.4
 AWHAETP,"Avg weekly hours, private (SA)",Bureau of Labor Statistics (BLS) via FRED,"Avg weekly hours, private (SA)",m,2026-09-01,34.4
+AWHAETP,"Avg weekly hours, private (SA)",Bureau of Labor Statistics (BLS) via FRED,"Avg weekly hours, private (SA)",m,2026-10-01,34.4
 CCSA,"Continued claims, insured unemployment (SA)",U.S. Department of Labor via FRED,"Continued claims, insured unemployment (SA)",w,2021-11-06,2036000.0
 CCSA,"Continued claims, insured unemployment (SA)",U.S. Department of Labor via FRED,"Continued claims, insured unemployment (SA)",w,2021-11-13,1968000.0
 CCSA,"Continued claims, insured unemployment (SA)",U.S. Department of Labor via FRED,"Continued claims, insured unemployment (SA)",w,2021-11-20,1803000.0
@@ -700,7 +701,8 @@ CES0500000003,"Avg hourly earnings, all employees (SA)",Bureau of Labor Statisti
 CES0500000003,"Avg hourly earnings, all employees (SA)",Bureau of Labor Statistics (BLS) via FRED,"Avg hourly earnings, all employees (SA)",m,2026-06-01,37.59
 CES0500000003,"Avg hourly earnings, all employees (SA)",Bureau of Labor Statistics (BLS) via FRED,"Avg hourly earnings, all employees (SA)",m,2026-07-01,37.64
 CES0500000003,"Avg hourly earnings, all employees (SA)",Bureau of Labor Statistics (BLS) via FRED,"Avg hourly earnings, all employees (SA)",m,2026-08-01,37.76
-CES0500000003,"Avg hourly earnings, all employees (SA)",Bureau of Labor Statistics (BLS) via FRED,"Avg hourly earnings, all employees (SA)",m,2026-09-01,37.81
+CES0500000003,"Avg hourly earnings, all employees (SA)",Bureau of Labor Statistics (BLS) via FRED,"Avg hourly earnings, all employees (SA)",m,2026-09-01,37.86
+CES0500000003,"Avg hourly earnings, all employees (SA)",Bureau of Labor Statistics (BLS) via FRED,"Avg hourly earnings, all employees (SA)",m,2026-10-01,38.0
 CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2006-11-01,-0.11
 CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2006-12-01,0.77
 CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2007-01-01,-0.48
@@ -1058,6 +1060,7 @@ CIVPART,LFPR (SA),Bureau of Labor Statistics (BLS) via FRED,LFPR (SA),m,2026-06-
 CIVPART,LFPR (SA),Bureau of Labor Statistics (BLS) via FRED,LFPR (SA),m,2026-07-01,61.4
 CIVPART,LFPR (SA),Bureau of Labor Statistics (BLS) via FRED,LFPR (SA),m,2026-08-01,61.6
 CIVPART,LFPR (SA),Bureau of Labor Statistics (BLS) via FRED,LFPR (SA),m,2026-09-01,61.8
+CIVPART,LFPR (SA),Bureau of Labor Statistics (BLS) via FRED,LFPR (SA),m,2026-10-01,61.9
 CORCCACBS,"CC charge-off rate (net, SA)",Federal Reserve Board via FRED,"CC charge-off rate (net, SA)",q,2017-01-01,3.45
 CORCCACBS,"CC charge-off rate (net, SA)",Federal Reserve Board via FRED,"CC charge-off rate (net, SA)",q,2017-04-01,3.5
 CORCCACBS,"CC charge-off rate (net, SA)",Federal Reserve Board via FRED,"CC charge-off rate (net, SA)",q,2017-07-01,3.59
@@ -10591,6 +10594,7 @@ EMRATIO,EPOP (SA),Bureau of Labor Statistics (BLS) via FRED,EPOP (SA),m,2026-06-
 EMRATIO,EPOP (SA),Bureau of Labor Statistics (BLS) via FRED,EPOP (SA),m,2026-07-01,58.9
 EMRATIO,EPOP (SA),Bureau of Labor Statistics (BLS) via FRED,EPOP (SA),m,2026-08-01,59.1
 EMRATIO,EPOP (SA),Bureau of Labor Statistics (BLS) via FRED,EPOP (SA),m,2026-09-01,59.2
+EMRATIO,EPOP (SA),Bureau of Labor Statistics (BLS) via FRED,EPOP (SA),m,2026-10-01,59.3
 GDPC1,"Real GDP, level (SAAR)",Bureau of Economic Analysis (BEA) via FRED,"Real GDP, level (SAAR)",q,2007-01-01,16611.69
 GDPC1,"Real GDP, level (SAAR)",Bureau of Economic Analysis (BEA) via FRED,"Real GDP, level (SAAR)",q,2007-04-01,16713.31
 GDPC1,"Real GDP, level (SAAR)",Bureau of Economic Analysis (BEA) via FRED,"Real GDP, level (SAAR)",q,2007-07-01,16809.59
@@ -11462,6 +11466,7 @@ LNS11300060,"Labor force participation rate, 25-54 yr (SA)",Bureau of Labor Stat
 LNS11300060,"Labor force participation rate, 25-54 yr (SA)",Bureau of Labor Statistics (BLS) via FRED,"Labor force participation rate, 25-54 yr (SA)",m,2026-07-01,83.4
 LNS11300060,"Labor force participation rate, 25-54 yr (SA)",Bureau of Labor Statistics (BLS) via FRED,"Labor force participation rate, 25-54 yr (SA)",m,2026-08-01,83.4
 LNS11300060,"Labor force participation rate, 25-54 yr (SA)",Bureau of Labor Statistics (BLS) via FRED,"Labor force participation rate, 25-54 yr (SA)",m,2026-09-01,83.7
+LNS11300060,"Labor force participation rate, 25-54 yr (SA)",Bureau of Labor Statistics (BLS) via FRED,"Labor force participation rate, 25-54 yr (SA)",m,2026-10-01,83.7
 LNS12600000,"Employed, usually work part time (SA)",Bureau of Labor Statistics (BLS) via FRED,"Employed, usually work part time (SA)",m,2016-11-01,27892.0
 LNS12600000,"Employed, usually work part time (SA)",Bureau of Labor Statistics (BLS) via FRED,"Employed, usually work part time (SA)",m,2016-12-01,27921.0
 LNS12600000,"Employed, usually work part time (SA)",Bureau of Labor Statistics (BLS) via FRED,"Employed, usually work part time (SA)",m,2017-01-01,27428.0
@@ -11580,6 +11585,7 @@ LNS12600000,"Employed, usually work part time (SA)",Bureau of Labor Statistics (
 LNS12600000,"Employed, usually work part time (SA)",Bureau of Labor Statistics (BLS) via FRED,"Employed, usually work part time (SA)",m,2026-07-01,28764.0
 LNS12600000,"Employed, usually work part time (SA)",Bureau of Labor Statistics (BLS) via FRED,"Employed, usually work part time (SA)",m,2026-08-01,28541.0
 LNS12600000,"Employed, usually work part time (SA)",Bureau of Labor Statistics (BLS) via FRED,"Employed, usually work part time (SA)",m,2026-09-01,28746.0
+LNS12600000,"Employed, usually work part time (SA)",Bureau of Labor Statistics (BLS) via FRED,"Employed, usually work part time (SA)",m,2026-10-01,28504.0
 MANEMP,"All employees, manufacturing (SA)",Bureau of Labor Statistics (BLS) via FRED,"All employees, manufacturing (SA)",m,2016-11-01,12311.0
 MANEMP,"All employees, manufacturing (SA)",Bureau of Labor Statistics (BLS) via FRED,"All employees, manufacturing (SA)",m,2016-12-01,12324.0
 MANEMP,"All employees, manufacturing (SA)",Bureau of Labor Statistics (BLS) via FRED,"All employees, manufacturing (SA)",m,2017-01-01,12334.0
@@ -11697,8 +11703,9 @@ MANEMP,"All employees, manufacturing (SA)",Bureau of Labor Statistics (BLS) via 
 MANEMP,"All employees, manufacturing (SA)",Bureau of Labor Statistics (BLS) via FRED,"All employees, manufacturing (SA)",m,2026-05-01,12595.0
 MANEMP,"All employees, manufacturing (SA)",Bureau of Labor Statistics (BLS) via FRED,"All employees, manufacturing (SA)",m,2026-06-01,12608.0
 MANEMP,"All employees, manufacturing (SA)",Bureau of Labor Statistics (BLS) via FRED,"All employees, manufacturing (SA)",m,2026-07-01,12628.0
-MANEMP,"All employees, manufacturing (SA)",Bureau of Labor Statistics (BLS) via FRED,"All employees, manufacturing (SA)",m,2026-08-01,12643.0
-MANEMP,"All employees, manufacturing (SA)",Bureau of Labor Statistics (BLS) via FRED,"All employees, manufacturing (SA)",m,2026-09-01,12652.0
+MANEMP,"All employees, manufacturing (SA)",Bureau of Labor Statistics (BLS) via FRED,"All employees, manufacturing (SA)",m,2026-08-01,12649.0
+MANEMP,"All employees, manufacturing (SA)",Bureau of Labor Statistics (BLS) via FRED,"All employees, manufacturing (SA)",m,2026-09-01,12662.0
+MANEMP,"All employees, manufacturing (SA)",Bureau of Labor Statistics (BLS) via FRED,"All employees, manufacturing (SA)",m,2026-10-01,12681.0
 MDSP,"Mortgage debt service ratio (DSR, SA)",Federal Reserve Board via FRED,"Mortgage debt service ratio (DSR, SA)",q,2012-01-01,6.81
 MDSP,"Mortgage debt service ratio (DSR, SA)",Federal Reserve Board via FRED,"Mortgage debt service ratio (DSR, SA)",q,2012-04-01,6.68
 MDSP,"Mortgage debt service ratio (DSR, SA)",Federal Reserve Board via FRED,"Mortgage debt service ratio (DSR, SA)",q,2012-07-01,6.62
@@ -12268,8 +12275,9 @@ PAYEMS,"Nonfarm payrolls (NFP, SA)",Bureau of Labor Statistics (BLS) via FRED,"N
 PAYEMS,"Nonfarm payrolls (NFP, SA)",Bureau of Labor Statistics (BLS) via FRED,"Nonfarm payrolls (NFP, SA)",m,2026-05-01,158861.0
 PAYEMS,"Nonfarm payrolls (NFP, SA)",Bureau of Labor Statistics (BLS) via FRED,"Nonfarm payrolls (NFP, SA)",m,2026-06-01,158892.0
 PAYEMS,"Nonfarm payrolls (NFP, SA)",Bureau of Labor Statistics (BLS) via FRED,"Nonfarm payrolls (NFP, SA)",m,2026-07-01,158882.0
-PAYEMS,"Nonfarm payrolls (NFP, SA)",Bureau of Labor Statistics (BLS) via FRED,"Nonfarm payrolls (NFP, SA)",m,2026-08-01,159015.0
-PAYEMS,"Nonfarm payrolls (NFP, SA)",Bureau of Labor Statistics (BLS) via FRED,"Nonfarm payrolls (NFP, SA)",m,2026-09-01,159044.0
+PAYEMS,"Nonfarm payrolls (NFP, SA)",Bureau of Labor Statistics (BLS) via FRED,"Nonfarm payrolls (NFP, SA)",m,2026-08-01,159068.0
+PAYEMS,"Nonfarm payrolls (NFP, SA)",Bureau of Labor Statistics (BLS) via FRED,"Nonfarm payrolls (NFP, SA)",m,2026-09-01,159128.0
+PAYEMS,"Nonfarm payrolls (NFP, SA)",Bureau of Labor Statistics (BLS) via FRED,"Nonfarm payrolls (NFP, SA)",m,2026-10-01,159293.0
 PCEC96,Real PCE (SAAR),Bureau of Economic Analysis (BEA) via FRED,Real PCE (SAAR),m,2021-11-01,15118.0
 PCEC96,Real PCE (SAAR),Bureau of Economic Analysis (BEA) via FRED,Real PCE (SAAR),m,2021-12-01,15062.3
 PCEC96,Real PCE (SAAR),Bureau of Economic Analysis (BEA) via FRED,Real PCE (SAAR),m,2022-01-01,15085.8
@@ -13179,6 +13187,7 @@ SAHMREALTIME,Real-time Sahm Rule Recession Indicator,Federal Reserve Board via F
 SAHMREALTIME,Real-time Sahm Rule Recession Indicator,Federal Reserve Board via FRED,Real-time Sahm Rule Recession Indicator,m,2026-07-01,-0.03
 SAHMREALTIME,Real-time Sahm Rule Recession Indicator,Federal Reserve Board via FRED,Real-time Sahm Rule Recession Indicator,m,2026-08-01,-0.07
 SAHMREALTIME,Real-time Sahm Rule Recession Indicator,Federal Reserve Board via FRED,Real-time Sahm Rule Recession Indicator,m,2026-09-01,0.0
+SAHMREALTIME,Real-time Sahm Rule Recession Indicator,Federal Reserve Board via FRED,Real-time Sahm Rule Recession Indicator,m,2026-10-01,0.0
 SLOASM,Student loan ABS issuance (SA),"Federal Reserve Board, G.19 via FRED",Student loan ABS issuance (SA),q,2021-12-01,1733415.18
 SLOASM,Student loan ABS issuance (SA),"Federal Reserve Board, G.19 via FRED",Student loan ABS issuance (SA),q,2022-03-01,1747455.51
 SLOASM,Student loan ABS issuance (SA),"Federal Reserve Board, G.19 via FRED",Student loan ABS issuance (SA),q,2022-06-01,1744007.0
@@ -19040,6 +19049,7 @@ U6RATE,U-6 underemployment rate (SA),Bureau of Labor Statistics (BLS) via FRED,U
 U6RATE,U-6 underemployment rate (SA),Bureau of Labor Statistics (BLS) via FRED,U-6 underemployment rate (SA),m,2026-07-01,7.9
 U6RATE,U-6 underemployment rate (SA),Bureau of Labor Statistics (BLS) via FRED,U-6 underemployment rate (SA),m,2026-08-01,7.7
 U6RATE,U-6 underemployment rate (SA),Bureau of Labor Statistics (BLS) via FRED,U-6 underemployment rate (SA),m,2026-09-01,7.6
+U6RATE,U-6 underemployment rate (SA),Bureau of Labor Statistics (BLS) via FRED,U-6 underemployment rate (SA),m,2026-10-01,7.9
 UEMP27OV,Number unemployed 27 weeks & over (SA),Bureau of Labor Statistics (BLS) via FRED,Number unemployed 27 weeks & over (SA),m,2016-11-01,1865.0
 UEMP27OV,Number unemployed 27 weeks & over (SA),Bureau of Labor Statistics (BLS) via FRED,Number unemployed 27 weeks & over (SA),m,2016-12-01,1860.0
 UEMP27OV,Number unemployed 27 weeks & over (SA),Bureau of Labor Statistics (BLS) via FRED,Number unemployed 27 weeks & over (SA),m,2017-01-01,1866.0
@@ -19158,6 +19168,7 @@ UEMP27OV,Number unemployed 27 weeks & over (SA),Bureau of Labor Statistics (BLS)
 UEMP27OV,Number unemployed 27 weeks & over (SA),Bureau of Labor Statistics (BLS) via FRED,Number unemployed 27 weeks & over (SA),m,2026-07-01,1771.0
 UEMP27OV,Number unemployed 27 weeks & over (SA),Bureau of Labor Statistics (BLS) via FRED,Number unemployed 27 weeks & over (SA),m,2026-08-01,1930.0
 UEMP27OV,Number unemployed 27 weeks & over (SA),Bureau of Labor Statistics (BLS) via FRED,Number unemployed 27 weeks & over (SA),m,2026-09-01,1944.0
+UEMP27OV,Number unemployed 27 weeks & over (SA),Bureau of Labor Statistics (BLS) via FRED,Number unemployed 27 weeks & over (SA),m,2026-10-01,1963.0
 UNRATE,"Unemployment rate (U-3, SA)",Bureau of Labor Statistics (BLS) via FRED,"Unemployment rate (U-3, SA)",m,2016-11-01,4.7
 UNRATE,"Unemployment rate (U-3, SA)",Bureau of Labor Statistics (BLS) via FRED,"Unemployment rate (U-3, SA)",m,2016-12-01,4.7
 UNRATE,"Unemployment rate (U-3, SA)",Bureau of Labor Statistics (BLS) via FRED,"Unemployment rate (U-3, SA)",m,2017-01-01,4.7
@@ -19276,6 +19287,7 @@ UNRATE,"Unemployment rate (U-3, SA)",Bureau of Labor Statistics (BLS) via FRED,"
 UNRATE,"Unemployment rate (U-3, SA)",Bureau of Labor Statistics (BLS) via FRED,"Unemployment rate (U-3, SA)",m,2026-07-01,4.1
 UNRATE,"Unemployment rate (U-3, SA)",Bureau of Labor Statistics (BLS) via FRED,"Unemployment rate (U-3, SA)",m,2026-08-01,4.1
 UNRATE,"Unemployment rate (U-3, SA)",Bureau of Labor Statistics (BLS) via FRED,"Unemployment rate (U-3, SA)",m,2026-09-01,4.2
+UNRATE,"Unemployment rate (U-3, SA)",Bureau of Labor Statistics (BLS) via FRED,"Unemployment rate (U-3, SA)",m,2026-10-01,4.1
 USCONS,"All employees, construction (SA)",Bureau of Labor Statistics (BLS) via FRED,"All employees, construction (SA)",m,2016-11-01,6823.0
 USCONS,"All employees, construction (SA)",Bureau of Labor Statistics (BLS) via FRED,"All employees, construction (SA)",m,2016-12-01,6818.0
 USCONS,"All employees, construction (SA)",Bureau of Labor Statistics (BLS) via FRED,"All employees, construction (SA)",m,2017-01-01,6840.0
@@ -19393,8 +19405,9 @@ USCONS,"All employees, construction (SA)",Bureau of Labor Statistics (BLS) via F
 USCONS,"All employees, construction (SA)",Bureau of Labor Statistics (BLS) via FRED,"All employees, construction (SA)",m,2026-05-01,8316.0
 USCONS,"All employees, construction (SA)",Bureau of Labor Statistics (BLS) via FRED,"All employees, construction (SA)",m,2026-06-01,8319.0
 USCONS,"All employees, construction (SA)",Bureau of Labor Statistics (BLS) via FRED,"All employees, construction (SA)",m,2026-07-01,8337.0
-USCONS,"All employees, construction (SA)",Bureau of Labor Statistics (BLS) via FRED,"All employees, construction (SA)",m,2026-08-01,8353.0
-USCONS,"All employees, construction (SA)",Bureau of Labor Statistics (BLS) via FRED,"All employees, construction (SA)",m,2026-09-01,8364.0
+USCONS,"All employees, construction (SA)",Bureau of Labor Statistics (BLS) via FRED,"All employees, construction (SA)",m,2026-08-01,8354.0
+USCONS,"All employees, construction (SA)",Bureau of Labor Statistics (BLS) via FRED,"All employees, construction (SA)",m,2026-09-01,8370.0
+USCONS,"All employees, construction (SA)",Bureau of Labor Statistics (BLS) via FRED,"All employees, construction (SA)",m,2026-10-01,8367.0
 USFIRE,"All employees, financial activities (SA)",Bureau of Labor Statistics (BLS) via FRED,"All employees, financial activities (SA)",m,2016-11-01,8344.0
 USFIRE,"All employees, financial activities (SA)",Bureau of Labor Statistics (BLS) via FRED,"All employees, financial activities (SA)",m,2016-12-01,8370.0
 USFIRE,"All employees, financial activities (SA)",Bureau of Labor Statistics (BLS) via FRED,"All employees, financial activities (SA)",m,2017-01-01,8397.0
@@ -19512,8 +19525,9 @@ USFIRE,"All employees, financial activities (SA)",Bureau of Labor Statistics (BL
 USFIRE,"All employees, financial activities (SA)",Bureau of Labor Statistics (BLS) via FRED,"All employees, financial activities (SA)",m,2026-05-01,9106.0
 USFIRE,"All employees, financial activities (SA)",Bureau of Labor Statistics (BLS) via FRED,"All employees, financial activities (SA)",m,2026-06-01,9108.0
 USFIRE,"All employees, financial activities (SA)",Bureau of Labor Statistics (BLS) via FRED,"All employees, financial activities (SA)",m,2026-07-01,9098.0
-USFIRE,"All employees, financial activities (SA)",Bureau of Labor Statistics (BLS) via FRED,"All employees, financial activities (SA)",m,2026-08-01,9089.0
-USFIRE,"All employees, financial activities (SA)",Bureau of Labor Statistics (BLS) via FRED,"All employees, financial activities (SA)",m,2026-09-01,9082.0
+USFIRE,"All employees, financial activities (SA)",Bureau of Labor Statistics (BLS) via FRED,"All employees, financial activities (SA)",m,2026-08-01,9092.0
+USFIRE,"All employees, financial activities (SA)",Bureau of Labor Statistics (BLS) via FRED,"All employees, financial activities (SA)",m,2026-09-01,9078.0
+USFIRE,"All employees, financial activities (SA)",Bureau of Labor Statistics (BLS) via FRED,"All employees, financial activities (SA)",m,2026-10-01,9085.0
 USGOVT,"All employees, government (SA)",Bureau of Labor Statistics (BLS) via FRED,"All employees, government (SA)",m,2016-11-01,22277.0
 USGOVT,"All employees, government (SA)",Bureau of Labor Statistics (BLS) via FRED,"All employees, government (SA)",m,2016-12-01,22304.0
 USGOVT,"All employees, government (SA)",Bureau of Labor Statistics (BLS) via FRED,"All employees, government (SA)",m,2017-01-01,22316.0
@@ -19632,7 +19646,8 @@ USGOVT,"All employees, government (SA)",Bureau of Labor Statistics (BLS) via FRE
 USGOVT,"All employees, government (SA)",Bureau of Labor Statistics (BLS) via FRED,"All employees, government (SA)",m,2026-06-01,23338.0
 USGOVT,"All employees, government (SA)",Bureau of Labor Statistics (BLS) via FRED,"All employees, government (SA)",m,2026-07-01,23300.0
 USGOVT,"All employees, government (SA)",Bureau of Labor Statistics (BLS) via FRED,"All employees, government (SA)",m,2026-08-01,23344.0
-USGOVT,"All employees, government (SA)",Bureau of Labor Statistics (BLS) via FRED,"All employees, government (SA)",m,2026-09-01,23327.0
+USGOVT,"All employees, government (SA)",Bureau of Labor Statistics (BLS) via FRED,"All employees, government (SA)",m,2026-09-01,23326.0
+USGOVT,"All employees, government (SA)",Bureau of Labor Statistics (BLS) via FRED,"All employees, government (SA)",m,2026-10-01,23332.0
 USREC,NBER recession indicator (1 = recession),NBER,NBER recession indicator (1 = recession),m,1926-11-01,1.0
 USREC,NBER recession indicator (1 = recession),NBER,NBER recession indicator (1 = recession),m,1926-12-01,1.0
 USREC,NBER recession indicator (1 = recession),NBER,NBER recession indicator (1 = recession),m,1927-01-01,1.0
