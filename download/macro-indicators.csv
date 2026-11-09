@@ -3,10 +3,10 @@
 # Definition: The series the Macro page charts, as published by their sources (levels, not transforms); the figures belong to those sources and are public US government or Federal Reserve data unless the source says otherwise
 # Note: Not in this file (shown on the page under their owners' terms): series from Freddie Mac, Moody’s, National Association of Realtors, S&P Dow Jones Indices / CoreLogic, University of Michigan Surveys of Consumers.
 # Columns: series = FRED series id, or nyfed_* for NY Fed; title = the dashboard's name for the series; source = the publisher; units = as the source reports; frequency = d/w/m/q/a; date = observation date; value = the figure
-# Data through: 2026-11-05
+# Data through: 2026-11-06
 # Page: https://data.consumercreditmatters.com/macro/index.html
 # Licence: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/) — free to use, share and adapt with attribution to Consumer Credit Matters
-# Cite as: Consumer Credit Matters, “Macro Indicators”, data through 2026-11-05, https://data.consumercreditmatters.com/download/macro-indicators.csv
+# Cite as: Consumer Credit Matters, “Macro Indicators”, data through 2026-11-06, https://data.consumercreditmatters.com/download/macro-indicators.csv
 # Read in Python: pandas.read_csv(url, comment="#")
 series,title,source,units,frequency,date,value
 A191RL1Q225SBEA,Real GDP growth (annualized),Bureau of Economic Analysis (BEA) via FRED,Real GDP growth (annualized),q,2007-01-01,1.2
@@ -2797,46 +2797,46 @@ DEMAUTO,Auto loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto loa
 DEMAUTO,Auto loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto loan demand (SLOOS),q,2026-04-01,-9.8
 DEMAUTO,Auto loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto loan demand (SLOOS),q,2026-07-01,-11.4
 DEMAUTO,Auto loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto loan demand (SLOOS),q,2026-10-01,-12.5
-DEMCC,CC demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC demand (SLOOS),q,2017-01-01,-8.3
-DEMCC,CC demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC demand (SLOOS),q,2017-04-01,-10.2
-DEMCC,CC demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC demand (SLOOS),q,2017-07-01,-6.1
-DEMCC,CC demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC demand (SLOOS),q,2017-10-01,0.0
-DEMCC,CC demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC demand (SLOOS),q,2018-01-01,0.0
-DEMCC,CC demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC demand (SLOOS),q,2018-04-01,-9.6
-DEMCC,CC demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC demand (SLOOS),q,2018-07-01,-2.1
-DEMCC,CC demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC demand (SLOOS),q,2018-10-01,-4.3
-DEMCC,CC demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC demand (SLOOS),q,2019-01-01,-17.4
-DEMCC,CC demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC demand (SLOOS),q,2019-04-01,-6.8
-DEMCC,CC demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC demand (SLOOS),q,2019-07-01,6.4
-DEMCC,CC demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC demand (SLOOS),q,2019-10-01,6.4
-DEMCC,CC demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC demand (SLOOS),q,2020-01-01,2.3
-DEMCC,CC demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC demand (SLOOS),q,2020-04-01,-23.1
-DEMCC,CC demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC demand (SLOOS),q,2020-07-01,-65.2
-DEMCC,CC demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC demand (SLOOS),q,2020-10-01,2.3
-DEMCC,CC demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC demand (SLOOS),q,2021-01-01,2.2
-DEMCC,CC demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC demand (SLOOS),q,2021-04-01,2.1
-DEMCC,CC demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC demand (SLOOS),q,2021-07-01,32.0
-DEMCC,CC demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC demand (SLOOS),q,2021-10-01,15.6
-DEMCC,CC demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC demand (SLOOS),q,2022-01-01,19.6
-DEMCC,CC demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC demand (SLOOS),q,2022-04-01,26.1
-DEMCC,CC demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC demand (SLOOS),q,2022-07-01,18.2
-DEMCC,CC demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC demand (SLOOS),q,2022-10-01,10.6
-DEMCC,CC demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC demand (SLOOS),q,2023-01-01,-11.1
-DEMCC,CC demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC demand (SLOOS),q,2023-04-01,-2.2
-DEMCC,CC demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC demand (SLOOS),q,2023-07-01,0.0
-DEMCC,CC demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC demand (SLOOS),q,2023-10-01,-9.1
-DEMCC,CC demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC demand (SLOOS),q,2024-01-01,-6.4
-DEMCC,CC demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC demand (SLOOS),q,2024-04-01,-12.0
-DEMCC,CC demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC demand (SLOOS),q,2024-07-01,2.0
-DEMCC,CC demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC demand (SLOOS),q,2024-10-01,-2.1
-DEMCC,CC demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC demand (SLOOS),q,2025-01-01,-9.4
-DEMCC,CC demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC demand (SLOOS),q,2025-04-01,-14.8
-DEMCC,CC demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC demand (SLOOS),q,2025-07-01,-12.5
-DEMCC,CC demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC demand (SLOOS),q,2025-10-01,4.3
-DEMCC,CC demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC demand (SLOOS),q,2026-01-01,-4.5
-DEMCC,CC demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC demand (SLOOS),q,2026-04-01,-6.0
-DEMCC,CC demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC demand (SLOOS),q,2026-07-01,2.2
-DEMCC,CC demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC demand (SLOOS),q,2026-10-01,10.2
+DEMCC,Card loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card loan demand (SLOOS),q,2017-01-01,-8.3
+DEMCC,Card loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card loan demand (SLOOS),q,2017-04-01,-10.2
+DEMCC,Card loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card loan demand (SLOOS),q,2017-07-01,-6.1
+DEMCC,Card loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card loan demand (SLOOS),q,2017-10-01,0.0
+DEMCC,Card loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card loan demand (SLOOS),q,2018-01-01,0.0
+DEMCC,Card loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card loan demand (SLOOS),q,2018-04-01,-9.6
+DEMCC,Card loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card loan demand (SLOOS),q,2018-07-01,-2.1
+DEMCC,Card loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card loan demand (SLOOS),q,2018-10-01,-4.3
+DEMCC,Card loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card loan demand (SLOOS),q,2019-01-01,-17.4
+DEMCC,Card loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card loan demand (SLOOS),q,2019-04-01,-6.8
+DEMCC,Card loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card loan demand (SLOOS),q,2019-07-01,6.4
+DEMCC,Card loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card loan demand (SLOOS),q,2019-10-01,6.4
+DEMCC,Card loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card loan demand (SLOOS),q,2020-01-01,2.3
+DEMCC,Card loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card loan demand (SLOOS),q,2020-04-01,-23.1
+DEMCC,Card loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card loan demand (SLOOS),q,2020-07-01,-65.2
+DEMCC,Card loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card loan demand (SLOOS),q,2020-10-01,2.3
+DEMCC,Card loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card loan demand (SLOOS),q,2021-01-01,2.2
+DEMCC,Card loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card loan demand (SLOOS),q,2021-04-01,2.1
+DEMCC,Card loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card loan demand (SLOOS),q,2021-07-01,32.0
+DEMCC,Card loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card loan demand (SLOOS),q,2021-10-01,15.6
+DEMCC,Card loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card loan demand (SLOOS),q,2022-01-01,19.6
+DEMCC,Card loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card loan demand (SLOOS),q,2022-04-01,26.1
+DEMCC,Card loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card loan demand (SLOOS),q,2022-07-01,18.2
+DEMCC,Card loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card loan demand (SLOOS),q,2022-10-01,10.6
+DEMCC,Card loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card loan demand (SLOOS),q,2023-01-01,-11.1
+DEMCC,Card loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card loan demand (SLOOS),q,2023-04-01,-2.2
+DEMCC,Card loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card loan demand (SLOOS),q,2023-07-01,0.0
+DEMCC,Card loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card loan demand (SLOOS),q,2023-10-01,-9.1
+DEMCC,Card loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card loan demand (SLOOS),q,2024-01-01,-6.4
+DEMCC,Card loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card loan demand (SLOOS),q,2024-04-01,-12.0
+DEMCC,Card loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card loan demand (SLOOS),q,2024-07-01,2.0
+DEMCC,Card loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card loan demand (SLOOS),q,2024-10-01,-2.1
+DEMCC,Card loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card loan demand (SLOOS),q,2025-01-01,-9.4
+DEMCC,Card loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card loan demand (SLOOS),q,2025-04-01,-14.8
+DEMCC,Card loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card loan demand (SLOOS),q,2025-07-01,-12.5
+DEMCC,Card loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card loan demand (SLOOS),q,2025-10-01,4.3
+DEMCC,Card loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card loan demand (SLOOS),q,2026-01-01,-4.5
+DEMCC,Card loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card loan demand (SLOOS),q,2026-04-01,-6.0
+DEMCC,Card loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card loan demand (SLOOS),q,2026-07-01,2.2
+DEMCC,Card loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card loan demand (SLOOS),q,2026-10-01,10.2
 DEMOTHCONS,Other consumer loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer loan demand (SLOOS),q,2017-01-01,-3.3
 DEMOTHCONS,Other consumer loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer loan demand (SLOOS),q,2017-04-01,-4.6
 DEMOTHCONS,Other consumer loan demand (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer loan demand (SLOOS),q,2017-07-01,4.5
@@ -10186,6 +10186,7 @@ DFF,Effective federal funds rate,Federal Reserve Board via FRED,Effective federa
 DFF,Effective federal funds rate,Federal Reserve Board via FRED,Effective federal funds rate,d,2026-11-02,3.88
 DFF,Effective federal funds rate,Federal Reserve Board via FRED,Effective federal funds rate,d,2026-11-03,3.88
 DFF,Effective federal funds rate,Federal Reserve Board via FRED,Effective federal funds rate,d,2026-11-04,3.88
+DFF,Effective federal funds rate,Federal Reserve Board via FRED,Effective federal funds rate,d,2026-11-05,3.88
 DRCCLACBS,"CC delinquency rate, 30+ days (SA)",Federal Reserve Board via FRED,"CC delinquency rate, 30+ days (SA)",q,2017-01-01,2.4
 DRCCLACBS,"CC delinquency rate, 30+ days (SA)",Federal Reserve Board via FRED,"CC delinquency rate, 30+ days (SA)",q,2017-04-01,2.49
 DRCCLACBS,"CC delinquency rate, 30+ days (SA)",Federal Reserve Board via FRED,"CC delinquency rate, 30+ days (SA)",q,2017-07-01,2.54
@@ -10302,46 +10303,46 @@ DROCLACBS,Other consumer loan delinquency rate: banks (SA),Federal Reserve Board
 DROCLACBS,Other consumer loan delinquency rate: banks (SA),Federal Reserve Board via FRED,Other consumer loan delinquency rate: banks (SA),q,2025-10-01,2.27
 DROCLACBS,Other consumer loan delinquency rate: banks (SA),Federal Reserve Board via FRED,Other consumer loan delinquency rate: banks (SA),q,2026-01-01,2.28
 DROCLACBS,Other consumer loan delinquency rate: banks (SA),Federal Reserve Board via FRED,Other consumer loan delinquency rate: banks (SA),q,2026-04-01,2.33
-DRTSCLCC,CC standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC standards tightening (SLOOS),q,2017-01-01,8.3
-DRTSCLCC,CC standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC standards tightening (SLOOS),q,2017-04-01,-7.8
-DRTSCLCC,CC standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC standards tightening (SLOOS),q,2017-07-01,5.8
-DRTSCLCC,CC standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC standards tightening (SLOOS),q,2017-10-01,9.1
-DRTSCLCC,CC standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC standards tightening (SLOOS),q,2018-01-01,1.9
-DRTSCLCC,CC standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC standards tightening (SLOOS),q,2018-04-01,9.4
-DRTSCLCC,CC standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC standards tightening (SLOOS),q,2018-07-01,12.0
-DRTSCLCC,CC standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC standards tightening (SLOOS),q,2018-10-01,-2.2
-DRTSCLCC,CC standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC standards tightening (SLOOS),q,2019-01-01,6.4
-DRTSCLCC,CC standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC standards tightening (SLOOS),q,2019-04-01,15.2
-DRTSCLCC,CC standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC standards tightening (SLOOS),q,2019-07-01,8.5
-DRTSCLCC,CC standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC standards tightening (SLOOS),q,2019-10-01,10.4
-DRTSCLCC,CC standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC standards tightening (SLOOS),q,2020-01-01,13.6
-DRTSCLCC,CC standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC standards tightening (SLOOS),q,2020-04-01,38.5
-DRTSCLCC,CC standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC standards tightening (SLOOS),q,2020-07-01,71.7
-DRTSCLCC,CC standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC standards tightening (SLOOS),q,2020-10-01,26.7
-DRTSCLCC,CC standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC standards tightening (SLOOS),q,2021-01-01,-12.8
-DRTSCLCC,CC standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC standards tightening (SLOOS),q,2021-04-01,-27.1
-DRTSCLCC,CC standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC standards tightening (SLOOS),q,2021-07-01,-37.3
-DRTSCLCC,CC standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC standards tightening (SLOOS),q,2021-10-01,-31.1
-DRTSCLCC,CC standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC standards tightening (SLOOS),q,2022-01-01,-17.0
-DRTSCLCC,CC standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC standards tightening (SLOOS),q,2022-04-01,-10.4
-DRTSCLCC,CC standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC standards tightening (SLOOS),q,2022-07-01,0.0
-DRTSCLCC,CC standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC standards tightening (SLOOS),q,2022-10-01,18.8
-DRTSCLCC,CC standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC standards tightening (SLOOS),q,2023-01-01,28.3
-DRTSCLCC,CC standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC standards tightening (SLOOS),q,2023-04-01,30.4
-DRTSCLCC,CC standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC standards tightening (SLOOS),q,2023-07-01,36.4
-DRTSCLCC,CC standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC standards tightening (SLOOS),q,2023-10-01,28.9
-DRTSCLCC,CC standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC standards tightening (SLOOS),q,2024-01-01,22.9
-DRTSCLCC,CC standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC standards tightening (SLOOS),q,2024-04-01,21.2
-DRTSCLCC,CC standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC standards tightening (SLOOS),q,2024-07-01,20.0
-DRTSCLCC,CC standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC standards tightening (SLOOS),q,2024-10-01,18.4
-DRTSCLCC,CC standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC standards tightening (SLOOS),q,2025-01-01,9.4
-DRTSCLCC,CC standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC standards tightening (SLOOS),q,2025-04-01,5.6
-DRTSCLCC,CC standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC standards tightening (SLOOS),q,2025-07-01,10.4
-DRTSCLCC,CC standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC standards tightening (SLOOS),q,2025-10-01,4.2
-DRTSCLCC,CC standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC standards tightening (SLOOS),q,2026-01-01,0.0
-DRTSCLCC,CC standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC standards tightening (SLOOS),q,2026-04-01,2.0
-DRTSCLCC,CC standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC standards tightening (SLOOS),q,2026-07-01,6.7
-DRTSCLCC,CC standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,CC standards tightening (SLOOS),q,2026-10-01,4.0
+DRTSCLCC,Card lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card lending standards (SLOOS),q,2017-01-01,8.3
+DRTSCLCC,Card lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card lending standards (SLOOS),q,2017-04-01,-7.8
+DRTSCLCC,Card lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card lending standards (SLOOS),q,2017-07-01,5.8
+DRTSCLCC,Card lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card lending standards (SLOOS),q,2017-10-01,9.1
+DRTSCLCC,Card lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card lending standards (SLOOS),q,2018-01-01,1.9
+DRTSCLCC,Card lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card lending standards (SLOOS),q,2018-04-01,9.4
+DRTSCLCC,Card lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card lending standards (SLOOS),q,2018-07-01,12.0
+DRTSCLCC,Card lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card lending standards (SLOOS),q,2018-10-01,-2.2
+DRTSCLCC,Card lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card lending standards (SLOOS),q,2019-01-01,6.4
+DRTSCLCC,Card lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card lending standards (SLOOS),q,2019-04-01,15.2
+DRTSCLCC,Card lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card lending standards (SLOOS),q,2019-07-01,8.5
+DRTSCLCC,Card lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card lending standards (SLOOS),q,2019-10-01,10.4
+DRTSCLCC,Card lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card lending standards (SLOOS),q,2020-01-01,13.6
+DRTSCLCC,Card lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card lending standards (SLOOS),q,2020-04-01,38.5
+DRTSCLCC,Card lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card lending standards (SLOOS),q,2020-07-01,71.7
+DRTSCLCC,Card lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card lending standards (SLOOS),q,2020-10-01,26.7
+DRTSCLCC,Card lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card lending standards (SLOOS),q,2021-01-01,-12.8
+DRTSCLCC,Card lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card lending standards (SLOOS),q,2021-04-01,-27.1
+DRTSCLCC,Card lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card lending standards (SLOOS),q,2021-07-01,-37.3
+DRTSCLCC,Card lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card lending standards (SLOOS),q,2021-10-01,-31.1
+DRTSCLCC,Card lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card lending standards (SLOOS),q,2022-01-01,-17.0
+DRTSCLCC,Card lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card lending standards (SLOOS),q,2022-04-01,-10.4
+DRTSCLCC,Card lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card lending standards (SLOOS),q,2022-07-01,0.0
+DRTSCLCC,Card lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card lending standards (SLOOS),q,2022-10-01,18.8
+DRTSCLCC,Card lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card lending standards (SLOOS),q,2023-01-01,28.3
+DRTSCLCC,Card lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card lending standards (SLOOS),q,2023-04-01,30.4
+DRTSCLCC,Card lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card lending standards (SLOOS),q,2023-07-01,36.4
+DRTSCLCC,Card lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card lending standards (SLOOS),q,2023-10-01,28.9
+DRTSCLCC,Card lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card lending standards (SLOOS),q,2024-01-01,22.9
+DRTSCLCC,Card lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card lending standards (SLOOS),q,2024-04-01,21.2
+DRTSCLCC,Card lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card lending standards (SLOOS),q,2024-07-01,20.0
+DRTSCLCC,Card lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card lending standards (SLOOS),q,2024-10-01,18.4
+DRTSCLCC,Card lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card lending standards (SLOOS),q,2025-01-01,9.4
+DRTSCLCC,Card lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card lending standards (SLOOS),q,2025-04-01,5.6
+DRTSCLCC,Card lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card lending standards (SLOOS),q,2025-07-01,10.4
+DRTSCLCC,Card lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card lending standards (SLOOS),q,2025-10-01,4.2
+DRTSCLCC,Card lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card lending standards (SLOOS),q,2026-01-01,0.0
+DRTSCLCC,Card lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card lending standards (SLOOS),q,2026-04-01,2.0
+DRTSCLCC,Card lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card lending standards (SLOOS),q,2026-07-01,6.7
+DRTSCLCC,Card lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Card lending standards (SLOOS),q,2026-10-01,4.0
 DSPIC96,Real disposable personal income (SAAR),Bureau of Economic Analysis (BEA) via FRED,Real disposable personal income (SAAR),m,2021-11-01,16727.1
 DSPIC96,Real disposable personal income (SAAR),Bureau of Economic Analysis (BEA) via FRED,Real disposable personal income (SAAR),m,2021-12-01,16647.1
 DSPIC96,Real disposable personal income (SAAR),Bureau of Economic Analysis (BEA) via FRED,Real disposable personal income (SAAR),m,2022-01-01,16235.8
@@ -11931,19 +11932,20 @@ MVLOASM,Auto ABS issuance (SA),"Federal Reserve Board, G.19 via FRED",Auto ABS i
 MVLOASM,Auto ABS issuance (SA),"Federal Reserve Board, G.19 via FRED",Auto ABS issuance (SA),q,2022-09-01,1472306.45
 MVLOASM,Auto ABS issuance (SA),"Federal Reserve Board, G.19 via FRED",Auto ABS issuance (SA),q,2022-12-01,1494915.44
 MVLOASM,Auto ABS issuance (SA),"Federal Reserve Board, G.19 via FRED",Auto ABS issuance (SA),q,2023-03-01,1511826.76
-MVLOASM,Auto ABS issuance (SA),"Federal Reserve Board, G.19 via FRED",Auto ABS issuance (SA),q,2023-06-01,1530545.48
+MVLOASM,Auto ABS issuance (SA),"Federal Reserve Board, G.19 via FRED",Auto ABS issuance (SA),q,2023-06-01,1530545.51
 MVLOASM,Auto ABS issuance (SA),"Federal Reserve Board, G.19 via FRED",Auto ABS issuance (SA),q,2023-09-01,1547708.46
 MVLOASM,Auto ABS issuance (SA),"Federal Reserve Board, G.19 via FRED",Auto ABS issuance (SA),q,2023-12-01,1550726.62
 MVLOASM,Auto ABS issuance (SA),"Federal Reserve Board, G.19 via FRED",Auto ABS issuance (SA),q,2024-03-01,1550274.04
 MVLOASM,Auto ABS issuance (SA),"Federal Reserve Board, G.19 via FRED",Auto ABS issuance (SA),q,2024-06-01,1557390.77
 MVLOASM,Auto ABS issuance (SA),"Federal Reserve Board, G.19 via FRED",Auto ABS issuance (SA),q,2024-09-01,1562252.41
 MVLOASM,Auto ABS issuance (SA),"Federal Reserve Board, G.19 via FRED",Auto ABS issuance (SA),q,2024-12-01,1564316.81
-MVLOASM,Auto ABS issuance (SA),"Federal Reserve Board, G.19 via FRED",Auto ABS issuance (SA),q,2025-03-01,1555165.6
+MVLOASM,Auto ABS issuance (SA),"Federal Reserve Board, G.19 via FRED",Auto ABS issuance (SA),q,2025-03-01,1555165.59
 MVLOASM,Auto ABS issuance (SA),"Federal Reserve Board, G.19 via FRED",Auto ABS issuance (SA),q,2025-06-01,1560783.49
 MVLOASM,Auto ABS issuance (SA),"Federal Reserve Board, G.19 via FRED",Auto ABS issuance (SA),q,2025-09-01,1560732.63
 MVLOASM,Auto ABS issuance (SA),"Federal Reserve Board, G.19 via FRED",Auto ABS issuance (SA),q,2025-12-01,1562179.54
 MVLOASM,Auto ABS issuance (SA),"Federal Reserve Board, G.19 via FRED",Auto ABS issuance (SA),q,2026-03-01,1559740.62
-MVLOASM,Auto ABS issuance (SA),"Federal Reserve Board, G.19 via FRED",Auto ABS issuance (SA),q,2026-06-01,1574630.04
+MVLOASM,Auto ABS issuance (SA),"Federal Reserve Board, G.19 via FRED",Auto ABS issuance (SA),q,2026-06-01,1574640.37
+MVLOASM,Auto ABS issuance (SA),"Federal Reserve Board, G.19 via FRED",Auto ABS issuance (SA),q,2026-09-01,1589783.76
 NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2006-11-01,1523402.89
 NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2006-12-01,1532838.92
 NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2007-01-01,1530316.12
@@ -12141,47 +12143,48 @@ NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRE
 NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2023-01-01,3673726.29
 NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2023-02-01,3680882.71
 NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2023-03-01,3688224.03
-NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2023-04-01,3687580.04
-NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2023-05-01,3684425.16
-NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2023-06-01,3701363.25
-NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2023-07-01,3704039.51
-NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2023-08-01,3674941.65
-NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2023-09-01,3677904.8
-NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2023-10-01,3686712.93
-NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2023-11-01,3691613.79
-NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2023-12-01,3689360.04
+NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2023-04-01,3687580.24
+NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2023-05-01,3684424.59
+NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2023-06-01,3701363.28
+NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2023-07-01,3704039.97
+NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2023-08-01,3674941.85
+NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2023-09-01,3677904.79
+NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2023-10-01,3686712.96
+NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2023-11-01,3691613.78
+NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2023-12-01,3689360.03
 NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2024-01-01,3694115.37
-NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2024-02-01,3695806.73
-NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2024-03-01,3693979.09
+NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2024-02-01,3695806.76
+NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2024-03-01,3693979.08
 NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2024-04-01,3693276.73
-NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2024-05-01,3693556.51
-NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2024-06-01,3695485.88
-NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2024-07-01,3708692.39
+NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2024-05-01,3693556.5
+NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2024-06-01,3695485.87
+NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2024-07-01,3708692.38
 NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2024-08-01,3715582.9
-NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2024-09-01,3715864.24
-NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2024-10-01,3719154.82
+NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2024-09-01,3715864.23
+NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2024-10-01,3719154.81
 NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2024-11-01,3723599.29
-NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2024-12-01,3650263.96
-NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2025-01-01,3653683.6
-NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2025-02-01,3653425.72
-NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2025-03-01,3729061.7
-NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2025-04-01,3738801.57
-NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2025-05-01,3748056.81
+NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2024-12-01,3650263.95
+NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2025-01-01,3653683.7
+NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2025-02-01,3653425.91
+NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2025-03-01,3729061.69
+NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2025-04-01,3738801.76
+NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2025-05-01,3748056.91
 NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2025-06-01,3741791.67
-NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2025-07-01,3745632.81
-NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2025-08-01,3750278.11
-NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2025-09-01,3759249.83
-NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2025-10-01,3762686.92
-NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2025-11-01,3766743.23
-NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2025-12-01,3774498.48
-NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2026-01-01,3777172.0
-NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2026-02-01,3783269.91
-NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2026-03-01,3793246.55
-NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2026-04-01,3802621.65
-NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2026-05-01,3807723.71
-NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2026-06-01,3816339.04
-NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2026-07-01,3831297.14
-NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2026-08-01,3844364.44
+NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2025-07-01,3745672.99
+NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2025-08-01,3750358.02
+NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2025-09-01,3759249.85
+NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2025-10-01,3762775.73
+NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2025-11-01,3766837.08
+NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2025-12-01,3774498.49
+NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2026-01-01,3777183.18
+NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2026-02-01,3783269.86
+NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2026-03-01,3793246.65
+NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2026-04-01,3802712.79
+NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2026-05-01,3808066.05
+NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2026-06-01,3816336.24
+NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2026-07-01,3831263.71
+NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2026-08-01,3844423.02
+NONREVSL,Non-revolving consumer credit (SA),"Federal Reserve Board, G.19 via FRED",Non-revolving consumer credit (SA),m,2026-09-01,3855963.04
 OPHNFB,Nonfarm productivity (SAAR),Bureau of Labor Statistics (BLS) via FRED,Nonfarm productivity (SAAR),q,2017-01-01,99.43
 OPHNFB,Nonfarm productivity (SAAR),Bureau of Labor Statistics (BLS) via FRED,Nonfarm productivity (SAAR),q,2017-04-01,99.48
 OPHNFB,Nonfarm productivity (SAAR),Bureau of Labor Statistics (BLS) via FRED,Nonfarm productivity (SAAR),q,2017-07-01,100.29
@@ -12892,7 +12895,7 @@ REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving c
 REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2023-01-01,1199848.64
 REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2023-02-01,1204657.9
 REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2023-03-01,1220942.04
-REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2023-04-01,1232544.16
+REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2023-04-01,1232544.63
 REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2023-05-01,1241274.33
 REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2023-06-01,1247630.05
 REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2023-07-01,1255749.42
@@ -12913,26 +12916,27 @@ REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving c
 REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2024-10-01,1352433.61
 REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2024-11-01,1342090.48
 REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2024-12-01,1296965.62
-REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2025-01-01,1301935.81
-REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2025-02-01,1304181.74
-REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2025-03-01,1292802.54
-REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2025-04-01,1299412.58
-REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2025-05-01,1300224.95
-REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2025-06-01,1301742.16
-REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2025-07-01,1310281.47
-REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2025-08-01,1308311.66
-REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2025-09-01,1312713.48
-REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2025-10-01,1317077.74
-REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2025-11-01,1316336.21
-REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2025-12-01,1324322.34
-REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2026-01-01,1326040.46
-REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2026-02-01,1327120.87
+REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2025-01-01,1301937.46
+REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2025-02-01,1304184.87
+REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2025-03-01,1292802.44
+REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2025-04-01,1299411.16
+REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2025-05-01,1300222.89
+REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2025-06-01,1301742.11
+REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2025-07-01,1310282.17
+REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2025-08-01,1308311.62
+REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2025-09-01,1312713.57
+REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2025-10-01,1317094.33
+REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2025-11-01,1316369.91
+REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2025-12-01,1324322.29
+REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2026-01-01,1326096.05
+REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2026-02-01,1327287.7
 REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2026-03-01,1338182.22
-REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2026-04-01,1349906.26
-REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2026-05-01,1347697.77
+REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2026-04-01,1349979.48
+REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2026-05-01,1347844.7
 REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2026-06-01,1354418.69
-REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2026-07-01,1357200.7
-REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2026-08-01,1352414.0
+REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2026-07-01,1357122.75
+REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2026-08-01,1352154.35
+REVOLSL,Revolving credit (SA),"Federal Reserve Board, G.19 via FRED",Revolving credit (SA),m,2026-09-01,1368452.96
 RIFLPBCIANM60NM,New car loan rate: 60-month (NSA),"Federal Reserve Board, G.19 via FRED",New car loan rate: 60-month (NSA),q,2006-11-01,7.78
 RIFLPBCIANM60NM,New car loan rate: 60-month (NSA),"Federal Reserve Board, G.19 via FRED",New car loan rate: 60-month (NSA),q,2007-02-01,7.71
 RIFLPBCIANM60NM,New car loan rate: 60-month (NSA),"Federal Reserve Board, G.19 via FRED",New car loan rate: 60-month (NSA),q,2007-05-01,7.78
@@ -13210,86 +13214,87 @@ SLOASM,Student loan ABS issuance (SA),"Federal Reserve Board, G.19 via FRED",Stu
 SLOASM,Student loan ABS issuance (SA),"Federal Reserve Board, G.19 via FRED",Student loan ABS issuance (SA),q,2025-12-01,1834690.1
 SLOASM,Student loan ABS issuance (SA),"Federal Reserve Board, G.19 via FRED",Student loan ABS issuance (SA),q,2026-03-01,1862697.6
 SLOASM,Student loan ABS issuance (SA),"Federal Reserve Board, G.19 via FRED",Student loan ABS issuance (SA),q,2026-06-01,1861849.37
-STDSAUTO,Auto standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto standards tightening (SLOOS),q,2017-01-01,11.7
-STDSAUTO,Auto standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto standards tightening (SLOOS),q,2017-04-01,11.5
-STDSAUTO,Auto standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto standards tightening (SLOOS),q,2017-07-01,7.7
-STDSAUTO,Auto standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto standards tightening (SLOOS),q,2017-10-01,9.8
-STDSAUTO,Auto standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto standards tightening (SLOOS),q,2018-01-01,4.9
-STDSAUTO,Auto standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto standards tightening (SLOOS),q,2018-04-01,6.5
-STDSAUTO,Auto standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto standards tightening (SLOOS),q,2018-07-01,-3.5
-STDSAUTO,Auto standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto standards tightening (SLOOS),q,2018-10-01,3.6
-STDSAUTO,Auto standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto standards tightening (SLOOS),q,2019-01-01,1.9
-STDSAUTO,Auto standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto standards tightening (SLOOS),q,2019-04-01,1.8
-STDSAUTO,Auto standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto standards tightening (SLOOS),q,2019-07-01,3.5
-STDSAUTO,Auto standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto standards tightening (SLOOS),q,2019-10-01,0.0
-STDSAUTO,Auto standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto standards tightening (SLOOS),q,2020-01-01,8.9
-STDSAUTO,Auto standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto standards tightening (SLOOS),q,2020-04-01,16.0
-STDSAUTO,Auto standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto standards tightening (SLOOS),q,2020-07-01,55.4
-STDSAUTO,Auto standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto standards tightening (SLOOS),q,2020-10-01,13.5
-STDSAUTO,Auto standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto standards tightening (SLOOS),q,2021-01-01,-7.0
-STDSAUTO,Auto standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto standards tightening (SLOOS),q,2021-04-01,-17.5
-STDSAUTO,Auto standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto standards tightening (SLOOS),q,2021-07-01,-18.6
-STDSAUTO,Auto standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto standards tightening (SLOOS),q,2021-10-01,-9.4
-STDSAUTO,Auto standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto standards tightening (SLOOS),q,2022-01-01,-14.5
-STDSAUTO,Auto standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto standards tightening (SLOOS),q,2022-04-01,-5.8
-STDSAUTO,Auto standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto standards tightening (SLOOS),q,2022-07-01,1.9
-STDSAUTO,Auto standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto standards tightening (SLOOS),q,2022-10-01,2.0
-STDSAUTO,Auto standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto standards tightening (SLOOS),q,2023-01-01,17.3
-STDSAUTO,Auto standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto standards tightening (SLOOS),q,2023-04-01,27.5
-STDSAUTO,Auto standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto standards tightening (SLOOS),q,2023-07-01,14.6
-STDSAUTO,Auto standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto standards tightening (SLOOS),q,2023-10-01,14.6
-STDSAUTO,Auto standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto standards tightening (SLOOS),q,2024-01-01,6.3
-STDSAUTO,Auto standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto standards tightening (SLOOS),q,2024-04-01,9.8
-STDSAUTO,Auto standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto standards tightening (SLOOS),q,2024-07-01,0.0
-STDSAUTO,Auto standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto standards tightening (SLOOS),q,2024-10-01,4.1
-STDSAUTO,Auto standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto standards tightening (SLOOS),q,2025-01-01,-3.8
-STDSAUTO,Auto standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto standards tightening (SLOOS),q,2025-04-01,1.9
-STDSAUTO,Auto standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto standards tightening (SLOOS),q,2025-07-01,-3.8
-STDSAUTO,Auto standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto standards tightening (SLOOS),q,2025-10-01,-5.8
-STDSAUTO,Auto standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto standards tightening (SLOOS),q,2026-01-01,-6.1
-STDSAUTO,Auto standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto standards tightening (SLOOS),q,2026-04-01,-2.0
-STDSAUTO,Auto standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto standards tightening (SLOOS),q,2026-07-01,-4.5
-STDSAUTO,Auto standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto standards tightening (SLOOS),q,2026-10-01,-2.1
-STDSOTHCONS,Other consumer standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer standards tightening (SLOOS),q,2017-01-01,3.1
-STDSOTHCONS,Other consumer standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer standards tightening (SLOOS),q,2017-04-01,0.0
-STDSOTHCONS,Other consumer standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer standards tightening (SLOOS),q,2017-07-01,2.9
-STDSOTHCONS,Other consumer standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer standards tightening (SLOOS),q,2017-10-01,-1.6
-STDSOTHCONS,Other consumer standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer standards tightening (SLOOS),q,2018-01-01,0.0
-STDSOTHCONS,Other consumer standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer standards tightening (SLOOS),q,2018-04-01,-4.8
-STDSOTHCONS,Other consumer standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer standards tightening (SLOOS),q,2018-07-01,-3.3
-STDSOTHCONS,Other consumer standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer standards tightening (SLOOS),q,2018-10-01,-3.6
-STDSOTHCONS,Other consumer standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer standards tightening (SLOOS),q,2019-01-01,1.7
-STDSOTHCONS,Other consumer standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer standards tightening (SLOOS),q,2019-04-01,1.7
-STDSOTHCONS,Other consumer standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer standards tightening (SLOOS),q,2019-07-01,8.3
-STDSOTHCONS,Other consumer standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer standards tightening (SLOOS),q,2019-10-01,6.7
-STDSOTHCONS,Other consumer standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer standards tightening (SLOOS),q,2020-01-01,1.6
-STDSOTHCONS,Other consumer standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer standards tightening (SLOOS),q,2020-04-01,21.8
-STDSOTHCONS,Other consumer standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer standards tightening (SLOOS),q,2020-07-01,60.7
-STDSOTHCONS,Other consumer standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer standards tightening (SLOOS),q,2020-10-01,16.4
-STDSOTHCONS,Other consumer standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer standards tightening (SLOOS),q,2021-01-01,-8.3
-STDSOTHCONS,Other consumer standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer standards tightening (SLOOS),q,2021-04-01,-17.5
-STDSOTHCONS,Other consumer standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer standards tightening (SLOOS),q,2021-07-01,-16.7
-STDSOTHCONS,Other consumer standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer standards tightening (SLOOS),q,2021-10-01,-15.5
-STDSOTHCONS,Other consumer standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer standards tightening (SLOOS),q,2022-01-01,-14.8
-STDSOTHCONS,Other consumer standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer standards tightening (SLOOS),q,2022-04-01,-3.4
-STDSOTHCONS,Other consumer standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer standards tightening (SLOOS),q,2022-07-01,1.7
-STDSOTHCONS,Other consumer standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer standards tightening (SLOOS),q,2022-10-01,13.6
-STDSOTHCONS,Other consumer standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer standards tightening (SLOOS),q,2023-01-01,10.2
-STDSOTHCONS,Other consumer standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer standards tightening (SLOOS),q,2023-04-01,23.6
-STDSOTHCONS,Other consumer standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer standards tightening (SLOOS),q,2023-07-01,20.8
-STDSOTHCONS,Other consumer standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer standards tightening (SLOOS),q,2023-10-01,29.4
-STDSOTHCONS,Other consumer standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer standards tightening (SLOOS),q,2024-01-01,22.6
-STDSOTHCONS,Other consumer standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer standards tightening (SLOOS),q,2024-04-01,13.7
-STDSOTHCONS,Other consumer standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer standards tightening (SLOOS),q,2024-07-01,12.0
-STDSOTHCONS,Other consumer standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer standards tightening (SLOOS),q,2024-10-01,1.9
-STDSOTHCONS,Other consumer standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer standards tightening (SLOOS),q,2025-01-01,3.6
-STDSOTHCONS,Other consumer standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer standards tightening (SLOOS),q,2025-04-01,3.4
-STDSOTHCONS,Other consumer standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer standards tightening (SLOOS),q,2025-07-01,3.8
-STDSOTHCONS,Other consumer standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer standards tightening (SLOOS),q,2025-10-01,0.0
-STDSOTHCONS,Other consumer standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer standards tightening (SLOOS),q,2026-01-01,2.0
-STDSOTHCONS,Other consumer standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer standards tightening (SLOOS),q,2026-04-01,5.5
-STDSOTHCONS,Other consumer standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer standards tightening (SLOOS),q,2026-07-01,0.0
-STDSOTHCONS,Other consumer standards tightening (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer standards tightening (SLOOS),q,2026-10-01,1.9
+SLOASM,Student loan ABS issuance (SA),"Federal Reserve Board, G.19 via FRED",Student loan ABS issuance (SA),q,2026-09-01,1884550.46
+STDSAUTO,Auto lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto lending standards (SLOOS),q,2017-01-01,11.7
+STDSAUTO,Auto lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto lending standards (SLOOS),q,2017-04-01,11.5
+STDSAUTO,Auto lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto lending standards (SLOOS),q,2017-07-01,7.7
+STDSAUTO,Auto lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto lending standards (SLOOS),q,2017-10-01,9.8
+STDSAUTO,Auto lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto lending standards (SLOOS),q,2018-01-01,4.9
+STDSAUTO,Auto lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto lending standards (SLOOS),q,2018-04-01,6.5
+STDSAUTO,Auto lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto lending standards (SLOOS),q,2018-07-01,-3.5
+STDSAUTO,Auto lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto lending standards (SLOOS),q,2018-10-01,3.6
+STDSAUTO,Auto lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto lending standards (SLOOS),q,2019-01-01,1.9
+STDSAUTO,Auto lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto lending standards (SLOOS),q,2019-04-01,1.8
+STDSAUTO,Auto lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto lending standards (SLOOS),q,2019-07-01,3.5
+STDSAUTO,Auto lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto lending standards (SLOOS),q,2019-10-01,0.0
+STDSAUTO,Auto lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto lending standards (SLOOS),q,2020-01-01,8.9
+STDSAUTO,Auto lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto lending standards (SLOOS),q,2020-04-01,16.0
+STDSAUTO,Auto lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto lending standards (SLOOS),q,2020-07-01,55.4
+STDSAUTO,Auto lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto lending standards (SLOOS),q,2020-10-01,13.5
+STDSAUTO,Auto lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto lending standards (SLOOS),q,2021-01-01,-7.0
+STDSAUTO,Auto lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto lending standards (SLOOS),q,2021-04-01,-17.5
+STDSAUTO,Auto lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto lending standards (SLOOS),q,2021-07-01,-18.6
+STDSAUTO,Auto lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto lending standards (SLOOS),q,2021-10-01,-9.4
+STDSAUTO,Auto lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto lending standards (SLOOS),q,2022-01-01,-14.5
+STDSAUTO,Auto lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto lending standards (SLOOS),q,2022-04-01,-5.8
+STDSAUTO,Auto lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto lending standards (SLOOS),q,2022-07-01,1.9
+STDSAUTO,Auto lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto lending standards (SLOOS),q,2022-10-01,2.0
+STDSAUTO,Auto lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto lending standards (SLOOS),q,2023-01-01,17.3
+STDSAUTO,Auto lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto lending standards (SLOOS),q,2023-04-01,27.5
+STDSAUTO,Auto lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto lending standards (SLOOS),q,2023-07-01,14.6
+STDSAUTO,Auto lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto lending standards (SLOOS),q,2023-10-01,14.6
+STDSAUTO,Auto lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto lending standards (SLOOS),q,2024-01-01,6.3
+STDSAUTO,Auto lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto lending standards (SLOOS),q,2024-04-01,9.8
+STDSAUTO,Auto lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto lending standards (SLOOS),q,2024-07-01,0.0
+STDSAUTO,Auto lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto lending standards (SLOOS),q,2024-10-01,4.1
+STDSAUTO,Auto lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto lending standards (SLOOS),q,2025-01-01,-3.8
+STDSAUTO,Auto lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto lending standards (SLOOS),q,2025-04-01,1.9
+STDSAUTO,Auto lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto lending standards (SLOOS),q,2025-07-01,-3.8
+STDSAUTO,Auto lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto lending standards (SLOOS),q,2025-10-01,-5.8
+STDSAUTO,Auto lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto lending standards (SLOOS),q,2026-01-01,-6.1
+STDSAUTO,Auto lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto lending standards (SLOOS),q,2026-04-01,-2.0
+STDSAUTO,Auto lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto lending standards (SLOOS),q,2026-07-01,-4.5
+STDSAUTO,Auto lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Auto lending standards (SLOOS),q,2026-10-01,-2.1
+STDSOTHCONS,Other consumer lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer lending standards (SLOOS),q,2017-01-01,3.1
+STDSOTHCONS,Other consumer lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer lending standards (SLOOS),q,2017-04-01,0.0
+STDSOTHCONS,Other consumer lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer lending standards (SLOOS),q,2017-07-01,2.9
+STDSOTHCONS,Other consumer lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer lending standards (SLOOS),q,2017-10-01,-1.6
+STDSOTHCONS,Other consumer lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer lending standards (SLOOS),q,2018-01-01,0.0
+STDSOTHCONS,Other consumer lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer lending standards (SLOOS),q,2018-04-01,-4.8
+STDSOTHCONS,Other consumer lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer lending standards (SLOOS),q,2018-07-01,-3.3
+STDSOTHCONS,Other consumer lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer lending standards (SLOOS),q,2018-10-01,-3.6
+STDSOTHCONS,Other consumer lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer lending standards (SLOOS),q,2019-01-01,1.7
+STDSOTHCONS,Other consumer lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer lending standards (SLOOS),q,2019-04-01,1.7
+STDSOTHCONS,Other consumer lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer lending standards (SLOOS),q,2019-07-01,8.3
+STDSOTHCONS,Other consumer lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer lending standards (SLOOS),q,2019-10-01,6.7
+STDSOTHCONS,Other consumer lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer lending standards (SLOOS),q,2020-01-01,1.6
+STDSOTHCONS,Other consumer lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer lending standards (SLOOS),q,2020-04-01,21.8
+STDSOTHCONS,Other consumer lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer lending standards (SLOOS),q,2020-07-01,60.7
+STDSOTHCONS,Other consumer lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer lending standards (SLOOS),q,2020-10-01,16.4
+STDSOTHCONS,Other consumer lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer lending standards (SLOOS),q,2021-01-01,-8.3
+STDSOTHCONS,Other consumer lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer lending standards (SLOOS),q,2021-04-01,-17.5
+STDSOTHCONS,Other consumer lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer lending standards (SLOOS),q,2021-07-01,-16.7
+STDSOTHCONS,Other consumer lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer lending standards (SLOOS),q,2021-10-01,-15.5
+STDSOTHCONS,Other consumer lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer lending standards (SLOOS),q,2022-01-01,-14.8
+STDSOTHCONS,Other consumer lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer lending standards (SLOOS),q,2022-04-01,-3.4
+STDSOTHCONS,Other consumer lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer lending standards (SLOOS),q,2022-07-01,1.7
+STDSOTHCONS,Other consumer lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer lending standards (SLOOS),q,2022-10-01,13.6
+STDSOTHCONS,Other consumer lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer lending standards (SLOOS),q,2023-01-01,10.2
+STDSOTHCONS,Other consumer lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer lending standards (SLOOS),q,2023-04-01,23.6
+STDSOTHCONS,Other consumer lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer lending standards (SLOOS),q,2023-07-01,20.8
+STDSOTHCONS,Other consumer lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer lending standards (SLOOS),q,2023-10-01,29.4
+STDSOTHCONS,Other consumer lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer lending standards (SLOOS),q,2024-01-01,22.6
+STDSOTHCONS,Other consumer lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer lending standards (SLOOS),q,2024-04-01,13.7
+STDSOTHCONS,Other consumer lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer lending standards (SLOOS),q,2024-07-01,12.0
+STDSOTHCONS,Other consumer lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer lending standards (SLOOS),q,2024-10-01,1.9
+STDSOTHCONS,Other consumer lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer lending standards (SLOOS),q,2025-01-01,3.6
+STDSOTHCONS,Other consumer lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer lending standards (SLOOS),q,2025-04-01,3.4
+STDSOTHCONS,Other consumer lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer lending standards (SLOOS),q,2025-07-01,3.8
+STDSOTHCONS,Other consumer lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer lending standards (SLOOS),q,2025-10-01,0.0
+STDSOTHCONS,Other consumer lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer lending standards (SLOOS),q,2026-01-01,2.0
+STDSOTHCONS,Other consumer lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer lending standards (SLOOS),q,2026-04-01,5.5
+STDSOTHCONS,Other consumer lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer lending standards (SLOOS),q,2026-07-01,0.0
+STDSOTHCONS,Other consumer lending standards (SLOOS),Federal Reserve Board (SLOOS) via FRED,Other consumer lending standards (SLOOS),q,2026-10-01,1.9
 T10Y2Y,10Y–2Y Treasury spread (yield curve),Federal Reserve Board via FRED,10Y–2Y Treasury spread (yield curve),d,2006-11-01,-0.09
 T10Y2Y,10Y–2Y Treasury spread (yield curve),Federal Reserve Board via FRED,10Y–2Y Treasury spread (yield curve),d,2006-11-02,-0.07
 T10Y2Y,10Y–2Y Treasury spread (yield curve),Federal Reserve Board via FRED,10Y–2Y Treasury spread (yield curve),d,2006-11-03,-0.1
@@ -18297,6 +18302,7 @@ T10Y2Y,10Y–2Y Treasury spread (yield curve),Federal Reserve Board via FRED,10Y
 T10Y2Y,10Y–2Y Treasury spread (yield curve),Federal Reserve Board via FRED,10Y–2Y Treasury spread (yield curve),d,2026-11-03,0.34
 T10Y2Y,10Y–2Y Treasury spread (yield curve),Federal Reserve Board via FRED,10Y–2Y Treasury spread (yield curve),d,2026-11-04,0.32
 T10Y2Y,10Y–2Y Treasury spread (yield curve),Federal Reserve Board via FRED,10Y–2Y Treasury spread (yield curve),d,2026-11-05,0.38
+T10Y2Y,10Y–2Y Treasury spread (yield curve),Federal Reserve Board via FRED,10Y–2Y Treasury spread (yield curve),d,2026-11-06,0.35
 TCU,Capacity utilization: total industry (SA),Federal Reserve Board via FRED,Capacity utilization: total industry (SA),m,2006-11-01,79.97
 TCU,Capacity utilization: total industry (SA),Federal Reserve Board via FRED,Capacity utilization: total industry (SA),m,2006-12-01,80.6
 TCU,Capacity utilization: total industry (SA),Federal Reserve Board via FRED,Capacity utilization: total industry (SA),m,2007-01-01,80.15
@@ -18893,47 +18899,48 @@ TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via 
 TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2023-01-01,4873574.92
 TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2023-02-01,4885540.61
 TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2023-03-01,4909166.07
-TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2023-04-01,4920124.19
-TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2023-05-01,4925699.5
-TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2023-06-01,4948993.3
-TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2023-07-01,4959788.93
-TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2023-08-01,4946750.25
-TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2023-09-01,4955832.25
-TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2023-10-01,4969073.22
-TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2023-11-01,4993197.93
-TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2023-12-01,4988225.98
+TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2023-04-01,4920124.87
+TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2023-05-01,4925698.92
+TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2023-06-01,4948993.33
+TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2023-07-01,4959789.39
+TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2023-08-01,4946750.45
+TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2023-09-01,4955832.24
+TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2023-10-01,4969073.25
+TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2023-11-01,4993197.92
+TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2023-12-01,4988225.97
 TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2024-01-01,5002475.58
-TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2024-02-01,5015273.37
+TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2024-02-01,5015273.4
 TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2024-03-01,5014899.75
-TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2024-04-01,5016165.95
+TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2024-04-01,5016165.94
 TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2024-05-01,5024842.11
 TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2024-06-01,5026364.81
-TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2024-07-01,5046177.04
-TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2024-08-01,5055767.39
+TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2024-07-01,5046177.03
+TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2024-08-01,5055767.38
 TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2024-09-01,5058345.12
-TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2024-10-01,5071588.43
+TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2024-10-01,5071588.42
 TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2024-11-01,5065689.77
 TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2024-12-01,4947229.57
-TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2025-01-01,4955619.41
-TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2025-02-01,4957607.46
-TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2025-03-01,5021864.24
-TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2025-04-01,5038214.15
-TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2025-05-01,5048281.76
-TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2025-06-01,5043533.83
-TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2025-07-01,5055914.28
-TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2025-08-01,5058589.77
-TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2025-09-01,5071963.31
-TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2025-10-01,5079764.65
-TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2025-11-01,5083079.45
-TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2025-12-01,5098820.82
-TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2026-01-01,5103212.46
-TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2026-02-01,5110390.78
-TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2026-03-01,5131428.77
-TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2026-04-01,5152527.91
-TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2026-05-01,5155421.48
-TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2026-06-01,5170757.74
-TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2026-07-01,5188497.83
-TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2026-08-01,5196778.44
+TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2025-01-01,4955621.16
+TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2025-02-01,4957610.78
+TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2025-03-01,5021864.14
+TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2025-04-01,5038212.92
+TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2025-05-01,5048279.8
+TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2025-06-01,5043533.78
+TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2025-07-01,5055955.16
+TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2025-08-01,5058669.63
+TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2025-09-01,5071963.43
+TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2025-10-01,5079870.07
+TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2025-11-01,5083206.98
+TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2025-12-01,5098820.78
+TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2026-01-01,5103279.23
+TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2026-02-01,5110557.56
+TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2026-03-01,5131428.88
+TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2026-04-01,5152692.28
+TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2026-05-01,5155910.75
+TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2026-06-01,5170754.93
+TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2026-07-01,5188386.46
+TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2026-08-01,5196577.36
+TOTALSL,Total consumer credit outstanding (SA),"Federal Reserve Board, G.19 via FRED",Total consumer credit outstanding (SA),m,2026-09-01,5224415.99
 U6RATE,U-6 underemployment rate (SA),Bureau of Labor Statistics (BLS) via FRED,U-6 underemployment rate (SA),m,2016-11-01,9.4
 U6RATE,U-6 underemployment rate (SA),Bureau of Labor Statistics (BLS) via FRED,U-6 underemployment rate (SA),m,2016-12-01,9.2
 U6RATE,U-6 underemployment rate (SA),Bureau of Labor Statistics (BLS) via FRED,U-6 underemployment rate (SA),m,2017-01-01,9.2
