@@ -4,10 +4,10 @@
 # Note: Rates are fractions (0.05 = 5%).
 # Note: Trusts that test every note with one figure (Chase, Citi, Bank of America, Capital One, Synchrony, Wells Fargo) are in credit-card-trust-performance.csv.
 # Columns: trust = the trust's ticker; trust_name = the issuing entity; month = collection month, YYYY-MM; series = the series, as the statement names it; excess_spread = the series' excess spread for the month as its statement prints it, annualized; included = whether the trust-level figure and the Weakest series view count this series this month; reason = why not: 'first month' (a partial first period) or 'repaid or set aside' (no collateral left: its notes repaid this month, or the cash to repay them set aside in full); 'no figure' where the statement prints none
-# Data through: 2026-09
+# Data through: 2026-10
 # Page: https://data.consumercreditmatters.com/abs/credit-card/index.html?m=excess_weakest
 # Licence: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/) — free to use, share and adapt with attribution to Consumer Credit Matters
-# Cite as: Consumer Credit Matters, “Credit Card ABS — Excess Spread by Series”, data through 2026-09, https://data.consumercreditmatters.com/download/credit-card-series-excess-spread.csv
+# Cite as: Consumer Credit Matters, “Credit Card ABS — Excess Spread by Series”, data through 2026-10, https://data.consumercreditmatters.com/download/credit-card-series-excess-spread.csv
 # Read in Python: pandas.read_csv(url, comment="#")
 trust,trust_name,month,series,excess_spread,included,reason
 AMXCA,American Express Credit Account Master Trust,2006-06,2006-2,0.118542,False,first month
@@ -5402,6 +5402,9 @@ FNBO,First National Master Note Trust,2026-08,2026-1,0.1302,True,
 FNBO,First National Master Note Trust,2026-09,2024-1,0.1273,True,
 FNBO,First National Master Note Trust,2026-09,2025-1,0.1312,True,
 FNBO,First National Master Note Trust,2026-09,2026-1,0.1331,True,
+FNBO,First National Master Note Trust,2026-10,2024-1,0.1298,True,
+FNBO,First National Master Note Trust,2026-10,2025-1,0.1336,True,
+FNBO,First National Master Note Trust,2026-10,2026-1,0.1354,True,
 SYNCCMNT,GE Capital / Synchrony Credit Card Master Note Trust,2004-07,2004-1,0.114707,False,first month
 SYNCCMNT,GE Capital / Synchrony Credit Card Master Note Trust,2004-08,2004-1,0.135136,True,
 SYNCCMNT,GE Capital / Synchrony Credit Card Master Note Trust,2004-09,2004-1,0.124203,True,
