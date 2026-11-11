@@ -11,6 +11,12 @@
 /podcasts /podcasts/ 301
 /disclaimer /disclaimer/ 301
 /subscribe /subscribe/ 301
+# GMCAR 2026-3, linked by the 2026-07-13 issue
+/abs/issuance/presale/gmcar-2026-3.html /abs/issuance/presale/gm-financial-consumer-automobile-receivables-trust-2026-3.html 301
+/abs/issuance/presale/gmcar-2026-3 /abs/issuance/presale/gm-financial-consumer-automobile-receivables-trust-2026-3.html 301
+# PILOT 2026-1, linked by the 2026-06-08 issue
+/abs/issuance/presale/porsche-innovative-lease-owner-trust-pilot-2026-1.html /abs/issuance/presale/porsche-innovative-lease-owner-trust-2026-1.html 301
+/abs/issuance/presale/porsche-innovative-lease-owner-trust-pilot-2026-1 /abs/issuance/presale/porsche-innovative-lease-owner-trust-2026-1.html 301
 # www is the apex
 https://www.consumercreditmatters.com/* https://consumercreditmatters.com/:splat 301
 # every link to the data subdomain keeps working
