@@ -1,0 +1,17 @@
+# Redirects for Cloudflare Pages — written by src/workflows/site_redirects.py on every publish; do not edit here.
+# Each address ever shared keeps working on the one-domain site: the Squarespace pages, www, the data subdomain.
+# Squarespace's home page address
+/home / 301
+# the Squarespace newsletter page that preceded the archive
+/newsletter-old /newsletter/ 301
+# the archive; Squarespace forwarded this to the data subdomain
+/newsletter /newsletter/ 301
+/about /about/ 301
+/contact /contact/ 301
+/podcasts /podcasts/ 301
+/disclaimer /disclaimer/ 301
+/subscribe /subscribe/ 301
+# www is the apex
+https://www.consumercreditmatters.com/* https://consumercreditmatters.com/:splat 301
+# every link to the data subdomain keeps working
+https://data.consumercreditmatters.com/* https://consumercreditmatters.com/:splat 301

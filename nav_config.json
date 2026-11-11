@@ -40,6 +40,15 @@
           "type": "panel",
           "url": "abs/issuance/index.html",
           "badge": null
+        },
+        {
+          "id": "abs-my-portfolio",
+          "label": "My Portfolio",
+          "icon": "star",
+          "type": "panel",
+          "url": "abs/my-portfolio/index.html",
+          "badge": null,
+          "home": false
         }
       ]
     },
