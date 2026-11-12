@@ -4,9 +4,9 @@
 # Note: Not in this file (shown on the page under their owners' terms): series from Freddie Mac, Moody’s, National Association of Realtors, S&P Dow Jones Indices / CoreLogic, University of Michigan Surveys of Consumers.
 # Columns: series = FRED series id, or nyfed_* for NY Fed; title = the dashboard's name for the series; source = the publisher; units = as the source reports; frequency = d/w/m/q/a; date = observation date; value = the figure
 # Data through: 2026-11-10
-# Page: https://data.consumercreditmatters.com/macro/index.html
+# Page: https://consumercreditmatters.com/macro/index.html
 # Licence: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/) — free to use, share and adapt with attribution to Consumer Credit Matters
-# Cite as: Consumer Credit Matters, “Macro Indicators”, data through 2026-11-10, https://data.consumercreditmatters.com/download/macro-indicators.csv
+# Cite as: Consumer Credit Matters, “Macro Indicators”, data through 2026-11-10, https://consumercreditmatters.com/download/macro-indicators.csv
 # Read in Python: pandas.read_csv(url, comment="#")
 series,title,source,units,frequency,date,value
 A191RL1Q225SBEA,Real GDP growth (annualized),Bureau of Economic Analysis (BEA) via FRED,Real GDP growth (annualized),q,2007-01-01,1.2

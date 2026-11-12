@@ -1,5 +1,5 @@
 Consumer Credit Matters — data downloads
-https://data.consumercreditmatters.com/download/
+https://consumercreditmatters.com/download/
 
 Licence: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Use, share and adapt freely with attribution to Consumer Credit Matters.
 Each CSV opens with '#' comment lines giving its source, definition, the month it runs through,
