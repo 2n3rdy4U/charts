@@ -1,14 +1,14 @@
 # Consumer Credit Matters — Auto Lease ABS — Residual Gain (Loss) on Vehicles Sold
 # Source: Monthly servicer reports (SEC Form 10-D) of the public auto-lease shelves, compiled by Consumer Credit Matters
-# Definition: The servicer's gain or loss on the leased vehicles it sold in the month, as a share of the residual value it measures them against, summed across each shelf's deals; https://data.consumercreditmatters.com/abs/methodology.html#losses
+# Definition: The servicer's gain or loss on the leased vehicles it sold in the month, as a share of the residual value it measures them against, summed across each shelf's deals; https://consumercreditmatters.com/abs/methodology.html#losses
 # Note: Rates are fractions (0.05 = 5%).
 # Note: Servicers differ in which vehicles they count and which residual value they use (the methodology says how); compare a shelf's trend, not levels across shelves.
 # Note: Months with less than $500,000 of residual value sold are not shown.
 # Columns: shelf = the shelf's ticker; shelf_name = the issuer; month = collection month, YYYY-MM; n_deals = deals with vehicles sold that month; residual_value_sold = residual value of the vehicles sold, US dollars; residual_gain_loss = gain (loss) as a share of residual_value_sold; a gain is positive
 # Data through: 2026-09
-# Page: https://data.consumercreditmatters.com/abs/performance/index.html?ac=lease&m=rv_gl_cum_ratio&view=calendar
+# Page: https://consumercreditmatters.com/abs/performance/index.html?ac=lease&m=rv_gl_cum_ratio&view=calendar
 # Licence: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/) — free to use, share and adapt with attribution to Consumer Credit Matters
-# Cite as: Consumer Credit Matters, “Auto Lease ABS — Residual Gain (Loss) on Vehicles Sold”, data through 2026-09, https://data.consumercreditmatters.com/download/auto-lease-residual.csv
+# Cite as: Consumer Credit Matters, “Auto Lease ABS — Residual Gain (Loss) on Vehicles Sold”, data through 2026-09, https://consumercreditmatters.com/download/auto-lease-residual.csv
 # Read in Python: pandas.read_csv(url, comment="#")
 shelf,shelf_name,month,n_deals,residual_value_sold,residual_gain_loss
 BMWLT,BMW,2017-03,1,3382531.3,0.554771

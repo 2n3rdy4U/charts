@@ -1,14 +1,14 @@
 # Consumer Credit Matters — Auto Loan ABS — Recovery on Defaulted Loans
 # Source: SEC Form ABS-EE loan-level filings of the public auto-loan shelves, checked against their monthly servicer reports (SEC Form 10-D), compiled by Consumer Credit Matters
-# Definition: Cash collected on loans that defaulted in four consecutive quarters, within 12 (or 6) months of default and net of repossession and sale costs, over the balance owed the month before default; https://data.consumercreditmatters.com/abs/methodology.html#recoveries
+# Definition: Cash collected on loans that defaulted in four consecutive quarters, within 12 (or 6) months of default and net of repossession and sale costs, over the balance owed the month before default; https://consumercreditmatters.com/abs/methodology.html#recoveries
 # Note: Rates are fractions (0.05 = 5%).
 # Note: Shelves withheld for data quality are not in the file; the methodology page lists them and why.
 # Note: Low-precision windows are flagged, not removed.
 # Columns: shelf = the shelf's ticker (ALL = every loan shelf pooled; ALL-LEASE = every lease shelf pooled); shelf_name = the issuer; window_end = last month of the four default quarters, YYYY-MM; defaults_window = the four default quarters; horizon_months = months after default the cash is counted (12; 6 = the early read); recovery_rate = recovered cash / balance at default; loss_severity = 1 - recovery_rate; margin_95 = 95% margin of the rate (same units; applies to severity too); defaulted_loans = loans in the cohort; low_precision = true where the margin is wider than 3 percentage points; early_read = true for 6-month windows not yet 12 months past default
 # Data through: —
-# Page: https://data.consumercreditmatters.com/abs/performance/index.html?ac=loan&m=recovery_rate&view=calendar
+# Page: https://consumercreditmatters.com/abs/performance/index.html?ac=loan&m=recovery_rate&view=calendar
 # Licence: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/) — free to use, share and adapt with attribution to Consumer Credit Matters
-# Cite as: Consumer Credit Matters, “Auto Loan ABS — Recovery on Defaulted Loans”, data through —, https://data.consumercreditmatters.com/download/auto-loan-recoveries.csv
+# Cite as: Consumer Credit Matters, “Auto Loan ABS — Recovery on Defaulted Loans”, data through —, https://consumercreditmatters.com/download/auto-loan-recoveries.csv
 # Read in Python: pandas.read_csv(url, comment="#")
 shelf,shelf_name,window_end,defaults_window,horizon_months,recovery_rate,loss_severity,margin_95,defaulted_loans,low_precision,early_read
 AART,Ally,2017-12,Jan 2017 – Dec 2017,12,0.572218,0.427782,0.016524,1072,False,False

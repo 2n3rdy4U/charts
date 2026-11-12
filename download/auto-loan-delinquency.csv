@@ -1,13 +1,13 @@
 # Consumer Credit Matters — Auto Loan ABS — Delinquency
 # Source: SEC Form ABS-EE loan-level filings of the public auto-loan shelves, compiled by Consumer Credit Matters
-# Definition: Share of active loans past due at month end, counted loan by loan across each shelf's deals; https://data.consumercreditmatters.com/abs/methodology.html#active-pool
+# Definition: Share of active loans past due at month end, counted loan by loan across each shelf's deals; https://consumercreditmatters.com/abs/methodology.html#active-pool
 # Note: Rates are fractions (0.05 = 5%).
 # Note: Loans without a consumer credit score are excluded.
 # Columns: shelf = the shelf's ticker (ALL = every loan shelf pooled; ALL-LEASE = every lease shelf pooled); shelf_name = the issuer; month = collection month, YYYY-MM; universe = 'all' (every active deal) or 'seasoned' (deals at least 6 months old); n_loans = active loans in the month; dq_30plus = share 30+ days past due; dq_31_60 = share 30/31-60 days past due; dq_60plus = share 60+ days past due
 # Data through: 2026-09
-# Page: https://data.consumercreditmatters.com/abs/performance/index.html?ac=loan
+# Page: https://consumercreditmatters.com/abs/performance/index.html?ac=loan
 # Licence: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/) — free to use, share and adapt with attribution to Consumer Credit Matters
-# Cite as: Consumer Credit Matters, “Auto Loan ABS — Delinquency”, data through 2026-09, https://data.consumercreditmatters.com/download/auto-loan-delinquency.csv
+# Cite as: Consumer Credit Matters, “Auto Loan ABS — Delinquency”, data through 2026-09, https://consumercreditmatters.com/download/auto-loan-delinquency.csv
 # Read in Python: pandas.read_csv(url, comment="#")
 shelf,shelf_name,month,universe,n_loans,dq_30plus,dq_31_60,dq_60plus
 AART,Ally,2017-02,all,63398,0.005883,0.005047,0.000836

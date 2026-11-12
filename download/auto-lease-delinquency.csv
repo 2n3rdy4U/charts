@@ -1,13 +1,13 @@
 # Consumer Credit Matters — Auto Lease ABS — Delinquency
 # Source: Monthly servicer reports (SEC Form 10-D) of the public auto-lease shelves, compiled by Consumer Credit Matters
-# Definition: Dollars past due at month end over the pool balance, as the servicers report them, summed across each shelf's deals; https://data.consumercreditmatters.com/abs/methodology.html#active-pool
+# Definition: Dollars past due at month end over the pool balance, as the servicers report them, summed across each shelf's deals; https://consumercreditmatters.com/abs/methodology.html#active-pool
 # Note: Rates are fractions (0.05 = 5%).
 # Note: By balance, not by count: lease shelves file no loan-level delinquency.
 # Columns: shelf = the shelf's ticker (ALL = every loan shelf pooled; ALL-LEASE = every lease shelf pooled); shelf_name = the issuer; month = collection month, YYYY-MM; universe = 'all' (every active deal) or 'seasoned' (deals at least 6 months old); n_deals = deals in the figure; pool_factor = pool balance / original balance; dq_30plus = share 30+ days past due; dq_31_60 = share 30/31-60 days past due; dq_60plus = share 60+ days past due
 # Data through: 2026-09
-# Page: https://data.consumercreditmatters.com/abs/performance/index.html?ac=lease
+# Page: https://consumercreditmatters.com/abs/performance/index.html?ac=lease
 # Licence: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/) — free to use, share and adapt with attribution to Consumer Credit Matters
-# Cite as: Consumer Credit Matters, “Auto Lease ABS — Delinquency”, data through 2026-09, https://data.consumercreditmatters.com/download/auto-lease-delinquency.csv
+# Cite as: Consumer Credit Matters, “Auto Lease ABS — Delinquency”, data through 2026-09, https://consumercreditmatters.com/download/auto-lease-delinquency.csv
 # Read in Python: pandas.read_csv(url, comment="#")
 shelf,shelf_name,month,universe,n_deals,pool_factor,dq_30plus,dq_31_60,dq_60plus
 ALL-LEASE,All Issuers,2017-03,all,,,0.003142,0.002897,0.000245

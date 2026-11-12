@@ -1,13 +1,13 @@
 # Consumer Credit Matters — Auto Loan ABS — First-Time Repossessions
 # Source: SEC Form ABS-EE loan-level filings of the public auto-loan shelves, compiled by Consumer Credit Matters
-# Definition: Loans repossessed for the first time in the month over the loans at risk at its start; https://data.consumercreditmatters.com/abs/methodology.html#repossessions
+# Definition: Loans repossessed for the first time in the month over the loans at risk at its start; https://consumercreditmatters.com/abs/methodology.html#repossessions
 # Note: Rates are fractions (0.05 = 5%).
 # Note: Shelves whose loan-level flag does not track repossessions are not in the file.
 # Columns: shelf = the shelf's ticker (ALL = every loan shelf pooled; ALL-LEASE = every lease shelf pooled); shelf_name = the issuer; month = collection month, YYYY-MM; universe = 'all' (every active deal) or 'seasoned' (deals at least 6 months old); repossessions = first-time repossessions in the month; at_risk = loans at risk at the start of the month; repo_rate = repossessions / at_risk; reversed_share = share of the month's repossessions later reinstated
 # Data through: 2026-09
-# Page: https://data.consumercreditmatters.com/abs/performance/index.html?ac=loan
+# Page: https://consumercreditmatters.com/abs/performance/index.html?ac=loan
 # Licence: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/) — free to use, share and adapt with attribution to Consumer Credit Matters
-# Cite as: Consumer Credit Matters, “Auto Loan ABS — First-Time Repossessions”, data through 2026-09, https://data.consumercreditmatters.com/download/auto-loan-repossessions.csv
+# Cite as: Consumer Credit Matters, “Auto Loan ABS — First-Time Repossessions”, data through 2026-09, https://consumercreditmatters.com/download/auto-loan-repossessions.csv
 # Read in Python: pandas.read_csv(url, comment="#")
 shelf,shelf_name,month,universe,repossessions,at_risk,repo_rate,reversed_share
 AART,Ally,2017-02,all,10,64248,0.000156,0.1

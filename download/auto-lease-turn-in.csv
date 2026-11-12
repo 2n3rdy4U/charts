@@ -1,14 +1,14 @@
 # Consumer Credit Matters — Auto Lease ABS — Turn-in Rate
 # Source: Monthly servicer reports (SEC Form 10-D) of the public auto-lease shelves, compiled by Consumer Credit Matters
-# Definition: Share of leases reaching their scheduled end whose vehicle is returned rather than bought, as each servicer states it; the shelf figure combines its deals, each weighted by its leases reaching scheduled end; https://data.consumercreditmatters.com/abs/methodology.html#losses
+# Definition: Share of leases reaching their scheduled end whose vehicle is returned rather than bought, as each servicer states it; the shelf figure combines its deals, each weighted by its leases reaching scheduled end; https://consumercreditmatters.com/abs/methodology.html#losses
 # Note: Rates are fractions (0.05 = 5%).
 # Note: Servicers define the rate differently (the methodology says how each does); compare a shelf's trend, not levels across shelves.
 # Note: BMW, Mercedes-Benz and Nissan do not report a turn-in rate.
 # Columns: shelf = the shelf's ticker; shelf_name = the issuer; month = collection month, YYYY-MM; n_deals = deals reporting a turn-in rate that month; leases = leases reaching scheduled end that month (blank where the servicer prints no count); turn_in = turn-in rate
 # Data through: 2026-09
-# Page: https://data.consumercreditmatters.com/abs/performance/index.html?ac=lease&m=turn_in_ratio
+# Page: https://consumercreditmatters.com/abs/performance/index.html?ac=lease&m=turn_in_ratio
 # Licence: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/) — free to use, share and adapt with attribution to Consumer Credit Matters
-# Cite as: Consumer Credit Matters, “Auto Lease ABS — Turn-in Rate”, data through 2026-09, https://data.consumercreditmatters.com/download/auto-lease-turn-in.csv
+# Cite as: Consumer Credit Matters, “Auto Lease ABS — Turn-in Rate”, data through 2026-09, https://consumercreditmatters.com/download/auto-lease-turn-in.csv
 # Read in Python: pandas.read_csv(url, comment="#")
 shelf,shelf_name,month,n_deals,leases,turn_in
 FCALT,Ford,2017-06,1,70,0.814286
