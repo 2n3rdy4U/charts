@@ -78,7 +78,7 @@
       "description": "The week in U.S. consumer-credit securitization, data, and policy. Independent, data-first, no paywall.",
       "icon": "document",
       "type": "link",
-      "url": "https://www.consumercreditmatters.com/newsletter"
+      "url": "/newsletter/"
     },
     {
       "id": "podcast",
@@ -87,7 +87,7 @@
       "icon": "microphone",
       "badge": null,
       "type": "link",
-      "url": "https://www.consumercreditmatters.com/podcasts"
+      "url": "/podcasts/"
     }
   ]
 }
