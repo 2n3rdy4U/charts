@@ -16,7 +16,11 @@ function classAvail(){ return AVAIL.filter(a=>a.asset===assetClass); }
    Single vs multiple is decided by the view, as on the Explorer: Deals and
    vintage curves describe one shelf, so there the picker takes one issuer
    (checking replaces the selection); time series compares several. */
-const issMulti = () => metric !== 'deals' && mode !== 'vintage';
+// The Deals tab tapped while All Issuers is the subject: the picker opens in
+// one-issuer mode and the pick lands on that issuer's Deals (set in
+// askIssuerForDeals, cleared by the pick or by closing the picker).
+let _pendingDeals = false;
+const issMulti = () => metric !== 'deals' && mode !== 'vintage' && !_pendingDeals;
 // Going to a one-issuer view keeps the subject and sets the others aside;
 // coming back to time series restores them, so a comparison is not lost by
 // glancing at one shelf's vintages.
@@ -48,7 +52,8 @@ function buildIssPanel(){
   panel.innerHTML = '';
   if(!issMulti()){
     const h=document.createElement('div'); h.className='mss-hint';
-    h.textContent = metric==='deals' ? 'Deals describes one shelf at a time'
+    h.textContent = _pendingDeals     ? 'Deals are listed per issuer \u2014 choose one to see its deals'
+                  : metric==='deals' ? 'Deals describes one shelf at a time'
                                      : 'Vintage curves show one issuer — use Time series to compare';
     panel.appendChild(h);
   }
@@ -67,6 +72,7 @@ function buildIssPanel(){
         if(selected.length<2){ cb.checked=true; return; }   // never empty
         selected = selected.filter(x=>x!==a.t);
       }
+      if(_pendingDeals){ _pendingDeals=false; closeAdd(); refresh().then(()=>dealsTab().click()); countView(); return; }
       buildIssPanel(); updateIssBtn(); refresh(); countView();
     });
     lbl.appendChild(cb);
@@ -85,14 +91,22 @@ function buildIssPanel(){
     panel.appendChild(lbl);
   }
 }
-function closeAdd(){ el('isspanel').classList.remove('open'); }
+function closeAdd(){ el('isspanel').classList.remove('open'); _pendingDeals=false; }
+const dealsTab=()=>document.querySelector('.mtabs button[data-metric="deals"]');
+// All Issuers has no deals of its own. The tab used to be disabled, with the
+// reason in a tooltip no phone ever shows; now it opens the issuer picker, and
+// the pick opens that issuer's Deals.
+function askIssuerForDeals(){
+  _pendingDeals=true; buildIssPanel(); el('isspanel').classList.add('open');
+  el('isswrap').scrollIntoView({block:'nearest'}); toast('Deals are listed per issuer. Choose one.');
+}
 
 async function refresh(){ fitSelectionToView(); await ensure(selected); enforceSingleIssuerViews(); updateIssBtn(); syncTabs(); renderSubject(); renderChart();
 }
 window.sel=t=>{ if(!selected.includes(t))selected.push(t); buildIssPanel(); refresh(); countView(); };
 window.unsel=t=>{ if(selected.length<2)return; selected=selected.filter(x=>x!==t); buildIssPanel(); refresh(); };
 window.makeSubject=t=>{ selected=[t,...selected.filter(x=>x!==t)]; buildIssPanel(); refresh(); };
-el('issbtn').onclick=e=>{ e.stopPropagation(); buildIssPanel(); el('isspanel').classList.toggle('open'); };
+el('issbtn').onclick=e=>{ e.stopPropagation(); if(el('isspanel').classList.contains('open')) closeAdd(); else { buildIssPanel(); el('isspanel').classList.add('open'); } };
 document.addEventListener('keydown', e=>{ if(e.key==='Escape' && el('isspanel').classList.contains('open')){ closeAdd(); el('issbtn').focus(); } });   // Escape closes, focus returns to the button
 document.addEventListener('click',e=>{ if(!e.target.closest('#isswrap')) closeAdd(); });
 // Auto Loan and Auto Lease are both this page; the frame's highlight and
@@ -103,10 +117,10 @@ function tellFrameAsset(){
 }
 // Tabs that belong to one asset class (Repossessions: loan; Residuals: lease).
 function syncTabs(){ document.querySelectorAll('.mtabs button[data-asset]').forEach(b=>{ b.hidden=b.dataset.asset!==assetClass; });
-  // Deals describes one shelf; All Issuers has none, so the tab is greyed out
-  // while it is the subject rather than opening on a message.
-  const dt=document.querySelector('.mtabs button[data-metric="deals"]');
-  if(dt){ dt.disabled=isAll(selected[0]); dt.title=dt.disabled?'All Issuers has no deals of its own':''; }
+  // Deals describes one shelf; All Issuers has none, so the tab is muted while
+  // it is the subject — still live: a tap asks for an issuer (askIssuerForDeals).
+  const dt=dealsTab();
+  if(dt){ const need=isAll(selected[0]); dt.classList.toggle('needs-issuer',need); dt.title=need?'Deals are listed per issuer: choose one':''; }
   // An earlier issuer has loss curves only (and its deals, unless it is a whole-portfolio set of originations).
   const h=isHist(selected[0]), pf=isPort(selected[0]);
   document.querySelectorAll('.mtabs button[data-metric]').forEach(b=>{
@@ -124,7 +138,9 @@ document.querySelectorAll('#assetseg button').forEach(b=>b.onclick=()=>{
   closeAdd(); buildIssPanel(); refresh(); countView();
 });
 
-document.querySelectorAll('.mtabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.mtabs button').forEach(x=>x.classList.remove('on'));b.classList.add('on');metric=b.dataset.metric;
+document.querySelectorAll('.mtabs button').forEach(b=>b.onclick=e=>{
+  if(b.dataset.metric==='deals' && isAll(selected[0])){ e.stopPropagation(); askIssuerForDeals(); return; }   // the click must not reach the close-on-click-outside handler
+  document.querySelectorAll('.mtabs button').forEach(x=>x.classList.remove('on'));b.classList.add('on');metric=b.dataset.metric;
   // Deals describes one shelf, the charts can compare several — the picker
   // changes between radio and checkbox with the lens, so it offers only what
   // the current view can actually use.
