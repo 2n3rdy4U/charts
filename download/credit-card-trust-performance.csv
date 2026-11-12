@@ -1,13 +1,13 @@
 # Consumer Credit Matters — Credit Card ABS — Master Trust Performance
 # Source: Monthly servicer certificates (SEC Form 10-D) of the public credit-card master trusts, as each trust reports them, compiled by Consumer Credit Matters
-# Definition: Each trust's own figures, which the trusts define differently; https://data.consumercreditmatters.com/abs/methodology.html#credit-card lists each definition
+# Definition: Each trust's own figures, which the trusts define differently; https://consumercreditmatters.com/abs/methodology.html#credit-card lists each definition
 # Note: Rates are fractions (0.05 = 5%). An empty cell is a figure the trust did not report that month.
 # Note: ALL is shown only for months in which at least three trusts holding at least 80% of receivables reported.
 # Columns: trust = the trust's ticker (ALL = every trust, weighted by receivables); trust_name = the issuing entity; month = collection month, YYYY-MM; trust_balance = principal receivables, US dollars; payment_rate = monthly principal payment rate; charge_off_rate = charge-off rate, on the basis in charge_off_basis; charge_off_basis = net or gross; default_rate_gross = gross default rate; default_rate_net = net default rate; portfolio_yield = portfolio yield before charge-offs (gross), annualized; excess_spread = excess spread for the whole trust (its own figure, or weighted across its series), annualized; dq_30plus = share of receivables 30+ days past due; dq_30_60 = 30-60 days past due; dq_61_90 = 61-90 days; dq_91_120 = 91-120 days; dq_120plus = 120+ days
 # Data through: 2026-10
-# Page: https://data.consumercreditmatters.com/abs/credit-card/index.html
+# Page: https://consumercreditmatters.com/abs/credit-card/index.html
 # Licence: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/) — free to use, share and adapt with attribution to Consumer Credit Matters
-# Cite as: Consumer Credit Matters, “Credit Card ABS — Master Trust Performance”, data through 2026-10, https://data.consumercreditmatters.com/download/credit-card-trust-performance.csv
+# Cite as: Consumer Credit Matters, “Credit Card ABS — Master Trust Performance”, data through 2026-10, https://consumercreditmatters.com/download/credit-card-trust-performance.csv
 # Read in Python: pandas.read_csv(url, comment="#")
 trust,trust_name,month,trust_balance,payment_rate,charge_off_rate,charge_off_basis,default_rate_gross,default_rate_net,portfolio_yield,excess_spread,dq_30plus,dq_30_60,dq_61_90,dq_91_120,dq_120plus
 ALL,All Trusts,1996-04,60301537393.78,,,,,,,,0.044008,,,,

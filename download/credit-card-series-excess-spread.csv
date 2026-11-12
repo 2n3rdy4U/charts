@@ -1,13 +1,13 @@
 # Consumer Credit Matters — Credit Card ABS — Excess Spread by Series
 # Source: Monthly series statements (SEC Form 10-D) of the credit-card trusts whose series each carry their own early-amortization test, compiled by Consumer Credit Matters
-# Definition: Each series' printed excess spread; https://data.consumercreditmatters.com/abs/methodology.html#credit-card explains which series count
+# Definition: Each series' printed excess spread; https://consumercreditmatters.com/abs/methodology.html#credit-card explains which series count
 # Note: Rates are fractions (0.05 = 5%).
 # Note: Trusts that test every note with one figure (Chase, Citi, Bank of America, Capital One, Synchrony, Wells Fargo) are in credit-card-trust-performance.csv.
 # Columns: trust = the trust's ticker; trust_name = the issuing entity; month = collection month, YYYY-MM; series = the series, as the statement names it; excess_spread = the series' excess spread for the month as its statement prints it, annualized; included = whether the trust-level figure and the Weakest series view count this series this month; reason = why not: 'first month' (a partial first period) or 'repaid or set aside' (no collateral left: its notes repaid this month, or the cash to repay them set aside in full); 'no figure' where the statement prints none
 # Data through: 2026-10
-# Page: https://data.consumercreditmatters.com/abs/credit-card/index.html?m=excess_weakest
+# Page: https://consumercreditmatters.com/abs/credit-card/index.html?m=excess_weakest
 # Licence: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/) — free to use, share and adapt with attribution to Consumer Credit Matters
-# Cite as: Consumer Credit Matters, “Credit Card ABS — Excess Spread by Series”, data through 2026-10, https://data.consumercreditmatters.com/download/credit-card-series-excess-spread.csv
+# Cite as: Consumer Credit Matters, “Credit Card ABS — Excess Spread by Series”, data through 2026-10, https://consumercreditmatters.com/download/credit-card-series-excess-spread.csv
 # Read in Python: pandas.read_csv(url, comment="#")
 trust,trust_name,month,series,excess_spread,included,reason
 AMXCA,American Express Credit Account Master Trust,2006-06,2006-2,0.118542,False,first month

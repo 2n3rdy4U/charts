@@ -5,29 +5,29 @@
 
 ## Trusts (one page each)
 
-- [American Express Credit Account Master Trust (AMXCA)](https://data.consumercreditmatters.com/abs/credit-card/AMXCA/) — data https://data.consumercreditmatters.com/abs/credit-card/data/AMXCA.json
-- [BA Credit Card Trust (BACCT)](https://data.consumercreditmatters.com/abs/credit-card/BACCT/) — data https://data.consumercreditmatters.com/abs/credit-card/data/BACCT.json
-- [Barclays Dryrock Issuance Trust (DRYROCK)](https://data.consumercreditmatters.com/abs/credit-card/DRYROCK/) — data https://data.consumercreditmatters.com/abs/credit-card/data/DRYROCK.json
-- [Capital One Multi-Asset Execution Trust (COMET)](https://data.consumercreditmatters.com/abs/credit-card/COMET/) — data https://data.consumercreditmatters.com/abs/credit-card/data/COMET.json
-- [Chase Issuance Trust (CHAIT)](https://data.consumercreditmatters.com/abs/credit-card/CHAIT/) — data https://data.consumercreditmatters.com/abs/credit-card/data/CHAIT.json
-- [Citibank Credit Card Issuance Trust (CCCIT)](https://data.consumercreditmatters.com/abs/credit-card/CCCIT/) — data https://data.consumercreditmatters.com/abs/credit-card/data/CCCIT.json
-- [World Financial Network Credit Card Master Note Trust (WFNN)](https://data.consumercreditmatters.com/abs/credit-card/WFNN/) — data https://data.consumercreditmatters.com/abs/credit-card/data/WFNN.json
-- [First National Master Note Trust (FNBO)](https://data.consumercreditmatters.com/abs/credit-card/FNBO/) — data https://data.consumercreditmatters.com/abs/credit-card/data/FNBO.json
-- [Synchrony Card Issuance Trust (SYNIT)](https://data.consumercreditmatters.com/abs/credit-card/SYNIT/) — data https://data.consumercreditmatters.com/abs/credit-card/data/SYNIT.json
-- [WF Card Issuance Trust (WFCARD)](https://data.consumercreditmatters.com/abs/credit-card/WFCARD/) — data https://data.consumercreditmatters.com/abs/credit-card/data/WFCARD.json
-- [Discover Card Master Trust I / Discover Card Execution Note Trust (DCENT)](https://data.consumercreditmatters.com/abs/credit-card/DCENT/) — data https://data.consumercreditmatters.com/abs/credit-card/data/DCENT.json
-- [GE Capital / Synchrony Credit Card Master Note Trust (SYNCCMNT)](https://data.consumercreditmatters.com/abs/credit-card/SYNCCMNT/) — data https://data.consumercreditmatters.com/abs/credit-card/data/SYNCCMNT.json
-- [Sears Credit Account Master Trust II (SEARS2)](https://data.consumercreditmatters.com/abs/credit-card/SEARS2/) — data https://data.consumercreditmatters.com/abs/credit-card/data/SEARS2.json
-- [Providian Master Trust (PROVIDIAN)](https://data.consumercreditmatters.com/abs/credit-card/PROVIDIAN/) — data https://data.consumercreditmatters.com/abs/credit-card/data/PROVIDIAN.json
-- [Metris Master Trust (METRIS)](https://data.consumercreditmatters.com/abs/credit-card/METRIS/) — data https://data.consumercreditmatters.com/abs/credit-card/data/METRIS.json
-- [Household / HSBC Credit Card Master Note Trust (USA) I (HSBCCC)](https://data.consumercreditmatters.com/abs/credit-card/HSBCCC/) — data https://data.consumercreditmatters.com/abs/credit-card/data/HSBCCC.json
-- [HSBC Private Label Credit Card Master Note Trust (USA) I (HSBCPL)](https://data.consumercreditmatters.com/abs/credit-card/HSBCPL/) — data https://data.consumercreditmatters.com/abs/credit-card/data/HSBCPL.json
-- [Household Affinity Credit Card Master Note Trust I (HAFF)](https://data.consumercreditmatters.com/abs/credit-card/HAFF/) — data https://data.consumercreditmatters.com/abs/credit-card/data/HAFF.json
-- [National City Credit Card Master Trust (NATCITY)](https://data.consumercreditmatters.com/abs/credit-card/NATCITY/) — data https://data.consumercreditmatters.com/abs/credit-card/data/NATCITY.json
-- [American Express Issuance Trust (charge card receivables) (AMEXIT)](https://data.consumercreditmatters.com/abs/credit-card/AMEXIT/) — data https://data.consumercreditmatters.com/abs/credit-card/data/AMEXIT.json
-- [All Trusts (ALL)](https://data.consumercreditmatters.com/abs/credit-card/ALL/) — data https://data.consumercreditmatters.com/abs/credit-card/data/ALL.json
+- [American Express Credit Account Master Trust (AMXCA)](https://consumercreditmatters.com/abs/credit-card/AMXCA/) — data https://consumercreditmatters.com/abs/credit-card/data/AMXCA.json
+- [BA Credit Card Trust (BACCT)](https://consumercreditmatters.com/abs/credit-card/BACCT/) — data https://consumercreditmatters.com/abs/credit-card/data/BACCT.json
+- [Barclays Dryrock Issuance Trust (DRYROCK)](https://consumercreditmatters.com/abs/credit-card/DRYROCK/) — data https://consumercreditmatters.com/abs/credit-card/data/DRYROCK.json
+- [Capital One Multi-Asset Execution Trust (COMET)](https://consumercreditmatters.com/abs/credit-card/COMET/) — data https://consumercreditmatters.com/abs/credit-card/data/COMET.json
+- [Chase Issuance Trust (CHAIT)](https://consumercreditmatters.com/abs/credit-card/CHAIT/) — data https://consumercreditmatters.com/abs/credit-card/data/CHAIT.json
+- [Citibank Credit Card Issuance Trust (CCCIT)](https://consumercreditmatters.com/abs/credit-card/CCCIT/) — data https://consumercreditmatters.com/abs/credit-card/data/CCCIT.json
+- [World Financial Network Credit Card Master Note Trust (WFNN)](https://consumercreditmatters.com/abs/credit-card/WFNN/) — data https://consumercreditmatters.com/abs/credit-card/data/WFNN.json
+- [First National Master Note Trust (FNBO)](https://consumercreditmatters.com/abs/credit-card/FNBO/) — data https://consumercreditmatters.com/abs/credit-card/data/FNBO.json
+- [Synchrony Card Issuance Trust (SYNIT)](https://consumercreditmatters.com/abs/credit-card/SYNIT/) — data https://consumercreditmatters.com/abs/credit-card/data/SYNIT.json
+- [WF Card Issuance Trust (WFCARD)](https://consumercreditmatters.com/abs/credit-card/WFCARD/) — data https://consumercreditmatters.com/abs/credit-card/data/WFCARD.json
+- [Discover Card Master Trust I / Discover Card Execution Note Trust (DCENT)](https://consumercreditmatters.com/abs/credit-card/DCENT/) — data https://consumercreditmatters.com/abs/credit-card/data/DCENT.json
+- [GE Capital / Synchrony Credit Card Master Note Trust (SYNCCMNT)](https://consumercreditmatters.com/abs/credit-card/SYNCCMNT/) — data https://consumercreditmatters.com/abs/credit-card/data/SYNCCMNT.json
+- [Sears Credit Account Master Trust II (SEARS2)](https://consumercreditmatters.com/abs/credit-card/SEARS2/) — data https://consumercreditmatters.com/abs/credit-card/data/SEARS2.json
+- [Providian Master Trust (PROVIDIAN)](https://consumercreditmatters.com/abs/credit-card/PROVIDIAN/) — data https://consumercreditmatters.com/abs/credit-card/data/PROVIDIAN.json
+- [Metris Master Trust (METRIS)](https://consumercreditmatters.com/abs/credit-card/METRIS/) — data https://consumercreditmatters.com/abs/credit-card/data/METRIS.json
+- [Household / HSBC Credit Card Master Note Trust (USA) I (HSBCCC)](https://consumercreditmatters.com/abs/credit-card/HSBCCC/) — data https://consumercreditmatters.com/abs/credit-card/data/HSBCCC.json
+- [HSBC Private Label Credit Card Master Note Trust (USA) I (HSBCPL)](https://consumercreditmatters.com/abs/credit-card/HSBCPL/) — data https://consumercreditmatters.com/abs/credit-card/data/HSBCPL.json
+- [Household Affinity Credit Card Master Note Trust I (HAFF)](https://consumercreditmatters.com/abs/credit-card/HAFF/) — data https://consumercreditmatters.com/abs/credit-card/data/HAFF.json
+- [National City Credit Card Master Trust (NATCITY)](https://consumercreditmatters.com/abs/credit-card/NATCITY/) — data https://consumercreditmatters.com/abs/credit-card/data/NATCITY.json
+- [American Express Issuance Trust (charge card receivables) (AMEXIT)](https://consumercreditmatters.com/abs/credit-card/AMEXIT/) — data https://consumercreditmatters.com/abs/credit-card/data/AMEXIT.json
+- [All Trusts (ALL)](https://consumercreditmatters.com/abs/credit-card/ALL/) — data https://consumercreditmatters.com/abs/credit-card/data/ALL.json
 
 ## Data files
 
-- `https://data.consumercreditmatters.com/abs/credit-card/data/<TICKER>.json` — a trust's monthly series, latest readings, its note series and definitions
-- `https://data.consumercreditmatters.com/abs/credit-card/data/ALL.json` — All Trusts, weighted by receivables
+- `https://consumercreditmatters.com/abs/credit-card/data/<TICKER>.json` — a trust's monthly series, latest readings, its note series and definitions
+- `https://consumercreditmatters.com/abs/credit-card/data/ALL.json` — All Trusts, weighted by receivables
