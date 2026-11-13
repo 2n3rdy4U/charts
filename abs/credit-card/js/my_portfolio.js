@@ -30,7 +30,16 @@
   var TYPE = { loan: "Auto loan", lease: "Auto lease", card: "Card trust" };
   function isIssuer(it) { return it.kind === "issuer"; }
   function groupOf(it) { return it.kind === "trust" ? "card" : it.ac; }
-  function label(it) { return it.kind === "deal" ? it.ticker + " " + it.series : it.name; }
+  function label(it) { return it.kind === "deal" && it.series ? it.ticker + " " + it.series : it.name; }
+  // A deal that has not reported yet: announced or closed, no servicer report, no
+  // figures. Its row says so and takes a rule that applies from its first report.
+  function pending(it) { return it.kind === "deal" && (it.state === "pending" || (it.state === "new" && !Object.keys(it.m).length)); }
+  // On a shelf the site has no performance page for: its presale report is all there is.
+  function untracked(it) { return it.state === "untracked"; }
+  function pendingNote(it) {
+    if (!it.close) return it.filed ? "filed " + fmtDate(it.filed) : "";
+    return (it.close > new Date().toISOString().slice(0, 10) ? "expected close " : "closed ") + fmtDate(it.close);
+  }
 
   // ── rules ────────────────────────────────────────────────────────
   function breached(rule, it) {
@@ -40,10 +49,12 @@
   }
   function ruleText(rule, meta) { return meta[rule.metric].label + " " + rule.op + " " + (rule.fmt === "fac" ? rule.value : rule.value + "%"); }
   function ruleCell(it, meta) {
-    var rule = W.rule(it.key), opts = RULE[groupOf(it)].filter(function (k) { return it.m[k]; });
+    var rule = W.rule(it.key), wait = pending(it), opts = RULE[groupOf(it)].filter(function (k) { return it.m[k]; });
+    if (wait) opts = RULE[groupOf(it)];               // every figure its type will publish
     if (!opts.length) return '<span class="flat">—</span>';
+    var from = wait ? ' <span class="flat">from its first report</span>' : "";
     if (rule && !editing[it.key]) {
-      return '<span class="ok">' + esc(ruleText(rule, meta)) + '</span>' + (breached(rule, it) ? ' <span class="md-pill breach">Breached</span>' : "") +
+      return '<span class="ok">' + esc(ruleText(rule, meta)) + '</span>' + from + (breached(rule, it) ? ' <span class="md-pill breach">Breached</span>' : "") +
              ' <button type="button" class="md-link" data-edit="' + esc(it.key) + '">Edit</button>';
     }
     if (!rule && !editing[it.key]) return '<button type="button" class="md-link" data-edit="' + esc(it.key) + '">+ Alert rule</button>';
@@ -53,7 +64,8 @@
       '<select name="op" aria-label="Direction"><option value="above"' + (r.op === "above" ? " selected" : "") + '>above</option><option value="below"' + (r.op === "below" ? " selected" : "") + '>below</option></select>' +
       '<input name="value" type="number" step="any" inputmode="decimal" aria-label="Threshold" value="' + esc(r.value) + '" required>' +
       '<span class="flat" data-unit>' + (meta[r.metric].fmt === "fac" ? "" : "%") + '</span>' +
-      '<button type="submit" class="md-btn">Save</button>' + (rule ? '<button type="button" class="md-btn md-btn-quiet" data-unrule="' + esc(it.key) + '">Remove</button>' : '<button type="button" class="md-btn md-btn-quiet" data-cancel="' + esc(it.key) + '">Cancel</button>') + "</form>";
+      '<button type="submit" class="md-btn">Save</button>' + (rule ? '<button type="button" class="md-btn md-btn-quiet" data-unrule="' + esc(it.key) + '">Remove</button>' : '<button type="button" class="md-btn md-btn-quiet" data-cancel="' + esc(it.key) + '">Cancel</button>') +
+      (wait ? '<span class="flat note">Applies from its first servicer report.</span>' : "") + "</form>";
   }
 
   // ── render ───────────────────────────────────────────────────────
@@ -83,13 +95,19 @@
       '<th class="num">Headline<span class="basis">60+ DQ · cards: charge-offs</span></th><th>Alert rule</th></tr></thead><tbody>';
     deals.forEach(function (w) {
       var it = byKey[w.key];
-      if (!it) { html += '<tr><td class="star wcol">' + star(w) + '</td><td class="name">' + esc(w.name) + '</td><td colspan="4" class="flat">No longer published: paid off, or not in the current build.</td></tr>'; return; }
-      var g = groupOf(it), m = it.m[HEAD[g]], just = it.as_of && it.as_of >= JUST;
+      if (!it) {   // the feed no longer describes it: it left the build (the generators star only what the feed carries)
+        html += '<tr><td class="star wcol">' + star(w) + '</td><td class="name">' + (w.url ? '<a href="' + esc(w.url) + '">' + esc(w.name) + "</a>" : esc(w.name)) +
+                '</td><td colspan="4" class="flat">Not in the current build: paid off or withdrawn.</td></tr>';
+        return;
+      }
+      var g = groupOf(it), m = it.m[HEAD[g]], just = it.as_of && it.as_of >= JUST, wait = pending(it);
       html += '<tr data-key="' + esc(w.key) + '"><td class="star wcol">' + star(it) + "</td>" +
         '<td class="name"><a href="' + esc(it.url) + '">' + esc(label(it)) + "</a>" +
         '<span class="sub">' + esc(it.kind === "deal" ? it.name : it.ticker) + "</span></td>" +
         '<td data-l="Type"><span class="md-pill state">' + esc(TYPE[g]) + "</span></td>" +
-        '<td class="when" data-l="Latest report">' + esc(fmtDate(it.as_of)) + (just ? ' <span class="md-pill new">New</span>' : "") + "</td>" +
+        '<td class="when" data-l="Latest report">' + (wait ? '<span class="md-pill wait">Awaiting first report</span><span class="sub">' + esc(pendingNote(it)) + "</span>"
+                                                          : untracked(it) ? '<span class="md-pill off">Not tracked</span><span class="sub">no servicer reports on this site for ' + esc(it.ticker) + "</span>"
+                                                          : esc(fmtDate(it.as_of)) + (just ? ' <span class="md-pill new">New</span>' : "")) + "</td>" +
         '<td class="num" data-l="' + esc(meta[HEAD[g]].label) + '"' + (m && m.basis ? ' title="' + esc(meta[HEAD[g]].label + ", " + m.basis) + '"' : "") + '><span class="vd">' + (m ? fmtVal(m.v, meta[HEAD[g]].fmt) + fmtDelta(m.v, m.p, meta[HEAD[g]].fmt) : "—") + "</span></td>" +
         '<td class="rule" data-l="Alert rule">' + ruleCell(it, meta) + "</td></tr>";
     });
@@ -141,14 +159,14 @@
       var own = keys[e.key], viaIssuer = !own && e.type === "psr" && tickers[e.ticker];
       if (!own && !viaIssuer) return;
       var id = e.date + "|" + (viaIssuer ? "shelf:" + e.ticker : e.key) + "|" + e.type;
-      if (!groups[id]) { groups[id] = { date: e.date, ticker: e.ticker, type: e.type, issuer: !!viaIssuer, names: [], url: e.url, extra: e.title.indexOf("·") > 0 ? e.title.split("·")[1].trim() : "" }; order.push(id); }
+      if (!groups[id]) { groups[id] = { date: e.date, ticker: e.ticker, type: e.type, issuer: !!viaIssuer, trust: e.type === "psr" && e.key.indexOf("trust:") === 0, names: [], url: e.url, extra: e.title.indexOf("·") > 0 ? e.title.split("·")[1].trim() : "" }; order.push(id); }
       var g = groups[id], who = e.series || e.name; if (g.names.indexOf(who) < 0) g.names.push(who);
     });
     order.slice(0, 30).forEach(function (id) {
       var g = groups[id], issuer = byKey["shelf:" + g.ticker];
       var who = g.ticker + " " + g.names[0] + (g.issuer && g.names.length > 1 ? " and " + (g.names.length - 1) + " more" : "");
       if (g.names[0].indexOf(g.ticker) === 0) who = g.names[0];
-      var what = (g.issuer ? "new deal · " : "") + TITLE[g.type] + (g.extra ? ", " + g.extra : "");
+      var what = (g.issuer ? "new deal · " : g.trust ? "new series · " : "") + TITLE[g.type] + (g.extra ? ", " + g.extra : "");
       var href = g.url || (byKey[g.names[0]] ? byKey[g.names[0]].url : null) || (issuer ? issuer.url : null);
       lines.push('<li><span class="d">' + esc(fmtDate(g.date, false)) + '</span><span class="t">' + (href ? '<a href="' + esc(href) + '">' + esc(who) + "</a>" : esc(who)) + '</span><span class="x">' + esc(what) + "</span></li>");
     });
@@ -181,6 +199,8 @@
     var lines = W.list().map(function (w) { var it = byKey[w.key]; if (!it) return w.name;
       if (isIssuer(it)) return it.name + "  (following for new deals)";
       var g = groupOf(it), m = it.m[HEAD[g]];
+      if (pending(it)) return label(it) + "  awaiting first servicer report" + (pendingNote(it) ? ", " + pendingNote(it) : "");
+      if (untracked(it)) return label(it) + "  not tracked on this site (presale report only)";
       return label(it) + "  " + DATA.metrics[HEAD[g]].label + " " + (m ? fmtVal(m.v, DATA.metrics[HEAD[g]].fmt) : "—") + "  reported " + fmtDate(it.as_of); });
     var text = NAME + " · " + fmtDate(new Date().toISOString()) + " · consumercreditmatters.com\n" + lines.join("\n");
     (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(function () { $("md-export").textContent = "Copied"; setTimeout(function () { $("md-export").textContent = "Copy as text"; }, 1600); }, function () { prompt("Copy:", text); });
