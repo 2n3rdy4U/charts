@@ -326,6 +326,22 @@ p.empty, p.peer-empty { color: var(--muted); font-style: italic; font-size: 13px
    scrollable instead of truncating values (cap-structure ellipsis) or
    compressing columns into unreadable single-letter stacks (comparison).
    Applies to all .grid tables; .kv key-value tables are left alone. */
+/* The inline SVG charts are drawn at 440px (the CNL / DQ pair), 920px (the
+   lease rows) and 1140px (the card trust metrics) with 9px type. Scaled to a
+   phone column they shrank to 3–4px text; two side by side were half that.
+   Below 768px the pair stacks; on a phone (≤600px: an iPhone, or the Duo's
+   outer screen) each chart keeps a minimum width that renders its type at
+   8px or more, and its cell scrolls sideways. The SVG's own width attribute
+   says which drawing it is. */
+@media (max-width: 768px) {
+  .chart-pair { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .chart-cell, .chart-row { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .chart[width="440"]  { min-width: 400px; }
+  .chart[width="920"]  { min-width: 760px; }
+  .chart[width="1140"] { min-width: 900px; }
+}
 @media (max-width: 768px) {
   table.grid {
     display: block;
@@ -386,7 +402,7 @@ p.empty, p.peer-empty { color: var(--muted); font-style: italic; font-size: 13px
     </svg>
   </button>
   <div class="eyebrow">Presale Report &nbsp;·&nbsp; Data as of <strong>2025-06-26</strong></div>
-  <h1>Citibank Credit Card Issuance Trust Class 2025-A2
+  <h1>Citibank Credit Card Issuance Trust Class 2025-A2 <span data-watch="trust:CCCIT" data-watch-kind="trust" data-watch-ac="card" data-watch-ticker="CCCIT" data-watch-name="Citibank Credit Card Issuance Trust" data-watch-series="" data-watch-url="/abs/credit-card/CCCIT/" data-watch-label></span>
     <span class="status">FINAL · CLOSED 2025-06-26</span>
   </h1>
   <div class="metric-strip"><div class="metric"><div class="metric-label">Series Notes</div><div class="metric-value">$750.0MM</div></div><div class="metric"><div class="metric-label">Trust Balance</div><div class="metric-value">$21,087.1MM</div></div><div class="metric"><div class="metric-label">Min Seller&rsquo;s Interest</div><div class="metric-value">—</div></div><div class="metric"><div class="metric-label">Senior Class Min Sub</div><div class="metric-value">0.0%</div></div></div>
@@ -448,4 +464,4 @@ p.empty, p.peer-empty { color: var(--muted); font-style: italic; font-size: 13px
   </p>
   <p class="gen">Deal universe through 2026-11-16</p>
 </footer>
-</body></html>
+<script src="/watch/watch.js" defer></script></body></html>

@@ -111,7 +111,7 @@ function renderOverlay(box){
   // a level index (CPI, sentiment, sales) gets a non-zero baseline so its shape shows; a rate axis stays zero-based
   const macScale = mMk==='bar' ? {zero:false,nice:true} : {zero:false,nice:true};
   embed(box,{ $schema:"https://vega.github.io/schema/vega-lite/v5.json", width:"container", height:chartHeight(selected.length,6), background:null,
-    encoding:{x:{field:"date",type:"temporal",title:"Reporting Date",axis:dateAxis()}},
+    encoding:{x:{field:"date",type:"temporal",title:"Reporting Date",axis:dateAxis(new Set(absA.map(p=>p.date.slice(0,7))).size, plotWidth(box, true))}},
     layer:[
       {data:{values:macA},mark:macMk,
        encoding:{y:{field:"v",type:"quantitative",title:m.name,scale:macScale,axis:{orient:mAx,grid:false,titleColor:"#9c4fb5",labelColor:"#9c4fb5"}},
@@ -171,16 +171,38 @@ const legendCols=()=>isPhone()?4:window.matchMedia('(max-width:1024px)').matches
 const legendCfg=(long)=>isLandscapePhone()
   ? {orient:"right",direction:"vertical",columns:long?1:2,columnPadding:8,labelLimit:long?150:70,labelFontSize:10.5,symbolSize:80,symbolLimit:1000,symbolType:"stroke",symbolStrokeWidth:2,title:null,rowPadding:2}
   : ({orient:"bottom",direction:"horizontal",columns:long&&isPhone()?2:legendCols(),columnPadding:isPhone()?10:24,labelLimit:long?170:90,symbolSize:110,symbolLimit:1000,symbolType:"stroke",symbolStrokeWidth:2});
-// Calendar x-axis — the Explorer's tsDateAxis(): month labels on a short
-// window, years otherwise, angled on a phone.
-function dateAxis(nMonths){
-  const a = (nMonths && nMonths<=24) ? {tickCount:6,format:"%b %Y"}
-          : (nMonths && nMonths>72) ? {tickCount:{interval:"year",step:2},format:"%Y"}
-          : {tickCount:"year",format:"%Y"};
-  a.labelOverlap=false;
-  if(isPhone() && !isLandscapePhone()){ a.labelAngle=-45; a.labelFontSize=10; }   // narrow portrait only
+// Calendar x-axis. The tick step is chosen from the pixels the plot has, not
+// from the orientation: a label needs about 44px of room as a year and 70px as
+// "Mar 2026" (labelFontSize 10–11); with less room per label the next coarser
+// step is tried (months 1·2·3·6, years 1·2·5·10) and, when the coarsest still
+// does not fit, the labels are angled, which needs about 18px each. Vega's
+// own overlap removal stays on as the safety net. A 23-year card trust on a
+// 260px plot (Safari at 150% zoom, or the iPhone Duo's outer screen) used to
+// print every other year on top of its neighbour. `plotPx` is the box width
+// less the y axis; the kit's own charts pass it from the box.
+const AXIS_PX = {year: 44, month: 70, angled: 18};
+function dateAxis(nMonths, plotPx){
+  const px = plotPx > 0 ? plotPx : 640, months = nMonths > 0 ? nMonths : 120;
+  const fits = (n, w) => n * w <= px;
+  let a, n;
+  if(months <= 24){
+    const step = [1, 2, 3, 6].find(st => fits(Math.ceil(months / st), AXIS_PX.month)) || 6;
+    n = Math.ceil(months / step);
+    a = {tickCount: step === 1 ? "month" : {interval: "month", step}, format: "%b %Y"};
+  } else {
+    const years = Math.max(2, months / 12), labels = st => Math.max(2, Math.round(years / st));
+    const step = [1, 2, 5, 10].find(st => fits(labels(st), AXIS_PX.year)) || 10;
+    n = labels(step);
+    a = {tickCount: step === 1 ? "year" : {interval: "year", step}, format: "%Y"};
+  }
+  a.labelOverlap = true;                       // parity: drops every other label only if they still collide
+  a.labelSeparation = 4;
+  if(isPhone()){ a.labelFontSize = 10; }
+  if(!fits(n, months <= 24 ? AXIS_PX.month : AXIS_PX.year)){ a.labelAngle = -45; a.labelFontSize = 10; }
   return a;
 }
+// The plot's width: the box less the y axis (two when a series is on the right axis).
+const plotWidth = (box, dual) => (box && box.clientWidth ? box.clientWidth : 0) - (dual ? 110 : 55);
 // The Explorer's hover: a large invisible target that snaps to the nearest
 // point, a dot on the point, and a dashed guide line down to the axis. The
 // tooltip rides on the dot, so the reader never has to land on a 1.5px line.
@@ -287,10 +309,10 @@ function calendarChart(box,S,o){
   renderSeriesChips(grps.map(g=>({key:g,name:g,color:col(g)})), grps.length>1);
   const data=[]; S.forEach(s=>{ const ax=seriesAxis(s.grp); s.pts.forEach(([x,y,xl,extra])=>data.push({x,xl,series:s.series,grp:s.grp,seg:s.seg||s.series, dash:!!s.dash, yL:ax==='left'?y:null, yR:ax==='right'?y:null, ...(extra||{})})); });
   const nMonths=new Set(data.map(d=>String(d.x).slice(0,7))).size;
-  const X={field:"x",type:"temporal",title:o.xTitle||"Reporting Date",axis:dateAxis(nMonths)};
+  const dual = grps.some(g=>seriesAxis(g)==='right') && grps.some(g=>seriesAxis(g)==='left');
+  const X={field:"x",type:"temporal",title:o.xTitle||"Reporting Date",axis:dateAxis(nMonths, plotWidth(box, dual))};
   const C={field:"grp",type:"nominal",title:"Series",scale:{domain:grps,range:grps.map(col)}};
   const T=o.tip;
-  const dual = grps.some(g=>seriesAxis(g)==='right') && grps.some(g=>seriesAxis(g)==='left');
   // One group per axis side: that side's lines/bars AND its hover layers share
   // one y encoding — one scale, one axis. (A hover layer with a y of its own
   // made Vega draw a second default axis on each side, two scales printed on

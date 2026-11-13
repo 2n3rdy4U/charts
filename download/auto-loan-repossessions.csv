@@ -4,10 +4,10 @@
 # Note: Rates are fractions (0.05 = 5%).
 # Note: Shelves whose loan-level flag does not track repossessions are not in the file.
 # Columns: shelf = the shelf's ticker (ALL = every loan shelf pooled; ALL-LEASE = every lease shelf pooled); shelf_name = the issuer; month = collection month, YYYY-MM; universe = 'all' (every active deal) or 'seasoned' (deals at least 6 months old); repossessions = first-time repossessions in the month; at_risk = loans at risk at the start of the month; repo_rate = repossessions / at_risk; reversed_share = share of the month's repossessions later reinstated
-# Data through: 2026-09
+# Data through: 2026-10
 # Page: https://consumercreditmatters.com/abs/performance/index.html?ac=loan
 # Licence: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/) — free to use, share and adapt with attribution to Consumer Credit Matters
-# Cite as: Consumer Credit Matters, “Auto Loan ABS — First-Time Repossessions”, data through 2026-09, https://consumercreditmatters.com/download/auto-loan-repossessions.csv
+# Cite as: Consumer Credit Matters, “Auto Loan ABS — First-Time Repossessions”, data through 2026-10, https://consumercreditmatters.com/download/auto-loan-repossessions.csv
 # Read in Python: pandas.read_csv(url, comment="#")
 shelf,shelf_name,month,universe,repossessions,at_risk,repo_rate,reversed_share
 AART,Ally,2017-02,all,10,64248,0.000156,0.1
@@ -1446,8 +1446,10 @@ CRVNAN,Carvana N,2026-07,all,175,18671,0.009373,0.005714
 CRVNAN,Carvana N,2026-07,seasoned,175,18671,0.009373,0.005714
 CRVNAN,Carvana N,2026-08,all,158,14120,0.01119,0.006329
 CRVNAN,Carvana N,2026-08,seasoned,158,14120,0.01119,0.006329
-CRVNAN,Carvana N,2026-09,all,129,13626,0.009467,0.0
-CRVNAN,Carvana N,2026-09,seasoned,129,13626,0.009467,0.0
+CRVNAN,Carvana N,2026-09,all,129,13626,0.009467,0.007752
+CRVNAN,Carvana N,2026-09,seasoned,129,13626,0.009467,0.007752
+CRVNAN,Carvana N,2026-10,all,177,13141,0.013469,0.0
+CRVNAN,Carvana N,2026-10,seasoned,177,13141,0.013469,0.0
 CRVNAP,Carvana P,2020-11,all,0,16854,0.0,
 CRVNAP,Carvana P,2020-12,all,0,20083,0.0,
 CRVNAP,Carvana P,2021-01,all,4,19787,0.000202,0.0
@@ -1583,8 +1585,10 @@ CRVNAP,Carvana P,2026-07,all,317,288132,0.0011,0.003155
 CRVNAP,Carvana P,2026-07,seasoned,314,250661,0.001253,0.003185
 CRVNAP,Carvana P,2026-08,all,333,333831,0.000998,0.003003
 CRVNAP,Carvana P,2026-08,seasoned,328,244689,0.00134,0.0
-CRVNAP,Carvana P,2026-09,all,286,326597,0.000876,0.0
-CRVNAP,Carvana P,2026-09,seasoned,282,238912,0.00118,0.0
+CRVNAP,Carvana P,2026-09,all,286,326597,0.000876,0.003497
+CRVNAP,Carvana P,2026-09,seasoned,282,238912,0.00118,0.003546
+CRVNAP,Carvana P,2026-10,all,340,319909,0.001063,0.0
+CRVNAP,Carvana P,2026-10,seasoned,340,269260,0.001263,0.0
 DRIVE,Santander (DRIVE),2017-06,all,41,67930,0.000604,0.0
 DRIVE,Santander (DRIVE),2017-07,all,405,119993,0.003375,0.333333
 DRIVE,Santander (DRIVE),2017-08,all,991,118838,0.008339,0.392533
