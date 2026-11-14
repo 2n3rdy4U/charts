@@ -3,10 +3,10 @@
 # Definition: Net losses in the collection month, annualized, over the pool balance, summed across each shelf's deals; https://consumercreditmatters.com/abs/methodology.html#losses
 # Note: Rates are fractions (0.05 = 5%).
 # Columns: shelf = the shelf's ticker (ALL = every loan shelf pooled; ALL-LEASE = every lease shelf pooled); shelf_name = the issuer; month = collection month, YYYY-MM; universe = 'all' (every active deal) or 'seasoned' (deals at least 6 months old); n_deals = deals in the figure; annualized_net_loss = annualized net loss rate
-# Data through: 2026-09
+# Data through: 2026-10
 # Page: https://consumercreditmatters.com/abs/performance/index.html?ac=loan
 # Licence: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/) — free to use, share and adapt with attribution to Consumer Credit Matters
-# Cite as: Consumer Credit Matters, “Auto Loan ABS — Annualized Net Loss”, data through 2026-09, https://consumercreditmatters.com/download/auto-loan-net-loss.csv
+# Cite as: Consumer Credit Matters, “Auto Loan ABS — Annualized Net Loss”, data through 2026-10, https://consumercreditmatters.com/download/auto-loan-net-loss.csv
 # Read in Python: pandas.read_csv(url, comment="#")
 shelf,shelf_name,month,universe,n_deals,annualized_net_loss
 AART,Ally,2017-01,all,1,0.0
@@ -1317,6 +1317,8 @@ CRVNAN,Carvana N,2026-08,all,3,0.16979
 CRVNAN,Carvana N,2026-08,seasoned,3,0.16979
 CRVNAN,Carvana N,2026-09,all,3,0.121476
 CRVNAN,Carvana N,2026-09,seasoned,3,0.121476
+CRVNAN,Carvana N,2026-10,all,3,0.147889
+CRVNAN,Carvana N,2026-10,seasoned,3,0.147889
 CRVNAP,Carvana P,2020-12,all,1,0.002609
 CRVNAP,Carvana P,2021-01,all,1,0.002898
 CRVNAP,Carvana P,2021-02,all,1,0.003416
@@ -1452,6 +1454,8 @@ CRVNAP,Carvana P,2026-08,all,16,0.008362
 CRVNAP,Carvana P,2026-08,seasoned,14,0.012844
 CRVNAP,Carvana P,2026-09,all,16,0.008532
 CRVNAP,Carvana P,2026-09,seasoned,14,0.012543
+CRVNAP,Carvana P,2026-10,all,16,0.011176
+CRVNAP,Carvana P,2026-10,seasoned,15,0.014383
 DRIVE,Santander (DRIVE),2017-06,all,1,0.00054
 DRIVE,Santander (DRIVE),2017-07,all,2,0.001848
 DRIVE,Santander (DRIVE),2017-08,all,2,0.006698
