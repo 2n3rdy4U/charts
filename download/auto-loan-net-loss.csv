@@ -532,6 +532,8 @@ BLAST,Bridgecrest,2026-08,all,12,0.137313
 BLAST,Bridgecrest,2026-08,seasoned,10,0.168483
 BLAST,Bridgecrest,2026-09,all,12,0.144158
 BLAST,Bridgecrest,2026-09,seasoned,11,0.160502
+BLAST,Bridgecrest,2026-10,all,13,0.154977
+BLAST,Bridgecrest,2026-10,seasoned,11,0.191528
 BMWOT,BMW,2018-01,all,1,-8.1e-05
 BMWOT,BMW,2018-02,all,1,0.000344
 BMWOT,BMW,2018-03,all,1,0.000289
@@ -966,6 +968,8 @@ CAOT,CarMax,2026-08,all,16,0.013018
 CAOT,CarMax,2026-08,seasoned,14,0.016306
 CAOT,CarMax,2026-09,all,16,0.010593
 CAOT,CarMax,2026-09,seasoned,15,0.011954
+CAOT,CarMax,2026-10,all,16,0.011066
+CAOT,CarMax,2026-10,seasoned,14,0.013346
 CMXS,CarMax Select,2024-06,all,1,0.0
 CMXS,CarMax Select,2024-07,all,1,0.002309
 CMXS,CarMax Select,2024-08,all,1,0.007284
@@ -1017,6 +1021,8 @@ CMXS,CarMax Select,2026-08,all,5,0.048199
 CMXS,CarMax Select,2026-08,seasoned,4,0.06083
 CMXS,CarMax Select,2026-09,all,6,0.03994
 CMXS,CarMax Select,2026-09,seasoned,4,0.053291
+CMXS,CarMax Select,2026-10,all,6,0.043624
+CMXS,CarMax Select,2026-10,seasoned,4,0.054868
 COPAR,Capital One Prime,2019-05,all,1,0.001182
 COPAR,Capital One Prime,2019-06,all,1,0.000279
 COPAR,Capital One Prime,2019-07,all,1,0.000367
@@ -1190,6 +1196,8 @@ COPAR,Capital One Prime,2026-08,all,4,0.000266
 COPAR,Capital One Prime,2026-08,seasoned,4,0.000266
 COPAR,Capital One Prime,2026-09,all,5,0.000936
 COPAR,Capital One Prime,2026-09,seasoned,4,0.001078
+COPAR,Capital One Prime,2026-10,all,5,0.001032
+COPAR,Capital One Prime,2026-10,seasoned,4,0.00089
 CRVNAN,Carvana N,2021-04,all,1,0.013221
 CRVNAN,Carvana N,2021-05,all,1,0.004042
 CRVNAN,Carvana N,2021-06,all,2,0.014815
@@ -3565,6 +3573,8 @@ SDART,Santander (SDART),2026-08,all,20,0.077938
 SDART,Santander (SDART),2026-08,seasoned,20,0.077938
 SDART,Santander (SDART),2026-09,all,20,0.080546
 SDART,Santander (SDART),2026-09,seasoned,20,0.080546
+SDART,Santander (SDART),2026-10,all,17,0.074153
+SDART,Santander (SDART),2026-10,seasoned,17,0.074153
 TAOT,Toyota,2017-03,all,1,0.000263
 TAOT,Toyota,2017-04,all,1,0.000183
 TAOT,Toyota,2017-05,all,2,0.001754
