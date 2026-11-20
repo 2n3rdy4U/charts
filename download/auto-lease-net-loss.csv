@@ -4,10 +4,10 @@
 # Note: Rates are fractions (0.05 = 5%).
 # Note: Credit losses only; residual-value results are not in this file.
 # Columns: shelf = the shelf's ticker (ALL = every loan shelf pooled; ALL-LEASE = every lease shelf pooled); shelf_name = the issuer; month = collection month, YYYY-MM; universe = 'all' (every active deal) or 'seasoned' (deals at least 6 months old); n_deals = deals in the figure; annualized_net_loss = annualized credit net loss rate
-# Data through: 2026-09
+# Data through: 2026-10
 # Page: https://consumercreditmatters.com/abs/performance/index.html?ac=lease
 # Licence: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/) — free to use, share and adapt with attribution to Consumer Credit Matters
-# Cite as: Consumer Credit Matters, “Auto Lease ABS — Annualized Credit Net Loss”, data through 2026-09, https://consumercreditmatters.com/download/auto-lease-net-loss.csv
+# Cite as: Consumer Credit Matters, “Auto Lease ABS — Annualized Credit Net Loss”, data through 2026-10, https://consumercreditmatters.com/download/auto-lease-net-loss.csv
 # Read in Python: pandas.read_csv(url, comment="#")
 shelf,shelf_name,month,universe,n_deals,annualized_net_loss
 ALL-LEASE,All Issuers,2017-03,all,,-1e-06
@@ -616,6 +616,8 @@ FCALT,Ford,2026-08,all,5,0.000931
 FCALT,Ford,2026-08,seasoned,4,0.001291
 FCALT,Ford,2026-09,all,5,0.002878
 FCALT,Ford,2026-09,seasoned,4,0.003675
+FCALT,Ford,2026-10,all,5,0.002348
+FCALT,Ford,2026-10,seasoned,4,0.00308
 GMALT,GM Financial,2017-04,all,1,0.002591
 GMALT,GM Financial,2017-05,all,1,0.000479
 GMALT,GM Financial,2017-06,all,2,0.006134

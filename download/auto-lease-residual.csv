@@ -5,10 +5,10 @@
 # Note: Servicers differ in which vehicles they count and which residual value they use (the methodology says how); compare a shelf's trend, not levels across shelves.
 # Note: Months with less than $500,000 of residual value sold are not shown.
 # Columns: shelf = the shelf's ticker; shelf_name = the issuer; month = collection month, YYYY-MM; n_deals = deals with vehicles sold that month; residual_value_sold = residual value of the vehicles sold, US dollars; residual_gain_loss = gain (loss) as a share of residual_value_sold; a gain is positive
-# Data through: 2026-09
+# Data through: 2026-10
 # Page: https://consumercreditmatters.com/abs/performance/index.html?ac=lease&m=rv_gl_cum_ratio&view=calendar
 # Licence: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/) — free to use, share and adapt with attribution to Consumer Credit Matters
-# Cite as: Consumer Credit Matters, “Auto Lease ABS — Residual Gain (Loss) on Vehicles Sold”, data through 2026-09, https://consumercreditmatters.com/download/auto-lease-residual.csv
+# Cite as: Consumer Credit Matters, “Auto Lease ABS — Residual Gain (Loss) on Vehicles Sold”, data through 2026-10, https://consumercreditmatters.com/download/auto-lease-residual.csv
 # Read in Python: pandas.read_csv(url, comment="#")
 shelf,shelf_name,month,n_deals,residual_value_sold,residual_gain_loss
 BMWLT,BMW,2017-03,1,3382531.3,0.554771
@@ -240,6 +240,7 @@ FCALT,Ford,2026-06,5,68491869.54,0.147664
 FCALT,Ford,2026-07,6,88889510.47,0.12145
 FCALT,Ford,2026-08,5,72671421.02,0.094466
 FCALT,Ford,2026-09,5,76412397.13,0.086752
+FCALT,Ford,2026-10,5,88864527.56,0.078766
 GMALT,GM Financial,2017-03,1,2040662.0,0.047521
 GMALT,GM Financial,2017-04,1,2575174.0,0.030302
 GMALT,GM Financial,2017-05,1,3599243.0,0.05384
