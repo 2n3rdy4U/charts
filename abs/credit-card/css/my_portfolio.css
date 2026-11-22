@@ -1,5 +1,8 @@
 /* My Portfolio (web/my_portfolio.html). Tokens from the site frame's style.css; the
-   table follows the performance page's Deals table (dense, tabular figures). */
+   table follows the performance page's Deals table (dense, tabular figures). The
+   layout is draft 4 of the alerts mockups (docs/alerts-mockups/mock.css, 2026-11-22):
+   one row tells a deal's story, status pills follow the name, nothing in capitals on
+   a phone, bold for the name and the headline figure only. */
 .md-page{font-family:var(--font,'Inter',system-ui,sans-serif);color:var(--color-text,#111827);font-size:13px;line-height:1.45;max-width:1180px;margin:0 auto;padding:18px 16px 40px;font-variant-numeric:tabular-nums}
 .md-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin:0 0 14px}
 .md-head h1{font-size:22px;letter-spacing:-.2px;margin:0 0 4px}
@@ -11,19 +14,6 @@
 .md-btn-quiet{color:var(--color-muted,#5b6472);border-color:transparent}
 .md-btn-primary{background:var(--color-brand,#0034A5);border-color:var(--color-brand,#0034A5);color:#fff}
 .md-btn-primary:hover{color:#fff;background:#002a85}
-
-/* since your last visit */
-.md-since{border:1px solid var(--color-border,#dde2ed);border-left:3px solid var(--color-brand,#0034A5);border-radius:8px;background:#fff;padding:12px 16px;margin:0 0 16px}
-.md-since h2{font-size:12px;text-transform:uppercase;letter-spacing:.4px;color:var(--color-muted,#5b6472);margin:0 0 8px;font-weight:600}
-.md-since h2 span{text-transform:none;letter-spacing:0;font-weight:500}
-.md-since ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:2px 28px}
-.md-since li{display:flex;gap:10px;padding:4px 0;border-bottom:1px solid var(--color-border-soft,#f0f0f0);align-items:baseline;min-width:0}
-.md-since .x{min-width:0}
-.md-since .d{color:var(--color-muted,#5b6472);font-size:11.5px;min-width:46px;font-variant-numeric:tabular-nums}
-.md-since .t{font-weight:600;white-space:nowrap} .md-since .t a{border:0} .md-since .t a:hover{border-bottom:1px solid var(--color-brand,#0034A5)} .md-since .x{color:var(--color-muted,#5b6472)}
-.md-since .breach{color:#b4232c;font-weight:700}
-.md-since .quiet{color:var(--color-muted,#5b6472);margin:0}
-.md-since a{color:inherit;text-decoration:none;border-bottom:1px solid #b9c6d8} .md-since a:hover{border-bottom-color:var(--color-brand,#0034A5)}
 
 /* groups and table */
 .md-group{background:#fff;border:1px solid var(--color-border,#dde2ed);border-radius:10px;margin:0 0 14px;overflow:hidden}
@@ -39,15 +29,18 @@ table.md{width:100%;border-collapse:collapse;font-size:12.5px}
 .md td.num,.md th.num{text-align:right}
 .md td.name{white-space:normal;min-width:180px}
 .md td.name a{font-weight:600;color:inherit;text-decoration:none;border-bottom:1px solid #b9c6d8} .md td.name a:hover{border-bottom-color:var(--color-brand,#0034A5)}
-.md td.name .sub{display:block;font-size:11px;color:var(--color-muted,#5b6472);font-weight:400;margin-top:1px}
-.md td.when{color:var(--color-muted,#5b6472);font-size:12px}
+.md td.name .md-pill{margin-left:5px}
+.md td.when{font-size:12px;white-space:normal;min-width:150px} .md td.when .d{color:var(--color-muted,#5b6472);margin-right:5px}
+.md td.when .sub{display:block;font-size:11px;color:var(--color-muted,#5b6472);margin-top:2px}
+.md td.when a{color:inherit;text-decoration:none;border-bottom:1px solid #b9c6d8} .md td.when a:hover{border-bottom-color:var(--color-brand,#0034A5)}
 .md .up{color:#b4232c} .md .dn{color:#1f7a4d} .md .flat{color:var(--color-muted,#5b6472)}
+.md .vd{font-weight:600}
 .md .delta{font-size:11.5px;margin-left:4px}
 .md td.rule{min-width:150px}
-.md .md-pill{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;padding:2px 6px;border-radius:3px;vertical-align:1px}
-.md .md-pill.new{color:#1e40af;background:#dbeafe} .md .md-pill.breach{color:#fff;background:#b4232c} .md .md-pill.basis{color:var(--color-muted,#5b6472);background:#f1f5f9;font-weight:600;text-transform:none}
-.md .md-pill.state{color:var(--color-muted,#5b6472);background:#f1f5f9}
-.md .md-pill.wait{color:#92400e;background:#fef3c7;text-transform:none;letter-spacing:0} .md .md-pill.off{color:var(--color-muted,#5b6472);background:#f1f5f9;text-transform:none;letter-spacing:0} .md td.when .sub{display:block;font-size:11px;color:var(--color-muted,#5b6472);margin-top:2px}
+/* pills carry status only, in sentence case, always right after the deal's name */
+.md .md-pill{display:inline-block;font-size:10.5px;font-weight:600;padding:2px 6px;border-radius:3px;vertical-align:1px;white-space:nowrap}
+.md .md-pill.new{color:#1e40af;background:#dbeafe} .md .md-pill.breach{color:#fff;background:#b4232c}
+.md .md-pill.wait{color:#92400e;background:#fef3c7} .md .md-pill.stale{color:#7a4b00;background:#fff3d6} .md .md-pill.off{color:var(--color-muted,#5b6472);background:#f1f5f9}
 .md-rule .note{flex-basis:100%;font-size:11px}
 .md-link{font:inherit;font-size:12px;color:var(--color-brand,#0034A5);background:none;border:0;padding:0;cursor:pointer;font-weight:600}
 .md-link:hover{text-decoration:underline}
@@ -56,14 +49,14 @@ table.md{width:100%;border-collapse:collapse;font-size:12.5px}
 .md-rule input{width:64px;text-align:right}
 .md-rule .ok{font-weight:600}
 
-/* issuers you follow: a list, no figures */
+/* issuers you follow: one line each, the newest deal and its PSR, no figures */
 .md-follow{list-style:none;margin:0;padding:0 6px}
 .md-follow li{display:flex;align-items:center;gap:10px;padding:8px 8px;border-bottom:1px solid var(--color-border,#dde2ed)}
 .md-follow li:last-child{border-bottom:none}
 .md-follow .who{flex:1;min-width:0}
 .md-follow .who a{font-weight:600;color:inherit;text-decoration:none;border-bottom:1px solid #b9c6d8} .md-follow .who a:hover{border-bottom-color:var(--color-brand,#0034A5)}
 .md-follow .sub{display:block;font-size:11px;color:var(--color-muted,#5b6472);margin-top:1px}
-.md-follow .x{font-size:12px;white-space:nowrap} .md-follow .x a{color:var(--color-brand,#0034A5);text-decoration:none;font-weight:600}
+.md-follow .x{font-size:12px;white-space:nowrap;color:var(--color-muted,#5b6472)} .md-follow .x b{color:var(--color-text,#111827);font-weight:600} .md-follow .x a{color:var(--color-brand,#0034A5);text-decoration:none;font-weight:600}
 .md-none{margin:0;padding:12px 14px;color:var(--color-muted,#5b6472);font-size:12.5px}
 
 /* states */
@@ -79,20 +72,38 @@ table.md{width:100%;border-collapse:collapse;font-size:12.5px}
 @keyframes mdspin{to{transform:rotate(360deg)}}
 .md-foot{color:var(--color-muted,#5b6472);font-size:11.5px;margin:4px 2px 0}
 
-/* phones: the table becomes stacked cards */
+/* phones: each deal is one card with a fixed grammar. Star at the left; the short name
+   with its status pills on their own line, then the latest filings, on the left; the
+   headline figure with its basis and change on the right; the rule on a final line.
+   Nothing in capitals: labels are sentence-case words in grey. */
 @media (max-width:640px){
   .md-page{padding:12px 12px 32px}
   .md-head{flex-direction:column;gap:8px}
-  .md-since ul{grid-template-columns:1fr}
+  .md-group h2{flex-direction:column;align-items:flex-start;gap:2px}
   .md thead{display:none}
-  .md,.md tbody,.md tr,.md td{display:block;white-space:normal}
-  .md tr{padding:8px 12px;border-bottom:1px solid var(--color-border,#dde2ed)}
-  .md td{padding:2px 0;border:0;display:flex;justify-content:space-between;gap:12px}
-  .md td.num::before,.md td.when::before,.md td.rule::before{content:attr(data-l);color:var(--color-muted,#5b6472);font-size:11px;text-transform:uppercase;letter-spacing:.3px}
-  .md td.name{display:block;min-width:0;padding:0 36px 4px 0}
-  .md td[data-l="Type"]{display:block;padding:0 0 4px} .md td[data-l="Type"] .md-pill{display:inline-block}
-  .md td.star{position:absolute;right:10px;top:6px;padding:0} .md tr{position:relative}
-  .md td .vd{white-space:nowrap}
-  .md td.num{text-align:right}
+  .md,.md tbody{display:block}
+  .md tr{display:grid;grid-template-columns:28px minmax(0,1fr) auto;column-gap:10px;row-gap:3px;padding:10px 12px 10px 8px;border-bottom:1px solid var(--color-border,#dde2ed);white-space:normal}
+  .md tbody tr:hover{background:none}
+  .md td{display:block;padding:0;border:0;white-space:normal;min-width:0}
+  .md td.star{grid-area:1/1/4/2;padding:1px 0 0;text-align:left}
+  td.wcol{width:auto;padding:0 !important}
+  .md td.name{grid-area:1/2/2/3;min-width:0}
+  .md td.name a{display:block;width:max-content;max-width:100%}
+  .md td.name .md-pill{margin:3px 4px 0 0}
+  .md td.when{grid-area:2/2/3/3;color:var(--color-text,#111827);font-size:12px;min-width:0}
+  .md td.when::before{content:attr(data-l) " ";color:var(--color-muted,#5b6472)}
+  .md td.num{grid-area:1/3/3/4;display:grid;grid-template-columns:auto auto;justify-content:end;align-content:start;column-gap:4px;text-align:right;padding-left:8px}
+  .md td.num .vd{grid-column:1/-1;font-size:17px;line-height:1.15;white-space:nowrap}
+  .md td.num::before{content:attr(data-l);grid-row:2;grid-column:1;font-size:11px;color:var(--color-muted,#5b6472)}
+  .md td.num .delta{grid-row:2;grid-column:2;font-size:11px;margin:0} .md td.num .delta::before{content:"· ";color:var(--color-muted,#5b6472)}
+  .md td.rule{grid-area:3/2/4/4;margin-top:6px;padding:8px 0 0;border-top:1px solid var(--color-border-soft,#f0f0f0);min-width:0;line-height:1.7}
+  .md td.rule::before{content:attr(data-l) " ";color:var(--color-muted,#5b6472)}
+  .md td.flat[colspan]{grid-area:2/2/3/4}
+  /* the issuer list takes the same shape */
+  .md-follow{padding:0}
+  .md-follow li{display:grid;grid-template-columns:28px minmax(0,1fr);column-gap:10px;row-gap:2px;padding:10px 12px 10px 8px}
+  .md-follow .star{grid-area:1/1/3/2;padding-top:1px}
+  .md-follow .who{grid-area:1/2/2/3}
+  .md-follow .x{grid-area:2/2/3/3;white-space:normal}
 }
 @media (prefers-reduced-motion:reduce){.md-spin{animation:none}}
