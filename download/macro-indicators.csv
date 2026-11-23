@@ -833,7 +833,7 @@ CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activ
 CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2017-01-01,-0.12
 CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2017-02-01,-0.09
 CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2017-03-01,0.02
-CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2017-04-01,0.34
+CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2017-04-01,0.35
 CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2017-05-01,0.02
 CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2017-06-01,0.17
 CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2017-07-01,-0.17
@@ -845,7 +845,7 @@ CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activ
 CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2018-01-01,-0.23
 CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2018-02-01,0.48
 CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2018-03-01,0.11
-CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2018-04-01,0.39
+CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2018-04-01,0.4
 CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2018-05-01,-0.14
 CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2018-06-01,0.22
 CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2018-07-01,0.05
@@ -869,18 +869,18 @@ CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activ
 CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2020-01-01,-0.25
 CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2020-02-01,0.07
 CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2020-03-01,-4.39
-CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2020-04-01,-18.36
+CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2020-04-01,-18.37
 CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2020-05-01,4.78
-CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2020-06-01,6.33
+CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2020-06-01,6.34
 CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2020-07-01,2.65
-CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2020-08-01,1.26
+CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2020-08-01,1.27
 CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2020-09-01,0.5
 CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2020-10-01,1.02
 CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2020-11-01,0.29
 CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2020-12-01,0.68
-CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2021-01-01,0.86
+CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2021-01-01,0.87
 CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2021-02-01,-1.86
-CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2021-03-01,2.4
+CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2021-03-01,2.41
 CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2021-04-01,0.13
 CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2021-05-01,0.23
 CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2021-06-01,0.33
@@ -906,7 +906,7 @@ CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activ
 CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2023-02-01,-0.44
 CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2023-03-01,-0.43
 CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2023-04-01,0.03
-CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2023-05-01,-0.18
+CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2023-05-01,-0.17
 CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2023-06-01,-0.42
 CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2023-07-01,0.12
 CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2023-08-01,-0.17
@@ -942,11 +942,12 @@ CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activ
 CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2026-02-01,0.23
 CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2026-03-01,-0.11
 CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2026-04-01,0.11
-CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2026-05-01,-0.07
-CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2026-06-01,0.01
-CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2026-07-01,0.12
-CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2026-08-01,-0.08
-CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2026-09-01,0.07
+CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2026-05-01,-0.08
+CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2026-06-01,0.03
+CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2026-07-01,0.13
+CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2026-08-01,-0.13
+CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2026-09-01,0.05
+CFNAI,Chicago Fed National Activity Index,Chicago Fed,Chicago Fed National Activity Index,m,2026-10-01,-0.06
 CIVPART,LFPR (SA),Bureau of Labor Statistics (BLS) via FRED,LFPR (SA),m,2016-11-01,62.7
 CIVPART,LFPR (SA),Bureau of Labor Statistics (BLS) via FRED,LFPR (SA),m,2016-12-01,62.7
 CIVPART,LFPR (SA),Bureau of Labor Statistics (BLS) via FRED,LFPR (SA),m,2017-01-01,62.8
