@@ -2282,6 +2282,8 @@ FTAT,Fifth Third,2026-08,all,1,0.006227
 FTAT,Fifth Third,2026-08,seasoned,1,0.006227
 FTAT,Fifth Third,2026-09,all,1,0.004423
 FTAT,Fifth Third,2026-09,seasoned,1,0.004423
+FTAT,Fifth Third,2026-10,all,1,-0.00147
+FTAT,Fifth Third,2026-10,seasoned,1,-0.00147
 GMCAR,GM Financial,2018-01,all,1,4.6e-05
 GMCAR,GM Financial,2018-02,all,1,0.000514
 GMCAR,GM Financial,2018-03,all,1,0.002639
@@ -2487,6 +2489,8 @@ GMCAR,GM Financial,2026-08,all,16,0.005554
 GMCAR,GM Financial,2026-08,seasoned,14,0.006065
 GMCAR,GM Financial,2026-09,all,15,0.005451
 GMCAR,GM Financial,2026-09,seasoned,14,0.005731
+GMCAR,GM Financial,2026-10,all,16,0.006725
+GMCAR,GM Financial,2026-10,seasoned,14,0.008269
 HAROT,Honda,2017-08,all,2,0.000898
 HAROT,Honda,2017-08,seasoned,1,0.001639
 HAROT,Honda,2017-09,all,3,0.000812
@@ -3127,6 +3131,8 @@ MBART,Mercedes-Benz,2026-08,all,6,0.006472
 MBART,Mercedes-Benz,2026-08,seasoned,5,0.01124
 MBART,Mercedes-Benz,2026-09,all,6,0.007624
 MBART,Mercedes-Benz,2026-09,seasoned,5,0.013706
+MBART,Mercedes-Benz,2026-10,all,6,0.005171
+MBART,Mercedes-Benz,2026-10,seasoned,6,0.005171
 NAROT,Nissan,2017-03,all,1,0.002455
 NAROT,Nissan,2017-04,all,1,0.003754
 NAROT,Nissan,2017-05,all,1,0.006819
@@ -3352,6 +3358,8 @@ NAROT,Nissan,2026-08,all,8,0.002249
 NAROT,Nissan,2026-08,seasoned,7,0.001413
 NAROT,Nissan,2026-09,all,9,0.001962
 NAROT,Nissan,2026-09,seasoned,7,0.001703
+NAROT,Nissan,2026-10,all,9,0.001411
+NAROT,Nissan,2026-10,seasoned,8,0.001721
 SDART,Santander (SDART),2017-02,all,1,0.000886
 SDART,Santander (SDART),2017-03,all,1,0.004614
 SDART,Santander (SDART),2017-04,all,1,0.009973

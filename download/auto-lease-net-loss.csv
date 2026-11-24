@@ -1063,6 +1063,8 @@ MBALT,Mercedes-Benz,2026-08,all,5,0.000536
 MBALT,Mercedes-Benz,2026-08,seasoned,5,0.000536
 MBALT,Mercedes-Benz,2026-09,all,5,0.001513
 MBALT,Mercedes-Benz,2026-09,seasoned,5,0.001513
+MBALT,Mercedes-Benz,2026-10,all,6,0.000987
+MBALT,Mercedes-Benz,2026-10,seasoned,5,0.001599
 NALT,Nissan,2017-06,all,1,0.000673
 NALT,Nissan,2017-07,all,1,-0.000358
 NALT,Nissan,2017-08,all,1,0.003898
@@ -1282,6 +1284,8 @@ NALT,Nissan,2026-08,all,5,0.000642
 NALT,Nissan,2026-08,seasoned,4,1.7e-05
 NALT,Nissan,2026-09,all,5,0.003312
 NALT,Nissan,2026-09,seasoned,4,0.00214
+NALT,Nissan,2026-10,all,5,0.004383
+NALT,Nissan,2026-10,seasoned,4,0.00105
 PILOT,Porsche,2026-06,all,1,0.0
 PILOT,Porsche,2026-07,all,1,0.000729
 PILOT,Porsche,2026-08,all,1,0.0
