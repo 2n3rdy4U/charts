@@ -467,6 +467,8 @@ AMCAR,AmeriCredit,2026-08,all,5,0.078202
 AMCAR,AmeriCredit,2026-08,seasoned,5,0.078202
 AMCAR,AmeriCredit,2026-09,all,5,0.068736
 AMCAR,AmeriCredit,2026-09,seasoned,5,0.068736
+AMCAR,AmeriCredit,2026-10,all,4,0.085174
+AMCAR,AmeriCredit,2026-10,seasoned,4,0.085174
 BLAST,Bridgecrest,2023-10,all,1,0.008587
 BLAST,Bridgecrest,2023-11,all,1,0.016092
 BLAST,Bridgecrest,2023-12,all,1,0.0611
@@ -3814,6 +3816,8 @@ TAOT,Toyota,2026-08,all,17,0.003971
 TAOT,Toyota,2026-08,seasoned,15,0.00446
 TAOT,Toyota,2026-09,all,17,0.00275
 TAOT,Toyota,2026-09,seasoned,16,0.002429
+TAOT,Toyota,2026-10,all,18,0.002764
+TAOT,Toyota,2026-10,seasoned,16,0.002976
 VALET,Volkswagen,2018-07,all,1,0.004413
 VALET,Volkswagen,2018-08,all,1,0.006989
 VALET,Volkswagen,2018-09,all,1,0.006412
