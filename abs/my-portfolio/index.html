@@ -34,22 +34,34 @@
 <div id="panel-content">
 <div class="ccm-page">
 <div class="md-page" id="md" data-feed="/abs/performance/data/">
-  <header class="md-head">
+  <header class="md-head" id="md-head">
     <div>
       <h1>My Portfolio</h1>
       <p class="md-sub" id="md-sub">Saved in this browser only. Nothing is sent to us.</p>
+      <p class="ac-signin" id="md-signin" hidden><a href="#sign-in" id="md-signin-link">Sign in to get email alerts ›</a> <span class="flat">Free. Email when a deal you watch reports or crosses your line.</span></p>
     </div>
     <div class="md-actions">
+      <span class="ac-chip" id="md-chip" hidden>Signed in as <b id="md-who"></b><span class="ac-badge" id="md-badge" hidden></span> <button type="button" class="md-btn" id="md-settings">Settings</button></span>
       <button type="button" class="md-btn" id="md-export" hidden>Copy as text</button>
       <button type="button" class="md-btn md-btn-quiet" id="md-clear" hidden>Clear portfolio</button>
     </div>
   </header>
+
+  <div id="md-notice" aria-live="polite"></div>
 
   <div id="md-body" aria-live="polite">
     <div class="md-state" id="md-loading"><span class="md-spin" aria-hidden="true"></span> Loading the latest figures…</div>
   </div>
 
   <p class="md-foot" id="md-foot" hidden></p>
+
+  <!-- the sign-in screens stand alone: the form, then "check your email", then the expired link -->
+  <section class="ac-alone" id="md-auth" hidden></section>
+
+  <!-- the settings sheet and the delete confirmation, both over a scrim -->
+  <div class="ac-scrim" id="md-scrim" hidden></div>
+  <aside class="ac-sheet" id="md-sheet" role="dialog" aria-labelledby="md-sheet-h" aria-modal="true" hidden></aside>
+  <div class="ac-modal" id="md-delete" role="alertdialog" aria-labelledby="md-delete-h" aria-modal="true" hidden></div>
 </div>
 <script src="/watch/watch.js"></script>
 <script src="js/my_portfolio.js"></script>

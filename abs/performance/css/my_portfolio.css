@@ -107,3 +107,96 @@ table.md{width:100%;border-collapse:collapse;font-size:12.5px}
   .md-follow .x{grid-area:2/2/3/3;white-space:normal}
 }
 @media (prefers-reduced-motion:reduce){.md-spin{animation:none}}
+
+/* ── the account (Phase 3; docs/alerts-mockups/mock.css, the .ac-* additions) ── */
+.md-page [hidden]{display:none !important}   /* a hidden chip or line stays hidden whatever its display */
+.ac-signin{margin:6px 0 0;font-size:12.5px}
+.ac-signin .flat{color:var(--color-muted,#5b6472)}
+.ac-signin a,.ac-link{color:var(--color-brand,#0034A5);font-weight:600;text-decoration:none}
+.ac-signin a:hover,.ac-link:hover{text-decoration:underline}
+.ac-chip{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;color:var(--color-muted,#5b6472);background:#fff;border:1px solid var(--color-border,#dde2ed);border-radius:999px;padding:5px 6px 5px 12px}
+.ac-chip b{color:var(--color-text,#111827);font-weight:600}
+.ac-chip .md-btn{padding:4px 10px;border-radius:999px}
+.ac-badge{font-size:10.5px;font-weight:600;color:#7a4b00;background:#fff3d6;border-radius:999px;padding:2px 8px;white-space:nowrap}
+/* the stand-alone card: the form, check your email, the expired link */
+.ac-alone{max-width:560px;margin:28px auto 0}
+.ac-back{display:inline-block;margin:0 0 14px;font-size:12.5px}
+.ac-card{border:1px solid var(--color-border,#dde2ed);border-radius:8px;background:#fff;padding:20px 22px 18px;margin:0;max-width:560px}
+.ac-card h2{font-size:16px;margin:0 0 6px}
+.ac-card p{margin:0 0 12px;font-size:13px;color:#1f2937;line-height:1.5}
+.ac-card p.small{font-size:11.5px;color:var(--color-muted,#5b6472);margin:10px 0 0}
+.ac-form{display:grid;grid-template-columns:1fr 1fr;gap:10px 12px}
+.ac-form .full{grid-column:1/-1}
+.ac-form label{display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.3px;color:var(--color-muted,#5b6472);margin:0 0 4px}
+.ac-form input{font:inherit;font-size:14px;width:100%;box-sizing:border-box;padding:8px 10px;border:1px solid var(--color-border,#dde2ed);border-radius:6px;background:#fff;color:inherit}
+.ac-form input:focus-visible{outline:2px solid var(--color-accent-pill,#2563eb);outline-offset:1px;border-color:transparent}
+.ac-form input[aria-invalid="true"]{border-color:#b4232c}
+.ac-form .row{grid-column:1/-1;display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:2px}
+.ac-form .row .flat{font-size:12px;color:var(--color-muted,#5b6472)}
+.ac-form .err{grid-column:1/-1;margin:0;font-size:12px;color:#8a1c23}
+.ac-code{display:flex;gap:6px;margin:4px 0 2px}
+.ac-code input{width:40px;height:46px;text-align:center;font-size:20px;font-weight:600;padding:0;font-variant-numeric:tabular-nums}
+.ac-addr{font-weight:600;color:var(--color-text,#111827)}
+.ac-wait{color:var(--color-muted,#5b6472);font-size:12px}
+.md-btn[disabled]{opacity:.6;cursor:default}
+/* notices under the header */
+.ac-note{border:1px solid #bfe3cf;background:#effaf3;color:#145a32;border-radius:8px;padding:10px 14px;margin:0 0 14px;font-size:12.5px;line-height:1.5}
+.ac-note.warn{border-color:#f3dba3;background:#fff8e6;color:#7a4b00}
+.ac-note.err{border-color:#f3c6c9;background:#fff7f7;color:#8a1c23}
+.ac-note b{font-weight:600}
+.ac-note a,.ac-note .md-link{color:inherit;font-weight:600;font-size:inherit}
+/* the email switch: a checkbox for the keyboard and the reader, a pill for the eye */
+.ac-sw{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:var(--color-muted,#5b6472);cursor:pointer;white-space:nowrap;position:relative}
+.ac-sw input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+.ac-sw i{width:28px;height:16px;border-radius:999px;background:#cbd2dd;position:relative;transition:background 120ms;flex-shrink:0}
+.ac-sw i::after{content:"";position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:50%;background:#fff;transition:left 120ms}
+.ac-sw.on i{background:var(--color-brand,#0034A5)} .ac-sw.on i::after{left:14px}
+.ac-sw.on{color:var(--color-text,#111827)}
+.ac-sw input:focus-visible+i{outline:2px solid var(--color-accent-pill,#2563eb);outline-offset:2px}
+.md th.mail,.md td.mail{text-align:center}
+.md .held{color:#7a4b00;font-weight:600}
+/* the settings sheet and the delete confirmation */
+.ac-scrim{position:fixed;inset:0;background:rgba(17,24,39,.35);z-index:700}
+.ac-sheet{position:fixed;top:0;right:0;bottom:0;width:min(420px,100vw);background:#fff;z-index:900;box-shadow:-8px 0 30px rgba(16,24,40,.18);overflow:auto;padding:18px 20px 28px;box-sizing:border-box;font-size:13px}
+.ac-sheet h2{font-size:17px;margin:0 0 2px}
+.ac-sheet .sub{color:var(--color-muted,#5b6472);font-size:12.5px;margin:0 0 16px}
+.ac-sheet h3{font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--color-muted,#5b6472);margin:20px 0 8px;padding-top:14px;border-top:1px solid var(--color-border,#dde2ed)}
+.ac-sheet h3:first-of-type{border-top:0;padding-top:0;margin-top:6px}
+.ac-field{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:7px 0;font-size:13px}
+.ac-field .k{color:var(--color-muted,#5b6472);min-width:76px}
+.ac-field .v{flex:1;font-weight:500;min-width:0;overflow-wrap:anywhere}
+.ac-field .v small{display:block;font-weight:400;color:var(--color-muted,#5b6472);font-size:11.5px}
+.ac-field form{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.ac-field form input{font:inherit;font-size:13px;padding:5px 8px;border:1px solid var(--color-border,#dde2ed);border-radius:5px;min-width:0}
+.ac-field form .row{grid-column:1/-1;display:flex;gap:6px}
+.ac-radio{display:block;padding:8px 10px;border:1px solid var(--color-border,#dde2ed);border-radius:6px;margin:0 0 6px;font-size:13px;cursor:pointer}
+.ac-radio.on{border-color:var(--color-brand,#0034A5);background:var(--color-accent-active-bg,#dbeafe)}
+.ac-radio small{display:block;color:var(--color-muted,#5b6472);font-size:11.5px;margin-top:2px}
+.ac-radio input{margin:0 8px 0 0;vertical-align:-1px}
+.ac-check{display:flex;gap:8px;align-items:flex-start;font-size:13px;color:var(--color-muted,#5b6472)}
+.ac-check input{margin:3px 0 0}
+.ac-sheet .ac-actions{display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+.ac-sheet .ac-actions .md-link{font-size:13px}
+.ac-sheet .ac-actions .danger{color:#b4232c}
+.ac-sheet .small{font-size:11.5px;color:var(--color-muted,#5b6472);margin:16px 0 0}
+.ac-close{position:absolute;top:12px;right:14px;font-size:20px;line-height:1;background:none;border:0;color:var(--color-muted,#5b6472);cursor:pointer}
+.ac-modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(440px,calc(100vw - 32px));background:#fff;border-radius:10px;z-index:720;padding:20px 22px;box-shadow:0 20px 60px rgba(16,24,40,.3);box-sizing:border-box}
+.ac-modal h2{font-size:17px;margin:0 0 8px}
+.ac-modal p{font-size:13px;line-height:1.5;margin:0 0 14px;color:#1f2937}
+.ac-modal p.small{color:var(--color-muted,#5b6472);font-size:12px}
+.ac-modal .row{display:flex;gap:8px;justify-content:flex-end}
+.md-btn-danger{background:#b4232c;border-color:#b4232c;color:#fff} .md-btn-danger:hover{color:#fff;background:#8a1c23}
+@media (max-width:640px){
+  .ac-form{grid-template-columns:1fr}
+  .ac-alone{margin-top:12px}
+  .ac-chip{flex-wrap:wrap}
+  .md-actions{flex-wrap:wrap}
+  /* the switch sits at the end of the card's last line, beside the rule */
+  .md td.mail{grid-area:3/3/4/4;align-self:end;justify-self:end;padding-top:8px;display:flex;align-items:center;gap:6px;font-size:11px;color:var(--color-muted,#5b6472)}
+  .md td.mail::before{content:attr(data-l)}
+  .md tr.nomail td.rule{padding-right:0}
+  .md-follow li.mail{grid-template-columns:28px minmax(0,1fr) auto}
+  .md-follow .ac-sw{grid-area:1/3/3/4;align-self:center}
+  .ac-field form{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){.ac-sw i,.ac-sw i::after{transition:none}}

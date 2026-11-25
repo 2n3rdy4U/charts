@@ -2,10 +2,15 @@
 // that tells the deal's whole story (status pills after its name, its latest
 // filings, one headline figure, an optional rule), and the issuers they follow
 // for new deals, one line each. Reads watch.json + events.json (built by
-// src/workflows/sec/shelf_detail/watch_feed.py) and the browser store in
+// src/workflows/sec/shelf_detail/watch_feed.py) and the store in
 // /watch/watch.js. Draws only: no figure is computed here beyond a difference.
 // Draft 4 of the alerts mockups (docs/alerts-mockups, 2026-11-22) is the design:
 // no separate Updates box, deals named by ticker and series, rows breached first.
+//
+// With an account (Phase 3, the account layer of watch.js): the quiet sign-in
+// line, the stand-alone form and "check your email" screens, the chip with the
+// Settings sheet, an Email switch per row, the delete confirmation. Every string
+// is from docs/alerts-mockups/microcopy.md. Signed out, nothing is gated.
 (function () {
   "use strict";
   var root = document.getElementById("md"), FEED = root.dataset.feed || "/abs/performance/data/";
@@ -25,7 +30,9 @@
     return '<span class="delta ' + cls + '" title="Change from the previous reporting period">' + (d > 0 ? "+" : d < 0 ? "−" : "") + s.replace("-", "") + "</span>";
   }
   function ofN(n, cap, word) { return n + " of " + cap + " " + word + (cap === 1 ? "" : "s"); }
+  function n_(n, word) { return n + " " + word + (n === 1 ? "" : "s"); }
   function pill(cls, text) { return ' <span class="md-pill ' + cls + '">' + text + "</span>"; }
+  function signedIn() { return !!(W && W.account); }
 
   // ── what each kind of deal shows and may set a rule on ───────────
   // Issuers are followed for new deals only: no headline, no rule.
@@ -120,43 +127,55 @@
   var _day = function (n, from) { return new Date((from ? new Date(from.slice(0, 10) + "T00:00:00").getTime() : Date.now()) - n * 864e5).toISOString().slice(0, 10); };
   var WINDOW = _day(WINDOW_DAYS), JUST = _day(JUST_DAYS);
 
-  function render() {
-    var body = $("md-body"), all = W.list(), deals = all.filter(function (w) { return !isIssuer(w); }), issuers = all.filter(isIssuer);
-    var n = all.length, lim = W.limits;
-    $("md-export").hidden = $("md-clear").hidden = !n;
-    $("md-sub").textContent = n ? ofN(deals.length, lim.deals, "deal") + " · " + ofN(issuers.length, lim.issuers, "issuer") + " · saved in this browser only"
-                                : "Saved in this browser only. Nothing is sent to us.";
-    if (!n) { renderEmpty(body); $("md-foot").hidden = true; return; }
-    body.innerHTML = renderDeals(deals, lim) + renderIssuers(issuers, lim);
-    var foot = $("md-foot"); foot.hidden = false;
-    foot.textContent = "Figures as published " + fmtDate(DATA.built) + ". Headline: 60+ day delinquency by loan count from the ABS-EE tape (by balance from the 10-D where a deal files no tape); for card trusts, annualized net charge-offs. Δ is the change from the previous reporting period." +
-      " A free portfolio holds " + lim.deals + " deals and follows " + lim.issuers + " issuers. Your list and rules live in this browser's storage; clearing site data removes them.";
+  function mailState(all) {   // "on" when any item mails, "off" when none does
+    var on = all.some(function (w) { return W.emailOn(w.key); });
+    return all.length ? (on ? " · email alerts on" : " · email alerts off") : "";
   }
-  function renderDeals(deals, lim) {
+  function render() {
+    renderHead();
+    if (!DATA) return;
+    var body = $("md-body"), all = W.list(), deals = all.filter(function (w) { return !isIssuer(w); }), issuers = all.filter(isIssuer);
+    var n = all.length, lim = W.limits, acct = signedIn();
+    $("md-export").hidden = !n;
+    $("md-clear").hidden = !n || acct;                // an account is emptied star by star
+    $("md-sub").textContent = n ? ofN(deals.length, lim.deals, "deal") + " · " + ofN(issuers.length, lim.issuers, "issuer") + (acct ? mailState(all) : " · saved in this browser only")
+                                : acct ? ofN(0, lim.deals, "deal") + " · " + ofN(0, lim.issuers, "issuer") : "Saved in this browser only. Nothing is sent to us.";
+    if (!n) { renderEmpty(body); $("md-foot").hidden = true; return; }
+    body.innerHTML = renderDeals(deals, lim, acct) + renderIssuers(issuers, lim, acct);
+    var foot = $("md-foot"); foot.hidden = false;
+    foot.innerHTML = esc("Figures as published " + fmtDate(DATA.built) + ". Headline: 60+ day delinquency by loan count from the ABS-EE tape (by balance from the 10-D where a deal files no tape); for card trusts, annualized net charge-offs. Δ is the change from the previous reporting period.") +
+      (acct ? esc(" Your account holds " + lim.deals + " deals and follows " + lim.issuers + " issuers; one email a day at most.") + ' <a class="ac-link" href="/privacy/">Privacy</a>'
+            : esc(" A free portfolio holds " + lim.deals + " deals and follows " + lim.issuers + " issuers. Your list and rules live in this browser's storage; clearing site data removes them."));
+  }
+  function mailSwitch(it, kind) {
+    var on = W.emailOn(it.key), title = kind === "issuer" ? "Email me about new deals from this issuer" : (on ? "Email me about this deal" : "Email off for this deal");
+    return '<label class="ac-sw' + (on ? " on" : "") + '" title="' + title + '"><input type="checkbox" data-mail="' + esc(it.key) + '"' + (on ? " checked" : "") + ' aria-label="' + title + '"><i></i></label>';
+  }
+  function renderDeals(deals, lim, acct) {
     var meta = DATA.metrics;
     var html = '<section class="md-group" aria-label="Deals you watch"><h2>Deals you watch<span class="n">' + ofN(deals.length, lim.deals, "deal") + ' · breached first, then by newest filing · a name opens its charts</span></h2>';
     if (!deals.length) return html + '<p class="md-none">No deals yet. Star a deal on the Auto Loan, Auto Lease, Credit Card or Issuance pages, or on its PSR.</p></section>';
     html += '<div class="md-scroll"><table class="md"><thead><tr>' +
       '<th class="wcol"><span class="sr-only">Watch</span></th><th>Deal</th><th>Latest filings</th>' +
-      '<th class="num">Headline<span class="basis">60+ DQ · cards: charge-offs</span></th><th>Rule</th></tr></thead><tbody>';
+      '<th class="num">Headline<span class="basis">60+ DQ · cards: charge-offs</span></th><th>Rule</th>' + (acct ? '<th class="mail">Email</th>' : "") + '</tr></thead><tbody>';
     // breached rules first, then the newest filing first; a deal the feed no longer carries last
     var rows = deals.map(function (w) { var it = byKey[w.key]; return { w: w, it: it, b: it && breached(W.rule(w.key), it) ? 1 : 0, d: it ? newestFiling(it) : "" }; });
     rows.sort(function (a, b) { return b.b - a.b || (a.d < b.d ? 1 : a.d > b.d ? -1 : 0); });
     rows.forEach(function (r) {
-      var w = r.w, it = r.it;
+      var w = r.w, it = r.it, mail = acct ? '<td class="mail" data-l="Email">' + mailSwitch(w, "deal") + "</td>" : "", cls = acct && !W.emailOn(w.key) ? ' class="nomail"' : "";
       if (!it) {   // the feed no longer describes it: it left the build (the generators star only what the feed carries)
-        html += '<tr><td class="star wcol">' + star(w) + '</td><td class="name">' + (w.url ? '<a href="' + esc(w.url) + '">' + esc(w.name) + "</a>" : esc(w.name)) +
-                '</td><td colspan="3" class="flat">Not in the current build: paid off or withdrawn.</td></tr>';
+        html += "<tr" + cls + ' data-key="' + esc(w.key) + '"><td class="star wcol">' + star(w) + '</td><td class="name">' + (w.url ? '<a href="' + esc(w.url) + '">' + esc(w.name || w.key) + "</a>" : esc(w.name || w.key)) +
+                '</td><td colspan="3" class="flat">Not in the current build: paid off or withdrawn.</td>' + mail + "</tr>";
         return;
       }
       var g = groupOf(it), m = it.m[HEAD[g]], just = it.as_of && it.as_of >= JUST;
       var pills = (r.b ? pill("breach", "Breached") : "") + (just ? pill("new", "New") : "") +
                   (pending(it) ? pill("wait", "Awaiting first report") : untracked(it) ? pill("off", "Not tracked") : stale(it) ? pill("stale", "Not reported in " + staleDays(it) + " days") : "");
-      html += '<tr data-key="' + esc(w.key) + '"><td class="star wcol">' + star(it) + "</td>" +
+      html += "<tr" + cls + ' data-key="' + esc(w.key) + '"><td class="star wcol">' + star(it) + "</td>" +
         '<td class="name"><a href="' + esc(it.url) + '" title="' + esc(it.name) + '">' + esc(label(it)) + "</a>" + pills + "</td>" +
         '<td class="when" data-l="Filings">' + filingsCell(it) + "</td>" +
         '<td class="num" data-l="' + esc(meta[HEAD[g]].label) + '"' + (m && m.basis ? ' title="' + esc(meta[HEAD[g]].label + ", " + m.basis) + '"' : "") + '><span class="vd">' + (m ? fmtVal(m.v, meta[HEAD[g]].fmt) : "—") + "</span>" + (m ? fmtDelta(m.v, m.p, meta[HEAD[g]].fmt) : "") + "</td>" +
-        '<td class="rule" data-l="Rule">' + ruleCell(it, meta) + "</td></tr>";
+        '<td class="rule" data-l="Rule">' + ruleCell(it, meta) + "</td>" + mail + "</tr>";
     });
     return html + "</tbody></table></div></section>";
   }
@@ -165,8 +184,8 @@
     DATA.items.forEach(function (it) { if (it.kind === "deal" && it.ticker === ticker && it.series && (!best || it.series > best.series)) best = it; });
     return best;
   }
-  function renderIssuers(issuers, lim) {
-    var html = '<section class="md-group" aria-label="New deals from issuers you follow"><h2>New deals from issuers you follow<span class="n">' + ofN(issuers.length, lim.issuers, "issuer") + ' · new deals only, no figures</span></h2>';
+  function renderIssuers(issuers, lim, acct) {
+    var html = '<section class="md-group" aria-label="New deals from issuers you follow"><h2>New deals from issuers you follow<span class="n">' + ofN(issuers.length, lim.issuers, "issuer") + (acct ? " · you hear when one announces a deal and its PSR is up" : " · new deals only, no figures") + "</span></h2>";
     if (!issuers.length) return html + '<p class="md-none">No issuers yet. Follow one from its performance page to see its new deals here.</p></section>';
     html += '<ul class="md-follow">';
     issuers.forEach(function (w) {
@@ -177,22 +196,254 @@
         var psr = nd.url && nd.url.indexOf("/presale/") > 0 ? nd.url : (ev.filter(function (e) { return e.type === "psr" && e.url; })[0] || {}).url;
         x = (fresh ? "<b>New deal</b> " + who : "No new deal since " + who) + (psr ? ' · <a href="' + esc(psr) + '">PSR ›</a>' : "");
       }
-      html += '<li><span class="star">' + star(it || w) + '</span><span class="who">' +
-        (it ? '<a href="' + esc(it.url) + '">' + esc(it.name) + "</a>" : esc(w.name)) +
+      html += "<li" + (acct ? ' class="mail"' : "") + ' data-key="' + esc(w.key) + '"><span class="star">' + star(it || w) + '</span><span class="who">' +
+        (it ? '<a href="' + esc(it.url) + '">' + esc(it.name) + "</a>" : esc(w.name || w.key)) +
         '<span class="sub">' + (it && it.n_active != null ? it.n_active + " active deals" : "") + "</span></span>" +
-        '<span class="x">' + x + "</span></li>";
+        '<span class="x">' + x + "</span>" + (acct ? mailSwitch(w, "issuer") : "") + "</li>";
     });
     return html + "</ul></section>";
   }
   function star(it) {
-    return '<span data-watch="' + esc(it.key) + '" data-watch-kind="' + esc(it.kind) + '" data-watch-ac="' + esc(it.ac) + '" data-watch-ticker="' + esc(it.ticker || "") + '" data-watch-name="' + esc(it.name) + '" data-watch-series="' + esc(it.series || "") + '" data-watch-url="' + esc(it.url || "") + '"></span>';
+    return '<span data-watch="' + esc(it.key) + '" data-watch-kind="' + esc(it.kind) + '" data-watch-ac="' + esc(it.ac || "") + '" data-watch-ticker="' + esc(it.ticker || "") + '" data-watch-name="' + esc(it.name || it.key) + '" data-watch-series="' + esc(it.series || "") + '" data-watch-url="' + esc(it.url || "") + '"></span>';
   }
   function renderEmpty(body) {
+    var lim = W.limits, acct = signedIn();
     body.innerHTML = '<div class="md-state md-empty"><h2>Nothing in your portfolio yet</h2>' +
-      "<p>Star up to " + W.limits.deals + " deals, auto or card, from their pages. Each appears here with its latest filings and one headline figure, and you can set one alert rule on it. Follow up to " + W.limits.issuers + " issuers to see their new deals here.</p>" +
+      (acct ? "<p>Star a deal on any performance page, PSR or the issuance table and it appears here with its latest filings and one headline figure. You can set one alert rule on each and we'll email you when it reports or crosses the line. Follow an issuer to hear when it brings a new deal.</p>"
+            : "<p>Star up to " + lim.deals + " deals, auto or card, from their pages. Each appears here with its latest filings and one headline figure, and you can set one alert rule on it. Follow up to " + lim.issuers + " issuers to see their new deals here.</p>") +
       '<div class="where"><a href="/abs/performance/index.html?ac=loan">Auto Loan ›</a><a href="/abs/performance/index.html?ac=lease">Auto Lease ›</a><a href="/abs/credit-card/index.html">Credit Card ›</a><a href="/abs/issuance/index.html">Issuance ›</a></div>' +
-      '<div class="demo">' + (W.available ? "Saved in this browser only — no account, nothing sent to us." : "This browser is not storing site data, so a portfolio cannot be kept here.") + "</div></div>";
+      '<div class="demo">' + (acct ? esc(n_(lim.deals, "deal") + " and " + n_(lim.issuers, "issuer") + " on an account · one message a day at most.")
+                                   : W.available ? "Saved in this browser only — no account, nothing sent to us." : "This browser is not storing site data, so a portfolio cannot be kept here.") + "</div></div>";
   }
+
+  // ── the header: the sign-in line, or the chip ────────────────────
+  var ACCOUNTS = null;   // true once /watch/alerts.json names a project
+  function renderHead() {
+    var a = W && W.account;
+    $("md-chip").hidden = !a;
+    $("md-signin").hidden = !!a || !ACCOUNTS || !(W && W.available);
+    if (a) {
+      $("md-who").textContent = a.first_name || a.email;
+      $("md-badge").hidden = !a.label; $("md-badge").textContent = a.label || "";
+    }
+  }
+  function notice(html, cls) {
+    $("md-notice").innerHTML = html ? '<div class="ac-note' + (cls ? " " + cls : "") + '">' + html + "</div>" : "";
+  }
+  function landed(res) {   // what the merge moved, in one line; nothing to say when nothing moved
+    var m = res.moved, l = res.left, parts = [];
+    if (m.deals) parts.push(n_(m.deals, "deal"));
+    if (m.issuers) parts.push(n_(m.issuers, "issuer"));
+    if (m.rules) parts.push(n_(m.rules, "rule"));
+    var lim = W.limits, text = "";
+    if (parts.length) {
+      var list = parts.length > 1 ? parts.slice(0, -1).join(", ") + " and " + parts[parts.length - 1] : parts[0];
+      text = "<b>You're signed in.</b> The " + esc(list) + " saved in this browser " + (parts.length === 1 && !/^1 /.test(parts[0]) || parts.length > 1 ? "are" : "is") +
+             " now on your account, and email alerts are on for each. Turn any off with its switch, or change how often you hear from us in Settings.";
+    }
+    if (l.deals || l.issuers) {
+      var left = l.deals && l.issuers ? n_(l.deals, "deal") + " and " + n_(l.issuers, "issuer") : l.deals ? n_(l.deals, "deal") : n_(l.issuers, "issuer");
+      text += (text ? " " : "") + "Your account holds " + esc(n_(lim.deals, "deal") + " and " + n_(lim.issuers, "issuer")) + "; " + esc(left) + " from this browser didn't fit and " + (l.deals + l.issuers === 1 ? "is" : "are") + " still saved here. Remove one to add them.";
+    }
+    notice(text, l.deals || l.issuers ? "warn" : "");
+  }
+
+  // ── the sign-in screens: form → check your email; the expired link ──
+  var auth = { state: null, email: "", first: "", last: "", again: null };
+  function showAuth(state) {
+    auth.state = state;
+    var on = !!state;
+    $("md-head").hidden = $("md-body").hidden = on; if (on) $("md-foot").hidden = true; else if (DATA && W.count()) $("md-foot").hidden = false;
+    $("md-notice").hidden = on;
+    $("md-auth").hidden = !on;
+    clearInterval(auth.again);
+    if (!on) { $("md-auth").innerHTML = ""; return; }
+    var back = '<a class="ac-link ac-back" href="#" data-auth="back">‹ My Portfolio</a>';
+    if (state === "form") {
+      $("md-auth").innerHTML = back + '<div class="ac-card" role="region" aria-labelledby="ac-h1"><h2 id="ac-h1">Get email alerts</h2>' +
+        "<p>One message a day at most, when a deal you watch reports, a rule you set is crossed, or an issuer you follow brings a new deal. Your portfolio moves to the account.</p>" +
+        '<form class="ac-form" id="ac-form" novalidate>' +
+        '<div class="full"><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com" required value="' + esc(auth.email) + '"></div>' +
+        '<div><label for="f-first">First name</label><input id="f-first" name="first" type="text" autocomplete="given-name" required value="' + esc(auth.first) + '"></div>' +
+        '<div><label for="f-last">Last name</label><input id="f-last" name="last" type="text" autocomplete="family-name" required value="' + esc(auth.last) + '"></div>' +
+        '<p class="err" id="ac-err" hidden></p>' +
+        '<div class="row"><button type="submit" class="md-btn md-btn-primary" id="ac-send">Send me a sign-in link</button><span class="flat">No password. The link signs you in.</span></div></form>' +
+        '<p class="small">We ask for your name so we know who we\'re writing to. We hold it and your email address, nothing else, and only you can see your portfolio. <a class="ac-link" href="/privacy/">Privacy ›</a></p></div>';
+      $("f-email").focus();
+    } else if (state === "check") {
+      $("md-auth").innerHTML = back + '<div class="ac-card" role="region" aria-labelledby="ac-h2"><h2 id="ac-h2">Check your email</h2>' +
+        '<p>We sent a sign-in link to <span class="ac-addr">' + esc(auth.email) + "</span>. Open it on this device to sign in here, or type the six-digit code from the email:</p>" +
+        '<form class="ac-form" id="ac-code-form" novalidate><div class="full"><label for="c1">Code</label><div class="ac-code" id="codebox">' +
+        [1, 2, 3, 4, 5, 6].map(function (i) { return '<input id="c' + i + '" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="' + (i === 1 ? "one-time-code" : "off") + '" aria-label="Digit ' + i + '">'; }).join("") + "</div></div>" +
+        '<p class="err" id="ac-err" hidden></p>' +
+        '<div class="row"><button type="submit" class="md-btn md-btn-primary" id="ac-verify">Sign in</button><span class="ac-wait" id="ac-again">Didn\'t get it? Check your spam folder. You can send again in <b id="ac-secs">30</b>s.</span></div></form>' +
+        '<p class="small">The link and the code work once, for 15 minutes. <a class="ac-link" href="#" data-auth="form">Wrong address? Start over.</a></p></div>';
+      $("c1").focus();
+      var n = 30;
+      auth.again = setInterval(function () {
+        n--; var s = $("ac-secs"), box = $("ac-again"); if (!box) { clearInterval(auth.again); return; }
+        if (n <= 0) { clearInterval(auth.again); box.innerHTML = 'Didn\'t get it? Check your spam folder, or <a class="ac-link" href="#" data-auth="again">send again</a>.'; } else if (s) s.textContent = n;
+      }, 1000);
+    } else if (state === "expired") {
+      $("md-auth").innerHTML = back + '<div class="ac-card" role="region" aria-labelledby="ac-h3"><h2 id="ac-h3">That sign-in link has expired</h2>' +
+        "<p>Links work once, for 15 minutes.</p>" +
+        '<div class="ac-form"><div class="row"><button type="button" class="md-btn md-btn-primary" data-auth="form">Send me a new link</button></div></div></div>';
+    }
+    window.scrollTo(0, 0);
+  }
+  function authError(msg, field) {
+    var e = $("ac-err"); if (!e) return; e.textContent = msg; e.hidden = !msg;
+    if (field) { field.setAttribute("aria-invalid", "true"); field.focus(); }
+  }
+  function sendLink(again) {
+    var btn = $("ac-send") || $("ac-verify"); if (btn) btn.disabled = true;
+    return W.signIn({ email: auth.email, first_name: auth.first, last_name: auth.last }).then(function () {
+      if (!again) showAuth("check"); else { W.toast("Sent again."); showAuth("check"); }
+    }, function (e) {
+      if (btn) btn.disabled = false;
+      if (again) { authError(e.reason === "rate" ? "We just sent a link to that address. Give it a minute, then try again." : "Couldn't send the link. Try again in a moment."); return; }
+      authError(e.reason === "email" ? "That doesn't look like an email address." : e.reason === "rate" ? "We just sent a link to that address. Give it a minute, then try again." : "Couldn't send the link. Try again in a moment.", e.reason === "email" ? $("f-email") : null);
+    });
+  }
+  function verifyCode() {
+    var code = Array.prototype.map.call(document.querySelectorAll("#codebox input"), function (i) { return i.value; }).join("");
+    if (code.length < 6) { authError("Type all six digits of the code.", $("c1")); return; }
+    var btn = $("ac-verify"); btn.disabled = true;
+    W.verify({ email: auth.email, token: code }).then(function (res) {
+      showAuth(null); landed(res); render();
+    }, function (e) {
+      btn.disabled = false;
+      document.querySelectorAll("#codebox input").forEach(function (i) { i.value = ""; });
+      // the project answers "expired or invalid" for both a wrong code and an old one
+      authError(e.reason === "expired" ? "That code didn't match. Check the newest email; each request sends a new one." : "Couldn't check the code. Try again in a moment.", $("c1"));
+    });
+  }
+  root.addEventListener("click", function (e) {
+    var a = e.target.closest("[data-auth]"); if (!a) return;
+    e.preventDefault();
+    var go = a.dataset.auth;
+    if (go === "back") showAuth(null);
+    else if (go === "form") showAuth("form");
+    else if (go === "again") sendLink(true);
+  });
+  $("md-signin-link").addEventListener("click", function (e) { e.preventDefault(); showAuth("form"); });
+  root.addEventListener("submit", function (e) {
+    var f = e.target;
+    if (f.id === "ac-form") {
+      e.preventDefault();
+      auth.email = f.email.value.trim(); auth.first = f.first.value.trim(); auth.last = f.last.value.trim();
+      ["f-email", "f-first", "f-last"].forEach(function (id) { $(id).removeAttribute("aria-invalid"); });
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(auth.email)) { authError("That doesn't look like an email address.", f.email); return; }
+      if (!auth.first) { authError("Please tell us your name.", f.first); return; }
+      if (!auth.last) { authError("Please tell us your name.", f.last); return; }
+      authError(""); sendLink(false);
+    } else if (f.id === "ac-code-form") { e.preventDefault(); verifyCode(); }
+  });
+  // the code boxes: a digit moves on, backspace moves back, a pasted code fills all six
+  root.addEventListener("input", function (e) {
+    var i = e.target; if (!i.closest || !i.closest("#codebox")) return;
+    var v = i.value.replace(/\D/g, "");
+    if (v.length > 1) { var boxes = document.querySelectorAll("#codebox input"), at = Array.prototype.indexOf.call(boxes, i); v.split("").forEach(function (d, j) { if (boxes[at + j]) boxes[at + j].value = d; }); (boxes[Math.min(at + v.length, 5)]).focus(); return; }
+    i.value = v;
+    if (v && i.nextElementSibling) i.nextElementSibling.focus();
+    else if (v && !i.nextElementSibling) verifyCode();
+  });
+  root.addEventListener("keydown", function (e) {
+    var i = e.target; if (!i.closest || !i.closest("#codebox")) return;
+    if (e.key === "Backspace" && !i.value && i.previousElementSibling) i.previousElementSibling.focus();
+  });
+
+  // ── the settings sheet and the delete confirmation ───────────────
+  var editingName = false, editingEmail = false, emailSent = "";
+  function openSheet() {
+    var a = W.account; if (!a) return;
+    $("md-scrim").hidden = $("md-sheet").hidden = false;
+    $("md-sheet").innerHTML = '<button type="button" class="ac-close" aria-label="Close" data-sheet="close">×</button><h2 id="md-sheet-h">Settings</h2><p class="sub">Your account on Consumer Credit Matters</p>' +
+      "<h3>Account</h3>" +
+      (editingName ? '<div class="ac-field"><span class="k">Name</span><form id="ac-name"><input name="first" aria-label="First name" value="' + esc(a.first_name) + '" required><input name="last" aria-label="Last name" value="' + esc(a.last_name) + '" required><div class="row"><button type="submit" class="md-btn">Save</button><button type="button" class="md-btn md-btn-quiet" data-sheet="name-cancel">Cancel</button></div></form></div>'
+                   : '<div class="ac-field"><span class="k">Name</span><span class="v">' + esc(a.first_name + " " + a.last_name) + '</span><button type="button" class="md-link" data-sheet="name">Edit</button></div>') +
+      (editingEmail ? '<div class="ac-field"><span class="k">Email</span><form id="ac-email"><input name="email" type="email" inputmode="email" autocomplete="email" aria-label="New email address" placeholder="new@example.com" required><div class="row"><button type="submit" class="md-btn">Send the link</button><button type="button" class="md-btn md-btn-quiet" data-sheet="email-cancel">Cancel</button></div></form></div>'
+                    : '<div class="ac-field"><span class="k">Email</span><span class="v">' + esc(a.email) +
+                      (emailSent ? "<small>We sent a link to " + esc(emailSent) + " and one to this address. The change takes effect when both are opened.</small>"
+                                 : "<small>Changing it sends a link to the new address and to this one; the change takes effect when both are opened.</small>") +
+                      '</span><button type="button" class="md-link" data-sheet="email">Change</button></div>') +
+      '<div class="ac-field"><span class="k">Since</span><span class="v">' + esc(fmtDate(a.since)) + "</span></div>" +
+      (a.label ? '<div class="ac-field"><span class="k">Tier</span><span class="v"><span class="ac-badge">' + esc(a.label) + "</span></span></div>" : "") +
+      "<h3>How often</h3>" +
+      '<label class="ac-radio' + (a.cadence === "daily" ? " on" : "") + '"><input type="radio" name="cad" value="daily"' + (a.cadence === "daily" ? " checked" : "") + ">As it happens<small>One message a day at most, after the day's filings have been published. Most months that is a few messages.</small></label>" +
+      '<label class="ac-radio' + (a.cadence === "monthly" ? " on" : "") + '"><input type="radio" name="cad" value="monthly"' + (a.cadence === "monthly" ? " checked" : "") + ">Monthly digest<small>One message on the first sending day of each month with everything from the month before, including the deals that were quiet.</small></label>" +
+      "<h3>Newsletter</h3>" +
+      '<label class="ac-check"><input type="checkbox" disabled><span>Send me the weekly newsletter<br><small>The newsletter still goes out from our current mailing list. When it moves to this account you can turn it on here; nobody will be mailed twice.</small></span></label>' +
+      "<h3>Your account</h3>" +
+      '<div class="ac-actions"><button type="button" class="md-link" data-sheet="signout">Sign out</button><button type="button" class="md-link danger" data-sheet="delete">Delete my account…</button></div>' +
+      '<p class="small">Only you can see your portfolio. We hold your email, name, this list, and a record of what we sent you. <a class="ac-link" href="/privacy/">Privacy ›</a></p>';
+    ($("ac-name") ? $("ac-name").first : $("ac-email") ? $("ac-email").email : $("md-sheet").querySelector(".ac-close")).focus();
+  }
+  function closeSheet() { $("md-scrim").hidden = $("md-sheet").hidden = true; $("md-sheet").innerHTML = ""; editingName = editingEmail = false; $("md-settings").focus(); }
+  function openDelete() {
+    var all = W.list(), deals = all.filter(function (w) { return !isIssuer(w); }).length, iss = all.length - deals, rules = all.filter(function (w) { return W.rule(w.key); }).length;
+    $("md-sheet").hidden = true;
+    $("md-delete").hidden = false;
+    $("md-delete").innerHTML = '<h2 id="md-delete-h">Delete your account?</h2>' +
+      "<p>This removes your email address and name, your " + esc(n_(deals, "deal") + " and " + n_(iss, "issuer") + ", your " + n_(rules, "rule")) + ", and the record of what we sent you. No more email from us. It can't be undone, but you can sign up again any time.</p>" +
+      '<p class="small">Your portfolio stays in this browser\'s storage, the way it was before you signed in, until you clear it.</p>' +
+      '<div class="row"><button type="button" class="md-btn" data-sheet="keep">Keep my account</button><button type="button" class="md-btn md-btn-danger" data-sheet="delete-confirm">Delete my account</button></div>';
+    $("md-delete").querySelector("[data-sheet=keep]").focus();
+  }
+  function closeDelete(back) { $("md-delete").hidden = true; $("md-delete").innerHTML = ""; if (back) { $("md-sheet").hidden = false; } else closeSheet(); }
+  $("md-settings").addEventListener("click", openSheet);
+  $("md-scrim").addEventListener("click", function () { if (!$("md-delete").hidden) closeDelete(true); else closeSheet(); });
+  document.addEventListener("keydown", function (e) { if (e.key !== "Escape") return; if (!$("md-delete").hidden) closeDelete(true); else if (!$("md-sheet").hidden) closeSheet(); });
+  function saved(p) { return p.then(function () { W.toast("Saved."); }, function () { W.toast("Couldn't save that change. Your portfolio is as it was — try again in a moment."); }); }
+  root.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-sheet]"); if (!b) return;
+    var what = b.dataset.sheet;
+    if (what === "close") closeSheet();
+    else if (what === "name") { editingName = true; openSheet(); }
+    else if (what === "name-cancel") { editingName = false; openSheet(); }
+    else if (what === "email") { editingEmail = true; openSheet(); }
+    else if (what === "email-cancel") { editingEmail = false; openSheet(); }
+    else if (what === "signout") { closeSheet(); W.signOut(); notice(""); render(); }
+    else if (what === "delete") openDelete();
+    else if (what === "keep") closeDelete(true);
+    else if (what === "delete-confirm") {
+      b.disabled = true;
+      W.deleteAccount().then(function () {
+        closeDelete(false); render();
+        notice("<b>Your account is deleted.</b> Your email address, name, portfolio, rules and the record of what we sent you are gone. The portfolio saved in this browser is as it was before you signed in.");
+      }, function () { b.disabled = false; W.toast("Couldn't delete the account. Try again in a moment."); });
+    }
+  });
+  root.addEventListener("submit", function (e) {
+    if (e.target.id === "ac-email") {
+      e.preventDefault();
+      var addr = e.target.email.value.trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(addr)) { W.toast("That doesn't look like an email address."); return; }
+      if (addr.toLowerCase() === (W.account.email || "").toLowerCase()) { W.toast("That is already your address."); return; }
+      e.target.querySelector("button[type=submit]").disabled = true;
+      W.changeEmail(addr).then(function () { emailSent = addr; editingEmail = false; openSheet(); },
+                              function (e) { W.toast(e.status === 429 ? "We just sent a link to that address. Give it a minute, then try again." : "Couldn't send the link. Try again in a moment."); editingEmail = false; openSheet(); });
+      return;
+    }
+    if (e.target.id !== "ac-name") return;
+    e.preventDefault();
+    var f = e.target, first = f.first.value.trim(), last = f.last.value.trim();
+    if (!first || !last) { W.toast("Please tell us your name."); return; }
+    saved(W.setAccount({ first_name: first, last_name: last })).then(function () { editingName = false; openSheet(); renderHead(); });
+  });
+  root.addEventListener("change", function (e) {
+    if (e.target.name === "cad") {
+      document.querySelectorAll(".ac-radio").forEach(function (l) { l.classList.toggle("on", l.contains(e.target)); });
+      saved(W.setAccount({ cadence: e.target.value }));
+    }
+    if (e.target.dataset && e.target.dataset.mail) {
+      var k = e.target.dataset.mail, on = e.target.checked;
+      W.setEmail(k, on);
+      e.target.closest(".ac-sw").classList.toggle("on", on);
+      var row = e.target.closest("tr"); if (row) row.classList.toggle("nomail", !on);
+      $("md-sub").textContent = $("md-sub").textContent.replace(/ · email alerts (on|off)$/, mailState(W.list()));
+    }
+  });
 
   // ── events ───────────────────────────────────────────────────────
   root.addEventListener("click", function (e) {
@@ -212,10 +463,15 @@
     if (e.target.name !== "metric") return; var u = e.target.form.querySelector("[data-unit]");
     if (u) u.textContent = DATA.metrics[e.target.value].fmt === "fac" ? "" : "%";
   });
-  document.addEventListener("ccm-watch-change", function () { render(); });
+  document.addEventListener("ccm-watch-change", function (e) { if (!(e.detail && e.detail.reverted) || !auth.state) render(); });
+  document.addEventListener("ccm-watch-session", function (e) {
+    var d = e.detail || {};
+    if (!d.signedIn && d.why === "expired") notice("<b>Your session ended.</b> Sign in again to keep getting email alerts; your portfolio is still here.", "warn");
+    render();
+  });
   $("md-clear").addEventListener("click", function () { if (confirm("Remove every deal, issuer and rule from this browser's portfolio?")) { W.clear(); render(); } });
   $("md-export").addEventListener("click", function () {
-    var lines = W.list().map(function (w) { var it = byKey[w.key]; if (!it) return w.name;
+    var lines = W.list().map(function (w) { var it = byKey[w.key]; if (!it) return w.name || w.key;
       if (isIssuer(it)) return it.name + "  (following for new deals)";
       var g = groupOf(it), m = it.m[HEAD[g]], r = W.rule(w.key);
       if (pending(it)) return label(it) + "  awaiting first servicer report" + (pendingNote(it) ? ", " + pendingNote(it) : "");
@@ -236,7 +492,23 @@
                  fetch(FEED + "events.json" + bust).then(function (r) { return r.ok ? r.json() : { events: [] }; }).catch(function () { return { events: [] }; })])
       .then(function (res) { DATA = res[0]; EVENTS = res[1]; byKey = {}; DATA.items.forEach(function (it) { byKey[it.key] = it; }); indexEvents(); render();
              try { if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: PAGE, title: NAME, event: false }); } catch (e) {} })
-      .catch(function () { fail("The latest figures could not be loaded. Your portfolio is still saved in this browser."); });
+      .catch(function () { fail("The latest figures could not be loaded. Your portfolio is still saved" + (signedIn() ? "." : " in this browser.")); });
+  }
+  // Accounts on? Then the sign-in line shows, a session syncs from the account, and the
+  // link's token (W.landing) signs in and says what moved.
+  if (W) {
+    W.config().then(function (cfg) {
+      ACCOUNTS = !!cfg; renderHead();
+      if (W.landing && W.landingType === "email_change") {
+        W.landing.then(function (res) {
+          emailSent = "";
+          notice(res.pending ? "<b>One more step.</b> This address is confirmed; open the link we sent to the other one and the change takes effect."
+                             : "<b>Your email address is now " + esc(W.account ? W.account.email : res.changed) + ".</b> Alerts go there from now on.");
+          render();
+        }, function (e) { notice(e.reason === "expired" ? "<b>That link has expired.</b> Links work once, for 15 minutes; ask for the change again in Settings." : "<b>Couldn't confirm the address.</b> Try the link again in a moment.", "err"); render(); });
+      } else if (W.landing) W.landing.then(function (res) { landed(res); render(); }, function (e) { if (e.reason === "expired") showAuth("expired"); else notice("<b>Couldn't sign you in.</b> Try the link again in a moment, or ask for a new one.", "err"); });
+      else if (W.account) W.sync().catch(function () {});
+    });
   }
   load();
 })();
