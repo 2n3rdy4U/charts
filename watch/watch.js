@@ -284,6 +284,7 @@
     if (e.status === 429 || /rate/i.test(e.code)) e.reason = "rate";
     else if (e.status === 422 || e.status === 400 && /email|validat/i.test(e.message)) e.reason = "email";
     else if (e.status === 403 || e.status === 401 || /expired|invalid/i.test(e.message)) e.reason = "expired";
+    else if (e.status === 500 && /(saving|creating) new user/i.test(e.message)) e.reason = "invited";   // the registration trigger refused the address
     else e.reason = "other";
     return e;
   }
@@ -301,6 +302,23 @@
       if (!cfg) throw signInError(Object.assign(new Error("accounts are off"), { status: 0 }));
       return anon(cfg, "/auth/v1/otp", { email: who.email, create_user: true, data: { first_name: who.first_name || "", last_name: who.last_name || "" } })
         .then(function () { return true; }, function (e) { throw signInError(e); });
+    });
+  };
+  // May this address register now? The project's can_register (open registration, an
+  // invited address, or an account that exists). Resolves true when accounts are off or
+  // the question cannot be asked, so the sign-in itself gives the answer.
+  W.canRegister = function (email) {
+    return W.config().then(function (cfg) {
+      if (!cfg) return true;
+      return anon(cfg, "/rest/v1/rpc/can_register", { addr: email }).then(function (b) { return b !== false; }, function () { return true; });
+    });
+  };
+  // Unsubscribe from every alert email by the token in the email's link (no session).
+  // Resolves with the project's answer: {ok, email, already} or {ok: false}.
+  W.unsubscribe = function (token) {
+    return W.config().then(function (cfg) {
+      if (!cfg) throw new Error("accounts are off");
+      return anon(cfg, "/rest/v1/rpc/unsubscribe", { t: token });
     });
   };
   // The six-digit code ({email, token}) or the link's token ({token_hash}). Resolves with what the
