@@ -11844,9 +11844,10 @@ MSACSR,"Months' supply, new homes (SA)",U.S. Census Bureau via FRED,"Months' sup
 MSACSR,"Months' supply, new homes (SA)",U.S. Census Bureau via FRED,"Months' supply, new homes (SA)",m,2026-04-01,9.0
 MSACSR,"Months' supply, new homes (SA)",U.S. Census Bureau via FRED,"Months' supply, new homes (SA)",m,2026-05-01,9.2
 MSACSR,"Months' supply, new homes (SA)",U.S. Census Bureau via FRED,"Months' supply, new homes (SA)",m,2026-06-01,8.5
-MSACSR,"Months' supply, new homes (SA)",U.S. Census Bureau via FRED,"Months' supply, new homes (SA)",m,2026-07-01,8.9
+MSACSR,"Months' supply, new homes (SA)",U.S. Census Bureau via FRED,"Months' supply, new homes (SA)",m,2026-07-01,9.0
 MSACSR,"Months' supply, new homes (SA)",U.S. Census Bureau via FRED,"Months' supply, new homes (SA)",m,2026-08-01,8.5
-MSACSR,"Months' supply, new homes (SA)",U.S. Census Bureau via FRED,"Months' supply, new homes (SA)",m,2026-09-01,8.4
+MSACSR,"Months' supply, new homes (SA)",U.S. Census Bureau via FRED,"Months' supply, new homes (SA)",m,2026-09-01,9.3
+MSACSR,"Months' supply, new homes (SA)",U.S. Census Bureau via FRED,"Months' supply, new homes (SA)",m,2026-10-01,8.0
 MSPUS,Median new home price (NSA),U.S. Census Bureau via FRED,Median new home price (NSA),q,2017-01-01,313100.0
 MSPUS,Median new home price (NSA),U.S. Census Bureau via FRED,Median new home price (NSA),q,2017-04-01,318200.0
 MSPUS,Median new home price (NSA),U.S. Census Bureau via FRED,Median new home price (NSA),q,2017-07-01,320500.0
@@ -12543,7 +12544,7 @@ PERMIT,New private housing permits (SAAR),U.S. Census Bureau via FRED,New privat
 PERMIT,New private housing permits (SAAR),U.S. Census Bureau via FRED,New private housing permits (SAAR),m,2026-07-01,1433.0
 PERMIT,New private housing permits (SAAR),U.S. Census Bureau via FRED,New private housing permits (SAAR),m,2026-08-01,1403.0
 PERMIT,New private housing permits (SAAR),U.S. Census Bureau via FRED,New private housing permits (SAAR),m,2026-09-01,1398.0
-PERMIT,New private housing permits (SAAR),U.S. Census Bureau via FRED,New private housing permits (SAAR),m,2026-10-01,1295.0
+PERMIT,New private housing permits (SAAR),U.S. Census Bureau via FRED,New private housing permits (SAAR),m,2026-10-01,1297.0
 PSAVERT,Personal saving rate (SA),Bureau of Economic Analysis (BEA) via FRED,Personal saving rate (SA),m,2016-11-01,5.4
 PSAVERT,Personal saving rate (SA),Bureau of Economic Analysis (BEA) via FRED,Personal saving rate (SA),m,2016-12-01,5.0
 PSAVERT,Personal saving rate (SA),Bureau of Economic Analysis (BEA) via FRED,Personal saving rate (SA),m,2017-01-01,5.3
