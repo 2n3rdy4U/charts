@@ -42,12 +42,14 @@
     </div>
     <div class="md-actions">
       <span class="ac-chip" id="md-chip" hidden>Signed in as <b id="md-who"></b><span class="ac-badge" id="md-badge" hidden></span> <button type="button" class="md-btn" id="md-settings">Settings</button></span>
-      <button type="button" class="md-btn" id="md-export" hidden>Copy as text</button>
       <button type="button" class="md-btn md-btn-quiet" id="md-clear" hidden>Clear portfolio</button>
     </div>
   </header>
 
   <div id="md-notice" aria-live="polite"></div>
+
+  <!-- the Add bar (draft 6): find a deal by ticker or name, follow an issuer from a grouped list -->
+  <div class="md-add" id="md-add" role="group" aria-label="Add to your portfolio" hidden></div>
 
   <div id="md-body" aria-live="polite">
     <div class="md-state" id="md-loading"><span class="md-spin" aria-hidden="true"></span> Loading the latest figures…</div>

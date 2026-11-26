@@ -4,8 +4,9 @@
 // for new deals, one line each. Reads watch.json + events.json (built by
 // src/workflows/sec/shelf_detail/watch_feed.py) and the store in
 // /watch/watch.js. Draws only: no figure is computed here beyond a difference.
-// Draft 4 of the alerts mockups (docs/alerts-mockups, 2026-11-22) is the design:
-// no separate Updates box, deals named by ticker and series, rows breached first.
+// Draft 6 of the alerts mockups (docs/alerts-mockups, 2026-11-25) is the design:
+// no separate Updates box, deals named by ticker and series, rows breached first, the
+// Add bar under the header, the Headline following the rule's metric, the issuers a table.
 //
 // With an account (Phase 3, the account layer of watch.js): the quiet sign-in
 // line, the stand-alone form and "check your email" screens, the chip with the
@@ -83,7 +84,7 @@
   }
 
   // ── filings: what events.json says about an item ─────────────────
-  var TITLE = { report: "servicer report", tape: "loan tape", amendment: "amended filing", psr: "PSR" };
+  var TITLE = { report: "servicer report (10-D)", tape: "loan tape (ABS-EE)", amendment: "amended filing", psr: "PSR" };
   var byItem = {};   // key → its events, newest first
   function indexEvents() {
     byItem = {};
@@ -96,7 +97,7 @@
     // a trust report is named by its period ("trust report, Oct 2026"): the feed dates it
     // by the period, not the filing.
     var extra = e.title.indexOf("·") > 0 ? e.title.split("·")[1].trim() : "";
-    if (it.kind === "trust" && e.type === "report") return "trust report" + (extra ? ", " + esc(extra) : "");
+    if (it.kind === "trust" && e.type === "report") return '<span class="d">' + esc(fmtDay(e.date)) + "</span>trust report (10-D)" + (extra ? ", " + esc(extra) : "");
     var what = (it.kind === "trust" && e.type === "psr" ? "new series " + esc(e.series || e.name) + " · " : "") + TITLE[e.type] + (e.type === "psr" && extra ? ", " + esc(extra) : "");
     if (e.url && e.type === "psr") what = '<a href="' + esc(e.url) + '">' + what + "</a>";
     return '<span class="d">' + esc(fmtDay(e.date)) + "</span>" + what;
@@ -110,7 +111,7 @@
       if (rep && pick.indexOf(rep) < 0) pick[pick.length > 1 ? 1 : pick.length] = rep;
       lines = pick.map(function (e) { return filingLine(e, it); });
     } else if (it.as_of) {
-      lines.push('<span class="d">' + esc(fmtDay(it.as_of)) + "</span>servicer report");
+      lines.push('<span class="d">' + esc(fmtDay(it.as_of)) + "</span>" + (it.kind === "trust" ? "trust report (10-D)" : "servicer report (10-D)"));
     }
     if (pending(it)) lines.push(esc(pendingNote(it)));
     else if (untracked(it)) lines.push("no servicer reports on this site for " + esc(it.ticker));
@@ -136,14 +137,14 @@
     if (!DATA) return;
     var body = $("md-body"), all = W.list(), deals = all.filter(function (w) { return !isIssuer(w); }), issuers = all.filter(isIssuer);
     var n = all.length, lim = W.limits, acct = signedIn();
-    $("md-export").hidden = !n;
     $("md-clear").hidden = !n || acct;                // an account is emptied star by star
+    renderAdd();
     $("md-sub").textContent = n ? ofN(deals.length, lim.deals, "deal") + " · " + ofN(issuers.length, lim.issuers, "issuer") + (acct ? mailState(all) : " · saved in this browser only")
                                 : acct ? ofN(0, lim.deals, "deal") + " · " + ofN(0, lim.issuers, "issuer") : "Saved in this browser only. Nothing is sent to us.";
     if (!n) { renderEmpty(body); $("md-foot").hidden = true; return; }
     body.innerHTML = renderDeals(deals, lim, acct) + renderIssuers(issuers, lim, acct);
     var foot = $("md-foot"); foot.hidden = false;
-    foot.innerHTML = esc("Figures as published " + fmtDate(DATA.built) + ". Headline: 60+ day delinquency by loan count from the ABS-EE tape (by balance from the 10-D where a deal files no tape); for card trusts, annualized net charge-offs. Δ is the change from the previous reporting period.") +
+    foot.innerHTML = esc("Figures as published " + fmtDate(DATA.built) + ". Headline: the figure your rule is judged on; with no rule, 60+ day delinquency by loan count from the ABS-EE tape (by balance from the 10-D where a deal files no tape), or a card trust's annualized net charge-offs. Δ is the change from the previous reporting period.") +
       (acct ? esc(" Your account holds " + lim.deals + " deals and follows " + lim.issuers + " issuers; one email a day at most.") + ' <a class="ac-link" href="/privacy/">Privacy</a>'
             : esc(" A free portfolio holds " + lim.deals + " deals and follows " + lim.issuers + " issuers. Your list and rules live in this browser's storage; clearing site data removes them."));
   }
@@ -154,10 +155,10 @@
   function renderDeals(deals, lim, acct) {
     var meta = DATA.metrics;
     var html = '<section class="md-group" aria-label="Deals you watch"><h2>Deals you watch<span class="n">' + ofN(deals.length, lim.deals, "deal") + ' · breached first, then by newest filing · a name opens its charts</span></h2>';
-    if (!deals.length) return html + '<p class="md-none">No deals yet. Star a deal on the Auto Loan, Auto Lease, Credit Card or Issuance pages, or on its PSR.</p></section>';
+    if (!deals.length) return html + '<p class="md-none">No deals yet. Star a deal on the Auto Loan, Auto Lease, Credit Card or Issuance pages, or on its PSR.' + (acct ? "" : " Sign in and we email you when one reports or crosses a line you set.") + '</p></section>';
     html += '<div class="md-scroll"><table class="md"><thead><tr>' +
       '<th class="wcol"><span class="sr-only">Watch</span></th><th>Deal</th><th>Latest filings</th>' +
-      '<th class="num">Headline<span class="basis">60+ DQ · cards: charge-offs</span></th><th>Rule</th>' + (acct ? '<th class="mail">Email</th>' : "") + '</tr></thead><tbody>';
+      '<th class="num">Headline</th><th>Alert rule</th>' + (acct ? '<th class="mail">Email</th>' : "") + '</tr></thead><tbody>';
     // breached rules first, then the newest filing first; a deal the feed no longer carries last
     var rows = deals.map(function (w) { var it = byKey[w.key]; return { w: w, it: it, b: it && breached(W.rule(w.key), it) ? 1 : 0, d: it ? newestFiling(it) : "" }; });
     rows.sort(function (a, b) { return b.b - a.b || (a.d < b.d ? 1 : a.d > b.d ? -1 : 0); });
@@ -168,14 +169,15 @@
                 '</td><td colspan="3" class="flat">Not in the current build: paid off or withdrawn.</td>' + mail + "</tr>";
         return;
       }
-      var g = groupOf(it), m = it.m[HEAD[g]], just = it.as_of && it.as_of >= JUST;
+      // the Headline is the figure the rule is judged on when there is a rule (named in the cell), else the type's default
+      var g = groupOf(it), rule = W.rule(w.key), hm = rule && meta[rule.metric] ? rule.metric : HEAD[g], m = it.m[hm], just = it.as_of && it.as_of >= JUST;
       var pills = (r.b ? pill("breach", "Breached") : "") + (just ? pill("new", "New") : "") +
                   (pending(it) ? pill("wait", "Awaiting first report") : untracked(it) ? pill("off", "Not tracked") : stale(it) ? pill("stale", "Not reported in " + staleDays(it) + " days") : "");
       html += "<tr" + cls + ' data-key="' + esc(w.key) + '"><td class="star wcol">' + star(it) + "</td>" +
-        '<td class="name"><a href="' + esc(it.url) + '" title="' + esc(it.name) + '">' + esc(label(it)) + "</a>" + pills + "</td>" +
+        '<td class="name"><a href="' + esc(it.url) + '" title="' + esc(it.name) + '">' + esc(label(it)) + "</a>" + (pills ? '<span class="pills">' + pills + "</span>" : "") + "</td>" +
         '<td class="when" data-l="Filings">' + filingsCell(it) + "</td>" +
-        '<td class="num" data-l="' + esc(meta[HEAD[g]].label) + '"' + (m && m.basis ? ' title="' + esc(meta[HEAD[g]].label + ", " + m.basis) + '"' : "") + '><span class="vd">' + (m ? fmtVal(m.v, meta[HEAD[g]].fmt) : "—") + "</span>" + (m ? fmtDelta(m.v, m.p, meta[HEAD[g]].fmt) : "") + "</td>" +
-        '<td class="rule" data-l="Rule">' + ruleCell(it, meta) + "</td>" + mail + "</tr>";
+        '<td class="num" data-l="' + esc(meta[hm].label) + '"' + (m && m.basis ? ' title="' + esc(meta[hm].label + ", " + m.basis) + '"' : "") + '><span class="vd">' + (m ? fmtVal(m.v, meta[hm].fmt) : "—") + '</span><span class="hlm">' + esc(meta[hm].label) + "</span>" + (m ? fmtDelta(m.v, m.p, meta[hm].fmt) : "") + "</td>" +
+        '<td class="rule" data-l="Alert rule">' + ruleCell(it, meta) + "</td>" + mail + "</tr>";
     });
     return html + "</tbody></table></div></section>";
   }
@@ -184,25 +186,73 @@
     DATA.items.forEach(function (it) { if (it.kind === "deal" && it.ticker === ticker && it.series && (!best || it.series > best.series)) best = it; });
     return best;
   }
+  // "Issuers you follow" (draft 6): every followed issuer is a row, new deal or not, in the
+  // deals table's grammar: the issuer with a New deal or Quiet pill on its own line, its
+  // latest deal with the date, its state in the issuance page's words and the PSR link at
+  // the cell's right edge, the email switch.
   function renderIssuers(issuers, lim, acct) {
-    var html = '<section class="md-group" aria-label="New deals from issuers you follow"><h2>New deals from issuers you follow<span class="n">' + ofN(issuers.length, lim.issuers, "issuer") + (acct ? " · you hear when one announces a deal and its PSR is up" : " · new deals only, no figures") + "</span></h2>";
-    if (!issuers.length) return html + '<p class="md-none">No issuers yet. Follow one from its performance page to see its new deals here.</p></section>';
-    html += '<ul class="md-follow">';
+    var html = '<section class="md-group" aria-label="Issuers you follow"><h2>Issuers you follow<span class="n">' + ofN(issuers.length, lim.issuers, "issuer") + (acct ? " · you hear when one announces a deal" : " · sign in and we email you when one announces a deal") + "</span></h2>";
+    if (!issuers.length) return html + '<p class="md-none">No issuers yet. Follow one with the Add bar above, or from its performance page.</p></section>';
+    html += '<div class="md-scroll"><table class="md md-iss"><thead><tr><th class="wcol"><span class="sr-only">Follow</span></th><th>Issuer</th><th>Latest deal</th>' + (acct ? '<th class="mail">Email</th>' : "") + '</tr></thead><tbody>';
+    var today = (DATA.built || new Date().toISOString()).slice(0, 10);
     issuers.forEach(function (w) {
-      var it = byKey[w.key], nd = it ? newestDeal(it.ticker) : null, x = "";
-      if (nd) {   // one line: the newest deal, dated by its first filing, and its PSR when the site has one
+      var it = byKey[w.key], nd = it ? newestDeal(it.ticker) : null, latest = '<span class="flat">—</span>', pills = "";
+      if (nd) {
         var ev = byItem[nd.key] || [], psrs = ev.filter(function (e) { return e.type === "psr"; }), first = psrs.length ? psrs[psrs.length - 1].date : null, when = first || nd.filed || nd.close;
-        var fresh = when && when >= WINDOW, who = esc(nd.ticker + " " + nd.series) + (when ? ", " + esc(fmtDay(when)) : "");
-        var psr = nd.url && nd.url.indexOf("/presale/") > 0 ? nd.url : (ev.filter(function (e) { return e.type === "psr" && e.url; })[0] || {}).url;
-        x = (fresh ? "<b>New deal</b> " + who : "No new deal since " + who) + (psr ? ' · <a href="' + esc(psr) + '">PSR ›</a>' : "");
+        var fresh = when && when >= WINDOW;
+        var psr = nd.url && nd.url.indexOf("/presale/") > 0 ? nd.url : (psrs.filter(function (e) { return e.url; })[0] || {}).url;
+        var state = nd.close && nd.close <= today ? "Closed " + fmtDay(nd.close)
+                  : (psrs.some(function (e) { return /final/i.test(e.title || ""); }) ? "Priced" : "Preliminary") + (nd.close ? " · closes " + fmtDay(nd.close) : "");
+        pills = fresh ? pill("new", "New deal") : pill("off", "Quiet");
+        latest = (psr ? '<a class="psr-link md-link" href="' + esc(psr) + '">PSR ›</a>' : "") + (when ? '<span class="d">' + esc(fmtDay(when)) + "</span>" : "") +
+                 "<b>" + esc(nd.ticker + " " + nd.series) + "</b>" + '<span class="sub">' + esc(state) + (fresh ? "" : " · no new deal in " + WINDOW_DAYS + " days") + "</span>";
       }
-      html += "<li" + (acct ? ' class="mail"' : "") + ' data-key="' + esc(w.key) + '"><span class="star">' + star(it || w) + '</span><span class="who">' +
-        (it ? '<a href="' + esc(it.url) + '">' + esc(it.name) + "</a>" : esc(w.name || w.key)) +
-        '<span class="sub">' + (it && it.n_active != null ? it.n_active + " active deals" : "") + "</span></span>" +
-        '<span class="x">' + x + "</span>" + (acct ? mailSwitch(w, "issuer") : "") + "</li>";
+      var mail = acct ? '<td class="mail" data-l="Email">' + mailSwitch(w, "issuer") + "</td>" : "", cls = acct && !W.emailOn(w.key) ? ' class="nomail"' : "";
+      html += "<tr" + cls + ' data-key="' + esc(w.key) + '"><td class="star wcol">' + star(it || w) + "</td>" +
+        '<td class="name">' + (it ? '<a href="' + esc(it.url) + '">' + esc(it.name) + "</a>" : esc(w.name || w.key)) +
+        '<span class="sub">' + (it && it.n_active != null ? it.n_active + " active deals" : "") + "</span>" + (pills ? '<span class="pills">' + pills + "</span>" : "") + "</td>" +
+        '<td class="when" data-l="Latest deal">' + latest + "</td>" + mail + "</tr>";
     });
-    return html + "</ul></section>";
+    return html + "</tbody></table></div></section>";
   }
+  // ── the Add bar: a deal by ticker or name, an issuer from a grouped list ──
+  function addLabel(it) { return label(it) + " · " + (it.name || ""); }
+  function renderAdd() {
+    var box = $("md-add"); if (!DATA || !W.available) { box.hidden = true; return; }
+    if (!box.innerHTML) {
+      var deals = DATA.items.filter(function (it) { return it.kind === "deal" || it.kind === "trust"; }).sort(function (a, b) { return label(a) < label(b) ? -1 : 1; });
+      var shelves = DATA.items.filter(isIssuer), groups = { loan: "Auto loan", lease: "Auto lease" };
+      var sel = Object.keys(groups).map(function (ac) {
+        var list = shelves.filter(function (x) { return x.ac === ac; }).sort(function (a, b) { return a.name < b.name ? -1 : 1; });
+        return list.length ? '<optgroup label="' + groups[ac] + '">' + list.map(function (x) { return '<option value="' + esc(x.key) + '">' + esc(x.name) + "</option>"; }).join("") + "</optgroup>" : "";
+      }).join("");
+      box.innerHTML = '<span class="k">Add to your portfolio</span>' +
+        '<input class="md-find" id="md-find" list="md-deal-list" placeholder="Find a deal by ticker or name…" aria-label="Find a deal" autocomplete="off">' +
+        '<datalist id="md-deal-list">' + deals.map(function (it) { return '<option value="' + esc(addLabel(it)) + '">'; }).join("") + "</datalist>" +
+        '<select class="md-follow-pick" id="md-follow-pick" aria-label="Follow an issuer"><option value="">Follow an issuer…</option>' + sel + "</select>" +
+        '<span class="flat">or star a deal on its page</span>';
+    }
+    box.hidden = !!auth.state;
+  }
+  function capText(why) {
+    var lim = W.limits, who = signedIn() ? "Your account" : "This browser";
+    return why === "issuers" ? who + " follows " + lim.issuers + " issuers. Unfollow one to add this one." : who + " holds " + lim.deals + " deals. Remove one to add this one.";
+  }
+  function addItem(it) {
+    if (W.has(it.key)) { W.toast(label(it) + " is already in your portfolio."); return; }
+    var item = { key: it.key, kind: it.kind, ac: it.ac || "", ticker: it.ticker || "", name: it.name || it.key, series: it.series || null, url: it.url || "" };
+    var why = W.room(item);
+    if (why) { W.toast(capText(why)); return; }
+    if (W.add(item)) { W.toast((isIssuer(it) ? "Following " : "Watching ") + label(it) + "."); render(); }
+  }
+  root.addEventListener("change", function (e) {
+    if (e.target.id === "md-follow-pick") { var k = e.target.value; e.target.value = ""; if (k && byKey[k]) addItem(byKey[k]); }
+    if (e.target.id === "md-find") {
+      var v = e.target.value.trim().toLowerCase(); if (!v) return;
+      var hit = DATA.items.filter(function (it) { return (it.kind === "deal" || it.kind === "trust") && (addLabel(it).toLowerCase() === v || label(it).toLowerCase() === v); })[0];
+      if (hit) { e.target.value = ""; addItem(hit); } else W.toast("No deal by that name on the site. Pick one from the list as you type.");
+    }
+  });
   function star(it) {
     return '<span data-watch="' + esc(it.key) + '" data-watch-kind="' + esc(it.kind) + '" data-watch-ac="' + esc(it.ac || "") + '" data-watch-ticker="' + esc(it.ticker || "") + '" data-watch-name="' + esc(it.name || it.key) + '" data-watch-series="' + esc(it.series || "") + '" data-watch-url="' + esc(it.url || "") + '"></span>';
   }
@@ -255,6 +305,7 @@
     var on = !!state;
     $("md-head").hidden = $("md-body").hidden = on; if (on) $("md-foot").hidden = true; else if (DATA && W.count()) $("md-foot").hidden = false;
     $("md-notice").hidden = on;
+    $("md-add").hidden = on || !DATA;
     $("md-auth").hidden = !on;
     clearInterval(auth.again);
     if (!on) { $("md-auth").innerHTML = ""; return; }
@@ -271,14 +322,16 @@
         '<p class="small">We ask for your name so we know who we\'re writing to. We hold it and your email address, nothing else, and only you can see your portfolio. <a class="ac-link" href="/privacy/">Privacy ›</a></p></div>';
       $("f-email").focus();
     } else if (state === "check") {
+      // draft 6: the link leads; the code boxes appear only behind the "another device" line
       $("md-auth").innerHTML = back + '<div class="ac-card" role="region" aria-labelledby="ac-h2"><h2 id="ac-h2">Check your email</h2>' +
-        '<p>We sent a sign-in link to <span class="ac-addr">' + esc(auth.email) + "</span>. Open it on this device to sign in here, or type the six-digit code from the email:</p>" +
-        '<form class="ac-form" id="ac-code-form" novalidate><div class="full"><label for="c1">Code</label><div class="ac-code" id="codebox">' +
+        '<p>We sent a sign-in link to <span class="ac-addr">' + esc(auth.email) + "</span>. <b>Open the link and you're in.</b> Nothing to type here.</p>" +
+        '<p class="ac-other" id="ac-other"><a class="ac-link" href="#" data-auth="code">Reading the email on another device? Type the code from it instead ›</a></p>' +
+        '<form class="ac-form" id="ac-code-form" novalidate hidden><div class="full"><label for="c1">The six-digit code from the email</label><div class="ac-code" id="codebox">' +
         [1, 2, 3, 4, 5, 6].map(function (i) { return '<input id="c' + i + '" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="' + (i === 1 ? "one-time-code" : "off") + '" aria-label="Digit ' + i + '">'; }).join("") + "</div></div>" +
+        '<div class="row"><button type="submit" class="md-btn md-btn-primary" id="ac-verify">Sign in with the code</button></div></form>' +
         '<p class="err" id="ac-err" hidden></p>' +
-        '<div class="row"><button type="submit" class="md-btn md-btn-primary" id="ac-verify">Sign in</button><span class="ac-wait" id="ac-again">Didn\'t get it? Check your spam folder. You can send again in <b id="ac-secs">30</b>s.</span></div></form>' +
+        '<p class="ac-wait" id="ac-again">Didn\'t get it? Check your spam folder. You can send again in <b id="ac-secs">30</b>s.</p>' +
         '<p class="small">The link and the code work once, for 15 minutes. <a class="ac-link" href="#" data-auth="form">Wrong address? Start over.</a></p></div>';
-      $("c1").focus();
       var n = 30;
       auth.again = setInterval(function () {
         n--; var s = $("ac-secs"), box = $("ac-again"); if (!box) { clearInterval(auth.again); return; }
@@ -295,14 +348,20 @@
     var e = $("ac-err"); if (!e) return; e.textContent = msg; e.hidden = !msg;
     if (field) { field.setAttribute("aria-invalid", "true"); field.focus(); }
   }
+  var INVITED = "Sign-in is by invitation for now. Email hello@consumercreditmatters.com if you'd like one.";
   function sendLink(again) {
     var btn = $("ac-send") || $("ac-verify"); if (btn) btn.disabled = true;
-    return W.signIn({ email: auth.email, first_name: auth.first, last_name: auth.last }).then(function () {
-      if (!again) showAuth("check"); else { W.toast("Sent again."); showAuth("check"); }
-    }, function (e) {
-      if (btn) btn.disabled = false;
-      if (again) { authError(e.reason === "rate" ? "We just sent a link to that address. Give it a minute, then try again." : "Couldn't send the link. Try again in a moment."); return; }
-      authError(e.reason === "email" ? "That doesn't look like an email address." : e.reason === "rate" ? "We just sent a link to that address. Give it a minute, then try again." : "Couldn't send the link. Try again in a moment.", e.reason === "email" ? $("f-email") : null);
+    // registration may be limited to invited addresses (the private QA, the founders preview): ask first
+    return (again ? Promise.resolve(true) : W.canRegister(auth.email)).then(function (may) {
+      if (!may) { if (btn) btn.disabled = false; authError(INVITED, $("f-email")); return; }
+      return W.signIn({ email: auth.email, first_name: auth.first, last_name: auth.last }).then(function () {
+        if (!again) showAuth("check"); else { W.toast("Sent again."); showAuth("check"); }
+      }, function (e) {
+        if (btn) btn.disabled = false;
+        if (again) { authError(e.reason === "rate" ? "We just sent a link to that address. Give it a minute, then try again." : "Couldn't send the link. Try again in a moment."); return; }
+        authError(e.reason === "email" ? "That doesn't look like an email address." : e.reason === "rate" ? "We just sent a link to that address. Give it a minute, then try again."
+                  : e.reason === "invited" ? INVITED : "Couldn't send the link. Try again in a moment.", e.reason === "email" || e.reason === "invited" ? $("f-email") : null);
+      });
     });
   }
   function verifyCode() {
@@ -325,6 +384,7 @@
     if (go === "back") showAuth(null);
     else if (go === "form") showAuth("form");
     else if (go === "again") sendLink(true);
+    else if (go === "code") { $("ac-code-form").hidden = false; $("ac-other").hidden = true; $("c1").focus(); }
   });
   $("md-signin-link").addEventListener("click", function (e) { e.preventDefault(); showAuth("form"); });
   root.addEventListener("submit", function (e) {
@@ -367,13 +427,10 @@
                       (emailSent ? "<small>We sent a link to " + esc(emailSent) + " and one to this address. The change takes effect when both are opened.</small>"
                                  : "<small>Changing it sends a link to the new address and to this one; the change takes effect when both are opened.</small>") +
                       '</span><button type="button" class="md-link" data-sheet="email">Change</button></div>') +
-      '<div class="ac-field"><span class="k">Since</span><span class="v">' + esc(fmtDate(a.since)) + "</span></div>" +
-      (a.label ? '<div class="ac-field"><span class="k">Tier</span><span class="v"><span class="ac-badge">' + esc(a.label) + "</span></span></div>" : "") +
+      '<div class="ac-field"><span class="k">Since</span><span class="v">' + esc(fmtDate(a.since)) + (a.label ? " · " + esc(a.label) + "<small>" + esc(a.label + "s hold " + W.limits.deals + " deals and follow " + W.limits.issuers + " issuers.") + "</small>" : "") + "</span></div>" +
       "<h3>How often</h3>" +
       '<label class="ac-radio' + (a.cadence === "daily" ? " on" : "") + '"><input type="radio" name="cad" value="daily"' + (a.cadence === "daily" ? " checked" : "") + ">As it happens<small>One message a day at most, after the day's filings have been published. Most months that is a few messages.</small></label>" +
       '<label class="ac-radio' + (a.cadence === "monthly" ? " on" : "") + '"><input type="radio" name="cad" value="monthly"' + (a.cadence === "monthly" ? " checked" : "") + ">Monthly digest<small>One message on the first sending day of each month with everything from the month before, including the deals that were quiet.</small></label>" +
-      "<h3>Newsletter</h3>" +
-      '<label class="ac-check"><input type="checkbox" disabled><span>Send me the weekly newsletter<br><small>The newsletter still goes out from our current mailing list. When it moves to this account you can turn it on here; nobody will be mailed twice.</small></span></label>' +
       "<h3>Your account</h3>" +
       '<div class="ac-actions"><button type="button" class="md-link" data-sheet="signout">Sign out</button><button type="button" class="md-link danger" data-sheet="delete">Delete my account…</button></div>' +
       '<p class="small">Only you can see your portfolio. We hold your email, name, this list, and a record of what we sent you. <a class="ac-link" href="/privacy/">Privacy ›</a></p>';
@@ -470,17 +527,6 @@
     render();
   });
   $("md-clear").addEventListener("click", function () { if (confirm("Remove every deal, issuer and rule from this browser's portfolio?")) { W.clear(); render(); } });
-  $("md-export").addEventListener("click", function () {
-    var lines = W.list().map(function (w) { var it = byKey[w.key]; if (!it) return w.name || w.key;
-      if (isIssuer(it)) return it.name + "  (following for new deals)";
-      var g = groupOf(it), m = it.m[HEAD[g]], r = W.rule(w.key);
-      if (pending(it)) return label(it) + "  awaiting first servicer report" + (pendingNote(it) ? ", " + pendingNote(it) : "");
-      if (untracked(it)) return label(it) + "  not tracked on this site (PSR only)";
-      return label(it) + "  " + DATA.metrics[HEAD[g]].label + " " + (m ? fmtVal(m.v, DATA.metrics[HEAD[g]].fmt) : "—") + "  reported " + fmtDate(it.as_of) +
-             (r ? "  rule " + ruleText(r, DATA.metrics) + (breached(r, it) ? " (breached)" : "") : ""); });
-    var text = NAME + " · " + fmtDate(new Date().toISOString()) + " · consumercreditmatters.com\n" + lines.join("\n");
-    (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(function () { $("md-export").textContent = "Copied"; setTimeout(function () { $("md-export").textContent = "Copy as text"; }, 1600); }, function () { prompt("Copy:", text); });
-  });
 
   // ── load ─────────────────────────────────────────────────────────
   function fail(msg) { $("md-body").innerHTML = '<div class="md-state error">' + esc(msg) + ' <button type="button" class="md-btn" id="md-retry">Try again</button></div>'; $("md-retry").addEventListener("click", load); }
@@ -508,6 +554,8 @@
         }, function (e) { notice(e.reason === "expired" ? "<b>That link has expired.</b> Links work once, for 15 minutes; ask for the change again in Settings." : "<b>Couldn't confirm the address.</b> Try the link again in a moment.", "err"); render(); });
       } else if (W.landing) W.landing.then(function (res) { landed(res); render(); }, function (e) { if (e.reason === "expired") showAuth("expired"); else notice("<b>Couldn't sign you in.</b> Try the link again in a moment, or ask for a new one.", "err"); });
       else if (W.account) W.sync().catch(function () {});
+      // the unsubscribe page's "Delete my account instead" lands here: open Settings for a signed-in reader
+      if (location.hash === "#settings" && W.account) { history.replaceState(null, "", location.pathname + location.search); openSheet(); }
     });
   }
   load();
