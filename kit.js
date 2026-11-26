@@ -65,4 +65,23 @@
 
   // ── Welcome page: year in the legal line ──
   var y = document.getElementById('ccm-year'); if (y) y.textContent = String(new Date().getFullYear());
+
+  // ── Welcome page: the My Portfolio row says what this browser or account holds.
+  //    watch.js (deferred, after this file) defines CCMWatch before DOMContentLoaded. ──
+  var note = document.getElementById('home-portfolio-note');
+  function portfolioNote() {
+    var W = window.CCMWatch; if (!note || !W || !W.available) return;
+    var d = 0, i = 0;
+    W.list().forEach(function (w) { if (w.kind === 'issuer') i++; else d++; });
+    if (!d && !i) { note.textContent = W.account ? 'Signed in · nothing watched yet' : 'The deals you watch and the issuers you follow'; return; }
+    var parts = [];
+    if (d) parts.push(d + (d === 1 ? ' deal' : ' deals'));
+    if (i) parts.push(i + (i === 1 ? ' issuer' : ' issuers'));
+    note.textContent = (W.account ? 'Signed in · ' : '') + parts.join(', ');
+  }
+  if (note) {
+    document.addEventListener('DOMContentLoaded', portfolioNote);
+    document.addEventListener('ccm-watch-change', portfolioNote);
+    document.addEventListener('ccm-watch-session', portfolioNote);
+  }
 })();

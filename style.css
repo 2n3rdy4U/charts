@@ -154,6 +154,18 @@ html, body {
 
 #header .header-right a:hover { color: var(--color-shell-text); }
 
+/* My Portfolio from every page (2026-11-26): a star with its label at the top
+   right, the convention for "mine"; the label goes on a phone, the star stays
+   at a 44px target. */
+#header .header-right .header-portfolio {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 4px;
+}
+#header .header-right .header-portfolio .header-star { flex-shrink: 0; }
+
 /* SUBSCRIBE CTA — emerald green to distinguish from the blue
    selected-nav-pill state (both used the same accent blue before, which
    read as the same UI affordance). Green is the convention for
@@ -630,6 +642,28 @@ a.nav-section-header, a.tile { color: inherit; }   /* .nav-item, .mobile-nav-pil
   letter-spacing: 0.01em;
 }
 
+/* The My Portfolio row under the grid (2026-11-26): one full-width button in the
+   tiles' own dress, so the 4×2 (phone 2×4) grid keeps its shape. */
+.tile-row {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  color: inherit;
+  text-decoration: none;
+  transition: border-color var(--transition), background var(--transition);
+}
+.tile-row:hover { border-color: var(--color-accent); background: var(--color-accent-dim); }
+.tile-row .header-star { width: 22px; height: 22px; color: var(--color-brand); flex-shrink: 0; }
+.tile-row-label { font-size: 15px; font-weight: 600; color: var(--color-text); white-space: nowrap; }
+.tile-row-note { font-size: 13px; color: var(--color-muted); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tile-row-go { margin-left: auto; font-size: 18px; color: var(--color-muted); }
+
 .tile-desc {
   font-size: 13px;
   color: var(--color-muted);
@@ -837,6 +871,8 @@ a.nav-section-header, a.tile { color: inherit; }   /* .nav-item, .mobile-nav-pil
   /* Hide the header disclaimer link on mobile to keep the compact header
      uncluttered — the welcome-screen legal line carries the link on mobile. */
   #header .header-disclaimer { display: none; }
+  #header .header-right .header-portfolio span { display: none; }
+  #header .header-right .header-portfolio { min-width: 44px; min-height: 44px; justify-content: center; padding: 0; }
   #header .header-right .btn-primary {
     padding: 5px 10px;
     font-size: 11px;
@@ -930,6 +966,9 @@ a.nav-section-header, a.tile { color: inherit; }   /* .nav-item, .mobile-nav-pil
   .tile .tile-icon     { width: 30px; height: 30px; }
   .tile .tile-icon-art { width: 35px; height: 35px; }
   .tile .tile-label    { font-size: 14px; }
+  .tile-row { padding: 10px 14px; border-radius: 10px; box-shadow: none; gap: 10px; }
+  .tile-row-label { font-size: 14px; }
+  .tile-row-note { font-size: 12px; }
 }
 
 /* ═══════════════════════════════════════════════════════════════════
