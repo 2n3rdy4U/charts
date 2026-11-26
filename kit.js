@@ -25,6 +25,35 @@
     });
   }
 
+  // ── Desktop: the rail hides (2026-11-26). The button is made here, not stamped
+  //    into each page, so every framed page has it from the publish that carries
+  //    this file; a page rendered since also sets the class before it paints
+  //    (site_frame._RAIL_EARLY). The choice is this browser's, one key, and the
+  //    page works the same when storage is refused. The phone has no rail: its
+  //    stylesheet hides the button. A chart page redraws on a window resize, so
+  //    one is announced when the content area changes width. ──
+  var RAIL_KEY = 'ccm.rail.v1', root = document.documentElement, header = document.getElementById('header');
+  if (rail && header) {
+    var wasHidden = false;
+    try { wasHidden = window.localStorage.getItem(RAIL_KEY) === 'hidden'; } catch (e) {}
+    root.classList.toggle('rail-hidden', wasHidden);
+    var railBtn = document.createElement('button');
+    railBtn.id = 'rail-toggle'; railBtn.type = 'button'; railBtn.setAttribute('aria-controls', 'rail');
+    railBtn.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="15" rx="2.5"/><path d="M9.5 4.5v15"/></svg>';
+    var railLabel = function () {
+      var hidden = root.classList.contains('rail-hidden'), text = hidden ? 'Show menu' : 'Hide menu';
+      railBtn.setAttribute('aria-expanded', String(!hidden)); railBtn.setAttribute('aria-label', text); railBtn.title = text;
+    };
+    railBtn.addEventListener('click', function () {
+      var hidden = root.classList.toggle('rail-hidden');
+      try { if (hidden) window.localStorage.setItem(RAIL_KEY, 'hidden'); else window.localStorage.removeItem(RAIL_KEY); } catch (e) {}
+      railLabel();
+      window.dispatchEvent(new Event('resize'));
+    });
+    railLabel();
+    header.insertBefore(railBtn, header.querySelector('.brand') || header.firstChild);
+  }
+
   // ── Rail accordion ──
   document.querySelectorAll('#rail .nav-section-header[data-section]').forEach(function (h) {
     h.addEventListener('click', function () {

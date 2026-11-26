@@ -1,3 +1,16 @@
+/* ── Inter, served from the site (2026-11-26) ───────────────────────
+   The frame has always named Inter, but only the macro, issuance and calendar
+   pages loaded it (from Google Fonts); everywhere else a reader without Inter
+   installed saw the system font. One variable file, weights 400 to 700, the
+   Latin range (which has the true minus sign the charts use). */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url(/fonts/inter-latin.woff2) format('woff2');
+}
+
 /* ── Reset & base ──────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -733,6 +746,26 @@ a.nav-section-header, a.tile { color: inherit; }   /* .nav-item, .mobile-nav-pil
 
 @keyframes spin { to { transform: rotate(360deg); } }
 
+/* ── The rail hides on the desktop (kit.js makes the button and sets the class) ── */
+#rail-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  margin-left: -7px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius);
+  background: none;
+  color: #cfd9ea;
+  cursor: pointer;
+}
+#rail-toggle:hover { background: rgba(255, 255, 255, 0.09); color: #fff; }
+#rail-toggle:focus-visible { outline: 2px solid var(--color-accent-nav); outline-offset: 1px; }
+html.rail-hidden #app { grid-template-columns: 0 1fr; }
+html.rail-hidden #rail { display: none; }
+
 /* ── Hamburger button (hidden on desktop) ───────────────────────── */
 #hamburger {
   display: none;
@@ -883,6 +916,7 @@ a.nav-section-header, a.tile { color: inherit; }   /* .nav-item, .mobile-nav-pil
   #mobile-nav   { display: flex; flex-shrink: 0; }
   #rail         { display: none !important; }
   #hamburger    { display: none !important; }
+  #rail-toggle  { display: none !important; }
   #nav-backdrop { display: none !important; }
   #panel-bar    { display: none !important; }
 
