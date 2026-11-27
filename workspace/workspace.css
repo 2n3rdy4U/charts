@@ -1,0 +1,64 @@
+/* The workspace (charts roadmap, phase 3, step 1): one to four tiles, each an
+   existing chart page shown in its embed mode. The grid fills the frame's
+   content area; a tile never goes under 280px tall, so a short window scrolls. */
+#panel-content > .ccm-page{height:100%}      /* this stylesheet is loaded by the workspace alone */
+.ws{display:flex;flex-direction:column;height:100%;min-height:0;font-family:Inter,system-ui,-apple-system,sans-serif;color:#1a202e;background:#f6f8fb}
+.ws-bar{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;padding:8px 16px;background:#fff;border-bottom:1px solid #e4e6ea;flex:none}
+.ws-name{font-size:15px;font-weight:700;margin:0}
+.ws-sp{flex:1}
+.ws-lab{font-size:12px;font-weight:600;color:#5b6270}
+.ws-sel,.ws-btn{font:500 13px Inter,system-ui,sans-serif;color:#1a202e;background:#fff;border:1px solid #cfd5df;border-radius:6px;padding:5px 9px}
+.ws-btn{cursor:pointer}
+.ws-btn:hover{background:#e9eefb}
+.ws-sel:focus-visible,.ws-btn:focus-visible,.ws-seg button:focus-visible{outline:2px solid #0034a5;outline-offset:1px}
+.ws-seg{display:inline-flex;border:1px solid #cfd5df;border-radius:7px;overflow:hidden;background:#fff}
+.ws-seg button{font:500 13px Inter,system-ui,sans-serif;padding:5px 12px;border:0;background:none;color:#5b6270;cursor:pointer}
+.ws-seg button+button{border-left:1px solid #cfd5df}
+.ws-seg button[aria-pressed="true"]{background:#e9eefb;color:#0034a5;font-weight:600}
+.ws-grid{flex:1;min-height:0;display:grid;gap:10px;padding:10px;grid-auto-rows:minmax(280px,1fr);overflow:auto}
+.ws-grid[data-n="1"]{grid-template-columns:1fr}
+.ws-grid[data-n="2"],.ws-grid[data-n="3"],.ws-grid[data-n="4"]{grid-template-columns:1fr 1fr}
+.ws-grid[data-n="3"] .ws-tile:first-child{grid-row:span 2}
+.ws-tile{position:relative;display:flex;flex-direction:column;min-width:0;min-height:0;background:#fff;border:1px solid #e4e6ea;border-radius:6px;overflow:hidden}
+.ws-tile[hidden]{display:none}
+/* A tile with its controls panel out: its frame is enlarged over the neighbours (workspace.js
+   sets the box); the frame is clear outside the chart and the panel, and a light shade lies
+   over the other tiles. */
+.ws-grid{position:relative}
+.ws-tile.ws-open{overflow:visible;z-index:5}
+.ws-tile.ws-open .ws-tile-head{right:calc(10px + var(--hs, 0px))}
+.ws-tile.ws-open iframe{position:absolute;flex:none;z-index:1;background:transparent}
+.ws-shade{position:absolute;left:0;top:0;width:100%;height:100%;min-height:100%;z-index:4;background:rgba(26,32,46,.10)}
+/* The tile's own menu sits over its top right corner, on the title's line; the page inside
+   leaves that corner clear (css/performance.css, the embed title's right padding). */
+.ws-tile-head{position:absolute;top:5px;right:8px;z-index:2;display:flex;align-items:center;gap:8px}
+.ws-tile-head .ws-sel{padding:2px 6px;font-size:12px}
+/* The two dots, top left as on a Mac window: 12px of colour in a 20px target. The sign inside
+   shows when the pointer is over the pair, on keyboard focus, and always on a touch screen, so
+   the colour is never the only cue. The page inside leaves the corner clear (performance.css). */
+.ws-dots{position:absolute;top:6px;left:calc(8px - var(--ds, 0px));z-index:2;display:flex;align-items:center;gap:0}
+.ws-tile.ws-nodots .ws-dots{display:none}
+.ws-dot{width:20px;height:20px;padding:0;border:0;background:none;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+.ws-dot[hidden]{display:none}
+.ws-dot span{width:12px;height:12px;border-radius:50%;display:block;box-shadow:inset 0 0 0 .5px rgba(0,0,0,.2)}
+.ws-shut span{background:#ff5f57;color:#7a0c05}
+.ws-grow span{background:#28c840;color:#0b5c18}
+.ws-dot svg{display:block;width:12px;height:12px;opacity:0}
+.ws-dots:hover .ws-dot svg,.ws-dot:focus-visible svg{opacity:1}
+.ws-grow .i,.ws-grow.on .o{display:none}
+.ws-grow.on .i{display:inline}
+.ws-dot:focus-visible{outline:2px solid #0034a5;outline-offset:-3px;border-radius:50%}
+@media (hover:none){ .ws-dot svg{opacity:1} }
+.ws-tile iframe{flex:1;min-height:0;width:100%;border:0;display:block;background:#fff}
+.ws-tabs{display:none;gap:6px;padding:8px 10px 0;overflow-x:auto;flex:none}
+.ws-tabs button{font:500 12.5px Inter,system-ui,sans-serif;white-space:nowrap;padding:4px 10px;border:1px solid #cfd5df;border-radius:6px;background:#fff;color:#1a202e;cursor:pointer}
+.ws-tabs button[aria-pressed="true"]{background:#e9eefb;color:#0034a5;font-weight:600;border-color:#0034a5}
+/* A phone, or a window too narrow for two charts abreast: one tile at a time, a switcher above it. */
+@media (max-width: 900px), (orientation: landscape) and (max-height: 500px) {
+  .ws{height:auto}
+  .ws-lay{display:none}
+  .ws-tabs{display:flex}
+  .ws-grid,.ws-grid[data-n]{display:block;padding:8px 0 0;overflow:visible}
+  .ws-tile{border-radius:0;border-left:0;border-right:0}
+  .ws-tile iframe{height:78vh;min-height:460px;flex:none}
+}

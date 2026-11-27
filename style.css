@@ -766,6 +766,16 @@ a.nav-section-header, a.tile { color: inherit; }   /* .nav-item, .mobile-nav-pil
 html.rail-hidden #app { grid-template-columns: 0 1fr; }
 html.rail-hidden #rail { display: none; }
 
+/* ── Embed mode (a workspace tile, 2026-11-26) ──────────────────────
+   A page opened with ?embed=1 is shown inside a tile of /workspace/: the
+   header, the rail, the breadcrumb and the phone pills go, and the page's own
+   content fills the frame. The class is set before the first paint by the
+   line site_frame stamps in the head (kit.js sets it too, for a page rendered
+   before that line existed). */
+html.ccm-embed #header, html.ccm-embed #rail, html.ccm-embed #panel-bar,
+html.ccm-embed #mobile-nav, html.ccm-embed #nav-backdrop { display: none !important; }
+html.ccm-embed #app { grid-template-rows: 0 1fr; grid-template-columns: 0 1fr; }
+
 /* ── Hamburger button (hidden on desktop) ───────────────────────── */
 #hamburger {
   display: none;

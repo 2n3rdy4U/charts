@@ -2,7 +2,7 @@
   --ink:#1a2230; --muted:#5b6472; --line:#e4e8ef; --bg:#f6f8fb;
   --accent:#2f6db5; --accent-soft:#9fc0e6; --loan:#2f6db5; --green:#2e8b57; --amber:#b5762f; --pros:#3b8a6e;
   --good:#2e8b57; --bad:#c0492f; --panel:#fff;
-  --mono:ui-monospace,Menlo,monospace; --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,Menlo,monospace; --sans:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
 }
 *{box-sizing:border-box}
 /* .bb-page is the page's root INSIDE the site frame (site_frame.wrap), where
@@ -34,7 +34,7 @@ a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
 .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
 .subjtag{font-size:11.5px;color:var(--muted);margin:2px 0 8px}.subjtag b{color:var(--accent)}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.chart-title{font-size:16px;font-weight:600;color:var(--ink);margin:10px 0 2px;text-align:center}
+.chart-title{font-size:17px;font-weight:700;color:var(--ink);margin:10px 0 2px;line-height:1.25;text-align:left}   /* the house style: left, as the exhibits */
 /* The table is wider than the panel on purpose — many deals. It scrolled
    already, but macOS overlay scrollbars only appear mid-gesture, so it read
    as cut off. Persistent bar + sticky label column + edge shade. */
@@ -80,7 +80,7 @@ a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
 #vg-tooltip-element{visibility:hidden;position:fixed;z-index:1000;pointer-events:none;
   background:rgba(31,41,55,.92);color:#fff;border:none;border-radius:8px;
   box-shadow:0 4px 14px rgba(0,0,0,.25);
-  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   font-size:12.5px;padding:8px 12px;line-height:1.5;max-width:320px;word-wrap:break-word}
 #vg-tooltip-element.visible{visibility:visible}
 #vg-tooltip-element h2{margin:0 0 4px;padding:0;font-size:12.5px;font-weight:600;color:#fff}
@@ -91,6 +91,67 @@ a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
 .vega-embed svg .role-legend-entry rect.background{fill:none !important}
 
 .ctxline{font-size:11.5px;color:var(--muted);margin:2px 0 10px}
+/* As a workspace tile (?embed=1, the frame's class): the chart and nothing else. The title,
+   a row of chips that is the legend, the plot at the height left in the tile (the kit's
+   chartHeight), the source as one line. The picker, the tabs and the settings rail are hidden
+   until the tile's Controls button slides them out in the panel below. */
+html.ccm-embed .bb-page{background:#fff}
+html.ccm-embed .wrap{padding:8px 12px 4px;max-width:none}
+html.ccm-embed .panel{border:0;border-radius:0}
+html.ccm-embed .chartwrap{display:block;padding:0}
+html.ccm-embed .selector, html.ccm-embed .mtabs, html.ccm-embed .chartrail, html.ccm-embed .ctxline,
+html.ccm-embed #assetseg, html.ccm-embed .sellabel, html.ccm-embed .cc-share-btn{display:none}
+html.ccm-embed .chart-title{font-size:14.5px;margin:0 0 1px;padding:0 118px 0 46px}   /* the workspace's dots at the left, its menu at the right */
+html.ccm-embed.ws-solo .chart-title{padding-left:0}   /* room for the workspace's own menu, top right */
+html.ccm-embed .chart-cap{font-size:12px;padding:0 0 5px}
+html.ccm-embed #chart{min-height:0}
+html.ccm-embed .chart-src{margin-top:2px;font-size:11px}
+html.ccm-embed .chart-src .src-toggle{display:inline}
+html.ccm-embed .chart-src .src-full{display:none}
+html.ccm-embed .chart-src.open .src-full{display:block;margin-top:4px}
+.tilebar{display:none}
+html.ccm-embed .tilebar{display:flex;align-items:flex-start;gap:8px;margin:0 0 4px}
+.tilechips{display:flex;flex-wrap:wrap;gap:4px 6px;flex:1;min-width:0}
+.tchip{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);border-radius:6px;padding:2px 7px;font:inherit;font-size:11.5px;color:var(--ink);background:#fff;white-space:nowrap}
+.tchip i{width:12px;height:3px;border-radius:2px;display:inline-block}
+.tchip b{font-weight:600;font-variant-numeric:tabular-nums}
+.tchip.tadd{border-style:dashed;color:var(--muted);cursor:pointer}
+.tchip.tadd:hover{color:var(--ink);border-color:#c3cad6}
+.tilebtn{font:inherit;font-size:12px;font-weight:500;color:var(--ink);background:#fff;border:1px solid #cfd5df;border-radius:6px;padding:3px 9px;cursor:pointer;flex:none}
+.tilebtn:hover{background:#eef2fb}
+.tilebtn.on{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+.tchip.tadd:focus-visible,.tilebtn:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.tchip{position:relative}
+.tchip .tx{position:absolute;right:1px;top:1px;bottom:1px;width:20px;border:0;border-radius:5px;background:#fff;color:var(--muted);font:inherit;font-size:14px;line-height:1;cursor:pointer;opacity:0;padding:0}
+.tchip:hover .tx,.tchip .tx:focus-visible{opacity:1}
+.tchip .tx:hover{color:#b3261e;background:#fdecea}
+@media (hover:none){ .tchip{padding-right:24px} .tchip .tx{opacity:1;background:none} }
+/* The controls panel: slid out beside the chart while the workspace holds this tile's frame
+   enlarged over its neighbours (kit: ccmTileBox). The chart is pinned to the box it had
+   (--tx --ty --tw --th); everything else in the frame is clear, so the charts beneath show. */
+.tilepanel{display:none}
+html.ccm-embed.ctl-open, html.ccm-embed.ctl-open body, html.ccm-embed.ctl-open #app, html.ccm-embed.ctl-open #main,
+html.ccm-embed.ctl-open #panel-content, html.ccm-embed.ctl-open .ccm-page, html.ccm-embed.ctl-open .bb-page{background:transparent !important}
+html.ccm-embed.ctl-open .wrap{position:fixed;left:var(--tx);top:var(--ty);width:var(--tw);height:var(--th);box-sizing:border-box;background:#fff;overflow:hidden}
+html.ccm-embed.ctl-open .tilepanel{display:block;position:fixed;top:0;bottom:0;left:var(--px);width:var(--pw);box-sizing:border-box;z-index:300;
+  background:#fff;border:1px solid #cfd5df;border-radius:6px;box-shadow:0 10px 30px rgba(16,24,40,.20);padding:9px 14px 14px;overflow-y:auto;
+  animation:tileslide .16s ease-out}
+html.ccm-embed.ctl-left .tilepanel{--from:14px}
+html.ccm-embed.ctl-bottom .tilepanel{top:auto;left:0;width:auto;right:0;max-height:66%;border-radius:12px 12px 0 0;animation-name:tilerise}
+@keyframes tileslide{from{opacity:0;transform:translateX(var(--from,-14px))}to{opacity:1;transform:none}}
+@keyframes tilerise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){ html.ccm-embed.ctl-open .tilepanel{animation:none} }
+.tilegear{display:inline-flex;align-items:center;justify-content:center;width:28px;height:26px;padding:0;color:var(--muted)}
+.tilegear:hover{color:var(--ink)}
+.tilefull{display:inline-block;margin:14px 0 0;font-size:12px;color:var(--accent);text-decoration:none}
+.tilefull:hover{text-decoration:underline}
+.tilepanel-head{display:flex;align-items:center;justify-content:space-between;font-size:14.5px;font-weight:700;padding:0 0 8px;margin:0 0 8px;border-bottom:1px solid var(--line)}
+html.ccm-embed .tilepanel .selector{display:flex;margin:0 0 10px}
+html.ccm-embed .tilepanel .mtabs{display:flex;flex-wrap:wrap;gap:4px;margin:0 0 12px;border-bottom:0}
+html.ccm-embed .tilepanel .mtabs button{padding:4px 9px;font-size:12.5px;border:1px solid var(--line);border-radius:6px;margin:0}
+html.ccm-embed .tilepanel .chartrail{display:flex;flex-direction:column;gap:12px;border-left:0;padding:0;width:auto;max-width:none}
+html.ccm-embed.ctl-open #tilectl{background:var(--accent);border-color:var(--accent);color:#fff}
+html.ccm-embed.ctl-open #chart{cursor:pointer}
 .ctxline b{color:var(--ink);font-weight:600}
 
 .layout{display:grid;grid-template-columns:minmax(0,1fr);gap:22px;align-items:start}
@@ -123,7 +184,7 @@ a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
 .ctrllabel{font-size:10px;text-transform:uppercase;letter-spacing:.3px;color:var(--muted);font-weight:600;margin-right:2px}
 .ovsel{border:1px solid var(--line);border-radius:6px;padding:5px 22px 5px 9px;font-size:12px;background:#fff;color:var(--ink);cursor:pointer;appearance:none}
 .ovsel.on{border-color:#9c4fb5;background:#f5eefb;color:#9c4fb5;font-weight:600}
-.chart-cap{padding:0 0 6px;font-size:11.5px;color:var(--muted);text-align:center} .chart-cap b{color:var(--ink)}
+.chart-cap{padding:0 0 8px;font-size:13px;color:var(--muted);text-align:left} .chart-cap b{color:var(--ink)}
 #chart{padding:4px 0 6px;min-height:380px}
 .rangebar{display:flex;align-items:center;gap:6px;padding:0 16px 12px;flex-wrap:wrap}
 .rangebar .rlab{font-size:10px;text-transform:uppercase;letter-spacing:.3px;color:var(--muted);font-weight:600;margin-right:4px}
@@ -133,6 +194,7 @@ a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
 .schip{display:flex;flex-wrap:wrap;align-items:center;gap:5px 6px;border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-size:11.5px}
 .schip .ssw{width:10px;height:10px;border-radius:2px;flex:none}
 .schip .snm{flex:1 1 60px;min-width:0;font-weight:600;color:var(--ink);line-height:1.3}
+.schip .sval{font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}   /* the newest reading: the chip is the legend */
 .cgrp{display:inline-flex;border:1px solid var(--line);border-radius:5px;overflow:hidden}
 .cm{border:none;background:#fff;padding:2px 8px;font-size:11px;color:var(--muted);cursor:pointer;border-right:1px solid var(--line)}
 .cgrp .cm:last-child{border-right:none} .cm.on{background:var(--accent);color:#fff;font-weight:600}

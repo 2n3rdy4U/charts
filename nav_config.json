@@ -63,6 +63,17 @@
       "url": "macro/index.html"
     },
     {
+      "id": "workspace",
+      "label": "Workspace",
+      "short_label": "Workspace",
+      "description": "Up to four charts on one screen, each with its own issuers and settings.",
+      "icon": "grid",
+      "badge": null,
+      "type": "panel",
+      "url": "workspace/index.html",
+      "home": false
+    },
+    {
       "id": "data-calendar",
       "label": "Data Calendar",
       "short_label": "Calendar",

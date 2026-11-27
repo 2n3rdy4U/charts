@@ -16,12 +16,12 @@ function buildSeries(){
       }
     } else if(isRecov()){ recSeries(S, subj.ticker, seriesColorOf(subj.ticker)); } else {
       const c=calOf(subj).filter(p=>p[K]!=null);
-      S.push({series:labCode(subj.ticker), grp:labCode(subj.ticker), short:shortOf(subj.ticker), color:seriesColorOf(subj.ticker), pts:c.map(p=>[p.date,p[K],fmtMonth(p.date),extraOf(p)])});
+      S.push({series:labCode(subj.ticker), grp:labCode(subj.ticker), tk:subj.ticker, short:shortOf(subj.ticker), color:seriesColorOf(subj.ticker), pts:c.map(p=>[p.date,p[K],fmtMonth(p.date),extraOf(p)])});
     }
   } else { // 2+ : calendar only (aggregate vintage dropped; cross-issuer vintage = cohort picker, next)
     if(isRecov()){ selected.forEach(tk=>recSeries(S, tk, seriesColorOf(tk))); return S; }
     selected.forEach((tk,i)=>{const sh=SHELVES[tk];const arr=calOf(sh).filter(p=>p[K]!=null);
-      S.push({series:labCode(tk), grp:labCode(tk), short:shortOf(tk), color:seriesColorOf(tk), pts:arr.map(p=>[p.date,p[K],fmtMonth(p.date),extraOf(p)])});});
+      S.push({series:labCode(tk), grp:labCode(tk), tk, short:shortOf(tk), color:seriesColorOf(tk), pts:arr.map(p=>[p.date,p[K],fmtMonth(p.date),extraOf(p)])});});
   }
   return S;
 }
@@ -31,8 +31,8 @@ function recSeries(S, tk, color){
   const sh=SHELVES[tk], name=labCode(tk), pts=calOf(sh).filter(p=>p.recovery_rate!=null);
   const row=p=>[p.date,p.recovery_rate,fmtMonth(p.date),extraOf(p)];
   const settled=pts.filter(p=>!p.early), early=pts.filter(p=>p.early);
-  S.push({series:name, grp:name, short:shortOf(tk), color, seg:name, pts:settled.map(row)});
-  if(early.length) S.push({series:name, grp:name, short:shortOf(tk), color, seg:name+' (early read)', dash:true,
+  S.push({series:name, grp:name, tk, short:shortOf(tk), color, seg:name, pts:settled.map(row)});
+  if(early.length) S.push({series:name, grp:name, tk, short:shortOf(tk), color, seg:name+' (early read)', dash:true,
     pts:(settled.length?[row(settled[settled.length-1])]:[]).concat(early.map(row))});
 }
 function setCap(){ el('chartcap').textContent = capText(); }   // the Explorer's sub-head: settings in force

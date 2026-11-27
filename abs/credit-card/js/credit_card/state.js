@@ -3,7 +3,9 @@
 // controls.js, boot.js); see web/README.md. Every figure comes from src/metrics/cc_10d.py by
 // way of src/workflows/cc/trust_detail.py; this page only draws.
 const AVAIL=[];                       // the picker: trusts.json (ticker, label, name)
-const ISSCOLOR=['#2f6db5','#2e8b57','#b5762f','#9c4fb5','#c0492f','#2a9d8f'];
+// A colour belongs to the trust (config/chart_tokens.json, by way of the kit's homeColors); All Trusts is ink.
+const seriesColorOf=t=>homeColors(selected,'card',isAll)[t];
+const shortOf=t=>isAll(t)?'All':t;   // the end label on a narrow plot
 const ALL='ALL';                      // the All Trusts series: balance-weighted, drawn heavier and in ink
 const isAll=t=>t===ALL;
 const anyAll=()=>selected.some(isAll);
@@ -124,7 +126,7 @@ function titleFor(){
 function subtitleFor(){
   let parts;
   if(macroId)                     parts=[metricAxis()[0]];
-  else                            parts=['By collection month'];
+  else                            parts=[];
   if(output==='seasonal') parts.push('Year overlay');
   return parts.filter(Boolean).join(' · ');
 }

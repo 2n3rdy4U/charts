@@ -54,11 +54,14 @@ function unitAxis(fmt, vals){
 }
 // A darker line at zero when the values cross it.
 const zeroRule=(vals,Y)=>Math.min(0,...vals.filter(x=>x!=null))<0 ? [{data:{values:[{z:0}]},mark:{type:"rule",color:INK.zero,strokeWidth:1},encoding:{y:{...Y,field:"z"}}}] : [];
-// The caption under the title: the measure and its denominator (they were the y-axis
-// title), then the page's own settings line.
+// The caption under the title says only what the title, the chips and the menus do not:
+// the measure's denominator (the measure's name too when the title lacks it), then any
+// setting the page reports, which it does only for one changed from its default.
 function capText(){
-  const a=[].concat(metricAxis()), m=a[0]+(a[1]?', '+String(a[1]).replace(/^\(|\)$/g,''):'');
-  return [m, ...subtitleFor().split(' \u00b7 ').filter(x=>x && x!==a[0])].join(' \u00b7 ');
+  const a=[].concat(metricAxis()), t=titleFor().toLowerCase();
+  const den=a[1]?String(a[1]).replace(/^\(|\)$/g,''):'', named=t.includes(String(a[0]).toLowerCase());
+  const m=named ? den : a[0]+(den?', '+den:'');
+  return [m, ...subtitleFor().split(' \u00b7 ').filter(x=>x && x!==a[0])].filter(Boolean).join(' \u00b7 ');
 }
 // A d3 format the kit's own text can use (chips, the end labels are Vega's): ".2%", "+.1%", ",.1f".
 function fmtNum(v, f){
@@ -95,7 +98,13 @@ function syncAddress(){
   const pre=window.BB_PRESET;
   if(pre && pre.static && (selected[0]!==pre.sel || (pre.ac && typeof assetClass!=='undefined' && assetClass!==pre.ac)))
     path=path.replace(/[^/]+\/$/, '') + 'index.html';    // <T>/ → ../index.html
-  try{ history.replaceState(null, '', path + '?' + serializeState().toString().replace(/%2C/g, ',')); }catch(e){}   // a readable list: sel=A,B
+  const query='?' + serializeState().toString().replace(/%2C/g, ',');   // a readable list: sel=A,B
+  // As a workspace tile (?embed=1) the page keeps the flag, so a reload stays a tile, and tells
+  // the workspace its new settings, which is how the workspace's own address follows the tile.
+  const tile=document.documentElement.classList.contains('ccm-embed');
+  try{ history.replaceState(null, '', path + query + (tile?'&embed=1':'')); }catch(e){}
+  if(tile){ const tf=el('tilefull'); if(tf) tf.href=tileFullHref(); }
+  if(tile && window.parent!==window){ try{ window.parent.postMessage({type:'ccm-tile-state', path, search:query}, location.origin); }catch(e){} }
 }
 // Views that describe ONE issuer: the year overlay (its years against each
 // other) and the macro overlay (its series against a macro series). With two
@@ -213,11 +222,86 @@ const CHART_CFG={aria:false, font:TK.font,
 // The page is its own window now (the frame is stamped into it), so the
 // layout classes come from this window's size, and the visible height for a
 // landscape chart is the frame's content area, which is what scrolls.
+// A workspace tile (?embed=1; the site frame marks it too) is neither a desktop page nor a
+// phone. It shows the chart and nothing else: the title, a row of chips that is the legend
+// (name and newest value), the plot sized to the height left in the tile, the source line.
+// Every control the page has (the picker, the tabs, the settings rail) is one press away,
+// behind the Controls button, which slides them out beside the chart (css/performance.css,
+// html.ccm-embed and .ctl-open). The page's own head script may have classed a small tile
+// as a phone before this file ran, so the classes are cleared here.
+const isEmbed=()=>document.documentElement.classList.contains('ccm-embed');
+if(/[?&]embed=1(&|$)/.test(location.search)){ const c=document.documentElement.classList; c.add('ccm-embed'); c.remove('bb-phone','bb-land'); }
+// The controls panel (2026-11-26). Controls slides the page's own controls out beside the
+// chart, which stays where it is and redraws as they change. A frame cannot draw outside
+// itself, so the workspace enlarges this tile's frame over its neighbours and hands back
+// the chart's box inside it (ccmTileBox: x, y, w, h, the panel's side and width); the page
+// pins the chart to that box and leaves the rest of the frame clear. Opened on its own
+// (no workspace above it), the panel takes the frame's right side, or its foot when narrow.
+const PANEL_W=310;
+let TILE_BOX=null, _afterOpen=null;
+const tileBottom=()=>TILE_BOX ? TILE_BOX.y+TILE_BOX.h : window.innerHeight;
+const inWorkspace=()=>{ try{ return window.parent!==window && typeof window.parent.ccmTilePanel==='function'; }catch(e){ return false; } };
+window.ccmTileBox=function(b){
+  const root=document.documentElement, c=root.classList, was=TILE_BOX;
+  TILE_BOX=b||null;
+  c.toggle('ctl-open', !!b); c.remove('ctl-right','ctl-left','ctl-bottom');
+  if(b){
+    c.add('ctl-'+b.side);
+    const px=b.side==='left' ? b.x-b.pw : b.x+b.w;
+    [['--tx',b.x],['--ty',b.y],['--tw',b.w],['--th',b.h],['--pw',b.pw],['--px',px]].forEach(([k,v])=>root.style.setProperty(k, Math.round(v)+'px'));
+    if(b.resized) renderChart();                 // the chart gave up some width to the panel
+    const f=_afterOpen; _afterOpen=null; if(f) setTimeout(f, 0);
+  } else if(was){ if(was.resized) renderChart(); const t=el('tilectl'); if(t) t.focus(); }
+};
+function tileControls(open, then){
+  if(open === !!TILE_BOX){ if(open && then) then(); return; }
+  _afterOpen = open ? (then||null) : null;
+  if(inWorkspace()){ window.parent.ccmTilePanel(window, open); return; }
+  if(!open){ window.ccmTileBox(null); return; }
+  const W=window.innerWidth, H=window.innerHeight, side=W>=PANEL_W+320;
+  window.ccmTileBox(side ? {x:0,y:0,w:W-PANEL_W,h:H,side:'right',pw:PANEL_W,resized:true} : {x:0,y:0,w:W,h:H,side:'bottom',pw:W});
+}
+const tileFullHref=()=>location.pathname+location.search.replace(/([?&])embed=1(&|$)/,(m,a,b)=>b?a:'');
+function setupTile(){
+  const cap=el('chartcap'), page=document.querySelector('.bb-page'); if(!cap || !page || el('tilebar')) return;
+  const bar=document.createElement('div'); bar.id='tilebar'; bar.className='tilebar';
+  bar.innerHTML='<div class="tilechips" id="tilechips"></div><button type="button" class="tilebtn tilegear" id="tilectl" aria-expanded="false" aria-label="Chart controls" title="Chart controls"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>';
+  cap.insertAdjacentElement('afterend', bar);
+  // The panel holds the page's own controls: they are moved, not copied, so every one works as it does on the full page.
+  const panel=document.createElement('aside'); panel.id='tilepanel'; panel.className='tilepanel'; panel.setAttribute('aria-label','Chart controls');
+  panel.innerHTML='<div class="tilepanel-head"><span>Chart controls</span><button type="button" class="tilebtn on" id="tiledone">Done</button></div>';
+  ['.selector','.mtabs','.chartrail'].forEach(q=>{ const n=document.querySelector(q); if(n) panel.appendChild(n); });
+  const full=document.createElement('a'); full.className='tilefull'; full.id='tilefull'; full.target='_top'; full.textContent='Open the full page \u203a';
+  full.href=tileFullHref();
+  panel.appendChild(full);
+  page.appendChild(panel);
+  el('tilectl').onclick=()=>tileControls(!TILE_BOX);
+  el('tiledone').onclick=()=>tileControls(false);
+  { const plot=el('chart'); if(plot) plot.addEventListener('click', ()=>{ if(TILE_BOX) tileControls(false); }); }   // a press on the chart closes it too
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape' && TILE_BOX) tileControls(false); });
+  // The panel stays until the reader closes it (the gear, Done, Escape, a press on the chart). A press elsewhere does
+  // not close it: a control that redraws itself (line or bar on a series chip) is gone from the
+  // page by the time its press is heard, and so looked like a press outside.
+  new MutationObserver(()=>el('tilectl').setAttribute('aria-expanded', String(document.documentElement.classList.contains('ctl-open'))))
+    .observe(document.documentElement, {attributes:true, attributeFilter:['class']});
+}
+if(isEmbed()) setupTile();
+// The tile's legend: a chip per series (swatch, short name, newest value) and a way to add one.
+function renderTileChips(list){
+  const box=el('tilechips'); if(!box) return;
+  const add=typeof window.KIT_ADD_LABEL==='string'?window.KIT_ADD_LABEL:'Add';
+  const drop=(list||[]).length>1 && typeof window.unsel==='function';     // the last series stays
+  box.innerHTML=(list||[]).map(s=>`<span class="tchip"><i style="background:${s.color}"></i>${esc(s.short||s.name)}${s.val?` <b>${esc(s.val)}</b>`:''}${drop&&s.tk?`<button type="button" class="tx" data-tk="${esc(s.tk)}" aria-label="Remove ${esc(s.short||s.name)}" title="Remove">×</button>`:''}</span>`).join('')
+    +`<button type="button" class="tchip tadd" id="tileadd">+ ${esc(add)}</button>`;
+  box.querySelectorAll('.tx').forEach(b=>b.onclick=()=>window.unsel(b.dataset.tk));
+  el('tileadd').onclick=()=>tileControls(true, ()=>{ const b=el('issbtn'), p=el('isspanel'); if(b && !(p && p.classList.contains('open'))) b.click(); });
+}
 const isPhone=()=>document.documentElement.classList.contains('bb-phone');
 const isLandscapePhone=()=>document.documentElement.classList.contains('bb-land');
 function applyViewMode(){   // returns true when the layout changed
   const w = innerWidth, h = innerHeight;
   const c = document.documentElement.classList, before = c.contains('bb-phone') + ':' + c.contains('bb-land');
+  if(isEmbed()){ c.remove('bb-phone','bb-land'); return before !== 'false:false'; }
   const land = w > h && h <= 500;
   c.toggle('bb-land', land); c.toggle('bb-phone', land || w <= 640);
   return before !== c.contains('bb-phone') + ':' + c.contains('bb-land');
@@ -287,6 +371,7 @@ const VEGA_OPTS={actions:false,renderer:'svg',tooltip:{disableDefaultStyle:true}
 // Used by BOTH the initial height estimate and the corrective fit pass — when
 // these disagreed the fit pass ran last and clawed the margin back.
 const BOTTOM_RESERVE=78;
+const bottomReserve=()=>isEmbed()?34:BOTTOM_RESERVE;   // a tile keeps one line for "Source & notes"
 
 function describeChart(box){   // the box is the image; the SVG's own node tree says nothing a reader needs
   const t=(el('viewTitle')||{}).textContent||'Chart';
@@ -298,19 +383,20 @@ function fitChart(box,spec){
   // axis, axis title and legend are added on top, so the rendered SVG is the
   // only honest measure of what the chart actually occupies.
   const svg=box.querySelector('svg'); if(!svg||typeof spec.height!=='number'||isPhone()) return;
-  const avail=window.innerHeight-box.getBoundingClientRect().top-BOTTOM_RESERVE;
+  const avail=(isEmbed()?tileBottom():window.innerHeight)-box.getBoundingClientRect().top-bottomReserve();
   const over=svg.getBoundingClientRect().height-avail;
-  if(over>4 && spec.height-over>=200){
+  if(over>4 && spec.height-over>=(isEmbed()?80:200)){
     return vegaEmbed(box,{...spec,height:Math.round(spec.height-over)},VEGA_OPTS).then(()=>describeChart(box)).catch(()=>{});
   }
 }
 function embed(box,spec){ if(typeof vegaEmbed==='undefined'){ box.innerHTML='<div class="chartph">loading chart library…</div>'; return; }
   return vegaEmbed(box,spec,VEGA_OPTS).then(()=>{ describeChart(box); return fitChart(box,spec); })
     .catch(e=>{box.innerHTML='<div class="chartph">chart error: '+esc(e.message)+'</div>';}); }
-function hideChips(){ const g=el('seriesgroup'); if(g)g.style.display='none'; const b=el('serieschips'); if(b)b.innerHTML=''; }
+function hideChips(){ const g=el('seriesgroup'); if(g)g.style.display='none'; const b=el('serieschips'); if(b)b.innerHTML=''; renderTileChips([]); }
 function renderSeriesChips(list, showAxis){   // each chart series: [swatch] name [≡|▋] [L|R]  (live-dashboard chip model)
   const bar=el('serieschips'), g=el('seriesgroup'); if(!bar) return;
   if(!list||!list.length){ hideChips(); return; }
+  renderTileChips(list);
   if(g)g.style.display='';
   bar.innerHTML=list.map(s=>{
     const mk=seriesMark(s.key), ax=seriesAxis(s.key);
@@ -340,7 +426,11 @@ function chartHeight(nEntries, nCols){
   // bottom legend (~22 per row). BOTTOM_RESERVE keeps the source line clear
   // of the window edge on top of that.
   const legendRows = Math.max(1, Math.ceil(nEntries/Math.max(1,nCols)));
-  const chrome = 46 + (legendRows*22) + BOTTOM_RESERVE;
+  // A tile: the plot takes exactly what is left above the x-axis labels and the source line, so
+  // nothing falls below the tile's edge; a legend (vintage curves, the year overlay) is taken
+  // off by fitChart's corrective pass.
+  if(isEmbed()) return Math.max(90, Math.round(tileBottom() - top - 30 - bottomReserve()));
+  const chrome = 46 + (legendRows*22) + bottomReserve();
   return Math.max(260, Math.round(window.innerHeight - top - chrome));
 }
 // Landscape phone: after loading, rotating, or any tab/control change, settle
@@ -357,6 +447,7 @@ addEventListener('orientationchange', ()=>{ _focusNext=true; });
 // groups it can be taller than a laptop window, and Range sat below the edge.
 function fitRail(){
   const rail = document.querySelector('.chartrail'); if(!rail) return;
+  if(isEmbed()){ rail.style.maxHeight=''; rail.style.overflowY=''; return; }   // in a tile the rail is inside the controls panel
   if(isPhone() || document.body.scrollHeight > window.innerHeight + 1){ rail.style.maxHeight = ''; rail.style.overflowY = ''; return; }
   rail.style.maxHeight = Math.max(200, Math.round(window.innerHeight - rail.getBoundingClientRect().top - 12)) + 'px';
   rail.style.overflowY = 'auto';
@@ -377,7 +468,7 @@ function calendarChart(box,S,o){
   // the label's own format: a signed change keeps its sign, a rate reads to a tenth (a hundredth under 2%)
   const labF=o.labelFormat || (axF[0]==='+' ? axF : /%$/.test(vf) ? (vMax<0.02?'.2%':'.1%') : vf);
   // CALENDAR: per-series chips (line/bar + L/R axis) → dual-axis via yL/yR fields
-  renderSeriesChips(grps.map(g=>({key:g,name:g,color:col(g),val:lastOf(g)?fmtNum(lastOf(g)[1],labF):''})), grps.length>1);
+  renderSeriesChips(grps.map(g=>({key:g,name:g,tk:(S.find(x=>x.grp===g)||{}).tk,short:(S.find(x=>x.grp===g)||{}).short,color:col(g),val:lastOf(g)?fmtNum(lastOf(g)[1],labF):''})), grps.length>1);
   // Up to four series are named at their line ends, so the legend goes; past four it stays.
   const tight=(box.clientWidth||0)<560;
   let direct=grps.length<=4;
@@ -451,7 +542,7 @@ function calendarChart(box,S,o){
   const groups=[side('left'),side('right')].filter(Boolean);
   return embed(box,{ $schema:"https://vega.github.io/schema/vega-lite/v5.json", width:"container", height:chartHeight(o.nEntries,6), background:null,
     // symbolOpacity: with a band, the legend would otherwise take the band's faint opacity.
-    encoding:{ x:X, color:{...C, legend: !direct && grps.length>1 ? {...legendCfg(true), ...(o.band?{symbolOpacity:1}:{})} : null} },
+    encoding:{ x:X, color:{...C, legend: !direct && grps.length>1 && !isEmbed() ? {...legendCfg(true), ...(o.band?{symbolOpacity:1}:{})} : null} },
     layer: groups.length>1 ? groups : groups[0].layer,
     ...(groups.length>1 ? {resolve:{scale:{y:"independent"}}} : {}), config:CHART_CFG });
 }

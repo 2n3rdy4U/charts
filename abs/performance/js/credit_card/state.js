@@ -126,7 +126,7 @@ function titleFor(){
 function subtitleFor(){
   let parts;
   if(macroId)                     parts=[metricAxis()[0]];
-  else                            parts=['By collection month'];
+  else                            parts=[];
   if(output==='seasonal') parts.push('Year overlay');
   return parts.filter(Boolean).join(' · ');
 }

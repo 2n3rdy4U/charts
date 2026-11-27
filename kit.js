@@ -25,6 +25,16 @@
     });
   }
 
+  // ── Embed mode: this page is a tile of /workspace/ (?embed=1). The frame's chrome is
+  //    hidden by style.css; a link out of the tile opens in the whole window, not inside it. ──
+  if (/[?&]embed=1(&|$)/.test(location.search)) document.documentElement.classList.add('ccm-embed');
+  if (document.documentElement.classList.contains('ccm-embed')) {
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('a[href]');
+      if (a && !a.target && !/^(#|javascript:)/.test(a.getAttribute('href'))) a.target = '_top';
+    }, true);
+  }
+
   // ── Desktop: the rail hides (2026-11-26). The button is made here, not stamped
   //    into each page, so every framed page has it from the publish that carries
   //    this file; a page rendered since also sets the class before it paints

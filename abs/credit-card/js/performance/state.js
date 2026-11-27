@@ -4,7 +4,10 @@
 // resolver (shelves.json) from the issuer roster; filled in by boot.js.
 const AVAIL=[];
 const CLASS_DEFAULT={loan:'ALL',lease:'ALL-LEASE'};   // the market series: a neutral opening view, not one issuer's
-const ISSCOLOR=['#2f6db5','#2e8b57','#b5762f','#9c4fb5'];
+// A colour belongs to the issuer (config/chart_tokens.json, by way of the kit's homeColors),
+// not to its place in the picker; All Issuers is ink.
+const seriesColorOf=t=>homeColors(selected,'auto',isAll)[t];
+const shortOf=t=>isAll(t)?'All':t;   // the end label on a narrow plot
 // The All Issuers series (every loan shelf's tape added together, from the
 // metrics layer): time series only, delinquency only, drawn heavier and in ink.
 const ALL='ALL', ALL_LEASE='ALL-LEASE';   // the market series, loan and lease: shelves added together, no deals
@@ -189,20 +192,18 @@ function titleFor(){
   return `${one?who:AUTO()} DQ ${DPD()}${yoy}`;
 }
 function subtitleFor(){
-  const book = useAbsee() ? ['All Credit Scores','New & Used'] : [];
-  const poolTxt = pools==='seasoned' ? 'Seasoned pools (>6 mo)' : 'All pools';
-  const n = selected.length>1 ? [`${selected.length} issuers`] : [];
+  // Only what is not the default, and nothing the chips already show (the issuers).
+  const poolTxt = pools==='seasoned' ? 'Seasoned pools (>6 mo)' : '';
   let parts;
   if(macroId)                          parts=[metricAxis()[0], poolTxt];
-  else if(mode==='vintage' && isDQ())  parts=[DPD(), ...book];
+  else if(mode==='vintage' && isDQ())  parts=[DPD()];
   else if(mode==='vintage')            parts=[(SHELVES[selected[0]]||{}).portfolio?'By origination year (all of the lender\'s loans)':'By series (individual deals)'];
-  else if(isDQ() && useAbsee())        parts=[...book, pools==='seasoned'?'Seasoned (>6mo)':''];
   else if(isRecov())                   parts=recView==='time'
-                                         ? ['Loans defaulting in the four quarters to each date', 'Net of repossession and sale costs', ...n]
-                                         : ['Newest cohort with 12 months of follow-up', 'Faded bars: fewer than 400 loans', ...n];
-  else if(isTurn())                    parts=['All deals, weighted by leases reaching scheduled end', ...n];
-  else if(isResid())                   parts=['All deals, weighted by value of vehicles sold', ...n];   // exactly the Explorer's DQ time series
-  else                                 parts=[poolTxt, ...n];
+                                         ? ['Loans defaulting in the four quarters to each date', 'Net of repossession and sale costs']
+                                         : ['Newest cohort with 12 months of follow-up', 'Faded bars: fewer than 400 loans'];
+  else if(isTurn())                    parts=['All deals, weighted by leases reaching scheduled end'];
+  else if(isResid())                   parts=['All deals, weighted by value of vehicles sold'];
+  else                                 parts=[poolTxt];
   if(output==='seasonal') parts.push('Year overlay');
   return parts.filter(Boolean).join(' · ');
 }
