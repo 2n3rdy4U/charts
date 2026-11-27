@@ -34,7 +34,10 @@
   var PAGE = "/abs/my-portfolio/", PAGE_NAME = "My Portfolio";
   function isIssuer(x) { return (x.kind || "deal") === "issuer"; }
   var SCRIPT_EL = document.currentScript;
-  var CSS_URL = SCRIPT_EL && SCRIPT_EL.src ? new URL("./watch.css", SCRIPT_EL.src).toString() : "/watch/watch.css";
+  // The stylesheet takes this script's version (?v=…, stamped at publish and covering both files),
+  // so a browser never pairs a new script with a cached old stylesheet.
+  var VER = SCRIPT_EL && SCRIPT_EL.src ? (/\?v=[0-9a-f]+$/.exec(SCRIPT_EL.src) || [""])[0] : "";
+  var CSS_URL = (SCRIPT_EL && SCRIPT_EL.src ? new URL("./watch.css", SCRIPT_EL.src).toString() : "/watch/watch.css") + VER;
   var CONFIG_URL = SCRIPT_EL && SCRIPT_EL.src ? new URL("./alerts.json", SCRIPT_EL.src).toString() : "/watch/alerts.json";
   var SAVE_FAILED = "Couldn't save that change. Your portfolio is as it was — try again in a moment.";
 

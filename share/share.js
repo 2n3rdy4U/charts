@@ -30,7 +30,9 @@
   })();
   var SCRIPT_URL = SCRIPT_EL ? new URL(SCRIPT_EL.src, document.baseURI).toString() : "";
   var ASSETS_BASE = SCRIPT_URL ? new URL("../assets/brand/", SCRIPT_URL).toString() : "/assets/brand/";
-  var CSS_URL = SCRIPT_URL ? new URL("./share.css", SCRIPT_URL).toString() : "/share/share.css";
+  // The stylesheet takes this script's version (?v=…, stamped at publish and covering both files).
+  var VER = (/\?v=[0-9a-f]+$/.exec(SCRIPT_URL) || [""])[0];
+  var CSS_URL = (SCRIPT_URL ? new URL("./share.css", SCRIPT_URL).toString() : "/share/share.css") + VER;
   var MARK_URL = ASSETS_BASE + "logo-mark-primary.png";
 
   var HTML2CANVAS_URL = "https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js";

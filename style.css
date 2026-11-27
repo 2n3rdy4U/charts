@@ -341,6 +341,19 @@ html, body {
   margin: 10px 16px;
 }
 
+/* A reader the site knows has subscribed is not asked again (site_frame._RAIL_EARLY) */
+html.ccm-subscriber #header .header-right .btn-primary { display: none; }
+
+/* A plain heading over a group of entries (Insights: the newsletter and the podcast) */
+.rail-heading {
+  margin: 4px 20px 2px;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--color-shell-muted, #7f8db0);
+}
+
 /* ── Main content panel ────────────────────────────────────────── */
 #main {
   grid-area: main;

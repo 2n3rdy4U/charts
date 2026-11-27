@@ -12,14 +12,16 @@
   var KINDS = {
     perf: { path: '/abs/performance/index.html' },
     card: { path: '/abs/credit-card/index.html' },
-    macro: { path: '/macro/index.html' }
+    macro: { path: '/macro/index.html' },
+    iss: { path: '/abs/issuance/index.html' }
   };
   // What the tile's menu offers; each starts from a view worth opening.
   var TYPES = [
     { id: 'loan',  label: 'Auto Loan',   kind: 'perf', q: 'ac=loan&sel=ALL,SDART,TAOT,CAOT&m=dq_60plus_pct&view=calendar' },
     { id: 'lease', label: 'Auto Lease',  kind: 'perf', q: 'ac=lease&sel=ALL-LEASE,NALT,GMALT&m=dq_60plus_pct&view=calendar' },
     { id: 'card',  label: 'Credit Card', kind: 'card', q: 'sel=ALL,CHAIT,COMET,SYNIT' },
-    { id: 'macro', label: 'Macro',       kind: 'macro', q: 'cat=Labor+Market&series=UNRATE' }
+    { id: 'macro', label: 'Macro',       kind: 'macro', q: 'cat=Labor+Market&series=UNRATE' },
+    { id: 'iss',   label: 'Issuance',    kind: 'iss', q: '' }
   ];
   var T = function (kind, q) { return { kind: kind, q: q }; };
   var PRESETS = [
@@ -70,7 +72,7 @@
   var state = { n: given.n || (window.innerWidth < 1100 ? 2 : 4), tiles: [], cur: 0, max: -1 };
   for (var i = 0; i < MAX; i++) state.tiles[i] = given.tiles[i] || dflt.tiles[i];
 
-  var typeOf = function (t) { return t.kind === 'macro' ? 'macro' : t.kind === 'card' ? 'card' : (/(^|&)ac=lease(&|$)/.test(t.q) ? 'lease' : 'loan'); };
+  var typeOf = function (t) { return t.kind === 'macro' ? 'macro' : t.kind === 'iss' ? 'iss' : t.kind === 'card' ? 'card' : (/(^|&)ac=lease(&|$)/.test(t.q) ? 'lease' : 'loan'); };
   var labelOf = function (t) { return TYPES.filter(function (x) { return x.id === typeOf(t); })[0].label; };
   var srcOf = function (t) { return KINDS[t.kind].path + '?' + (t.q ? t.q + '&' : '') + 'embed=1'; };
 

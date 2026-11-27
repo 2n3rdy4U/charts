@@ -1,10 +1,32 @@
 {
   "sections": [
     {
+      "id": "workspace",
+      "label": "Overview",
+      "short_label": "Overview",
+      "description": "Up to four charts on one screen, each with its own issuers and settings. Your arrangement is the site's front page.",
+      "icon": "grid",
+      "badge": null,
+      "type": "panel",
+      "url": "workspace/index.html",
+      "home": false
+    },
+    {
+      "id": "abs-my-portfolio",
+      "label": "My Portfolio",
+      "short_label": "Portfolio",
+      "description": "The deals you watch and the issuers you follow.",
+      "icon": "star",
+      "badge": null,
+      "type": "panel",
+      "url": "abs/my-portfolio/index.html",
+      "home": false
+    },
+    {
       "id": "abs-data",
-      "label": "ABS Data",
-      "short_label": "ABS",
-      "description": "Loan-level performance, delinquency trends, and new issuance data across auto and credit card ABS trusts.",
+      "label": "Markets",
+      "short_label": "Markets",
+      "description": "Loan-level performance, issuance, and the macro indicators behind them: auto loans and leases, credit cards, new deals, FRED series and the release calendar.",
       "icon": "chart-bar",
       "badge": null,
       "type": "accordion",
@@ -42,46 +64,22 @@
           "badge": null
         },
         {
-          "id": "abs-my-portfolio",
-          "label": "My Portfolio",
-          "icon": "star",
+          "id": "macro-data",
+          "label": "Macro",
+          "icon": "globe",
           "type": "panel",
-          "url": "abs/my-portfolio/index.html",
-          "badge": null,
-          "home": false
+          "url": "macro/index.html",
+          "badge": null
+        },
+        {
+          "id": "data-calendar",
+          "label": "Data Calendar",
+          "icon": "calendar",
+          "type": "panel",
+          "url": "abs/schedule/Data_Cal_Calendar.html",
+          "badge": null
         }
       ]
-    },
-    {
-      "id": "macro-data",
-      "label": "Macro",
-      "short_label": "Macro",
-      "description": "Key economic indicators from FRED — employment, inflation, consumer spending, and credit conditions.",
-      "icon": "globe",
-      "badge": null,
-      "type": "panel",
-      "url": "macro/index.html"
-    },
-    {
-      "id": "workspace",
-      "label": "Workspace",
-      "short_label": "Workspace",
-      "description": "Up to four charts on one screen, each with its own issuers and settings.",
-      "icon": "grid",
-      "badge": null,
-      "type": "panel",
-      "url": "workspace/index.html",
-      "home": false
-    },
-    {
-      "id": "data-calendar",
-      "label": "Data Calendar",
-      "short_label": "Calendar",
-      "description": "Upcoming macro data releases and ABS filing dates across all tracked trusts.",
-      "icon": "calendar",
-      "badge": null,
-      "type": "panel",
-      "url": "abs/schedule/Data_Cal_Calendar.html"
     },
     {
       "id": "newsletter",
@@ -89,7 +87,8 @@
       "description": "The week in U.S. consumer-credit securitization, data, and policy. Independent, data-first, no paywall.",
       "icon": "document",
       "type": "link",
-      "url": "/newsletter/"
+      "url": "/newsletter/",
+      "group": "Insights"
     },
     {
       "id": "podcast",
@@ -98,7 +97,8 @@
       "icon": "microphone",
       "badge": null,
       "type": "link",
-      "url": "/podcasts/"
+      "url": "/podcasts/",
+      "group": "Insights"
     }
   ]
 }
