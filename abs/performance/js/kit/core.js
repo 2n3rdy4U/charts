@@ -10,6 +10,62 @@
 // renderChart(), renderDeals(), serializeState() (the view as URL params); and may
 // set window.KIT_ROW_LABEL (the calendar table's first column: 'Issuer' unless
 // told otherwise). A page calls syncAddress() at the end of its renderChart().
+//
+// THE HOUSE STYLE (docs/charts-mockups/rulebook.md, 2026-11-26). The ink, the series
+// colours and each issuer's home colour are KIT_TOKENS, the block below, which
+// src/utils/chart_tokens.py writes from config/chart_tokens.json (edit the JSON, never the
+// block; a test fails when they differ). It sits in this file, not one of its own, so a
+// page rendered before the theme still finds it. What the theme sets:
+// Inter; ink text and soft axis labels; horizontal gridlines only and no plot border; the
+// unit on the top tick and no y-axis title (the measure is in the caption, capText);
+// years as 2017 ’18 ’19; a colour that belongs to the issuer (homeColors); a label at
+// each line's end, name and latest value, for up to four series (the legend past that).
+/* TOKENS:BEGIN */
+const KIT_TOKENS = {"font":"Inter, system-ui, -apple-system, 'Segoe UI', sans-serif","ink":{"text":"#1a202e","soft":"#5b6270","faint":"#8b919c","grid":"#e4e6ea","base":"#9aa0aa","zero":"#6b7280","band":"#f0f1f4","navy":"#0034a5"},"series":["#0034a5","#d9622b","#149a6c","#c98a00","#c9548a","#3f8f2f","#7a5fd0","#d14545"],"market":"#1a202e","years":["#a9bbe6","#0a2a78"],"homes":{"auto":{"SDART":0,"TAOT":1,"CAOT":2,"GMCAR":3,"AMCAR":4,"AART":5,"BAAT":6,"BLAST":7,"BMWLT":0,"BMWOT":2,"BMWPORT":1,"CFAST":3,"CMXS":5,"COPAR":4,"CRART":7,"CRVNAN":0,"CRVNAP":2,"DRIVE":6,"EART":1,"EARTS":3,"FCALT":4,"FCAOT":6,"FRANK":5,"FTAT":7,"GMALT":1,"HAROT":0,"HART":2,"HUNT":4,"LBAAT":3,"MBALT":5,"MBART":6,"NALT":7,"NAROT":0,"PILOT":2,"TRIAD":1,"UPFC":4,"USAOT":5,"VALET":3,"VWALT":6,"WOALT":3,"WOART":7,"WOSAT":0,"ALLYPORT":2},"card":{"AMEXIT":0,"AMXCA":1,"BACCT":2,"CCCIT":3,"CHAIT":4,"COMET":5,"DCENT":6,"DRYROCK":7,"FNBO":0,"HAFF":1,"HSBCCC":2,"HSBCPL":3,"METRIS":4,"NATCITY":5,"PROVIDIAN":6,"SEARS2":7,"SYNCCMNT":0,"SYNIT":1,"WFCARD":2,"WFNN":3}}};
+/* TOKENS:END */
+const TK=KIT_TOKENS, INK=TK.ink;
+// A colour per key, in the order picked. The market series is ink. Each key starts from
+// its home; when a home is taken in this view the later pick moves to the next free one.
+function homeColors(keys, kind, isMarket){
+  const pal=TK.series, homes=TK.homes[kind]||{}, used=new Set(), out={};
+  const hash=k=>[...String(k)].reduce((h,c)=>(h*31+c.charCodeAt(0))>>>0,7);
+  keys.forEach(k=>{ if(isMarket && isMarket(k)){ out[k]=TK.market; return; }
+    let i=homes[k]!=null?homes[k]:hash(k)%pal.length, n=0;
+    while(used.has(i) && n<pal.length){ i=(i+1)%pal.length; n++; }
+    used.add(i); out[k]=pal[i]; });
+  return out;
+}
+// n colours of one hue, light to dark: years against each other, vintages past eight deals.
+function rampColors(n){
+  const h=c=>[1,3,5].map(i=>parseInt(c.slice(i,i+2),16)), a=h(TK.years[0]), b=h(TK.years[1]);
+  return Array.from({length:n},(_,i)=>{ const t=n<2?1:i/(n-1);
+    return '#'+a.map((v,j)=>Math.round(v+(b[j]-v)*t).toString(16).padStart(2,'0')).join(''); });
+}
+// The y axis: about five gridlines at round values, the unit on the top tick only ("8%" then
+// 6, 4, 2, 0), and for a rate no more decimals than the step between gridlines needs (the
+// page's own format said 8.00%; the tooltip and the table keep the full figure).
+function unitAxis(fmt, vals){
+  const v=(vals||[]).filter(x=>x!=null);
+  if(v.length && /%$/.test(fmt)){
+    const step=(Math.max(0,...v)-Math.min(0,...v))/5*100;
+    fmt=(fmt[0]==='+'?'+':'')+'.'+(step>=0.7?0:step>=0.07?1:step>=0.007?2:3)+'%';
+  }
+  return {format:fmt, tickCount:5, labelExpr:"datum.index==1 ? datum.label : replace(datum.label,'%','')"};
+}
+// A darker line at zero when the values cross it.
+const zeroRule=(vals,Y)=>Math.min(0,...vals.filter(x=>x!=null))<0 ? [{data:{values:[{z:0}]},mark:{type:"rule",color:INK.zero,strokeWidth:1},encoding:{y:{...Y,field:"z"}}}] : [];
+// The caption under the title: the measure and its denominator (they were the y-axis
+// title), then the page's own settings line.
+function capText(){
+  const a=[].concat(metricAxis()), m=a[0]+(a[1]?', '+String(a[1]).replace(/^\(|\)$/g,''):'');
+  return [m, ...subtitleFor().split(' \u00b7 ').filter(x=>x && x!==a[0])].join(' \u00b7 ');
+}
+// A d3 format the kit's own text can use (chips, the end labels are Vega's): ".2%", "+.1%", ",.1f".
+function fmtNum(v, f){
+  const m=/^(\+?)(,?)\.(\d)([%f])$/.exec(f||'.2%'); if(v==null||!m) return v==null?'':String(v);
+  const x=m[4]==='%'?v*100:v, t=Math.abs(x).toLocaleString('en-US',{minimumFractionDigits:+m[3],maximumFractionDigits:+m[3],useGrouping:!!m[2]});
+  return (x<0?'\u2212':(m[1]&&x>0?'+':''))+t+(m[4]==='%'?'%':'');
+}
 const markBy={}, axisBy={};   // per-series: seriesKey -> 'line'|'bar', 'left'|'right' (live-dashboard model)
 const seriesMark=k=>markBy[k]||'line', seriesAxis=k=>axisBy[k]||'left';
 window.setSeriesMark=(k,m)=>{ markBy[k]=m; renderChart(); };
@@ -75,6 +131,7 @@ function renderSeasonal(box){
   const k=typeof scaleOf==='function'?scaleOf():1;
   const data=cal.filter(p=>p[sk]!=null).map(p=>{const a=p.date.split('-').map(Number);return {mn:a[1],y:p[sk]*k,year:String(a[0])};});
   if(!data.length){ box.innerHTML='<div class="chartph">no seasonal data for this metric</div>'; return; }
+  const seasYears=[...new Set(data.map(d=>d.year))].sort();   // one hue, the newest year darkest
   const spec={
     $schema:"https://vega.github.io/schema/vega-lite/v5.json", width:"container", height:chartHeight(new Set(data.map(d=>d.year)).size,6), background:null,
     data:{values:data},
@@ -83,8 +140,8 @@ function renderSeasonal(box){
     encoding:{
       x:{field:"mn",type:"quantitative",title:null,scale:{domain:[1,12],nice:false},
          axis:{values:[1,2,3,4,5,6,7,8,9,10,11,12],labelExpr:"['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][datum.value]",labelAngle:0}},
-      y:{field:"y",type:"quantitative",title:metricAxis(),axis:{format:axFmt(data.map(d=>d.y))},scale:{zero:true}},
-      color:{field:"year",type:"nominal",title:"Year",scale:{scheme:"tableau10"},legend:legendCfg()},
+      y:{field:"y",type:"quantitative",title:null,axis:unitAxis(axFmt(data.map(d=>d.y)),data.map(d=>d.y)),scale:{zero:true}},
+      color:{field:"year",type:"ordinal",title:"Year",scale:{domain:seasYears,range:rampColors(seasYears.length)},legend:legendCfg()},
       opacity:{condition:{param:"hl",value:1},value:0.2},
       tooltip:[{field:"year",title:"Year"},{field:"mn",title:"Month"},{field:"y",title:metricAxis()[0],format:typeof valueFormat==="function"?valueFormat():".2%"}]
     },
@@ -104,20 +161,22 @@ function renderOverlay(box){
   if(range!=='all'){ const latest=absA[absA.length-1].date, cut=(parseInt(latest.slice(0,4))-range)+latest.slice(4);
     absA=absA.filter(p=>p.date>=cut); macA=macA.filter(p=>p.date>=cut); }
   const aMk=seriesMark('ovmetric'), aAx=axisBy['ovmetric']||'left';
-  const mMk=seriesMark('ovmacro'),  mAx=axisBy['ovmacro']||'right';   // macro defaults to the right axis
-  renderSeriesChips([{key:'ovmetric',name:`${subj.ticker} ${mlab}`,color:'#2f6db5'},{key:'ovmacro',name:m.name,color:'#9c4fb5'}], true);
-  const absMk = aMk==='bar'?{type:"bar",color:"#2f6db5",opacity:0.6}:{type:"line",color:"#2f6db5",strokeWidth:2.6,interpolate:"monotone"};
-  const macMk = mMk==='bar'?{type:"bar",color:"#b98fd6",opacity:0.45}:{type:"line",color:"#9c4fb5",strokeWidth:2.4,interpolate:"monotone"};
+  if(axisBy['ovmacro']==null) axisBy['ovmacro']='right';              // macro defaults to the right axis, and its chip says so
+  const mMk=seriesMark('ovmacro'),  mAx=axisBy['ovmacro'];
+  const cA=typeof seriesColorOf==='function'?seriesColorOf(selected[0]):TK.series[0], cM=TK.series.find(c=>c!==cA && c!==TK.series[0])||TK.series[1];
+  renderSeriesChips([{key:'ovmetric',name:`${subj.ticker} ${mlab}`,color:cA},{key:'ovmacro',name:m.name,color:cM}], true);
+  const absMk = aMk==='bar'?{type:"bar",color:cA,opacity:0.6}:{type:"line",color:cA,strokeWidth:2.2,interpolate:"monotone"};
+  const macMk = mMk==='bar'?{type:"bar",color:cM,opacity:0.45}:{type:"line",color:cM,strokeWidth:2.2,interpolate:"monotone"};
   // a level index (CPI, sentiment, sales) gets a non-zero baseline so its shape shows; a rate axis stays zero-based
   const macScale = mMk==='bar' ? {zero:false,nice:true} : {zero:false,nice:true};
   embed(box,{ $schema:"https://vega.github.io/schema/vega-lite/v5.json", width:"container", height:chartHeight(selected.length,6), background:null,
-    encoding:{x:{field:"date",type:"temporal",title:"Reporting Date",axis:dateAxis(new Set(absA.map(p=>p.date.slice(0,7))).size, plotWidth(box, true))}},
+    encoding:{x:{field:"date",type:"temporal",title:null,axis:dateAxis(new Set(absA.map(p=>p.date.slice(0,7))).size, plotWidth(box, true))}},
     layer:[
       {data:{values:macA},mark:macMk,
-       encoding:{y:{field:"v",type:"quantitative",title:m.name,scale:macScale,axis:{orient:mAx,grid:false,titleColor:"#9c4fb5",labelColor:"#9c4fb5"}},
+       encoding:{y:{field:"v",type:"quantitative",title:m.name,scale:macScale,axis:{orient:mAx,grid:false,tickCount:5,titleColor:cM,labelColor:cM}},
          tooltip:[{field:"date",type:"temporal",title:"Date",format:"%b %Y"},{field:"v",title:m.name}]}},
       {data:{values:absA},mark:absMk,
-       encoding:{y:{field:"y",type:"quantitative",title:mlab,scale:{zero:true},axis:{orient:aAx,format:axFmt(absA.map(d=>d.y)),grid:aAx==='left',titleColor:"#2f6db5",labelColor:"#2f6db5"}},
+       encoding:{y:{field:"y",type:"quantitative",title:mlab,scale:{zero:true},axis:{...unitAxis(axFmt(absA.map(d=>d.y)),absA.map(d=>d.y)),orient:aAx,grid:aAx==='left',titleColor:cA,labelColor:cA}},
          tooltip:[{field:"date",type:"temporal",title:"Date",format:"%b %Y"},{field:"y",title:metricAxis()[0],format:typeof valueFormat==="function"?valueFormat():".2%"}]}}
     ],
     resolve:{scale:{y:"independent"}}, config:CHART_CFG });
@@ -141,14 +200,16 @@ function renderRangeBar(){
   bar.innerHTML=opts.map(([v,l])=>`<button class="rpill ${String(range)===v?'on':''}" onclick="setRange('${v}')">${l}</button>`).join('');
 }
 window.setRange=v=>{ range = v==='all'?'all':parseInt(v); renderChart(); };
-// The Explorer's chart settings (generate_sec_explorer_data.py), so the two
-// pages draw alike: Vega's default font, bold axis titles, gridlines in both
-// directions, the default plot border. Only sizes are set, as there.
+// The house chart settings (see THE HOUSE STYLE at the top of this file).
 // aria:false drops Vega's per-mark ARIA (hundreds of unlabeled graphics-symbol nodes); the
 // chart box carries one description instead (describeChart) and the Table display is the text.
-const CHART_CFG={aria:false,axis:{labelFontSize:13,titleFontSize:14},
-  title:{anchor:"middle",fontSize:15,subtitleFontSize:11},
-  view:{continuousHeight:300,continuousWidth:300}};
+const CHART_CFG={aria:false, font:TK.font,
+  axis:{labelFont:TK.font,titleFont:TK.font,labelFontSize:12,labelColor:INK.soft,titleFontSize:12.5,titleFontWeight:500,titleColor:INK.soft,
+        gridColor:INK.grid,gridWidth:1,domain:false,ticks:false,labelPadding:8},
+  axisX:{grid:false,domain:true,domainColor:INK.base,domainWidth:1.2,ticks:true,tickColor:INK.base,tickSize:5,labelPadding:6},
+  legend:{labelFont:TK.font,titleFont:TK.font,labelFontSize:12,labelColor:INK.text,titleFontSize:12,titleFontWeight:600,titleColor:INK.soft},
+  text:{font:TK.font},
+  view:{stroke:null,continuousHeight:300,continuousWidth:300}};
 // The page is its own window now (the frame is stamped into it), so the
 // layout classes come from this window's size, and the visible height for a
 // landscape chart is the frame's content area, which is what scrolls.
@@ -168,9 +229,10 @@ const legendCols=()=>isPhone()?4:window.matchMedia('(max-width:1024px)').matches
 // Issuer names ("Santander (SDART)") are long: fewer, wider columns on a phone.
 // Landscape phone: height is the scarce dimension, so the legend goes to the
 // right of the plot instead of under it.
+const longCols=()=>Math.max(1,Math.min(6,Math.floor(((el('chart')||{}).clientWidth||600)/190)));   // issuer names need about 190px each
 const legendCfg=(long)=>isLandscapePhone()
   ? {orient:"right",direction:"vertical",columns:long?1:2,columnPadding:8,labelLimit:long?150:70,labelFontSize:10.5,symbolSize:80,symbolLimit:1000,symbolType:"stroke",symbolStrokeWidth:2,title:null,rowPadding:2}
-  : ({orient:"bottom",direction:"horizontal",columns:long&&isPhone()?2:legendCols(),columnPadding:isPhone()?10:24,labelLimit:long?170:90,symbolSize:110,symbolLimit:1000,symbolType:"stroke",symbolStrokeWidth:2});
+  : ({orient:"bottom",direction:"horizontal",columns:long?longCols():legendCols(),columnPadding:isPhone()?10:24,labelLimit:long?170:90,...(long?{title:null}:{}),symbolSize:110,symbolLimit:1000,symbolType:"stroke",symbolStrokeWidth:2});
 // Calendar x-axis. The tick step is chosen from the pixels the plot has, not
 // from the orientation: a label needs about 44px of room as a year and 70px as
 // "Mar 2026" (labelFontSize 10–11); with less room per label the next coarser
@@ -193,7 +255,9 @@ function dateAxis(nMonths, plotPx){
     const years = Math.max(2, months / 12), labels = st => Math.max(2, Math.round(years / st));
     const step = [1, 2, 5, 10].find(st => fits(labels(st), AXIS_PX.year)) || 10;
     n = labels(step);
-    a = {tickCount: step === 1 ? "year" : {interval: "year", step}, format: "%Y"};
+    // the first and the last year in full, those between as ’18 ’19 (the exhibits' rule)
+    a = {tickCount: step === 1 ? "year" : {interval: "year", step}, format: "%Y",
+         labelExpr: "datum.index==0||datum.index==1 ? timeFormat(datum.value,'%Y') : '\u2019'+timeFormat(datum.value,'%y')"};
   }
   a.labelOverlap = true;                       // parity: drops every other label only if they still collide
   a.labelSeparation = 4;
@@ -214,7 +278,7 @@ function hoverLayers(data, x, y, tooltip, name){
      encoding:{x, y, color:tooltip.color,
        opacity:{condition:{param:name,empty:false,value:1},value:0}, tooltip:tooltip.rows}},
     {data:{values:data}, transform:[{filter:{param:name,empty:false}}],
-     mark:{type:"rule",color:"#94a3b8",strokeWidth:1,strokeDash:[3,3]}, encoding:{x}}
+     mark:{type:"rule",color:INK.base,strokeWidth:1,strokeDash:[3,3]}, encoding:{x}}
   ];
 }
 const VEGA_OPTS={actions:false,renderer:'svg',tooltip:{disableDefaultStyle:true}};
@@ -252,7 +316,8 @@ function renderSeriesChips(list, showAxis){   // each chart series: [swatch] nam
     const mk=seriesMark(s.key), ax=seriesAxis(s.key);
     const mb=['line','bar'].map(m=>`<button class="cm ${mk===m?'on':''}" title="${m}" onclick="setSeriesMark('${s.key}','${m}')">${m==='line'?'≡':'▮'}</button>`).join('');
     const ab=showAxis?`<span class="cgrp">${['left','right'].map(a=>`<button class="cm ${ax===a?'on':''}" title="${a} axis" onclick="setSeriesAxis('${s.key}','${a}')">${a==='left'?'L':'R'}</button>`).join('')}</span>`:'';
-    return `<span class="schip"><span class="ssw" style="background:${s.color}"></span><span class="snm">${esc(s.name)}</span><span class="cgrp">${mb}</span>${ab}</span>`;
+    const val=s.val?`<span class="sval">${esc(s.val)}</span>`:'';
+    return `<span class="schip"><span class="ssw" style="background:${s.color}"></span><span class="snm">${esc(s.name)}</span>${val}<span class="cgrp">${mb}</span>${ab}</span>`;
   }).join('');
 }
 function chartHeight(nEntries, nCols){
@@ -305,12 +370,30 @@ function fitRail(){
 // drawn hollow and grey where the point's extra has flag:true). o.yZero:false lets a rate axis fit its data.
 function calendarChart(box,S,o){
   const grps=[...new Set(S.map(s=>s.grp))], col=g=>S.find(s=>s.grp===g).color;
+  // The newest reading of each series: its chip says it, and so does the label at its line's end.
+  const lastOf=g=>{ let b=null; S.filter(s=>s.grp===g).forEach(s=>s.pts.forEach(p=>{ if(p[1]!=null && (!b||p[0]>=b[0])) b=p; })); return b; };
+  const allVals=S.flatMap(s=>s.pts.map(p=>p[1])).filter(v=>v!=null), vMax=Math.max(0,...allVals.map(Math.abs));
+  const axF=o.axisFormat(allVals), vf=o.valueFormat||'.2%';
+  // the label's own format: a signed change keeps its sign, a rate reads to a tenth (a hundredth under 2%)
+  const labF=o.labelFormat || (axF[0]==='+' ? axF : /%$/.test(vf) ? (vMax<0.02?'.2%':'.1%') : vf);
   // CALENDAR: per-series chips (line/bar + L/R axis) → dual-axis via yL/yR fields
-  renderSeriesChips(grps.map(g=>({key:g,name:g,color:col(g)})), grps.length>1);
+  renderSeriesChips(grps.map(g=>({key:g,name:g,color:col(g),val:lastOf(g)?fmtNum(lastOf(g)[1],labF):''})), grps.length>1);
+  // Up to four series are named at their line ends, so the legend goes; past four it stays.
+  const tight=(box.clientWidth||0)<560;
+  let direct=grps.length<=4;
+  // One series: the title names it, so its end label is the value and the period alone.
+  const shortOf=g=>{ const s=S.find(x=>x.grp===g); return tight && s.short ? s.short : g; };
+  let solo=grps.length===1;
+  let labPx=solo ? 78 : direct ? Math.min(tight?120:230, Math.max(...grps.map(g=>(shortOf(g).length+7)*(tight?6.4:7.1)))+14) : 0;
+  // The labels need the plot to keep its width: on a screen too narrow for both (a folded phone's
+  // outer screen, Safari at 150%) the plot wins and the legend names the series, as past four.
+  if(labPx && plotWidth(box, false)-labPx < 190){ direct=false; solo=false; labPx=0; }
   const data=[]; S.forEach(s=>{ const ax=seriesAxis(s.grp); s.pts.forEach(([x,y,xl,extra])=>data.push({x,xl,series:s.series,grp:s.grp,seg:s.seg||s.series, dash:!!s.dash, yL:ax==='left'?y:null, yR:ax==='right'?y:null, ...(extra||{})})); });
   const nMonths=new Set(data.map(d=>String(d.x).slice(0,7))).size;
   const dual = grps.some(g=>seriesAxis(g)==='right') && grps.some(g=>seriesAxis(g)==='left');
-  const X={field:"x",type:"temporal",title:o.xTitle||"Reporting Date",axis:dateAxis(nMonths, plotWidth(box, dual))};
+  // A calendar axis needs no title; a page passes xTitle only when the dates mean something else.
+  const X={field:"x",type:"temporal",title:o.xTitle||null,
+           axis:{...dateAxis(nMonths, plotWidth(box, dual)-labPx), titleAnchor:"start", titleLimit:Math.max(120, plotWidth(box, dual)-labPx)}};
   const C={field:"grp",type:"nominal",title:"Series",scale:{domain:grps,range:grps.map(col)}};
   const T=o.tip;
   // One group per axis side: that side's lines/bars AND its hover layers share
@@ -324,14 +407,15 @@ function calendarChart(box,S,o){
     // When both axes are in use, colour each axis like its series (one series)
     // so the reader can tell which line reads against which scale.
     const ac = dual && gs.length===1 ? {titleColor:col(gs[0]),labelColor:col(gs[0])} : {};
-    const Y={field:yf,type:"quantitative",title:o.axisTitle,scale:{zero:o.yZero!==false,nice:true},
-             axis:{format: o.axisFormat(data.map(r=>r[yf])),grid:sd==='left'||!dual,orient:sd,...ac}};
+    // One scale: no axis title, the unit on the top tick. Two scales: each keeps its title, in its colour.
+    const Y={field:yf,type:"quantitative",title:dual?o.axisTitle:null,scale:{zero:o.yZero!==false,nice:true},
+             axis:{...unitAxis(o.axisFormat(data.map(r=>r[yf])),data.map(r=>r[yf])),grid:sd==='left'||!dual,orient:sd,...ac}};
     const d=data.filter(r=>r[yf]!=null);
     const marks=['line','bar'].map(mk=>{ const ms=gs.filter(g=>seriesMark(g)===mk); if(!ms.length) return null;
       return {data:{values:d.filter(r=>ms.includes(r.grp))},
         mark: mk==='bar'?{type:"bar",opacity:0.75}:{type:"line",interpolate:"monotone"},
         encoding:{y:Y, detail:{field:"seg"},
-          ...(mk==='line' ? {strokeWidth:{condition:{test:o.boldTest, value:4}, value:2.6},
+          ...(mk==='line' ? {strokeWidth:{condition:{test:o.boldTest, value:3}, value:2},
                              strokeDash:{condition:{test:"datum.dash", value:[5,4]}, value:[1,0]}} : {})}}; }).filter(Boolean);
     // The margin sits under the lines; the dots on top. Both read the same y scale as the lines.
     const band = o.band ? [{data:{values:d.filter(r=>r.lo!=null&&r.hi!=null&&!r.dash)},
@@ -342,13 +426,32 @@ function calendarChart(box,S,o){
         encoding:{y:Y,
           fill:{condition:{test:"datum.flag || datum.dash", value:"#ffffff"}, field:"grp", type:"nominal", scale:C.scale, legend:null},
           stroke:{condition:{test:"datum.flag", value:"#8a929e"}, field:"grp", type:"nominal", scale:C.scale, legend:null}}}] : [];
-    return {layer: band.concat(marks, dots, hoverLayers(d, X, Y,
+    // The line's end: a dot with a white ring, and (to four series) the name and the newest value,
+    // pushed apart so two close endings never print over one another.
+    const lasts=gs.map(g=>({g, p:lastOf(g)})).filter(e=>e.p);
+    const ends=lasts.map(e=>({x:e.p[0], [yf]:e.p[1], grp:e.g}));
+    const endDots=[{data:{values:ends}, mark:{type:"point",filled:true,size:64,stroke:"#fff",strokeWidth:2,opacity:1}, encoding:{y:Y}}];
+    const ys=d.map(r=>r[yf]), lo=o.yZero!==false?Math.min(0,...ys):Math.min(...ys), hi=Math.max(...ys);
+    const gap=((hi-lo)||1)*(tight?17:19)/Math.max(80,chartHeight(o.nEntries,6)-30);
+    const xEnd=data.reduce((m,r)=>r.x>m?r.x:m,'');
+    const labs=lasts.map(e=>({x:xEnd, [yf]:e.p[1], grp:e.g, nm:shortOf(e.g), v:e.p[1], xl:e.p[2]||''})).sort((a,b)=>a[yf]-b[yf]);
+    labs.forEach((l,i)=>{ if(i && l[yf]-labs[i-1][yf]<gap) l[yf]=labs[i-1][yf]+gap; });
+    const endLabs = solo ? [
+        {data:{values:labs}, transform:[{calculate:`format(datum.v, '${labF}')`, as:"lab"}],
+         mark:{type:"text",align:"left",baseline:"bottom",dx:10,dy:1,fontSize:16,fontWeight:700},
+         encoding:{y:Y, text:{field:"lab"}, color:{value:col(gs[0])}}},
+        {data:{values:labs}, mark:{type:"text",align:"left",baseline:"top",dx:10,dy:4,fontSize:11.5,fontWeight:500},
+         encoding:{y:Y, text:{field:"xl"}, color:{value:INK.soft}}}]
+      : direct ? [{data:{values:labs}, transform:[{calculate:`datum.nm + '  ' + format(datum.v, '${labF}')`, as:"lab"}],
+        mark:{type:"text",align:"left",baseline:"middle",dx:9,fontSize:tight?11.5:12.5,fontWeight:600},
+        encoding:{y:Y, text:{field:"lab"}, color:{value:INK.text}}}] : [];
+    return {layer: zeroRule(ys,Y).concat(band, marks, dots, endDots, endLabs, hoverLayers(d, X, Y,
       {color:C, rows:[{field:"series",type:"nominal",title:T.series},{field:"xl",type:"nominal",title:T.x},{field:yf,type:"quantitative",title:T.y,format:o.valueFormat||".2%"}, ...(o.extraRows||[])]}, "hover"+sd))};
   };
   const groups=[side('left'),side('right')].filter(Boolean);
   return embed(box,{ $schema:"https://vega.github.io/schema/vega-lite/v5.json", width:"container", height:chartHeight(o.nEntries,6), background:null,
     // symbolOpacity: with a band, the legend would otherwise take the band's faint opacity.
-    encoding:{ x:X, color:{...C, legend: grps.length>1 ? {...legendCfg(true), ...(o.band?{symbolOpacity:1}:{})} : null} },
+    encoding:{ x:X, color:{...C, legend: !direct && grps.length>1 ? {...legendCfg(true), ...(o.band?{symbolOpacity:1}:{})} : null} },
     layer: groups.length>1 ? groups : groups[0].layer,
     ...(groups.length>1 ? {resolve:{scale:{y:"independent"}}} : {}), config:CHART_CFG });
 }
@@ -414,4 +517,9 @@ function kitPicker(cfg){
   document.addEventListener('click',e=>{ if(!e.target.closest('#'+cfg.wrap)) close(); });
   document.addEventListener('keydown',e=>{ if(e.key==='Escape' && panel.classList.contains('open')){ close(); btn.focus(); } });   // Escape closes, focus returns to the button
   return {build, updateBtn, close};
+}
+// Inter is served by the site (style.css). When it arrives after the first draw Vega has
+// measured its labels in the fallback font, so the chart is drawn once more.
+if(document.fonts && document.fonts.load && !document.fonts.check("12px Inter")){
+  document.fonts.load("12px Inter").then(f=>{ if(f && f.length && typeof renderChart==='function'){ try{ renderChart(); }catch(e){} } }).catch(()=>{});
 }

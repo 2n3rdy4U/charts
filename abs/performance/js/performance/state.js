@@ -4,7 +4,10 @@
 // resolver (shelves.json) from the issuer roster; filled in by boot.js.
 const AVAIL=[];
 const CLASS_DEFAULT={loan:'ALL',lease:'ALL-LEASE'};   // the market series: a neutral opening view, not one issuer's
-const ISSCOLOR=['#2f6db5','#2e8b57','#b5762f','#9c4fb5'];
+// A colour belongs to the issuer (config/chart_tokens.json, by way of the kit's homeColors),
+// not to its place in the picker; All Issuers is ink.
+const seriesColorOf=t=>homeColors(selected,'auto',isAll)[t];
+const shortOf=t=>isAll(t)?'All':t;   // the end label on a narrow plot
 // The All Issuers series (every loan shelf's tape added together, from the
 // metrics layer): time series only, delinquency only, drawn heavier and in ink.
 const ALL='ALL', ALL_LEASE='ALL-LEASE';   // the market series, loan and lease: shelves added together, no deals

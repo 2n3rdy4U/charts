@@ -141,45 +141,73 @@
     renderAdd();
     $("md-sub").textContent = n ? ofN(deals.length, lim.deals, "deal") + " · " + ofN(issuers.length, lim.issuers, "issuer") + (acct ? mailState(all) : " · saved in this browser only")
                                 : acct ? ofN(0, lim.deals, "deal") + " · " + ofN(0, lim.issuers, "issuer") : "Saved in this browser only. Nothing is sent to us.";
-    if (!n) { renderEmpty(body); $("md-foot").hidden = true; return; }
+    if (!n) { renderEmpty(body); $("md-foot").hidden = $("md-a2hs").hidden = true; return; }
     body.innerHTML = renderDeals(deals, lim, acct) + renderIssuers(issuers, lim, acct);
+    // the foot is the date and the privacy link (2026-11-26); the Headline's definition is
+    // the ⓘ on its column, the caps are in the header's count
     var foot = $("md-foot"); foot.hidden = false;
-    foot.innerHTML = esc("Figures as published " + fmtDate(DATA.built) + ". Headline: the figure your rule is judged on; with no rule, 60+ day delinquency by loan count from the ABS-EE tape (by balance from the 10-D where a deal files no tape), or a card trust's annualized net charge-offs. Δ is the change from the previous reporting period.") +
-      (acct ? esc(" Your account holds " + lim.deals + " deals and follows " + lim.issuers + " issuers; one email a day at most.") + ' <a class="ac-link" href="/privacy/">Privacy</a>'
-            : esc(" A free portfolio holds " + lim.deals + " deals and follows " + lim.issuers + " issuers. Your list and rules live in this browser's storage; clearing site data removes them."));
+    foot.innerHTML = esc("Figures as published " + fmtDate(DATA.built) + ".") + ' <a class="ac-link" href="/privacy/">Privacy</a>';
+    renderHomeScreenHint();
   }
+  // A phone reader with a portfolio is told once how to put the page on the home screen
+  // (the manifest and icons make it an app there); dismissed, the browser remembers.
+  var A2HS_KEY = "ccm.a2hs.v1";
+  function renderHomeScreenHint() {
+    var el = $("md-a2hs"), ua = navigator.userAgent || "";
+    var phone = /iPhone|iPad|iPod/.test(ua) ? "ios" : /Android/.test(ua) ? "android" : null;
+    var standalone = window.navigator.standalone === true || (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches);
+    var dismissed = false; try { dismissed = localStorage.getItem(A2HS_KEY) === "1"; } catch (e) {}
+    if (!phone || standalone || dismissed || root.dataset.a2hs === "off") { el.hidden = true; return; }
+    el.hidden = false;
+    el.innerHTML = "Keep this page one tap away: " + (phone === "ios" ? "tap <b>Share</b>, then <b>Add to Home Screen</b>." : "open the browser menu, then <b>Add to Home screen</b>.") +
+                   ' <button type="button" class="md-link" data-a2hs="dismiss">Dismiss</button>';
+  }
+  root.addEventListener("click", function (e) {
+    if (!e.target.closest("[data-a2hs]")) return;
+    try { localStorage.setItem(A2HS_KEY, "1"); } catch (err) {}
+    $("md-a2hs").hidden = true;
+  });
   function mailSwitch(it, kind) {
     var on = W.emailOn(it.key), title = kind === "issuer" ? "Email me about new deals from this issuer" : (on ? "Email me about this deal" : "Email off for this deal");
     return '<label class="ac-sw' + (on ? " on" : "") + '" title="' + title + '"><input type="checkbox" data-mail="' + esc(it.key) + '"' + (on ? " checked" : "") + ' aria-label="' + title + '"><i></i></label>';
   }
+  // An alert is a message, so a rule belongs to an account (decided 2026-11-26): signed out,
+  // the table has no Alert rule column and no Breached pill, and one line under it says
+  // what signing in adds. A rule set in this browser before that stays in its store and
+  // moves to the account at sign-in.
+  var HEAD_INFO = "60+ day delinquency by loan count from the ABS-EE tape (by balance from the 10-D where a deal files no tape); for a card trust, annualized net charge-offs. Δ is the change from the previous reporting period.";
   function renderDeals(deals, lim, acct) {
     var meta = DATA.metrics;
-    var html = '<section class="md-group" aria-label="Deals you watch"><h2>Deals you watch<span class="n">' + ofN(deals.length, lim.deals, "deal") + ' · breached first, then by newest filing · a name opens its charts</span></h2>';
+    var html = '<section class="md-group" aria-label="Deals you watch"><h2>Deals you watch<span class="n">' + ofN(deals.length, lim.deals, "deal") + (acct ? " · breached first, then by newest filing" : " · newest filing first") + ' · a name opens its charts</span></h2>';
     if (!deals.length) return html + '<p class="md-none">No deals yet. Star a deal on the Auto Loan, Auto Lease, Credit Card or Issuance pages, or on its PSR.' + (acct ? "" : " Sign in and we email you when one reports or crosses a line you set.") + '</p></section>';
+    var info = acct ? "The figure your rule is judged on; with no rule, " + HEAD_INFO.charAt(0).toLowerCase() + HEAD_INFO.slice(1) : HEAD_INFO;
     html += '<div class="md-scroll"><table class="md"><thead><tr>' +
       '<th class="wcol"><span class="sr-only">Watch</span></th><th>Deal</th><th>Latest filings</th>' +
-      '<th class="num">Headline</th><th>Alert rule</th>' + (acct ? '<th class="mail">Email</th>' : "") + '</tr></thead><tbody>';
-    // breached rules first, then the newest filing first; a deal the feed no longer carries last
-    var rows = deals.map(function (w) { var it = byKey[w.key]; return { w: w, it: it, b: it && breached(W.rule(w.key), it) ? 1 : 0, d: it ? newestFiling(it) : "" }; });
+      '<th class="num">Headline <span class="md-info" tabindex="0" role="img" title="' + esc(info) + '" aria-label="' + esc(info) + '">ⓘ</span></th>' +
+      (acct ? '<th>Alert rule</th><th class="mail">Email</th>' : "") + '</tr></thead><tbody>';
+    // breached rules first (an account's), then the newest filing first; a deal the feed no longer carries last
+    var rows = deals.map(function (w) { var it = byKey[w.key]; return { w: w, it: it, b: acct && it && breached(W.rule(w.key), it) ? 1 : 0, d: it ? newestFiling(it) : "" }; });
     rows.sort(function (a, b) { return b.b - a.b || (a.d < b.d ? 1 : a.d > b.d ? -1 : 0); });
     rows.forEach(function (r) {
       var w = r.w, it = r.it, mail = acct ? '<td class="mail" data-l="Email">' + mailSwitch(w, "deal") + "</td>" : "", cls = acct && !W.emailOn(w.key) ? ' class="nomail"' : "";
       if (!it) {   // the feed no longer describes it: it left the build (the generators star only what the feed carries)
         html += "<tr" + cls + ' data-key="' + esc(w.key) + '"><td class="star wcol">' + star(w) + '</td><td class="name">' + (w.url ? '<a href="' + esc(w.url) + '">' + esc(w.name || w.key) + "</a>" : esc(w.name || w.key)) +
-                '</td><td colspan="3" class="flat">Not in the current build: paid off or withdrawn.</td>' + mail + "</tr>";
+                '</td><td colspan="' + (acct ? 3 : 2) + '" class="flat">Not in the current build: paid off or withdrawn.</td>' + mail + "</tr>";
         return;
       }
       // the Headline is the figure the rule is judged on when there is a rule (named in the cell), else the type's default
-      var g = groupOf(it), rule = W.rule(w.key), hm = rule && meta[rule.metric] ? rule.metric : HEAD[g], m = it.m[hm], just = it.as_of && it.as_of >= JUST;
+      var g = groupOf(it), rule = acct ? W.rule(w.key) : null, hm = rule && meta[rule.metric] ? rule.metric : HEAD[g], m = it.m[hm], just = it.as_of && it.as_of >= JUST;
       var pills = (r.b ? pill("breach", "Breached") : "") + (just ? pill("new", "New") : "") +
                   (pending(it) ? pill("wait", "Awaiting first report") : untracked(it) ? pill("off", "Not tracked") : stale(it) ? pill("stale", "Not reported in " + staleDays(it) + " days") : "");
       html += "<tr" + cls + ' data-key="' + esc(w.key) + '"><td class="star wcol">' + star(it) + "</td>" +
         '<td class="name"><a href="' + esc(it.url) + '" title="' + esc(it.name) + '">' + esc(label(it)) + "</a>" + (pills ? '<span class="pills">' + pills + "</span>" : "") + "</td>" +
         '<td class="when" data-l="Filings">' + filingsCell(it) + "</td>" +
         '<td class="num" data-l="' + esc(meta[hm].label) + '"' + (m && m.basis ? ' title="' + esc(meta[hm].label + ", " + m.basis) + '"' : "") + '><span class="vd">' + (m ? fmtVal(m.v, meta[hm].fmt) : "—") + '</span><span class="hlm">' + esc(meta[hm].label) + "</span>" + (m ? fmtDelta(m.v, m.p, meta[hm].fmt) : "") + "</td>" +
-        '<td class="rule" data-l="Alert rule">' + ruleCell(it, meta) + "</td>" + mail + "</tr>";
+        (acct ? '<td class="rule" data-l="Alert rule">' + ruleCell(it, meta) + "</td>" : "") + mail + "</tr>";
     });
-    return html + "</tbody></table></div></section>";
+    html += "</tbody></table></div>";
+    if (!acct && ACCOUNTS) html += '<p class="md-none md-cta">Alerts need a free account. <a class="ac-link" href="#sign-in" data-auth="form">Sign in</a>, set one rule per deal, and we email you when a deal reports or crosses your line.</p>';
+    return html + "</section>";
   }
   function newestDeal(ticker) {   // the shelf's newest series in the feed, by series name within the year
     var best = null;
@@ -230,8 +258,12 @@
         '<input class="md-find" id="md-find" list="md-deal-list" placeholder="Find a deal by ticker or name…" aria-label="Find a deal" autocomplete="off">' +
         '<datalist id="md-deal-list">' + deals.map(function (it) { return '<option value="' + esc(addLabel(it)) + '">'; }).join("") + "</datalist>" +
         '<select class="md-follow-pick" id="md-follow-pick" aria-label="Follow an issuer"><option value="">Follow an issuer…</option>' + sel + "</select>" +
-        '<span class="flat">or star a deal on its page</span>';
+        '<span class="flat md-add-count" id="md-add-count" aria-live="polite"></span>';
     }
+    // the count beside the controls moves as a deal is added (2026-11-26): the confirmation
+    // a reader sees without scrolling
+    var all = W.list(), lim = W.limits, nd = all.filter(function (w) { return !isIssuer(w); }).length;
+    $("md-add-count").textContent = ofN(nd, lim.deals, "deal") + " · " + ofN(all.length - nd, lim.issuers, "issuer");
     box.hidden = !!auth.state;
   }
   function capText(why) {
@@ -243,7 +275,18 @@
     var item = { key: it.key, kind: it.kind, ac: it.ac || "", ticker: it.ticker || "", name: it.name || it.key, series: it.series || null, url: it.url || "" };
     var why = W.room(item);
     if (why) { W.toast(capText(why)); return; }
-    if (W.add(item)) { W.toast((isIssuer(it) ? "Following " : "Watching ") + label(it) + "."); render(); }
+    if (!W.add(item)) return;
+    W.toast((isIssuer(it) ? "Following " : "Watching ") + label(it) + ".");
+    render();
+    // the new row comes into view and lights up for a moment (2026-11-26): on a phone the
+    // table is below the Add bar and the keyboard, so a toast alone said nothing
+    if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+    var row = root.querySelector('tr[data-key="' + CSS.escape(it.key) + '"]');
+    if (row) {
+      row.classList.add("md-just");
+      try { row.scrollIntoView({ block: "center", behavior: "smooth" }); } catch (e) { row.scrollIntoView(); }
+      setTimeout(function () { row.classList.remove("md-just"); }, 2600);
+    }
   }
   root.addEventListener("change", function (e) {
     if (e.target.id === "md-follow-pick") { var k = e.target.value; e.target.value = ""; if (k && byKey[k]) addItem(byKey[k]); }
@@ -260,7 +303,7 @@
     var lim = W.limits, acct = signedIn();
     body.innerHTML = '<div class="md-state md-empty"><h2>Nothing in your portfolio yet</h2>' +
       (acct ? "<p>Star a deal on any performance page, PSR or the issuance table and it appears here with its latest filings and one headline figure. You can set one alert rule on each and we'll email you when it reports or crosses the line. Follow an issuer to hear when it brings a new deal.</p>"
-            : "<p>Star up to " + lim.deals + " deals, auto or card, from their pages. Each appears here with its latest filings and one headline figure, and you can set one alert rule on it. Follow up to " + lim.issuers + " issuers to see their new deals here.</p>") +
+            : "<p>Star up to " + lim.deals + " deals, auto or card, from their pages or with the Add bar above. Each appears here with its latest filings and one headline figure. Follow up to " + lim.issuers + " issuers to see their new deals here." + (ACCOUNTS ? " Sign in for email alerts and one rule per deal." : "") + "</p>") +
       '<div class="where"><a href="/abs/performance/index.html?ac=loan">Auto Loan ›</a><a href="/abs/performance/index.html?ac=lease">Auto Lease ›</a><a href="/abs/credit-card/index.html">Credit Card ›</a><a href="/abs/issuance/index.html">Issuance ›</a></div>' +
       '<div class="demo">' + (acct ? esc(n_(lim.deals, "deal") + " and " + n_(lim.issuers, "issuer") + " on an account · one message a day at most.")
                                    : W.available ? "Saved in this browser only — no account, nothing sent to us." : "This browser is not storing site data, so a portfolio cannot be kept here.") + "</div></div>";
@@ -303,7 +346,7 @@
   function showAuth(state) {
     auth.state = state;
     var on = !!state;
-    $("md-head").hidden = $("md-body").hidden = on; if (on) $("md-foot").hidden = true; else if (DATA && W.count()) $("md-foot").hidden = false;
+    $("md-head").hidden = $("md-body").hidden = on; if (on) $("md-foot").hidden = $("md-a2hs").hidden = true; else if (DATA && W.count()) { $("md-foot").hidden = false; renderHomeScreenHint(); }
     $("md-notice").hidden = on;
     $("md-add").hidden = on || !DATA;
     $("md-auth").hidden = !on;

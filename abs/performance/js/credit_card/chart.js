@@ -14,12 +14,12 @@ function pieces(pts){
 function buildSeries(){
   const K=calKey(), k=scaleOf(), S=[];
   selected.forEach((tk,i)=>{ const sh=SHELVES[tk]; const arr=calOf(sh).filter(p=>p[K]!=null);
-    const name=labCode(tk), color=isAll(tk)?ALL_COLOR:ISSCOLOR[i%ISSCOLOR.length];
+    const name=labCode(tk), color=seriesColorOf(tk);
     const pts=arr.map(p=>[p.date,p[K]*k,fmtMonth(p.date),extraOf(p)]);
-    pieces(pts).forEach((run,j)=>S.push({series:name, grp:name, seg:j?`${name}#${j}`:name, color, pts:run})); });
+    pieces(pts).forEach((run,j)=>S.push({series:name, grp:name, short:shortOf(tk), seg:j?`${name}#${j}`:name, color, pts:run})); });
   return S;
 }
-function setCap(){ el('chartcap').textContent = subtitleFor(); }
+function setCap(){ el('chartcap').textContent = capText(); }
 function updateOutputAvail(){
   el('xfctl').hidden = !(isRate() && output!=='seasonal' && !macroId);
   document.querySelectorAll('#xfseg button').forEach(b=>b.classList.toggle('on',b.dataset.transform===transform));

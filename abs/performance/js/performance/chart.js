@@ -14,14 +14,14 @@ function buildSeries(){
         (subj.deals||[]).filter(d=>d.has_tend_curve&&d.curve&&d.curve.length&&vintOK(d.series)).forEach(d=>{const yr=(d.series||'').slice(0,4);
           S.push({series:d.series, grp:yr, color:yearColor(yr), pts:(isTurn()?[]:[[0,0,'']]).concat(d.curve.filter(p=>p[K]!=null).map(p=>[p.m,p[K],fmtMonth(p.date)+(d.curve_source?' · '+d.curve_source:'')]))});});  // anchor at month-0 origin (cutoff); a monthly rate has none. curve_source: an older deal's source (loss_history)
       }
-    } else if(isRecov()){ recSeries(S, subj.ticker, ISSCOLOR[0]); } else {
+    } else if(isRecov()){ recSeries(S, subj.ticker, seriesColorOf(subj.ticker)); } else {
       const c=calOf(subj).filter(p=>p[K]!=null);
-      S.push({series:labCode(subj.ticker), grp:labCode(subj.ticker), color:isAll(subj.ticker)?ALL_COLOR:ISSCOLOR[0], pts:c.map(p=>[p.date,p[K],fmtMonth(p.date),extraOf(p)])});
+      S.push({series:labCode(subj.ticker), grp:labCode(subj.ticker), short:shortOf(subj.ticker), color:seriesColorOf(subj.ticker), pts:c.map(p=>[p.date,p[K],fmtMonth(p.date),extraOf(p)])});
     }
   } else { // 2+ : calendar only (aggregate vintage dropped; cross-issuer vintage = cohort picker, next)
-    if(isRecov()){ selected.forEach((tk,i)=>recSeries(S, tk, ISSCOLOR[i%ISSCOLOR.length])); return S; }
+    if(isRecov()){ selected.forEach(tk=>recSeries(S, tk, seriesColorOf(tk))); return S; }
     selected.forEach((tk,i)=>{const sh=SHELVES[tk];const arr=calOf(sh).filter(p=>p[K]!=null);
-      S.push({series:labCode(tk), grp:labCode(tk), color:isAll(tk)?ALL_COLOR:ISSCOLOR[i%ISSCOLOR.length], pts:arr.map(p=>[p.date,p[K],fmtMonth(p.date),extraOf(p)])});});
+      S.push({series:labCode(tk), grp:labCode(tk), short:shortOf(tk), color:seriesColorOf(tk), pts:arr.map(p=>[p.date,p[K],fmtMonth(p.date),extraOf(p)])});});
   }
   return S;
 }
@@ -31,11 +31,11 @@ function recSeries(S, tk, color){
   const sh=SHELVES[tk], name=labCode(tk), pts=calOf(sh).filter(p=>p.recovery_rate!=null);
   const row=p=>[p.date,p.recovery_rate,fmtMonth(p.date),extraOf(p)];
   const settled=pts.filter(p=>!p.early), early=pts.filter(p=>p.early);
-  S.push({series:name, grp:name, color, seg:name, pts:settled.map(row)});
-  if(early.length) S.push({series:name, grp:name, color, seg:name+' (early read)', dash:true,
+  S.push({series:name, grp:name, short:shortOf(tk), color, seg:name, pts:settled.map(row)});
+  if(early.length) S.push({series:name, grp:name, short:shortOf(tk), color, seg:name+' (early read)', dash:true,
     pts:(settled.length?[row(settled[settled.length-1])]:[]).concat(early.map(row))});
 }
-function setCap(){ el('chartcap').textContent = subtitleFor(); }   // the Explorer's sub-head: settings in force
+function setCap(){ el('chartcap').textContent = capText(); }   // the Explorer's sub-head: settings in force
 function updateCutAvail(){
   // The year-over-year view exists for the loan-tape delinquency time series.
   el('xfctl').hidden = !(isDQ() && useAbsee() && !isRepo() && mode==='calendar' && output!=='seasonal' && !macroId);
@@ -168,13 +168,14 @@ function renderChart(){
     // From 0 unless a value is visibly below it (a lease credit gain): a negligible negative — AmeriCredit 2001-B's
     // -0.000065% first month — must not pull a "nice" axis down a whole step. The value itself is unchanged.
     const ymin=Math.min(0,...data.map(d=>d.y).filter(v=>v!=null));
-    const Y={field:"y",type:"quantitative",title:metricAxis(),axis:{format:axFmt(data.map(d=>d.y))},
+    const Y={field:"y",type:"quantitative",title:null,axis:unitAxis(axFmt(data.map(d=>d.y)),data.map(d=>d.y)),
              scale:ymin>-0.0005?{zero:true,domainMin:0}:{zero:true}};
-    // Past 30 deals a colour per deal stops telling them apart: colour and legend by vintage year instead (the
-    // tooltip still names the deal).
-    const MANY=new Set(S.map(x=>x.series)).size>30 && ((SHELVES[selected[0]]||{}).deals||[]).some(d=>d.curve_source);   // only with the older deals (loss_history)
-    const C=MANY?{field:"grp",type:"ordinal",title:"Vintage",scale:{scheme:"viridis"},legend:legendCfg()}
-               :{field:"series",type:"nominal",title:"Series",scale:{scheme:"tableau10"},legend:legendCfg()};
+    // The house order has eight colours and no ninth: past eight deals the curves are coloured and the
+    // legend is keyed by vintage year, one hue from light (oldest) to dark (newest); the tooltip still
+    // names the deal. (Ten colours used to repeat from the eleventh deal, so the legend named two deals alike.)
+    const MANY=new Set(S.map(x=>x.series)).size>TK.series.length, vyears=[...new Set(S.map(x=>x.grp))].sort();
+    const C=MANY?{field:"grp",type:"ordinal",title:"Vintage",scale:{domain:vyears,range:rampColors(vyears.length)},legend:legendCfg()}
+               :{field:"series",type:"nominal",title:"Series",scale:{range:TK.series},legend:legendCfg()};
     const rows=[{field:"series",type:"nominal",title:T.series},
       isLoss?{field:"x",type:"quantitative",title:T.x}:{field:"xl",type:"nominal",title:T.x},
       {field:"y",type:"quantitative",title:T.y,format:".2%"}];
@@ -225,7 +226,7 @@ function renderRecoveryCuts(box){
     (c[dim]||[]).forEach(r=>data.push({band:r.band, issuer:labCode(tk), rate:r.recovery_rate, loans:r.loans, few:r.loans<400, window:c.window}));
     if(c.window) wins.push(c.window); });
   if(!data.length){ box.innerHTML=`<div class="chartph">${esc(recEmptyText())}</div>`; return; }
-  const grps=selected.map(labCode), cols=selected.map((t,i)=>ISSCOLOR[i%ISSCOLOR.length]);
+  const grps=selected.map(labCode), cols=selected.map(seriesColorOf);
   if(output==='table'){
     const th='<th>'+(dim==='ltv'?'Loan-to-value at origination':'Vehicle')+'</th>'+grps.map(g=>`<th class="num">${esc(g)}</th>`).join('');
     const body=order.map(b=>`<tr><td>${b}</td>`+grps.map(g=>{ const r=data.find(d=>d.band===b&&d.issuer===g);
@@ -241,7 +242,7 @@ function renderRecoveryCuts(box){
     mark:{type:"bar",cornerRadiusEnd:2},
     encoding:{x:{field:"band",type:"nominal",sort:order,title:dim==='ltv'?'Loan-to-value at origination':'Vehicle',axis:{labelAngle:0}},
       xOffset:{field:"issuer",sort:grps},
-      y:{field:"rate",type:"quantitative",title:['Recovered within 12 months','(% of balance at default)'],axis:{format:".0%"},scale:{zero:true}},
+      y:{field:"rate",type:"quantitative",title:null,axis:unitAxis(".0%"),scale:{zero:true}},
       color:C, opacity:{condition:{test:"datum.few",value:0.35},value:0.9},
       tooltip:[{field:"issuer",title:"Issuer"},{field:"band",title:dim==='ltv'?'LTV':'Vehicle'},{field:"rate",title:"Recovered",format:".1%"},
                {field:"loans",title:"Defaulted loans",format:","},{field:"window",title:"Defaults"}]},

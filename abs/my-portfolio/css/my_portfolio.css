@@ -84,6 +84,18 @@ table.md{width:100%;border-collapse:collapse;font-size:12.5px}
 .md-spin{display:inline-block;width:14px;height:14px;border:2px solid var(--color-border,#dde2ed);border-top-color:var(--color-brand,#0034A5);border-radius:50%;animation:mdspin .8s linear infinite;vertical-align:-2px;margin-right:6px}
 @keyframes mdspin{to{transform:rotate(360deg)}}
 .md-foot{color:var(--color-muted,#5b6472);font-size:11.5px;margin:4px 2px 0}
+/* 2026-11-26: the Headline's definition as an ⓘ on its column; the row just added lights up;
+   the sign-in line under a signed-out table; the home-screen hint on a phone */
+.md th .md-info{display:inline-block;font-size:12px;text-transform:none;letter-spacing:0;color:var(--color-muted,#5b6472);cursor:help;margin-left:2px;font-weight:500}
+.md th .md-info:focus-visible{outline:2px solid var(--color-accent-pill,#2563eb);outline-offset:1px;border-radius:50%}
+.md tbody tr.md-just td{animation:md-flash 2.4s ease-out}
+@keyframes md-flash{0%,35%{background:#dbeafe}100%{background:transparent}}
+.md-cta{border-top:1px solid var(--color-border,#dde2ed);color:var(--color-text,#111827)}
+.md-a2hs{display:none;color:var(--color-muted,#5b6472);font-size:12px;margin:10px 2px 0;padding:10px 12px;background:#fff;border:1px solid var(--color-border,#dde2ed);border-radius:8px}
+.md-a2hs b{color:var(--color-text,#111827);font-weight:600}
+.md-a2hs .md-link{margin-left:6px}
+@media (max-width:640px){.md-a2hs:not([hidden]){display:block}}
+@media (prefers-reduced-motion:reduce){.md tbody tr.md-just td{animation:none;background:#dbeafe}}
 
 /* phones: each deal is one card with a fixed grammar. Star at the left; the short name
    with its status pills on their own line, then the latest filings, on the left; the
@@ -114,7 +126,7 @@ table.md{width:100%;border-collapse:collapse;font-size:12.5px}
   .md td.flat[colspan]{grid-area:2/2/3/4}
   .md td.num .hlm{display:none}                 /* the card already names the metric under the figure */
   .md-iss td.when .psr-link{float:right;margin:0 0 0 8px}
-  .md-add{padding:10px 12px} .md-add .k{width:100%} .md-add .md-find,.md-add .md-follow-pick{flex:1 1 100%} .md-add .flat{display:none}
+  .md-add{padding:10px 12px} .md-add .k{width:100%} .md-add .md-find,.md-add .md-follow-pick{flex:1 1 100%} .md-add .md-add-count{width:100%;font-size:12px}
 }
 @media (prefers-reduced-motion:reduce){.md-spin{animation:none}}
 
