@@ -125,7 +125,7 @@ html.ccm-embed .tilebar{display:flex;align-items:flex-start;gap:8px;margin:0 0 4
 .tchip .tx{position:absolute;right:1px;top:1px;bottom:1px;width:20px;border:0;border-radius:5px;background:#fff;color:var(--muted);font:inherit;font-size:14px;line-height:1;cursor:pointer;opacity:0;padding:0}
 .tchip:hover .tx,.tchip .tx:focus-visible{opacity:1}
 .tchip .tx:hover{color:#b3261e;background:#fdecea}
-@media (hover:none){ .tchip{padding-right:24px} .tchip .tx{opacity:1;background:none} }
+@media (hover:none){ .tchip{padding-right:24px} .tchip.nox,.tchip.tadd{padding-right:7px} .tchip .tx{opacity:1;background:none} }
 /* The controls panel: slid out beside the chart while the workspace holds this tile's frame
    enlarged over its neighbours (kit: ccmTileBox). The chart is pinned to the box it had
    (--tx --ty --tw --th); everything else in the frame is clear, so the charts beneath show. */
@@ -137,7 +137,7 @@ html.ccm-embed.ctl-open .tilepanel{display:block;position:fixed;top:0;bottom:0;l
   background:#fff;border:1px solid #cfd5df;border-radius:6px;box-shadow:0 10px 30px rgba(16,24,40,.20);padding:9px 14px 14px;overflow-y:auto;
   animation:tileslide .16s ease-out}
 html.ccm-embed.ctl-left .tilepanel{--from:14px}
-html.ccm-embed.ctl-bottom .tilepanel{top:auto;left:0;width:auto;right:0;max-height:66%;border-radius:12px 12px 0 0;animation-name:tilerise}
+html.ccm-embed.ctl-bottom .tilepanel{top:auto;left:0;width:auto;right:0;height:var(--ph,auto);max-height:var(--ph,66%);border-radius:12px 12px 0 0;animation-name:tilerise}
 @keyframes tileslide{from{opacity:0;transform:translateX(var(--from,-14px))}to{opacity:1;transform:none}}
 @keyframes tilerise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){ html.ccm-embed.ctl-open .tilepanel{animation:none} }
@@ -152,6 +152,33 @@ html.ccm-embed .tilepanel .mtabs button{padding:4px 9px;font-size:12.5px;border:
 html.ccm-embed .tilepanel .chartrail{display:flex;flex-direction:column;gap:12px;border-left:0;padding:0;width:auto;max-width:none}
 html.ccm-embed.ctl-open #tilectl{background:var(--accent);border-color:var(--accent);color:#fff}
 html.ccm-embed.ctl-open #chart{cursor:pointer}
+/* A phone page: the same bar and panel, the panel as a sheet. The picker and the rail are in
+   the panel from the first script on; the two rules after this one cover the moment before. */
+html.bb-phone .tilebar{display:flex;align-items:flex-start;gap:8px;margin:3px 0 4px}
+html.bb-phone .wrap>.selector, html.bb-phone .chartwrap>.chartrail{display:none}
+html.bb-phone .tilegear{width:36px;height:32px}
+html.bb-phone .tchip{font-size:12px;padding-top:4px;padding-bottom:4px}
+html.bb-phone .tilefull{display:none}
+html.bb-land.ctl-open .wrap{padding-right:calc(min(330px,56%) + 10px)}
+html.bb-phone.ctl-open:not(.bb-land) .wrap{padding-bottom:calc(var(--sheet,56%) + 16px)}   /* so the chart can be brought up clear of the sheet */
+html.bb-phone.ctl-open .tilepanel{display:block;position:fixed;left:0;right:0;bottom:0;height:var(--sheet,56%);box-sizing:border-box;z-index:300;
+  background:#fff;border-top:1px solid #cfd5df;border-radius:14px 14px 0 0;box-shadow:0 -10px 30px rgba(16,24,40,.22);
+  padding:10px 16px calc(18px + env(safe-area-inset-bottom,0px));overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
+  animation:tilerise .18s ease-out}
+html.bb-land.ctl-open .tilepanel{left:auto;top:0;height:auto;width:min(330px,56%);border-radius:0;border-top:0;border-left:1px solid #cfd5df;
+  padding-right:calc(16px + env(safe-area-inset-right,0px));animation-name:tileslide;--from:14px}
+@media (prefers-reduced-motion:reduce){ html.bb-phone.ctl-open .tilepanel{animation:none} }
+html.bb-phone .tilepanel-head{position:sticky;top:-10px;background:#fff;z-index:2;margin:-10px -16px 12px;padding:10px 16px 9px}
+html.bb-phone .tilepanel-head .tilebtn{padding:6px 16px;font-size:13px}
+html.bb-phone .tilepanel .selector{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+html.bb-phone .tilepanel #isswrap{flex:1 1 100%}
+html.bb-phone .tilepanel .multi-sel-panel{position:static;margin-top:6px;box-shadow:none;max-height:none}
+html.bb-phone .tilepanel .chartrail{display:flex;flex-direction:column;gap:14px;border:0;padding:0;width:auto;max-width:none}
+html.bb-phone .tilepanel .seg button{padding:7px 11px;font-size:13px}
+html.bb-phone .tilepanel .rpill{padding:5px 11px;font-size:12.5px}
+html.bb-phone .tilepanel .ovsel{font-size:13px;padding:7px 22px 7px 9px}
+html.bb-phone .tilepanel .cc-share-btn{align-self:flex-start;margin:2px 0 0}
+html.bb-phone.ctl-open #tilectl{background:var(--accent);border-color:var(--accent);color:#fff}
 .ctxline b{color:var(--ink);font-weight:600}
 
 .layout{display:grid;grid-template-columns:minmax(0,1fr);gap:22px;align-items:start}
@@ -247,15 +274,15 @@ tr.woundtoggle td{background:#fafcff;text-align:center;padding:7px} tr.woundtogg
    than leave one stuck on screen after a tap. */
 @media (hover:none){ #vg-tooltip-element{display:none !important} }
 
-/* Phone (portrait): the Explorer's arrangement — tabs slide sideways, the
-   controls sit ABOVE the chart as compact rows, the chart keeps a fixed height.
+/* Phone (portrait), since 2026-11-27: the chart comes first. The tabs slide sideways above it;
+   under the title a chip per series is the legend, and the gear beside the chips raises the
+   picker and every setting as a sheet from the foot of the screen (the kit: placeControls,
+   phoneSheet). Seven rows of controls used to stand between the reader and the chart.
    Phone layout, keyed to classes rather than a media query: Build B sets
    html.bb-phone / html.bb-land from the screen — its own when opened on its
    own, the site frame's when embedded (inside the frame the page is grown to
    its full height, so its own size no longer says which way up the phone is). */
   html.bb-phone .wrap{padding:8px 12px 20px}
-  html.bb-phone .selector{margin:6px 0 4px;gap:8px;flex-wrap:nowrap}
-  html.bb-phone .sellabel{display:none}
   html.bb-phone #isswrap{flex:1;min-width:0}
   html.bb-phone .multi-sel-btn{min-width:0;width:100%;max-width:none}
   html.bb-phone .multi-sel-panel{min-width:0;width:100%}
@@ -265,14 +292,6 @@ tr.woundtoggle td{background:#fafcff;text-align:center;padding:7px} tr.woundtogg
   html.bb-phone .mtabs button{flex-shrink:0;min-height:36px;padding:7px 10px;font-size:12.5px}
   html.bb-phone .panel{border:none;border-radius:0;background:transparent}
   html.bb-phone .chartwrap{display:flex;flex-direction:column;padding:6px 0 0;gap:8px}
-  html.bb-phone .chartrail{order:-1;flex-direction:row;flex-wrap:wrap;gap:6px 10px;border:none;border-bottom:1px solid var(--line);padding:0 0 8px}
-  html.bb-phone .cgroup{flex-direction:row;align-items:center;gap:5px}
-  html.bb-phone .cglabel{font-size:10px;letter-spacing:.2px}
-  html.bb-phone #seriesgroup{display:none !important}
-  html.bb-phone .seg button{padding:5px 8px;font-size:12px}
-  html.bb-phone .rpill{padding:3px 9px}
-  html.bb-phone .chartrail .ovsel{width:auto;padding:4px 20px 4px 8px}
-  html.bb-phone .chartrail .cc-share-btn{margin:0 0 0 auto}
   html.bb-phone .chart-title{font-size:15px;margin:6px 0 1px}
   html.bb-phone .chart-cap{font-size:11.5px;padding:0 0 2px}
   html.bb-phone #chart{min-height:0}
@@ -286,10 +305,6 @@ tr.woundtoggle td{background:#fafcff;text-align:center;padding:7px} tr.woundtogg
   html.bb-phone body .ccm-topbar{height:40px;padding:0 12px}
   html.bb-phone body .ccm-wordmark{height:28px}
   html.bb-phone body .ccm-topbar-nav .ccm-cta{padding:4px 10px;font-size:12px}
-  html.bb-phone .selector{margin:4px 0 2px}
-  html.bb-phone .seg button{padding:4px 7px;font-size:11.5px}
-  html.bb-phone #assetseg button{padding:5px 9px}
-  html.bb-phone .multi-sel-btn{padding:4px 9px;font-size:12.5px}
   html.bb-phone .ctxline{font-size:11px;margin:1px 0 2px}
   /* Folder tabs on a phone: outlined, rounded tops; the open one is white and
      joins the controls area beneath it (which turns white to match). */
@@ -301,18 +316,6 @@ tr.woundtoggle td{background:#fafcff;text-align:center;padding:7px} tr.woundtogg
     box-shadow:inset 0 2px 0 #1e40af}
   html.bb-phone .layout{background:#fff;border:1px solid #cfd6e2;border-top:none;border-radius:0 0 8px 8px;padding:0 10px 8px}
   html.bb-phone .chartwrap{padding:4px 0 0;gap:4px}
-  html.bb-phone .chartrail{gap:5px 8px;padding:0 0 6px}
-  /* Buttons that name themselves need no label; DQ and Macro keep a short one. */
-  html.bb-phone #modeseg,html.bb-phone #outseg,html.bb-phone #poolseg,html.bb-phone #rangebar{margin:0}
-  html.bb-phone .cgroup:has(#modeseg)>.cglabel,html.bb-phone .cgroup:has(#outseg)>.cglabel,html.bb-phone #poolctl>.cglabel,html.bb-phone #rangegroup>.cglabel{display:none}
-  html.bb-phone #xfctl>.cglabel{font-size:0} html.bb-phone #xfctl>.cglabel::after{content:"YOY";font-size:10px}
-  html.bb-phone #dqctl>.cglabel{font-size:0}
-  html.bb-phone #dqctl>.cglabel::after{content:"DQ";font-size:10px}
-  html.bb-phone .cgroup:has(#macrosel)>.cglabel{font-size:0}
-  html.bb-phone .cgroup:has(#macrosel)>.cglabel::after{content:"Macro";font-size:10px}
-  html.bb-phone .rpill{padding:2px 8px;font-size:11.5px}
-  html.bb-phone .chartrail .ovsel{padding:3px 18px 3px 7px;font-size:11.5px;width:auto;max-width:112px}
-  html.bb-phone .chartrail .cc-share-btn{transform:scale(.85);transform-origin:right center}
   html.bb-phone .chart-title{font-size:14px;margin:4px 0 0}
   html.bb-phone .chart-cap{font-size:11px;padding:0}
   html.bb-phone .shelf-summary{font-size:12px;gap:4px 14px}
@@ -321,10 +324,17 @@ tr.woundtoggle td{background:#fafcff;text-align:center;padding:7px} tr.woundtogg
   html.bb-phone #dealsPanel>h2{display:block;padding:10px 0;font-size:12px;line-height:1.5}
 
 
-/* Landscape phone: the same phone styling, but the chart comes first and fills
-   the screen; the controls sit BELOW it (a scroll away), and the sideways-room
-   lets the legend sit beside the plot (set in chart.js). */
-  html.bb-land .chartrail{order:0;border-bottom:none;border-top:1px solid var(--line);padding:8px 0 0}
+/* Landscape phone: the same phone styling; the chart fills the screen and the
+   gear's panel comes in from the right. The page keeps a screen's height under the
+   chart's top edge, so it can always be scrolled to fill the screen (the rail used to
+   stand below the chart and gave that room by accident). */
+  html.bb-land .layout{min-height:100vh}
+  /* Height is the scarce dimension: the chips and the gear share the title's row, at its right. */
+  html.bb-land .chartmain{position:relative}
+  html.bb-land .tilebar{position:absolute;top:0;right:0;margin:0;justify-content:flex-end}
+  html.bb-land .tilechips{flex:none}
+  html.bb-land .tchip:not(.tadd){display:none}      /* the labels at the lines' ends, or the legend beside the plot, name the series */
+  html.bb-land .chart-title, html.bb-land .chart-cap{padding-right:132px}
   html.bb-land .chart-title{margin:2px 0 0;font-size:13.5px}
   html.bb-land .chart-cap{font-size:10.5px}
   html.bb-land .chart-src{margin-top:2px}

@@ -231,6 +231,11 @@ const CHART_CFG={aria:false, font:TK.font,
 // as a phone before this file ran, so the classes are cleared here.
 const isEmbed=()=>document.documentElement.classList.contains('ccm-embed');
 if(/[?&]embed=1(&|$)/.test(location.search)){ const c=document.documentElement.classList; c.add('ccm-embed'); c.remove('bb-phone','bb-land'); }
+const isPhone=()=>document.documentElement.classList.contains('bb-phone');
+const isLandscapePhone=()=>document.documentElement.classList.contains('bb-land');
+// The chips under the title name the series, so the plot carries no legend. Not on a phone held
+// sideways: there the chips are not drawn (no height to spare) and the legend sits beside the plot.
+const chipLegend=()=>isEmbed()||(isPhone()&&!isLandscapePhone());
 // The controls panel (2026-11-26). Controls slides the page's own controls out beside the
 // chart, which stays where it is and redraws as they change. A frame cannot draw outside
 // itself, so the workspace enlarges this tile's frame over its neighbours and hands back
@@ -249,6 +254,7 @@ window.ccmTileBox=function(b){
     c.add('ctl-'+b.side);
     const px=b.side==='left' ? b.x-b.pw : b.x+b.w;
     [['--tx',b.x],['--ty',b.y],['--tw',b.w],['--th',b.h],['--pw',b.pw],['--px',px]].forEach(([k,v])=>root.style.setProperty(k, Math.round(v)+'px'));
+    if(b.ph) root.style.setProperty('--ph', Math.round(b.ph)+'px'); else root.style.removeProperty('--ph');   // a sheet's height, when the workspace made room for it under the chart
     if(b.resized) renderChart();                 // the chart gave up some width to the panel
     const f=_afterOpen; _afterOpen=null; if(f) setTimeout(f, 0);
   } else if(was){ if(was.resized) renderChart(); const t=el('tilectl'); if(t) t.focus(); }
@@ -259,6 +265,7 @@ function tileControls(open, then){
   if(inWorkspace()){ window.parent.ccmTilePanel(window, open); return; }
   if(!open){ window.ccmTileBox(null); return; }
   const W=window.innerWidth, H=window.innerHeight, side=W>=PANEL_W+320;
+  if(!isEmbed()){ window.ccmTileBox({x:0,y:0,w:W,h:H,side:isLandscapePhone()?'right':'bottom',pw:W,resized:isLandscapePhone()}); phoneSheet(); return; }   // turned on its side, the chart redraws beside the panel
   window.ccmTileBox(side ? {x:0,y:0,w:W-PANEL_W,h:H,side:'right',pw:PANEL_W,resized:true} : {x:0,y:0,w:W,h:H,side:'bottom',pw:W});
 }
 const tileFullHref=()=>location.pathname+location.search.replace(/([?&])embed=1(&|$)/,(m,a,b)=>b?a:'');
@@ -270,7 +277,6 @@ function setupTile(){
   // The panel holds the page's own controls: they are moved, not copied, so every one works as it does on the full page.
   const panel=document.createElement('aside'); panel.id='tilepanel'; panel.className='tilepanel'; panel.setAttribute('aria-label','Chart controls');
   panel.innerHTML='<div class="tilepanel-head"><span>Chart controls</span><button type="button" class="tilebtn on" id="tiledone">Done</button></div>';
-  ['.selector','.mtabs','.chartrail'].forEach(q=>{ const n=document.querySelector(q); if(n) panel.appendChild(n); });
   const full=document.createElement('a'); full.className='tilefull'; full.id='tilefull'; full.target='_top'; full.textContent='Open the full page \u203a';
   full.href=tileFullHref();
   panel.appendChild(full);
@@ -285,26 +291,56 @@ function setupTile(){
   new MutationObserver(()=>el('tilectl').setAttribute('aria-expanded', String(document.documentElement.classList.contains('ctl-open'))))
     .observe(document.documentElement, {attributes:true, attributeFilter:['class']});
 }
-if(isEmbed()) setupTile();
+// Where the controls live (2026-11-27). A tile keeps all three blocks in the panel; a phone page
+// keeps the tabs on the page (Deals is one of them) and puts the picker and the settings rail in
+// the panel, which rises from the foot as a sheet; a desktop page has them where the markup put
+// them. They are moved, never copied, and each remembers its place, so a window dragged from
+// phone width to desktop width gets its page back.
+const GEAR_PARTS=['.selector','.mtabs','.chartrail'], _home={};
+const gearParts=()=>isEmbed() ? GEAR_PARTS : isPhone() ? ['.selector','.chartrail'] : [];
+function placeControls(){
+  const panel=el('tilepanel'), foot=el('tilefull'); if(!panel) return;
+  const want=gearParts();
+  GEAR_PARTS.forEach(q=>{
+    const n=document.querySelector(q); if(!n) return;
+    if(!_home[q]){ _home[q]=document.createComment('home of '+q); n.parentNode.insertBefore(_home[q], n); }
+    const inside=n.parentNode===panel;
+    if(want.includes(q) && !inside) panel.insertBefore(n, foot);
+    else if(!want.includes(q) && inside) _home[q].parentNode.insertBefore(n, _home[q].nextSibling);
+  });
+  if(!want.length && TILE_BOX) window.ccmTileBox(null);
+}
+// A phone's sheet: the chart is brought to the top of the screen and the sheet takes what is
+// left beneath it, so the reader watches the chart change (never less than 40% of the screen).
+function phoneSheet(){
+  const root=document.documentElement, r=el('export-region'), c=el('chart');
+  if(isLandscapePhone() || !r || !c){ root.style.removeProperty('--sheet'); return; }
+  const H=window.innerHeight;
+  root.style.setProperty('--sheet', Math.round(H*0.7)+'px');     // room to scroll first: the page ends in the sheet's height (css)
+  r.scrollIntoView({block:'start', behavior:'auto'});
+  const left=H - c.getBoundingClientRect().bottom - 8;
+  root.style.setProperty('--sheet', Math.round(Math.max(H*0.4, Math.min(left, H*0.7)))+'px');
+}
+setupTile(); placeControls();
 // The tile's legend: a chip per series (swatch, short name, newest value) and a way to add one.
 function renderTileChips(list){
   const box=el('tilechips'); if(!box) return;
   const add=typeof window.KIT_ADD_LABEL==='string'?window.KIT_ADD_LABEL:'Add';
   const drop=(list||[]).length>1 && typeof window.unsel==='function';     // the last series stays
-  box.innerHTML=(list||[]).map(s=>`<span class="tchip"><i style="background:${s.color}"></i>${esc(s.short||s.name)}${s.val?` <b>${esc(s.val)}</b>`:''}${drop&&s.tk?`<button type="button" class="tx" data-tk="${esc(s.tk)}" aria-label="Remove ${esc(s.short||s.name)}" title="Remove">×</button>`:''}</span>`).join('')
+  box.innerHTML=(list||[]).map(s=>`<span class="tchip${drop&&s.tk?'':' nox'}"><i style="background:${s.color}"></i>${esc(s.short||s.name)}${s.val?` <b>${esc(s.val)}</b>`:''}${drop&&s.tk?`<button type="button" class="tx" data-tk="${esc(s.tk)}" aria-label="Remove ${esc(s.short||s.name)}" title="Remove">×</button>`:''}</span>`).join('')
     +`<button type="button" class="tchip tadd" id="tileadd">+ ${esc(add)}</button>`;
   box.querySelectorAll('.tx').forEach(b=>b.onclick=()=>window.unsel(b.dataset.tk));
   el('tileadd').onclick=()=>tileControls(true, ()=>{ const b=el('issbtn'), p=el('isspanel'); if(b && !(p && p.classList.contains('open'))) b.click(); });
 }
-const isPhone=()=>document.documentElement.classList.contains('bb-phone');
-const isLandscapePhone=()=>document.documentElement.classList.contains('bb-land');
 function applyViewMode(){   // returns true when the layout changed
   const w = innerWidth, h = innerHeight;
   const c = document.documentElement.classList, before = c.contains('bb-phone') + ':' + c.contains('bb-land');
   if(isEmbed()){ c.remove('bb-phone','bb-land'); return before !== 'false:false'; }
   const land = w > h && h <= 500;
   c.toggle('bb-land', land); c.toggle('bb-phone', land || w <= 640);
-  return before !== c.contains('bb-phone') + ':' + c.contains('bb-land');
+  const changed = before !== c.contains('bb-phone') + ':' + c.contains('bb-land');
+  if(changed){ if(TILE_BOX) window.ccmTileBox(null); placeControls(); }   // the sheet does not survive a turn of the phone
+  return changed;
 }
 const scroller = () => document.getElementById('main') || document.scrollingElement;
 const visibleHeight = () => (scroller() && scroller().clientHeight) || window.innerHeight;
@@ -410,7 +446,7 @@ function chartHeight(nEntries, nCols){
   if(isLandscapePhone()){
     // Title, plot, axis and source line together fill the screen: the reader
     // sees the whole chart without scrolling; the controls are a scroll away.
-    const head = el('viewTitle').offsetHeight + el('chartcap').offsetHeight;
+    const head = el('viewTitle').offsetHeight + el('chartcap').offsetHeight;   // the chips sit in the title's row here (css), so they cost no height
     return Math.max(140, Math.round(visibleHeight() - head - 46 - 26 - 14));
   }
   if(isPhone()) return 280;   // portrait: the chart keeps a readable fixed height (the Explorer's #vis)
@@ -542,7 +578,7 @@ function calendarChart(box,S,o){
   const groups=[side('left'),side('right')].filter(Boolean);
   return embed(box,{ $schema:"https://vega.github.io/schema/vega-lite/v5.json", width:"container", height:chartHeight(o.nEntries,6), background:null,
     // symbolOpacity: with a band, the legend would otherwise take the band's faint opacity.
-    encoding:{ x:X, color:{...C, legend: !direct && grps.length>1 && !isEmbed() ? {...legendCfg(true), ...(o.band?{symbolOpacity:1}:{})} : null} },
+    encoding:{ x:X, color:{...C, legend: !direct && grps.length>1 && !chipLegend() ? {...legendCfg(true), ...(o.band?{symbolOpacity:1}:{})} : null} },
     layer: groups.length>1 ? groups : groups[0].layer,
     ...(groups.length>1 ? {resolve:{scale:{y:"independent"}}} : {}), config:CHART_CFG });
 }

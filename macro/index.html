@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<link rel="icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/manifest.json"><meta name="theme-color" content="#0e1a30"><link rel="stylesheet" href="/style.css?v=861fc286"><script>try{if(localStorage.getItem('ccm.rail.v1')==='hidden')document.documentElement.classList.add('rail-hidden')}catch(e){}if(/[?&]embed=1(&|$)/.test(location.search))document.documentElement.classList.add('ccm-embed')</script><script src="/kit.js?v=06118b50" defer></script><script src="/watch/watch.js?v=36c206be" defer></script>
+<link rel="icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/manifest.json"><meta name="theme-color" content="#0e1a30"><link rel="stylesheet" href="/style.css?v=861fc286"><script>try{if(localStorage.getItem('ccm.rail.v1')==='hidden')document.documentElement.classList.add('rail-hidden')}catch(e){}try{if(document.cookie.indexOf('bhv_d13419db-9a8e-44a3-9ee0-b8693fd59772_subscribed=')>-1||localStorage.getItem('ccm.watch.session.v1'))document.documentElement.classList.add('ccm-subscriber')}catch(e){}if(/[?&]embed=1(&|$)/.test(location.search))document.documentElement.classList.add('ccm-embed')</script><script src="/kit.js?v=06118b50" defer></script><script src="/watch/watch.js?v=36c206be" defer></script>
 <meta charset="UTF-8">
   
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -997,7 +997,7 @@
                  color: #5b6270; font: inherit; font-size: 14px; line-height: 1; cursor: pointer; opacity: 0; padding: 0; }
     .tchip:hover .tx, .tchip .tx:focus-visible { opacity: 1; }
     .tchip .tx:hover { color: #b3261e; background: #fdecea; }
-    @media (hover: none) { .tchip { padding-right: 24px; } .tchip .tx { opacity: 1; background: none; } }
+    @media (hover: none) { .tchip { padding-right: 24px; } .tchip.nox, .tchip.tadd { padding-right: 7px; } .tchip .tx { opacity: 1; background: none; } }
     .tilebtn { font: inherit; font-size: 12px; font-weight: 500; color: #1a202e; background: #fff; border: 1px solid #cfd5df;
                border-radius: 6px; padding: 3px 9px; cursor: pointer; flex: none; }
     .tilebtn:hover { background: #eef2fb; }
@@ -1015,7 +1015,7 @@
     :root.ccm-embed.ctl-open .tilepanel { display: block; position: fixed; top: 0; bottom: 0; left: var(--px); width: var(--pw); box-sizing: border-box;
       z-index: 300; background: #fff; border: 1px solid #cfd5df; border-radius: 6px; box-shadow: 0 10px 30px rgba(16,24,40,.20);
       padding: 9px 14px 14px; overflow-y: auto; animation: tileslide .16s ease-out; }
-    :root.ccm-embed.ctl-bottom .tilepanel { top: auto; left: 0; width: auto; right: 0; max-height: 66%; border-radius: 12px 12px 0 0; animation-name: tilerise; }
+    :root.ccm-embed.ctl-bottom .tilepanel { top: auto; left: 0; width: auto; right: 0; height: var(--ph, auto); max-height: var(--ph, 66%); border-radius: 12px 12px 0 0; animation-name: tilerise; }
     @keyframes tileslide { from { opacity: 0; transform: translateX(-14px); } to { opacity: 1; transform: none; } }
     @keyframes tilerise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
     @media (prefers-reduced-motion: reduce) { :root.ccm-embed.ctl-open .tilepanel { animation: none; } }
@@ -1034,7 +1034,27 @@
     .tilepanel #series-panel-handle, .tilepanel #series-toggle-group { display: none !important; }
     .tilepanel #controls { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; padding: 0; border: 0; background: none; }
     .tilepanel #controls .ctrl-group { flex-wrap: wrap; margin: 0; padding: 0; border: 0; }
+    .tilepanel #controls .lbl-full { display: inline; }      /* the panel has room for the whole word (a phone's toolbar had not) */
+    .tilepanel #controls .lbl-short { display: none; }
     .tilefull { display: inline-block; margin: 14px 0 0; font-size: 12px; color: #0034a5; text-decoration: none; }
+    /* A phone page (:root.ccm-gear, set by the script at load): the tile's bar under the title and
+       its panel as a sheet from the foot of the screen; on its side, a panel from the right. */
+    :root.ccm-gear .tilebar { display: flex; align-items: flex-start; gap: 8px; margin: 4px 0 6px; padding: 0 14px; }
+    :root.ccm-gear .tilegear { width: 36px; height: 32px; }
+    :root.ccm-gear .tchip { font-size: 12px; padding-top: 4px; padding-bottom: 4px; }
+    :root.ccm-gear .tilefull, :root.ccm-gear #fred-backdrop { display: none !important; }
+    :root.ccm-gear #chart-title, :root.ccm-gear #chart-subtitle { text-align: left; }
+    :root.ccm-gear.ctl-open #tilectl { background: #0034a5; border-color: #0034a5; color: #fff; }
+    :root.ccm-gear.ctl-open .tilepanel { display: block; position: fixed; left: 0; right: 0; bottom: 0; height: var(--sheet, 56%); box-sizing: border-box;
+      z-index: 300; background: #fff; border-top: 1px solid #cfd5df; border-radius: 14px 14px 0 0; box-shadow: 0 -10px 30px rgba(16,24,40,.22);
+      padding: 10px 16px calc(18px + env(safe-area-inset-bottom, 0px)); overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
+      animation: tilerise .18s ease-out; }
+    :root.ccm-gear.ctl-open.ctl-bottom #fred-app { padding-bottom: calc(var(--sheet, 56%) + 16px); }   /* so the chart can come up clear of the sheet */
+    :root.ccm-gear.ctl-right .tilepanel { left: auto; top: 0; height: auto; width: min(330px, 56%); border-radius: 0; border-top: 0; border-left: 1px solid #cfd5df; animation-name: tileslide; }
+    :root.ccm-gear.ctl-right #export-region { padding-right: calc(min(330px, 56%) + 10px); }
+    :root.ccm-gear .tilepanel-head { position: sticky; top: -10px; background: #fff; z-index: 3; margin: -10px -16px 10px; padding: 10px 16px 9px; }
+    :root.ccm-gear .tilepanel-head .tilebtn { padding: 6px 16px; font-size: 13px; }
+    @media (prefers-reduced-motion: reduce) { :root.ccm-gear.ctl-open .tilepanel { animation: none; } }
     .tilefull:hover { text-decoration: underline; }
     @media print {
       .ccm-page { height: auto; overflow: visible; }
@@ -1056,21 +1076,19 @@
 <header id="header"><button id="hamburger" aria-label="Open navigation" aria-expanded="false"><span></span><span></span><span></span></button><a href="/" class="brand" aria-label="Consumer Credit Matters home"><img src="/assets/brand/logo-horizontal-white.png" alt="Consumer Credit Matters" class="brand-logo"></a><nav class="header-right"><a href="/disclaimer/" class="header-disclaimer">Disclaimer</a><a href="/abs/my-portfolio/" class="header-portfolio" aria-label="My Portfolio"><svg class="header-star" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M12 2.6l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.4l-5.9 3.3 1.3-6.6L2.5 9.5l6.6-.8z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span>My Portfolio</span></a><a href="/subscribe/" class="btn-primary">Subscribe</a></nav></header>
 <div id="nav-backdrop" aria-hidden="true"></div>
 <nav id="rail" aria-label="Data modules">
-<div class="nav-section"><div class="nav-section-header open" role="button" aria-expanded="true" data-section="abs-data"><svg class="nav-section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 13.5h3v4.5H3v-4.5zm4.5-4.5h3v9h-3V9zm4.5-3h3v12h-3V6zm4.5-3h3v15h-3V3z"/></svg><span class="nav-section-label">ABS Data</span><svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><polyline stroke-linecap="round" stroke-linejoin="round" stroke-width="2" points="9,18 15,12 9,6"/></svg></div><div class="nav-items open"><a class="nav-item" data-id="abs-auto" href="/abs/performance/index.html?ac=loan"><svg class="nav-item-icon nav-item-icon-art" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-2.4 -2.7) scale(1.1)" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 31.5 L3 29.5 Q3 27.6 5.1 27.1 L11.6 25.5 L16.2 19.3 Q17.3 18 19.4 18 L30.8 18 Q32.8 18 34 19.6 L38.2 25.4 L43.2 26.6 Q45 27.1 45 29.1 L45 31.5 L39 31.5 A5 5 0 0 0 29 31.5 L19 31.5 A5 5 0 0 0 9 31.5 L3 31.5 Z"/><path d="M26 18.3 L26 30"/><path d="M13.5 26 L26 26"/><circle cx="14" cy="31.5" r="4.2"/><circle cx="34" cy="31.5" r="4.2"/></g><circle cx="36" cy="12.5" r="11" fill="#fff" stroke="#16a34a" stroke-width="2.4"/><g fill="none" stroke="#16a34a" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="32.8" cy="9.6" r="3"/><path d="M35 11.8 41.5 18.3"/><path d="M38.6 15.4 40.6 13.4"/><path d="M41.5 18.3 43.5 16.3"/></g></svg><span>Auto Loan</span></a><a class="nav-item" data-id="abs-auto-lease" href="/abs/performance/index.html?ac=lease"><svg class="nav-item-icon nav-item-icon-art" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-2.4 -2.7) scale(1.1)" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 31.5 L3 29.5 Q3 27.6 5.1 27.1 L11.6 25.5 L16.2 19.3 Q17.3 18 19.4 18 L30.8 18 Q32.8 18 34 19.6 L38.2 25.4 L43.2 26.6 Q45 27.1 45 29.1 L45 31.5 L39 31.5 A5 5 0 0 0 29 31.5 L19 31.5 A5 5 0 0 0 9 31.5 L3 31.5 Z"/><path d="M26 18.3 L26 30"/><path d="M13.5 26 L26 26"/><circle cx="14" cy="31.5" r="4.2"/><circle cx="34" cy="31.5" r="4.2"/></g><circle cx="36" cy="12.5" r="11" fill="#fff" stroke="#d97706" stroke-width="2.4"/><g fill="none" stroke="#d97706" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="30.5" y="7.7" width="11" height="9.6" rx="1.7"/><line x1="30.5" y1="11.1" x2="41.5" y2="11.1"/><line x1="33.8" y1="5.9" x2="33.8" y2="9"/><line x1="38.2" y1="5.9" x2="38.2" y2="9"/></g></svg><span>Auto Lease</span></a><a class="nav-item" data-id="abs-credit-card" href="/abs/credit-card/index.html"><svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="6" width="20" height="13" rx="2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="2" y1="10.5" x2="22" y2="10.5" stroke-width="1.8" stroke-linecap="round"/><line x1="6" y1="15" x2="10" y2="15" stroke-width="1.8" stroke-linecap="round"/></svg><span>Credit Card</span></a><a class="nav-item" data-id="abs-issuance" href="/abs/issuance/index.html"><svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 3 2 8l10 5 10-5-10-5zM2 13l10 5 10-5M2 18l10 5 10-5"/></svg><span>Issuance</span></a><a class="nav-item" data-id="abs-my-portfolio" href="/abs/my-portfolio/index.html"><svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 3.2l2.7 5.6 6.2.8-4.5 4.3 1.2 6.1L12 17.1 6.4 20l1.2-6.1L3.1 9.6l6.2-.8z"/></svg><span>My Portfolio</span></a></div></div>
+<div class="nav-section"><a class="nav-section-header" data-id="workspace" href="/workspace/index.html"><svg class="nav-section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 4.5h7v6.5H4V4.5zm9 0h7v6.5h-7V4.5zM4 13h7v6.5H4V13zm9 0h7v6.5h-7V13z"/></svg><span class="nav-section-label">Overview</span></a></div>
 <div class="rail-divider"></div>
-<div class="nav-section"><a class="nav-section-header active" data-id="macro-data" href="/macro/index.html" aria-current="page"><svg class="nav-section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm0 0c-2.5 2.5-4 6-4 10s1.5 7.5 4 10m0-20c2.5 2.5 4 6 4 10s-1.5 7.5-4 10M2 12h20"/></svg><span class="nav-section-label">Macro</span></a></div>
+<div class="nav-section"><a class="nav-section-header" data-id="abs-my-portfolio" href="/abs/my-portfolio/index.html"><svg class="nav-section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 3.2l2.7 5.6 6.2.8-4.5 4.3 1.2 6.1L12 17.1 6.4 20l1.2-6.1L3.1 9.6l6.2-.8z"/></svg><span class="nav-section-label">My Portfolio</span></a></div>
 <div class="rail-divider"></div>
-<div class="nav-section"><a class="nav-section-header" data-id="workspace" href="/workspace/index.html"><svg class="nav-section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 4.5h7v6.5H4V4.5zm9 0h7v6.5h-7V4.5zM4 13h7v6.5H4V13zm9 0h7v6.5h-7V13z"/></svg><span class="nav-section-label">Workspace</span></a></div>
+<div class="nav-section"><div class="nav-section-header open" role="button" aria-expanded="true" data-section="abs-data"><svg class="nav-section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 13.5h3v4.5H3v-4.5zm4.5-4.5h3v9h-3V9zm4.5-3h3v12h-3V6zm4.5-3h3v15h-3V3z"/></svg><span class="nav-section-label">Markets</span><svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><polyline stroke-linecap="round" stroke-linejoin="round" stroke-width="2" points="9,18 15,12 9,6"/></svg></div><div class="nav-items open"><a class="nav-item" data-id="abs-auto" href="/abs/performance/index.html?ac=loan"><svg class="nav-item-icon nav-item-icon-art" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-2.4 -2.7) scale(1.1)" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 31.5 L3 29.5 Q3 27.6 5.1 27.1 L11.6 25.5 L16.2 19.3 Q17.3 18 19.4 18 L30.8 18 Q32.8 18 34 19.6 L38.2 25.4 L43.2 26.6 Q45 27.1 45 29.1 L45 31.5 L39 31.5 A5 5 0 0 0 29 31.5 L19 31.5 A5 5 0 0 0 9 31.5 L3 31.5 Z"/><path d="M26 18.3 L26 30"/><path d="M13.5 26 L26 26"/><circle cx="14" cy="31.5" r="4.2"/><circle cx="34" cy="31.5" r="4.2"/></g><circle cx="36" cy="12.5" r="11" fill="#fff" stroke="#16a34a" stroke-width="2.4"/><g fill="none" stroke="#16a34a" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="32.8" cy="9.6" r="3"/><path d="M35 11.8 41.5 18.3"/><path d="M38.6 15.4 40.6 13.4"/><path d="M41.5 18.3 43.5 16.3"/></g></svg><span>Auto Loan</span></a><a class="nav-item" data-id="abs-auto-lease" href="/abs/performance/index.html?ac=lease"><svg class="nav-item-icon nav-item-icon-art" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><g transform="translate(-2.4 -2.7) scale(1.1)" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 31.5 L3 29.5 Q3 27.6 5.1 27.1 L11.6 25.5 L16.2 19.3 Q17.3 18 19.4 18 L30.8 18 Q32.8 18 34 19.6 L38.2 25.4 L43.2 26.6 Q45 27.1 45 29.1 L45 31.5 L39 31.5 A5 5 0 0 0 29 31.5 L19 31.5 A5 5 0 0 0 9 31.5 L3 31.5 Z"/><path d="M26 18.3 L26 30"/><path d="M13.5 26 L26 26"/><circle cx="14" cy="31.5" r="4.2"/><circle cx="34" cy="31.5" r="4.2"/></g><circle cx="36" cy="12.5" r="11" fill="#fff" stroke="#d97706" stroke-width="2.4"/><g fill="none" stroke="#d97706" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="30.5" y="7.7" width="11" height="9.6" rx="1.7"/><line x1="30.5" y1="11.1" x2="41.5" y2="11.1"/><line x1="33.8" y1="5.9" x2="33.8" y2="9"/><line x1="38.2" y1="5.9" x2="38.2" y2="9"/></g></svg><span>Auto Lease</span></a><a class="nav-item" data-id="abs-credit-card" href="/abs/credit-card/index.html"><svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="6" width="20" height="13" rx="2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="2" y1="10.5" x2="22" y2="10.5" stroke-width="1.8" stroke-linecap="round"/><line x1="6" y1="15" x2="10" y2="15" stroke-width="1.8" stroke-linecap="round"/></svg><span>Credit Card</span></a><a class="nav-item" data-id="abs-issuance" href="/abs/issuance/index.html"><svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 3 2 8l10 5 10-5-10-5zM2 13l10 5 10-5M2 18l10 5 10-5"/></svg><span>Issuance &amp; Presales</span></a><a class="nav-item active" data-id="macro-data" href="/macro/index.html" aria-current="page"><svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm0 0c-2.5 2.5-4 6-4 10s1.5 7.5 4 10m0-20c2.5 2.5 4 6 4 10s-1.5 7.5-4 10M2 12h20"/></svg><span>Macro</span></a><a class="nav-item" data-id="data-calendar" href="/abs/schedule/Data_Cal_Calendar.html"><svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="4" width="18" height="18" rx="2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="16" y1="2" x2="16" y2="6" stroke-linecap="round" stroke-width="1.8"/><line x1="8" y1="2" x2="8" y2="6" stroke-linecap="round" stroke-width="1.8"/><line x1="3" y1="10" x2="21" y2="10" stroke-linecap="round" stroke-width="1.8"/></svg><span>Data Calendar</span></a></div></div>
 <div class="rail-divider"></div>
-<div class="nav-section"><a class="nav-section-header" data-id="data-calendar" href="/abs/schedule/Data_Cal_Calendar.html"><svg class="nav-section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="4" width="18" height="18" rx="2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="16" y1="2" x2="16" y2="6" stroke-linecap="round" stroke-width="1.8"/><line x1="8" y1="2" x2="8" y2="6" stroke-linecap="round" stroke-width="1.8"/><line x1="3" y1="10" x2="21" y2="10" stroke-linecap="round" stroke-width="1.8"/></svg><span class="nav-section-label">Data Calendar</span></a></div>
-<div class="rail-divider"></div>
+<div class="rail-heading">Insights</div>
 <div class="nav-section"><a class="nav-section-header nav-section-link" href="/newsletter/"><svg class="nav-section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/><polyline stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" points="14,2 14,8 20,8"/><line x1="8" y1="13" x2="16" y2="13" stroke-linecap="round" stroke-width="1.8"/><line x1="8" y1="17" x2="16" y2="17" stroke-linecap="round" stroke-width="1.8"/></svg><span class="nav-section-label">Weekly Newsletter</span></a></div>
-<div class="rail-divider"></div>
 <div class="nav-section"><a class="nav-section-header nav-section-link" href="/podcasts/"><svg class="nav-section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 10a7 7 0 0 1-14 0"/><line x1="12" y1="19" x2="12" y2="23" stroke-linecap="round" stroke-width="1.8"/><line x1="8" y1="23" x2="16" y2="23" stroke-linecap="round" stroke-width="1.8"/></svg><span class="nav-section-label">Podcast</span></a></div>
 </nav>
-<nav id="mobile-nav" aria-label="Mobile navigation"><div id="mobile-nav-sections"><button type="button" class="mobile-nav-pill" data-section-id="abs-data" aria-expanded="false"><span class="pill-label"><span class="pill-label-full">ABS Data</span><span class="pill-label-short">ABS</span></span><svg class="pill-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><polyline stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" points="6,9 12,15 18,9"/></svg></button><a class="mobile-nav-pill active" data-section-id="macro-data" href="/macro/index.html"><span class="pill-label"><span class="pill-label-full">Macro</span><span class="pill-label-short">Macro</span></span></a><a class="mobile-nav-pill" data-section-id="workspace" href="/workspace/index.html"><span class="pill-label"><span class="pill-label-full">Workspace</span><span class="pill-label-short">Workspace</span></span></a><a class="mobile-nav-pill" data-section-id="data-calendar" href="/abs/schedule/Data_Cal_Calendar.html"><span class="pill-label"><span class="pill-label-full">Data Calendar</span><span class="pill-label-short">Calendar</span></span></a><a class="mobile-nav-pill" data-section-id="newsletter" href="/newsletter/"><span class="pill-label"><span class="pill-label-full">Weekly Newsletter</span><span class="pill-label-short">Weekly Newsletter</span></span></a><a class="mobile-nav-pill" data-section-id="podcast" href="/podcasts/"><span class="pill-label"><span class="pill-label-full">Podcast</span><span class="pill-label-short">Podcast</span></span></a></div><div class="mobile-nav-items" id="mobile-nav-items" data-section-id="abs-data" hidden><a class="mobile-nav-sub" data-item-id="abs-auto" href="/abs/performance/index.html?ac=loan">Auto Loan</a><a class="mobile-nav-sub" data-item-id="abs-auto-lease" href="/abs/performance/index.html?ac=lease">Auto Lease</a><a class="mobile-nav-sub" data-item-id="abs-credit-card" href="/abs/credit-card/index.html">Credit Card</a><a class="mobile-nav-sub" data-item-id="abs-issuance" href="/abs/issuance/index.html">Issuance</a><a class="mobile-nav-sub" data-item-id="abs-my-portfolio" href="/abs/my-portfolio/index.html">My Portfolio</a></div></nav>
+<nav id="mobile-nav" aria-label="Mobile navigation"><div id="mobile-nav-sections"><a class="mobile-nav-pill" data-section-id="workspace" href="/workspace/index.html"><span class="pill-label"><span class="pill-label-full">Overview</span><span class="pill-label-short">Overview</span></span></a><a class="mobile-nav-pill" data-section-id="abs-my-portfolio" href="/abs/my-portfolio/index.html"><span class="pill-label"><span class="pill-label-full">My Portfolio</span><span class="pill-label-short">Portfolio</span></span></a><button type="button" class="mobile-nav-pill active" data-section-id="abs-data" aria-expanded="true"><span class="pill-label"><span class="pill-label-full">Markets</span><span class="pill-label-short">Markets</span></span><svg class="pill-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><polyline stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" points="6,9 12,15 18,9"/></svg></button><a class="mobile-nav-pill" data-section-id="newsletter" href="/newsletter/"><span class="pill-label"><span class="pill-label-full">Weekly Newsletter</span><span class="pill-label-short">Weekly Newsletter</span></span></a><a class="mobile-nav-pill" data-section-id="podcast" href="/podcasts/"><span class="pill-label"><span class="pill-label-full">Podcast</span><span class="pill-label-short">Podcast</span></span></a></div><div class="mobile-nav-items" id="mobile-nav-items" data-section-id="abs-data"><a class="mobile-nav-sub" data-item-id="abs-auto" href="/abs/performance/index.html?ac=loan">Auto Loan</a><a class="mobile-nav-sub" data-item-id="abs-auto-lease" href="/abs/performance/index.html?ac=lease">Auto Lease</a><a class="mobile-nav-sub" data-item-id="abs-credit-card" href="/abs/credit-card/index.html">Credit Card</a><a class="mobile-nav-sub" data-item-id="abs-issuance" href="/abs/issuance/index.html">Issuance &amp; Presales</a><a class="mobile-nav-sub active" data-item-id="macro-data" href="/macro/index.html">Macro</a><a class="mobile-nav-sub" data-item-id="data-calendar" href="/abs/schedule/Data_Cal_Calendar.html">Data Calendar</a></div></nav>
 <main id="main">
-<div id="panel-bar"><span id="panel-section-label">Macro</span><span class="panel-sep" id="panel-sep" style="display:none">›</span><span id="panel-title"></span></div>
+<div id="panel-bar"><span id="panel-section-label">Markets</span><span class="panel-sep" id="panel-sep">›</span><span id="panel-title">Macro</span></div>
 <div id="panel-content">
 <div class="ccm-page">
 <div id="fred-app">
@@ -1771,9 +1789,14 @@ function init() {
     // Deep-links (handled in the branches above) are unaffected and still land
     // on their specific series/category.
     // A workspace tile is never blank: with no series named it opens on the unemployment rate.
+    // Nor is a phone (2026-11-27): the series list is a drawer there, so the blank page was an
+    // empty box and an instruction, with nothing to choose from in sight. It stays on the All tab.
     if (IS_TILE && DASHBOARD_DATA.series.UNRATE && ALL_CATS.includes("Labor Market")) {
       state.selected.add("UNRATE"); state.axisAssignment.set("UNRATE", "left");
       activateCategory("Labor Market");
+    } else if (IS_PHONE && DASHBOARD_DATA.series.UNRATE) {
+      state.selected.add("UNRATE"); state.axisAssignment.set("UNRATE", "left");
+      activateCategory(ALL_CAT);
     } else activateCategory(ALL_CAT);
   }
 
@@ -2065,7 +2088,7 @@ function activateCategory(cat) {
 // ─────────────────────────────────────────────────────────────────────────────
 function buildSeriesList(cat) {
   const container = document.getElementById("series-list");
-  if (IS_TILE) { if (container.children.length) return; cat = ALL_CAT; }   // a tile lists every series once; the search field narrows it
+  if (IS_GEAR) { if (container.children.length) return; cat = ALL_CAT; }   // a tile lists every series once; the search field narrows it
   container.innerHTML = "";
   // Clear any active search filter — list is rebuilt fresh on every category change
   const _searchEl = document.getElementById("series-search");
@@ -2084,7 +2107,7 @@ function buildSeriesList(cat) {
     cb.dataset.id = sid;
     cb.checked = state.selected.has(sid);
     cb.addEventListener("change", () => {
-      if (IS_TILE && !cb.checked && state.selected.size === 1 && state.selected.has(sid)) { cb.checked = true; return; }   // a tile keeps its last series
+      if (IS_GEAR && !cb.checked && state.selected.size === 1 && state.selected.has(sid)) { cb.checked = true; return; }   // a tile keeps its last series
       state.activeViewName = null;
       if (cb.checked) {
         state.selected.add(sid);
@@ -2392,7 +2415,7 @@ function buildSpec(datasets) {
   const colorEnc = (showLegend) => ({
     field: "series", type: "nominal",
     scale: colorScale,
-    legend: showLegend && !IS_TILE && !_direct      // a tile's chips are its legend; to four lines, their end labels
+    legend: showLegend && !IS_GEAR && !_direct      // a tile's chips are its legend; to four lines, their end labels
       ? { title: null, orient: "bottom", direction: "horizontal", labelFontSize: 12, labelColor: INK.text,
           symbolType: "stroke", symbolStrokeWidth: 3, symbolSize: 180, columnPadding: 18 }
       : null
@@ -2878,7 +2901,7 @@ function buildSpec(datasets) {
     const lasts = datasets.map(d => ({ d, r: d.data[d.data.length - 1] }));
     const vals = datasets.flatMap(d => d.data.map(r => r.value)).filter(v => v != null && isFinite(v));
     const lo = datasets.every(_isLevelLine) ? Math.min(...vals) : Math.min(0, ...vals), hi = Math.max(...vals);
-    const plotH = IS_TILE ? tilePlotHeight() : 320;
+    const plotH = IS_TILE ? tilePlotHeight() : (_phonePlotH || 320);
     const gap = ((hi - lo) || 1) * (_tight ? 17 : 19) / Math.max(80, plotH);
     const xEnd = lasts.reduce((m, e) => e.r.date > m ? e.r.date : m, "");
     const period = e => { const t = new Date(e.r.date + "T00:00:00");
@@ -2943,7 +2966,7 @@ function buildSpec(datasets) {
   const spec = {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
     width: "container",
-    height: IS_TILE ? tilePlotHeight() : 320,
+    height: IS_TILE ? tilePlotHeight() : (_phonePlotH || 320),
     autosize: { type: "fit-x", contains: "padding" },
     padding: { left: 4, right: _direct ? 8 : hasDual ? 8 : 14, top: 12, bottom: IS_TILE ? 2 : 8 },
     config: {
@@ -3176,7 +3199,7 @@ function updateChart() {
     }
     _lastSeriesSig = "";
     if (_currentView) { _currentView.finalize(); _currentView = null; }
-    if (IS_TILE) renderTileChips([]);
+    if (IS_GEAR) renderTileChips([]);
     return;
   }
   noMsg.style.display = "none";
@@ -3189,7 +3212,7 @@ function updateChart() {
   });
 
   datasets = applyNormalize(datasets);
-  if (IS_TILE) renderTileChips(datasets);
+  if (IS_GEAR) renderTileChips(datasets);
 
   const spec = buildSpec(datasets);
   chartCaption();
@@ -3633,6 +3656,33 @@ function renderChips() {
 const IS_TILE = /[?&]embed=1(&|$)/.test(location.search) || document.documentElement.classList.contains("ccm-embed");
 if (IS_TILE) document.documentElement.classList.add("ccm-embed");
 if (IS_TILE) document.addEventListener("DOMContentLoaded", () => { document.documentElement.style.overflow = "hidden"; });
+// A phone (2026-11-27) opens on the chart, as the performance pages do there: the chips under the
+// title are the legend and the gear raises the tile's panel as a sheet from the foot of the
+// screen, holding the series in the chart, the search list and the settings. Five rows of
+// controls used to stand above the chart. Decided at load: a phone does not become a desktop.
+const IS_PHONE = !IS_TILE && window.matchMedia("(max-width: 640px), (max-width: 1000px) and (pointer: coarse)").matches;
+const IS_GEAR = IS_TILE || IS_PHONE;          // chips for a legend, the controls in the gear's panel
+if (IS_PHONE) document.documentElement.classList.add("ccm-gear");
+const phoneSideways = () => window.innerWidth > window.innerHeight && window.innerHeight <= 500;
+// The chart is brought to the top of the screen and the sheet takes what is left beneath it
+// (never under 40% of the screen), so the reader watches the chart change.
+function phoneSheet() {
+  const root = document.documentElement, r = document.getElementById("export-region"), v = document.getElementById("vis-container");
+  if (phoneSideways() || !r || !v) { root.style.removeProperty("--sheet"); return; }
+  const H = window.innerHeight;
+  root.style.setProperty("--sheet", Math.round(H * 0.7) + "px");      // room to scroll first (the page ends in the sheet's height)
+  r.scrollIntoView({ block: "start", behavior: "auto" });
+  // The plot is 320px tall on a phone: with the title and chips above it, more than a 40% sheet
+  // leaves. While the sheet is open the plot takes the room there is and is redrawn; closing restores it.
+  const room = Math.round(H * 0.6 - v.getBoundingClientRect().top - 48);     // 48: the dates under the plot
+  if (room < 320) {
+    _phonePlotH = Math.max(150, room); if (TILE_BOX) TILE_BOX.resized = true;
+    root.style.setProperty("--sheet", Math.round(H * 0.4) + "px"); updateChart(); return;
+  }
+  const left = H - v.getBoundingClientRect().bottom - 8;
+  root.style.setProperty("--sheet", Math.round(Math.max(H * 0.4, Math.min(left, H * 0.7))) + "px");
+}
+let _phonePlotH = 0;
 const TILE_PANEL_W = 310;
 let TILE_BOX = null, _tileAfterOpen = null, _tileChrome = 44;
 function tileBottom() { return TILE_BOX ? TILE_BOX.y + TILE_BOX.h : window.innerHeight; }
@@ -3657,15 +3707,16 @@ window.ccmTileBox = function (b) {
   const root = document.documentElement, c = root.classList, was = TILE_BOX;
   TILE_BOX = b || null;
   c.toggle("ctl-open", !!b); c.remove("ctl-right", "ctl-left", "ctl-bottom");
-  [root, document.body].forEach(n => { n.style.background = b ? "transparent" : ""; });   // the frame is clear around the chart
+  if (IS_TILE) [root, document.body].forEach(n => { n.style.background = b ? "transparent" : ""; });   // the frame is clear around the chart
   const gear = document.getElementById("tilectl"); if (gear) gear.setAttribute("aria-expanded", String(!!b));
   if (b) {
     c.add("ctl-" + b.side);
     const px = b.side === "left" ? b.x - b.pw : b.x + b.w;
     [["--tx", b.x], ["--ty", b.y], ["--tw", b.w], ["--th", b.h], ["--pw", b.pw], ["--px", px]].forEach(([k, v]) => root.style.setProperty(k, Math.round(v) + "px"));
+    if (b.ph) root.style.setProperty("--ph", Math.round(b.ph) + "px"); else root.style.removeProperty("--ph");   // a sheet's height, when the workspace made room under the chart
     if (b.resized) updateChart();
     const f = _tileAfterOpen; _tileAfterOpen = null; if (f) setTimeout(f, 0);
-  } else if (was) { if (was.resized) updateChart(); if (gear) gear.focus(); }
+  } else if (was) { _phonePlotH = 0; if (was.resized) updateChart(); if (gear) gear.focus(); }
 };
 function tileControls(open, then) {
   if (open === !!TILE_BOX) { if (open && then) then(); return; }
@@ -3673,6 +3724,8 @@ function tileControls(open, then) {
   if (tileInWorkspace()) { window.parent.ccmTilePanel(window, open); return; }
   if (!open) { window.ccmTileBox(null); return; }
   const W = window.innerWidth, H = window.innerHeight;
+  if (IS_PHONE) { const side = phoneSideways();      // on its side the panel comes in from the right and the chart redraws beside it
+    window.ccmTileBox({ x: 0, y: 0, w: W, h: H, side: side ? "right" : "bottom", pw: W, resized: side }); phoneSheet(); return; }
   window.ccmTileBox(W >= TILE_PANEL_W + 320 ? { x: 0, y: 0, w: W - TILE_PANEL_W, h: H, side: "right", pw: TILE_PANEL_W, resized: true }
                                             : { x: 0, y: 0, w: W, h: H, side: "bottom", pw: W });
 }
@@ -3713,10 +3766,10 @@ function renderTileChips(datasets) {
     const last = d.data.length ? d.data[d.data.length - 1].value : null;
     const val = last == null ? "" : " <b>" + Number(last).toLocaleString("en-US", { minimumFractionDigits: _seriesDecimals(d.sid), maximumFractionDigits: _seriesDecimals(d.sid) }).replace("-", "−") + (/%/.test(_yLabelForLayer(d) || "") ? "%" : "") + "</b>";
     const x = drop && !d.secondary ? '<button type="button" class="tx" data-sid="' + esc(d.sid) + '" aria-label="Remove ' + esc(d.title) + '" title="Remove">×</button>' : "";
-    return '<span class="tchip"><i style="background:' + SERIES_COLORS[i % SERIES_COLORS.length] + '"></i>' + esc(d.title) + val + x + "</span>";
+    return '<span class="tchip' + (x ? "" : " nox") + '"><i style="background:' + SERIES_COLORS[i % SERIES_COLORS.length] + '"></i>' + esc(d.title) + val + x + "</span>";
   }).join("") + '<button type="button" class="tchip tadd" id="tileadd">+ Add</button>';
   box.querySelectorAll(".tx").forEach(b => { b.onclick = () => removeSeries(b.dataset.sid); });
-  document.getElementById("tileadd").onclick = () => tileControls(true, () => { const q = document.getElementById("series-search"); if (q) q.focus(); });
+  document.getElementById("tileadd").onclick = () => tileControls(true, () => { const q = document.getElementById("series-search"); if (q && !IS_PHONE) q.focus(); });   // a phone's keyboard would cover the list
 }
 // In a tile the next release rides in the caption, without the year when it is this year's.
 function tileCaption() {
@@ -3727,7 +3780,7 @@ function tileCaption() {
   const txt = "Next release " + d.toLocaleDateString("en-US", sameYear ? { month: "short", day: "numeric" } : { year: "numeric", month: "short", day: "numeric" });
   sub.textContent = sub.textContent ? sub.textContent + "  ·  " + txt : txt;
 }
-if (IS_TILE) document.addEventListener("DOMContentLoaded", setupTile);
+if (IS_GEAR) document.addEventListener("DOMContentLoaded", setupTile);
 
 // ─────────────────────────────────────────────────
 // Boot

@@ -60,7 +60,8 @@
   .ws-tabs{display:flex}
   .ws-grid,.ws-grid[data-n]{display:block;padding:8px 0 0;overflow:visible}
   .ws-tile{border-radius:0;border-left:0;border-right:0}
-  .ws-tile iframe{height:78vh;min-height:460px;flex:none}
+  /* #panel-content: the frame's own phone rule gives every iframe in the content area 800px */
+  #panel-content .ws-tile iframe{height:var(--one,78vh);min-height:380px;flex:none}
 }
 
 /* The newest issue, one line under the bar: the charts say there is something to read */

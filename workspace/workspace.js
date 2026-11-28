@@ -60,9 +60,10 @@
   }
   function writeAddress() { try { history.replaceState(null, '', address()); } catch (e) {} }
 
-  // ── state: what the address says, else the four-chart set (two on a small window) ──
+  // ── state: what the address says, else the four-chart set (two abreast on a small window; a phone
+  //    shows one at a time, so its switcher carries all four) ──
   var given = parse(location.search);
-  var state = { n: given.n || (window.innerWidth < 1100 ? 2 : 4), tiles: [], cur: 0, max: -1 };
+  var state = { n: given.n || (!narrow() && window.innerWidth < 1100 ? 2 : 4), tiles: [], cur: 0, max: -1 };
   for (var i = 0; i < MAX; i++) state.tiles[i] = given.tiles[i] || DEFAULT[i];
 
   var typeOf = function (t) { return t.kind === 'macro' ? 'macro' : t.kind === 'deals' ? 'deals' : t.kind === 'card' ? 'card' : (/(^|&)ac=lease(&|$)/.test(t.q) ? 'lease' : 'loan'); };
@@ -124,7 +125,14 @@
       if (on && !e.frame) load(i);
     });
     $('ws-n').querySelectorAll('button').forEach(function (b) { b.setAttribute('aria-pressed', String(+b.dataset.n === state.n)); });
-    drawTabs();
+    drawTabs(); fitOne();
+  }
+  // A phone's one tile takes what is left of the first screen under the switcher, so the whole
+  // chart is in view without a scroll (78% of the screen's height put its foot below the fold).
+  function fitOne() {
+    if (!narrow()) { grid.style.removeProperty('--one'); return; }
+    var sc = document.getElementById('main'), at = (sc && sc.scrollTop) || window.scrollY || 0;
+    grid.style.setProperty('--one', Math.max(380, Math.round(window.innerHeight - (grid.getBoundingClientRect().top + at) - 14)) + 'px');
   }
   function closeTile(i) {         // the chart leaves; those after it move up; its settings wait at the end for "Charts"
     if (state.n < 2) return;
@@ -160,7 +168,14 @@
   function openPanel(i) {
     closePanel();
     var e = els[i], r = e.tile.getBoundingClientRect(), w = e.frame.clientWidth, h = e.frame.clientHeight;
-    if (narrow()) { openAt = i; boxTo(i, { x: 0, y: 0, w: w, h: h, side: 'bottom', pw: w }); return; }
+    if (narrow()) {
+      // A phone: the frame grows downward by the sheet's height and the tile is brought to the top
+      // of the screen, so the chart stays whole above its controls (it used to lose its lower half).
+      var sheet = Math.round(Math.max(window.innerHeight * 0.4, window.innerHeight - h - 4));
+      e.frame.style.height = (h + sheet) + 'px';
+      e.tile.scrollIntoView({ block: 'start' });
+      openAt = i; boxTo(i, { x: 0, y: 0, w: w, h: h, side: 'bottom', pw: w, ph: sheet }); return;
+    }
     var g = grid.getBoundingClientRect(), x0 = g.left + PAD, x1 = g.left + grid.clientWidth - PAD;
     var y0 = Math.min(r.top, g.top + PAD), y1 = Math.max(r.bottom, g.top + grid.clientHeight - PAD);
     // Always at the chart's right side. Beside a left tile the frame grows rightward over its
@@ -210,8 +225,11 @@
     var url = location.origin + address(), done = function (ok) { copy.textContent = ok ? 'Copied' : 'Copy the address bar'; setTimeout(function () { copy.textContent = 'Copy link'; }, 2200); };
     try { navigator.clipboard.writeText(url).then(function () { done(true); }, function () { done(false); }); } catch (e) { done(false); }
   });
-  var wasNarrow = narrow(), rz;
-  window.addEventListener('resize', function () { clearTimeout(rz); closePanel(); rz = setTimeout(function () { if (narrow() !== wasNarrow) { wasNarrow = narrow(); show(); } }, 150); });
+  var wasNarrow = narrow(), rz, lastW = window.innerWidth;
+  window.addEventListener('resize', function () {
+    // a phone's browser bar sliding away is a resize too: only a change of width is a new layout
+    if (narrow() && wasNarrow && window.innerWidth === lastW) return;
+    lastW = window.innerWidth; clearTimeout(rz); closePanel(); rz = setTimeout(function () { if (narrow() !== wasNarrow) { wasNarrow = narrow(); show(); } else fitOne(); }, 150); });
 
   build(); show();
   if (given.n || given.tiles.length) writeAddress();   // tidy an address that came with gaps; a bare /workspace/ stays bare
