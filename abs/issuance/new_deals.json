@@ -1,0 +1,170 @@
+{
+ "deals": [
+  {
+   "close": "2026-11-24",
+   "date": "2026-11-23",
+   "name": "Carvana Auto Receivables Trust 2026-P4",
+   "sector": "Auto Loan",
+   "series": "2026-P4",
+   "size": 1534964000.0,
+   "status": "priced",
+   "ticker": "CRVNA",
+   "url": "/abs/issuance/presale/carvana-auto-receivables-trust-2026-p4.html"
+  },
+  {
+   "close": "2026-11-24",
+   "date": "2026-11-20",
+   "name": "Nissan Auto Lease Trust 2026-C",
+   "sector": "Auto Lease",
+   "series": "2026-C",
+   "size": 1309960000.0,
+   "status": "priced",
+   "ticker": "NALT",
+   "url": "/abs/issuance/presale/nissan-auto-lease-trust-2026-c.html"
+  },
+  {
+   "close": "2026-11-24",
+   "date": "2026-11-19",
+   "name": "Ford Credit Auto Lease Trust 2026-C",
+   "sector": "Auto Lease",
+   "series": "2026-C",
+   "size": 1451300000.0,
+   "status": "priced",
+   "ticker": "FCALT",
+   "url": "/abs/issuance/presale/ford-credit-auto-lease-trust-2026-c.html"
+  },
+  {
+   "close": "2026-11-18",
+   "date": "2026-11-13",
+   "name": "Volkswagen Auto Lease Trust 2026-C",
+   "sector": "Auto Lease",
+   "series": "2026-C",
+   "size": 745150000.0,
+   "status": "priced",
+   "ticker": "VWALT",
+   "url": "/abs/issuance/presale/volkswagen-auto-lease-trust-2026-c.html"
+  },
+  {
+   "close": "2026-11-16",
+   "date": "2026-11-12",
+   "name": "Synchrony Card Issuance Trust 2026-3",
+   "sector": "Credit Card",
+   "series": "2026-3",
+   "size": 750000000.0,
+   "status": "priced",
+   "ticker": "SYNIT",
+   "url": "/abs/issuance/presale/synchrony-card-issuance-trust-2026-3.html"
+  },
+  {
+   "close": "2026-11-18",
+   "date": "2026-11-10",
+   "name": "World Omni Auto Receivables Trust 2026-D",
+   "sector": "Auto Loan",
+   "series": "2026-D",
+   "size": 1000880000.0,
+   "status": "priced",
+   "ticker": "WOART",
+   "url": "/abs/issuance/presale/world-omni-auto-receivables-trust-2026-d.html"
+  },
+  {
+   "close": "2026-11-12",
+   "date": "2026-11-09",
+   "name": "WF Card Issuance Trust 2026-2",
+   "sector": "Credit Card",
+   "series": "2026-2",
+   "size": 1000000000.0,
+   "status": "priced",
+   "ticker": "WFCARD",
+   "url": "/abs/issuance/presale/wf-card-issuance-trust-2026-2.html"
+  },
+  {
+   "close": "2026-11-12",
+   "date": "2026-11-05",
+   "name": "Honda Auto Receivables 2026-4 Owner Trust",
+   "sector": "Auto Loan",
+   "series": "2026-4",
+   "size": 2105270000.0,
+   "status": "priced",
+   "ticker": "HAROT",
+   "url": "/abs/issuance/presale/honda-auto-receivables-2026-4-owner-trust.html"
+  },
+  {
+   "close": "2026-11-10",
+   "date": "2026-11-05",
+   "name": "Hyundai Auto Receivables Trust 2026-D",
+   "sector": "Auto Loan",
+   "series": "2026-D",
+   "size": 1997210000.0,
+   "status": "priced",
+   "ticker": "HART",
+   "url": "/abs/issuance/presale/hyundai-auto-receivables-trust-2026-d.html"
+  },
+  {
+   "close": "2026-10-22",
+   "date": "2026-10-19",
+   "name": "Mercedes-Benz Auto Lease Trust 2026-B",
+   "sector": "Auto Lease",
+   "series": "2026-B",
+   "size": 1322400000.0,
+   "status": "priced",
+   "ticker": "MBALT",
+   "url": "/abs/issuance/presale/mercedes-benz-auto-lease-trust-2026-b.html"
+  },
+  {
+   "close": "2026-10-21",
+   "date": "2026-10-16",
+   "name": "CarMax Auto Owner Trust 2026-4",
+   "sector": "Auto Loan",
+   "series": "2026-4",
+   "size": 1350000000.0,
+   "status": "priced",
+   "ticker": "CAOT",
+   "url": "/abs/issuance/presale/carmax-auto-owner-trust-2026-4.html"
+  },
+  {
+   "close": "2026-10-15",
+   "date": "2026-10-14",
+   "name": "Toyota Auto Receivables 2026-D Owner Trust",
+   "sector": "Auto Loan",
+   "series": "2026-D",
+   "size": 1900000000.0,
+   "status": "priced",
+   "ticker": "TAOT",
+   "url": "/abs/issuance/presale/toyota-auto-receivables-2026-d-owner-trust.html"
+  },
+  {
+   "close": "2026-10-22",
+   "date": "2026-10-13",
+   "name": "Bridgecrest Lending Auto Securitization Trust 2026-4",
+   "sector": "Auto Loan",
+   "series": "2026-4",
+   "size": 750000000.0,
+   "status": "priced",
+   "ticker": "BLAST",
+   "url": "/abs/issuance/presale/bridgecrest-lending-auto-securitization-trust-2026-4.html"
+  },
+  {
+   "close": "2026-10-14",
+   "date": "2026-10-09",
+   "name": "BMW Vehicle Lease Trust 2026-2",
+   "sector": "Auto Lease",
+   "series": "2026-2",
+   "size": 1250000000.0,
+   "status": "priced",
+   "ticker": "BMWLT",
+   "url": "/abs/issuance/presale/bmw-vehicle-lease-trust-2026-2.html"
+  },
+  {
+   "close": "2026-10-15",
+   "date": "2026-10-08",
+   "name": "Ford Credit Floorplan Master Owner Trust A 2026-3",
+   "sector": "Dealer Floorplan",
+   "series": "2026-3",
+   "size": 690789000.0,
+   "status": "priced",
+   "ticker": "FCFP",
+   "url": null
+  }
+ ],
+ "through": "2026-11-23"
+}

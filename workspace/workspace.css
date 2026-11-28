@@ -77,3 +77,6 @@
 html.ccm-subscriber .ws-news-read{display:inline}
 html.ccm-subscriber .ws-news-sub{display:none}
 @media (max-width:640px){.ws-news{flex-wrap:wrap;gap:2px 8px;padding:8px 12px}.ws-news-main{flex-wrap:wrap;gap:2px 8px;flex:1 1 100%}.ws-news-head{flex:1 1 100%;white-space:normal}.ws-news a.ws-news-go{margin-left:0}}
+
+/* The Overview's own bar names the page: the breadcrumb row above it would say "Overview" twice */
+#panel-bar{display:none}

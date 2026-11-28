@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>New deals and presale reports — Consumer Credit Matters</title>
+<meta name="robots" content="noindex">
+<style>
+/* The Overview's "New deals" tile: the newest deals of every sector with their presale reports,
+   from the list the issuance page writes beside itself (abs/issuance/new_deals.json). A page of its own so the Overview loads it as
+   it loads every tile; it has no frame and nothing to configure. */
+@font-face{font-family:Inter;src:url(/fonts/inter-latin.woff2) format("woff2");font-weight:100 900;font-display:swap}
+html,body{margin:0;background:#fff;color:#1a202e;font:13px/1.35 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+.nd{padding:8px 12px 6px;display:flex;flex-direction:column;height:100vh;box-sizing:border-box}
+.nd-t{font-size:14.5px;font-weight:700;padding:0 118px 0 46px;min-height:24px}
+html.ws-solo .nd-t{padding-left:0}
+.nd-c{font-size:12px;color:#5b6270;padding:0 0 3px}
+.nd-list{flex:1;overflow-y:auto;border-top:1px solid #e4e6ea;margin:0;padding:0;list-style:none}
+.nd-row{display:grid;grid-template-columns:52px minmax(0,1fr) 58px 86px 70px;align-items:baseline;gap:4px 10px;padding:7px 2px;border-bottom:1px solid #eef0f3}
+.nd-d{color:#5b6270;font-variant-numeric:tabular-nums;white-space:nowrap}
+.nd-n{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nd-n b{font-weight:600}
+.nd-n span{color:#5b6270;margin-left:6px}
+.nd-z{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.nd-s{font-size:11px;color:#5b6270;border:1px solid #e4e6ea;border-radius:10px;padding:1px 8px;white-space:nowrap;justify-self:start}
+.nd-off{color:#8b919c;font-weight:400}
+.nd-key{display:flex;flex-wrap:wrap;gap:2px 12px;font-size:11.5px;color:#5b6270;padding:0 0 6px}
+.nd-key i,.nd-row i{font-style:normal;display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:6px}
+.nd-s.final{color:#0f6b4b;border-color:#bfe3d4;background:#f1faf6}
+.nd-a{color:#0034a5;font-weight:600;text-decoration:none;white-space:nowrap}
+.nd-a:hover{text-decoration:underline}
+.nd-foot{font-size:12px;padding:6px 0 0}
+.nd-foot a{color:#0034a5;text-decoration:none}
+.nd-foot a:hover{text-decoration:underline}
+.nd-none{padding:18px 2px;color:#5b6270}
+@media (max-width:460px){.nd-row{grid-template-columns:46px minmax(0,1fr) 54px 62px}.nd-s{display:none}}
+</style>  <script data-goatcounter="https://consumercreditmatters.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</head>
+<body><div class="nd">
+<div class="nd-t">New deals and presale reports</div>
+<div class="nd-c" id="nd-c">The newest SEC-registered deals, each with its report</div>
+<div class="nd-key" id="nd-key" aria-label="Sector colours"></div>
+<ul class="nd-list" id="nd-list"><li class="nd-none">Loading…</li></ul>
+<div class="nd-foot"><a href="/abs/issuance/index.html" target="_top">All deals and presale reports ›</a></div>
+</div>
+<script>
+(function () {
+  // A sector's colour is the house palette's, as on the issuance chart (config/chart_tokens.json).
+  var SECTORS = [['Auto Loan', '#0034a5'], ['Auto Lease', '#d9622b'], ['Credit Card', '#149a6c'], ['Dealer Floorplan', '#c98a00'],
+                 ['Student Loan', '#c9548a'], ['Personal Loan', '#3f8f2f'], ['Other', '#9aa0aa']];
+  var COLOR = {}; SECTORS.forEach(function (s) { COLOR[s[0]] = s[1]; });
+  var MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var esc = function (t) { return String(t == null ? '' : t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  var day = function (iso) { var p = String(iso).split('-'); return MON[+p[1] - 1] + ' ' + (+p[2]); };
+  var money = function (v) { return v == null ? '' : v >= 1e9 ? '$' + (v / 1e9).toFixed(2) + 'B' : '$' + Math.round(v / 1e6) + 'M'; };
+  var list = document.getElementById('nd-list');
+  fetch('/abs/issuance/new_deals.json').then(function (r) { if (!r.ok) throw new Error('feed'); return r.json(); }).then(function (data) {
+    var rows = data.deals || [];
+    if (!rows.length) { list.innerHTML = '<li class="nd-none">No deals to show.</li>'; return; }
+    list.innerHTML = rows.map(function (d) {
+      var c = COLOR[d.sector] || COLOR.Other, priced = d.status === 'priced';
+      var short = d.ticker && d.series ? d.ticker + ' ' + d.series : '';
+      return '<li class="nd-row"><span class="nd-d">' + esc(day(d.date)) + '</span>'
+        + '<span class="nd-n" title="' + esc(d.name) + ' · ' + esc(d.sector) + '"><i style="background:' + c + '"></i>'
+        + (short ? '<b>' + esc(short) + '</b><span>' + esc(d.name) + '</span>' : '<b>' + esc(d.name) + '</b>') + '</span>'
+        + '<span class="nd-z">' + esc(money(d.size)) + '</span>'
+        + '<span class="nd-s' + (priced ? ' final' : '') + '">' + (priced ? 'Priced' : 'Announced') + '</span>'
+        + (d.url ? '<a class="nd-a" href="' + esc(d.url) + '" target="_top">Presale ›</a>' : '<span class="nd-a nd-off">No report</span>') + '</li>';
+    }).join('');
+    // the key names only the sectors in the list, in the house order
+    var have = {}; rows.forEach(function (d) { have[COLOR[d.sector] ? d.sector : 'Other'] = 1; });
+    document.getElementById('nd-key').innerHTML = SECTORS.filter(function (s) { return have[s[0]]; }).map(function (s) {
+      return '<span><i style="background:' + s[1] + '"></i>' + esc(s[0]) + '</span>'; }).join('');
+    document.getElementById('nd-c').textContent = 'Newest filing first · through ' + day(rows[0].date);
+  }).catch(function () { list.innerHTML = '<li class="nd-none">The deal list could not be loaded. <a class="nd-a" href="/abs/issuance/index.html" target="_top">Open the Issuance page ›</a></li>'; });
+})();
+</script>
+</body></html>

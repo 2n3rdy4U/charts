@@ -4238,6 +4238,8 @@ WOART,World Omni,2026-08,all,16,0.007336
 WOART,World Omni,2026-08,seasoned,14,0.007737
 WOART,World Omni,2026-09,all,16,0.007448
 WOART,World Omni,2026-09,seasoned,14,0.008219
+WOART,World Omni,2026-10,all,15,0.009255
+WOART,World Omni,2026-10,seasoned,14,0.009459
 WOSAT,World Omni Select,2019-10,all,1,0.002215
 WOSAT,World Omni Select,2019-11,all,1,0.005434
 WOSAT,World Omni Select,2019-12,all,1,0.023221
@@ -4401,3 +4403,5 @@ WOSAT,World Omni Select,2026-08,all,4,0.020701
 WOSAT,World Omni Select,2026-08,seasoned,3,0.033749
 WOSAT,World Omni Select,2026-09,all,4,0.023317
 WOSAT,World Omni Select,2026-09,seasoned,3,0.037067
+WOSAT,World Omni Select,2026-10,all,4,0.03318
+WOSAT,World Omni Select,2026-10,seasoned,3,0.030611

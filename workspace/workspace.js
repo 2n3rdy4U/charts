@@ -13,7 +13,7 @@
     perf: { path: '/abs/performance/index.html' },
     card: { path: '/abs/credit-card/index.html' },
     macro: { path: '/macro/index.html' },
-    iss: { path: '/abs/issuance/index.html' }
+    deals: { path: '/workspace/deals.html' }      // a list, not a chart: the newest deals and their presale reports
   };
   // What the tile's menu offers; each starts from a view worth opening.
   var TYPES = [
@@ -21,22 +21,15 @@
     { id: 'lease', label: 'Auto Lease',  kind: 'perf', q: 'ac=lease&sel=ALL-LEASE,NALT,GMALT&m=dq_60plus_pct&view=calendar' },
     { id: 'card',  label: 'Credit Card', kind: 'card', q: 'sel=ALL,CHAIT,COMET,SYNIT' },
     { id: 'macro', label: 'Macro',       kind: 'macro', q: 'cat=Labor+Market&series=UNRATE' },
-    { id: 'iss',   label: 'Issuance',    kind: 'iss', q: '' }
+    { id: 'deals', label: 'New deals',   kind: 'deals', q: '' }
   ];
   var T = function (kind, q) { return { kind: kind, q: q }; };
-  var PRESETS = [
-    { id: 'credit', label: 'Auto loans: delinquency and losses', n: 2, tiles: [
-        T('perf', 'ac=loan&sel=ALL,SDART,TAOT,CAOT&m=dq_60plus_pct&view=calendar'),
-        T('perf', 'ac=loan&sel=SDART,AMCAR,CAOT,TAOT&m=cnl_ratio&view=calendar')] },
-    { id: 'classes', label: 'Loans, leases and cards', n: 3, tiles: [
-        T('perf', 'ac=loan&sel=ALL,SDART,TAOT,CAOT&m=dq_60plus_pct&view=calendar'),
-        T('perf', 'ac=lease&sel=ALL-LEASE,NALT,GMALT&m=dq_60plus_pct&view=calendar'),
-        T('card', 'sel=ALL,CHAIT,COMET,SYNIT')] },
-    { id: 'four', label: 'Loans, leases, cards and the economy', n: 4, tiles: [
-        T('perf', 'ac=loan&sel=ALL,SDART,TAOT,CAOT&m=dq_60plus_pct&view=calendar'),
-        T('perf', 'ac=lease&sel=ALL-LEASE,NALT,GMALT&m=dq_60plus_pct&view=calendar'),
-        T('card', 'sel=ALL,CHAIT,COMET,SYNIT'),
-        T('macro', 'cat=Labor+Market&series=UNRATE')] }
+  // What the Overview opens on: one of each kind of thing the site has. A small window shows the first two.
+  var DEFAULT = [
+    T('perf', 'ac=loan&sel=ALL,SDART,TAOT,CAOT&m=dq_60plus_pct&view=calendar'),
+    T('card', 'sel=ALL,CHAIT,COMET,SYNIT'),
+    T('macro', 'cat=Labor+Market&series=UNRATE'),
+    T('deals', '')
   ];
   var MAX = 4;
   var $ = function (id) { return document.getElementById(id); };
@@ -68,11 +61,11 @@
   function writeAddress() { try { history.replaceState(null, '', address()); } catch (e) {} }
 
   // ── state: what the address says, else the four-chart set (two on a small window) ──
-  var given = parse(location.search), dflt = PRESETS[2];
+  var given = parse(location.search);
   var state = { n: given.n || (window.innerWidth < 1100 ? 2 : 4), tiles: [], cur: 0, max: -1 };
-  for (var i = 0; i < MAX; i++) state.tiles[i] = given.tiles[i] || dflt.tiles[i];
+  for (var i = 0; i < MAX; i++) state.tiles[i] = given.tiles[i] || DEFAULT[i];
 
-  var typeOf = function (t) { return t.kind === 'macro' ? 'macro' : t.kind === 'iss' ? 'iss' : t.kind === 'card' ? 'card' : (/(^|&)ac=lease(&|$)/.test(t.q) ? 'lease' : 'loan'); };
+  var typeOf = function (t) { return t.kind === 'macro' ? 'macro' : t.kind === 'deals' ? 'deals' : t.kind === 'card' ? 'card' : (/(^|&)ac=lease(&|$)/.test(t.q) ? 'lease' : 'loan'); };
   var labelOf = function (t) { return TYPES.filter(function (x) { return x.id === typeOf(t); })[0].label; };
   var srcOf = function (t) { return KINDS[t.kind].path + '?' + (t.q ? t.q + '&' : '') + 'embed=1'; };
 
@@ -211,14 +204,6 @@
   // ── controls ──
   $('ws-n').querySelectorAll('button').forEach(function (b) {
     b.addEventListener('click', function () { closePanel(); state.max = -1; state.n = +b.dataset.n; show(); writeAddress(); });
-  });
-  var preset = $('ws-preset');
-  PRESETS.forEach(function (p) { var o = document.createElement('option'); o.value = p.id; o.textContent = p.label; preset.appendChild(o); });
-  preset.addEventListener('change', function () {
-    var p = PRESETS.filter(function (x) { return x.id === preset.value; })[0]; if (!p) return;
-    closePanel(); state.max = -1; state.n = p.n; p.tiles.forEach(function (t, i) { state.tiles[i] = t; });
-    els.forEach(function (e, i) { if (e.frame) load(i); });
-    show(); writeAddress(); preset.value = '';
   });
   var copy = $('ws-copy');
   copy.addEventListener('click', function () {

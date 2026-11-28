@@ -57,7 +57,7 @@
         },
         {
           "id": "abs-issuance",
-          "label": "Issuance",
+          "label": "Issuance & Presales",
           "icon": "stack",
           "type": "panel",
           "url": "abs/issuance/index.html",
